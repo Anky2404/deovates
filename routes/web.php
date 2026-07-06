@@ -11,7 +11,7 @@ Route::get('/about', function () {
 })->name('front.about.index');
 
 Route::get('/projects', function () {
-    return view('front.projects.index');
+    return view('front.portfolios.index');
 })->name('front.projects.index');
 
 Route::get('/services', function () {

@@ -22,4 +22,5 @@
     <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/icomoon@1.0.0/style.css">
+    <link rel="stylesheet" href="{{ asset('assets/front/fonts/icomoon/style.css') }}">
 </head>
