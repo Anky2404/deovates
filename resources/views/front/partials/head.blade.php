@@ -1,15 +1,52 @@
 <head>
-    <meta charset="utf-8">
+    <!-- Character Encoding -->
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Construction HTML5 Template</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Primary SEO -->
+    <title>@yield('title', 'Deovate World: Web Design, Website Development, SEO, Digital Marketing & Branding Agency')</title>
+    <meta name="title" content="@yield('meta_title', 'Deovate World: Web Design, Website Development, SEO, Digital Marketing & Branding Agency')">
+    <meta name="description" content="@yield('meta_description', 'Deovate World is a full-service digital agency specializing in web design, website development, SEO, digital marketing, branding, eCommerce solutions, custom software development, and mobile app development. We help businesses grow with innovative digital solutions.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'Deovate World, Web Design, Website Development, SEO Services, Digital Marketing Agency, Branding Agency, Laravel Development, eCommerce Website Development, Mobile App Development, Graphic Design, UI UX Design, Software Development, Website Maintenance')">
+    <meta name="author" content="Deovate World">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="theme-color" content="#0b3c8a">
+    <!-- Canonical -->
+    <link rel="canonical" href="{{ url()->current() }}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('assets/front/favicons/favicon-96x96.png') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/front/favicons/favicon-180x180.png') }}">
+<link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
+    <!-- Manifest -->
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/front/img/favicon.ico') }}">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <meta name="theme-color" content="#0B3C8A">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="@yield('meta_title', 'Deovate World: Web Design, Website Development, SEO & Digital Marketing Agency')">
+    <meta property="og:description" content="@yield('meta_description', 'Build your online presence with professional web design, SEO, branding, and digital marketing services from Deovate World.')">
+    <meta property="og:image" content="{{ asset('assets/front/img/og-image.jpg') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:site_name" content="Deovate World">
+    <meta property="og:locale" content="en_US">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('meta_title', 'Deovate World')">
+    <meta name="twitter:description" content="@yield('meta_description', 'Professional Web Design, Website Development & SEO Services')">
+    <meta name="twitter:image" content="{{ asset('assets/front/img/og-image.jpg') }}">
+    <!-- Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/front/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/front/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/front/css/slicknav.css') }}">
@@ -19,8 +56,8 @@
     <link rel="stylesheet" href="{{ asset('assets/front/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/front/css/slick.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/front/css/nice-select.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/icomoon@1.0.0/style.css">
     <link rel="stylesheet" href="{{ asset('assets/front/fonts/icomoon/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
