@@ -1,404 +1,416 @@
 @extends('front.layouts.app')
 @section('content')
-    {{-- <section>
-        <!-- slider Area Start-->
+    <section>
         <div class="slider-area">
             <div class="slider-active">
+
+                <!-- Slider 1 -->
                 <div class="single-slider hero-overly slider-height d-flex align-items-center"
-                    data-background="{{ asset('assets/front/img/hero/h1_hero.jpg') }}">
+                    data-background="{{ asset('assets/front/img/hero/h1_hero.png') }}">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-11">
                                 <div class="hero__caption">
+
                                     <div class="hero-text1">
-                                        <span data-animation="fadeInUp" data-delay=".3s">hand car wash and detailing service
+                                        <span data-animation="fadeInUp" data-delay=".3s">
+                                            Trusted Web Design, SEO & Digital Marketing Agency
                                         </span>
                                     </div>
-                                    <h1 data-animation="fadeInUp" data-delay=".5s">advanced</h1>
-                                    <div class="stock-text" data-animation="fadeInUp" data-delay=".8s">
-                                        <h2>Construction</h2>
-                                        <h2>Construction</h2>
+
+                                    <h1 data-animation="fadeInUp" data-delay=".5s">
+                                        Deovate
+                                    </h1>
+
+                                    <div class="stock-text" data-animation="fadeInUp" data-delay=".8s"
+                                        style="animation-delay: 0.8s;">
+                                        <h2>World</h2>
+                                        <h2>World</h2>
                                     </div>
+
                                     <div class="hero-text2 mt-110" data-animation="fadeInUp" data-delay=".9s">
                                         <span>
-                                            <a href="services.html">Our Services</a>
+                                            <a href="#">Explore Our Services</a>
                                         </span>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Slider 2 -->
                 <div class="single-slider hero-overly slider-height d-flex align-items-center"
-                    data-background="{{ asset('assets/front/img/hero/h1_hero.jpg') }}">
+                    data-background="{{ asset('assets/front/img/hero/h2_hero.png') }}">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-11">
                                 <div class="hero__caption">
+
                                     <div class="hero-text1">
-                                        <span data-animation="fadeInUp" data-delay=".3s">hand car wash and detailing service
+                                        <span data-animation="fadeInUp" data-delay=".3s">
+                                            Custom Websites, Branding & Performance Marketing
                                         </span>
                                     </div>
-                                    <h1 data-animation="fadeInUp" data-delay=".5s">advanced</h1>
+
+                                    <h1 data-animation="fadeInUp" data-delay=".5s">
+                                        Digital Innovation
+                                    </h1>
+
                                     <div class="stock-text" data-animation="fadeInUp" data-delay=".8s">
-                                        <h2>Construction</h2>
-                                        <h2>Construction</h2>
+                                        <h2> Agency</h2>
+                                        <h2> Agency</h2>
                                     </div>
+
                                     <div class="hero-text2 mt-110" data-animation="fadeInUp" data-delay=".9s">
                                         <span>
-                                            <a href="services.html">Our Services</a>
+                                            <a href="#">Start Your Project</a>
                                         </span>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Slider 2 -->
+                <div class="single-slider hero-overly slider-height d-flex align-items-center"
+                    data-background="{{ asset('assets/front/img/hero/h3_hero.png') }}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-11">
+                                <div class="hero__caption">
+
+                                    <div class="hero-text1">
+                                        <span data-animation="fadeInUp" data-delay=".3s">
+                                            Custom Websites, Branding & Performance Marketing
+                                        </span>
+                                    </div>
+
+                                    <h1 data-animation="fadeInUp" data-delay=".5s">
+                                        Custom Software
+                                    </h1>
+
+                                    <div class="stock-text" data-animation="fadeInUp" data-delay=".8s">
+                                        <h2> Solutions</h2>
+                                        <h2> Solutions</h2>
+                                    </div>
+
+                                    <div class="hero-text2 mt-110" data-animation="fadeInUp" data-delay=".9s">
+                                        <span>
+                                            <a href="#">Start Your Project</a>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-        </section>
-        <!-- slider Area End-->
-        <!-- about section start -->
-        <section class="about" id="about">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="section-title st-center">
-                            <h3>WelCome to Sept</h3>
-                            <p>We are a creative Designer</p>
-                        </div>
-                        <div class="row mb90">
-                            <div class="col-md-6">
-                                <p>
-                                    Texit l, habere se indocti magnosque culpa gravioribus
-                                    discedere eas indignae diogenem, praetermissum effugiendorum
-                                    vult dicent, periculum dolere putat. Iucunditatem quid
-                                    turbulenta patre eae depravatum talem elaborare plerisque
-                                    repellere, o potiendi tuo aliter, militaris sint tranquillat
-                                    liberalitati. Locus delicata divelli intemperantes audeam
-                                    maximisque sitne pulcherrimum aegritudines studium. Habent
-                                    inveniri fidelissimae aequi andriam laudabilis. Libido
-                                    censet assiduitas quae probantur tantalo exquisitaque erunt
-                                    laudatur optari. Late suapte veterum enim qui magna securi
-                                    eaque proficiscuntur.
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <img src="{{ asset('assets/front/img/about.jpg') }}" alt="" class="img-responsive">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="st-member">
-                                    <div class="st-member-img">
-                                        <img src="{{ asset('assets/front/img/member1.png') }}" alt="" class="img-responsive">
-                                    </div>
-                                    <div class="st-member-info">
-                                        <strong class="st-member-name">Jerry Ward</strong>
-                                        <p class="st-member-pos">CEO</p>
-                                        <div class="skills">
-                                            <div class="skill">
-                                                <strong>HTML</strong>
-                                                <span>90%</span>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-sept" role="progressbar"
-                                                        aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 90%">
-                                                        <span class="sr-only">90% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="skill">
-                                                <strong>CSS</strong>
-                                                <span>70%</span>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-sept" role="progressbar"
-                                                        aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 70%">
-                                                        <span class="sr-only">70% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="skill">
-                                                <strong>JavaScript</strong>
-                                                <span>86%</span>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-sept" role="progressbar"
-                                                        aria-valuenow="86" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 86%">
-                                                        <span class="sr-only">86% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="st-member-social">
-                                            <ul>
-                                                <li>
-                                                    <a href="#" class="facebook" data-toggle="tooltip"
-                                                        data-placement="top" title="" data-original-title="Facebook">
-                                                        <i class="fab fa-facebook-f">
-                                                        </i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="twitter" data-toggle="tooltip"
-                                                        data-placement="top" title="" data-original-title="Twitter">
-                                                        <i class="fab fa-twitter">
-                                                        </i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="dribbble" data-toggle="tooltip"
-                                                        data-placement="top" title=""
-                                                        data-original-title="Dribbble">
-                                                        <i class="fab fa-linkedin-in">
-                                                        </i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="st-member">
-                                    <div class="st-member-img">
-                                        <img src="{{ asset('assets/front/img/member2.png') }}" alt="" class="img-responsive">
-                                    </div>
-                                    <div class="st-member-info">
-                                        <strong class="st-member-name">Sarah Moore</strong>
-                                        <p class="st-member-pos">Designer</p>
-                                        <div class="skills">
-                                            <div class="skill">
-                                                <strong>HTML</strong>
-                                                <span>90%</span>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-sept" role="progressbar"
-                                                        aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 90%">
-                                                        <span class="sr-only">90% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="skill">
-                                                <strong>CSS</strong>
-                                                <span>70%</span>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-sept" role="progressbar"
-                                                        aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 70%">
-                                                        <span class="sr-only">70% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="skill">
-                                                <strong>JavaScript</strong>
-                                                <span>86%</span>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-sept" role="progressbar"
-                                                        aria-valuenow="86" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 86%">
-                                                        <span class="sr-only">86% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="st-member-social">
-                                            <ul>
-                                                <li>
-                                                    <a href="#" class="facebook" data-toggle="tooltip"
-                                                        data-placement="top" title=""
-                                                        data-original-title="Facebook">
-                                                        <i class="fab fa-facebook-f">
-                                                        </i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="twitter" data-toggle="tooltip"
-                                                        data-placement="top" title=""
-                                                        data-original-title="Twitter">
-                                                        <i class="fab fa-twitter">
-                                                        </i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="dribbble" data-toggle="tooltip"
-                                                        data-placement="top" title=""
-                                                        data-original-title="Dribbble">
-                                                        <i class="fab fa-linkedin-in">
-                                                        </i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="st-member">
-                                    <div class="st-member-img">
-                                        <img src="{{ asset('assets/front/img/member3.png') }}" alt="" class="img-responsive">
-                                    </div>
-                                    <div class="st-member-info">
-                                        <strong class="st-member-name">Rose Johnson</strong>
-                                        <p class="st-member-pos">Developer</p>
-                                        <div class="skills">
-                                            <div class="skill">
-                                                <strong>HTML</strong>
-                                                <span>90%</span>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-sept" role="progressbar"
-                                                        aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 90%">
-                                                        <span class="sr-only">90% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="skill">
-                                                <strong>CSS</strong>
-                                                <span>70%</span>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-sept" role="progressbar"
-                                                        aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 70%">
-                                                        <span class="sr-only">70% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="skill">
-                                                <strong>JavaScript</strong>
-                                                <span>86%</span>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-sept" role="progressbar"
-                                                        aria-valuenow="86" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 86%">
-                                                        <span class="sr-only">86% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="st-member-social">
-                                            <ul>
-                                                <li>
-                                                    <a href="#" class="facebook" data-toggle="tooltip"
-                                                        data-placement="top" title=""
-                                                        data-original-title="Facebook">
-                                                        <i class="fab fa-facebook-f">
-                                                        </i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="twitter" data-toggle="tooltip"
-                                                        data-placement="top" title=""
-                                                        data-original-title="Twitter">
-                                                        <i class="fab fa-twitter">
-                                                        </i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="dribbble" data-toggle="tooltip"
-                                                        data-placement="top" title=""
-                                                        data-original-title="Dribbble">
-                                                        <i class="fab fa-linkedin-in">
-                                                        </i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    </section>
+    <!-- slider Area End-->
+    <!-- about section start -->
+    <section class="about" id="about">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="section-title st-center">
+
+                        <h3>WELCOME TO DEOVATE WORLD</h3>
+
+                        <p>
+                            Building Modern Websites, Smart Software & Digital Solutions
+                            That Help Businesses Grow Faster.
+                        </p>
+
                     </div>
+
+                    <div class="row align-items-center mb90">
+
+                        <div class="col-lg-6 col-md-6">
+
+                            {{-- <h2 class="about-title">
+                            Your Trusted Partner for Digital Innovation &
+                            Business Growth
+                        </h2> --}}
+
+                            <p class="about-text">
+
+                                At <strong>Deovate World</strong>, we build powerful digital
+                                solutions that help businesses establish a strong online
+                                presence, improve customer engagement, and achieve
+                                sustainable growth. From custom websites and enterprise
+                                software to eCommerce platforms and SEO-driven digital
+                                strategies, every solution is carefully designed to deliver
+                                performance, security, scalability, and measurable business
+                                results.
+
+                            </p>
+
+                            <div class="row mt-4">
+
+                                <div class="col-sm-6">
+
+                                    <ul class="about-list">
+
+                                        <li>
+                                            <i class="fa fa-check-circle"></i>
+                                            Custom Website Development
+                                        </li>
+
+                                        <li>
+                                            <i class="fa fa-check-circle"></i>
+                                            Business Software Solutions
+                                        </li>
+
+                                        <li>
+                                            <i class="fa fa-check-circle"></i>
+                                            Responsive UI/UX Design
+                                        </li>
+
+                                        <li>
+                                            <i class="fa fa-check-circle"></i>
+                                            eCommerce Development
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+
+                                <div class="col-sm-6">
+
+                                    <ul class="about-list">
+
+                                        <li>
+                                            <i class="fa fa-check-circle"></i>
+                                            Search Engine Optimization
+                                        </li>
+
+                                        <li>
+                                            <i class="fa fa-check-circle"></i>
+                                            Secure & Scalable Solutions
+                                        </li>
+
+                                        <li>
+                                            <i class="fa fa-check-circle"></i>
+                                            API Integrations
+                                        </li>
+
+                                        <li>
+                                            <i class="fa fa-check-circle"></i>
+                                            Ongoing Technical Support
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+
+                            </div>
+
+                            <div class="mt-4">
+
+                                <a href="#" class="btn btn-main">
+
+                                    Let's Build Together
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 text-center">
+
+                            <img src="{{ asset('assets/front/img/about.png') }}" alt="Professional Web Development Company"
+                                class="img-responsive about-img">
+
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
-        </section>
-        <!-- about section end -->
 
-        <!-- Counter Facts Start -->
+        </div>
+    </section>
+    <!-- about section end -->
+
+    <!-- Counter Facts Start -->
+    <section class="counter container-fluid service overflow-hidden pt-5" id="counter">
         <div class="container-fluid counter-facts py-5">
-            <div class="container py-5">
+            <div class="container py-1">
+                <div class="row mb-30">
+                    <div class="col-12">
+                        <div class="section-title st-center">
+
+                            <h3>OUR ACHIEVEMENTS</h3>
+
+                            <p>
+                                Delivering Reliable Digital Solutions That Create Real Business Impact
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+
                 <div class="row g-4">
+
+                    <!-- Projects -->
                     <div class="col-12 col-sm-6 col-md-6 col-xl-3 wow fadeInUp" data-wow-delay="0.1s">
+
+
                         <div class="counter">
+
                             <div class="counter-icon">
-                                <i class="fas fa-passport"></i>
+                                <i class="fas fa-laptop"></i>
                             </div>
+
                             <div class="counter-content">
-                                <h3>Visa Categories</h3>
+
+                                <h3>Projects Delivered</h3>
+
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <span class="counter-value" data-toggle="counter-up">31
+
+                                    <span class="counter-value" data-toggle="counter-up">
+                                        50
                                     </span>
-                                    <h4 class="text-secondary mb-0" style="font-weight: 600; font-size: 25px">
+
+                                    <h4 class="text-secondary mb-0" style="font-weight:600;font-size:25px;">
                                         +
                                     </h4>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     </div>
+
+                    <!-- Happy Clients -->
+
                     <div class="col-12 col-sm-6 col-md-6 col-xl-3 wow fadeInUp" data-wow-delay="0.3s">
+
                         <div class="counter">
+
                             <div class="counter-icon">
                                 <i class="fas fa-users"></i>
                             </div>
+
                             <div class="counter-content">
-                                <h3>Team Members</h3>
+
+                                <h3>Happy Clients</h3>
+
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <span class="counter-value" data-toggle="counter-up">377
+
+                                    <span class="counter-value" data-toggle="counter-up">
+                                        35
                                     </span>
-                                    <h4 class="text-secondary mb-0" style="font-weight: 600; font-size: 25px">
+
+                                    <h4 class="text-secondary mb-0" style="font-weight:600;font-size:25px;">
                                         +
                                     </h4>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     </div>
+
+                    <!-- Technologies -->
+
                     <div class="col-12 col-sm-6 col-md-6 col-xl-3 wow fadeInUp" data-wow-delay="0.5s">
+
                         <div class="counter">
+
                             <div class="counter-icon">
-                                <i class="fas fa-user-check"></i>
+                                <i class="fas fa-code"></i>
                             </div>
+
                             <div class="counter-content">
-                                <h3>Visa Process</h3>
+
+                                <h3>Technologies Used</h3>
+
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <span class="counter-value" data-toggle="counter-up">4.9
+
+                                    <span class="counter-value" data-toggle="counter-up">
+                                        15
                                     </span>
-                                    <h4 class="text-secondary mb-0" style="font-weight: 600; font-size: 25px">
-                                        K
+
+                                    <h4 class="text-secondary mb-0" style="font-weight:600;font-size:25px;">
+                                        +
                                     </h4>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     </div>
+
+                    <!-- Support -->
+
                     <div class="col-12 col-sm-6 col-md-6 col-xl-3 wow fadeInUp" data-wow-delay="0.7s">
+
                         <div class="counter">
+
                             <div class="counter-icon">
-                                <i class="fas fa-handshake"></i>
+                                <i class="fas fa-server"></i>
                             </div>
+
                             <div class="counter-content">
-                                <h3>Success Rates</h3>
+
+                                <h3>Technical Support</h3>
+
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <span class="counter-value" data-toggle="counter-up">98
+
+                                    <span class="counter-value">
+                                        24
                                     </span>
-                                    <h4 class="text-secondary mb-0" style="font-weight: 600; font-size: 25px">
-                                        %
+
+                                    <h4 class="text-secondary mb-0" style="font-weight:600;font-size:25px;">
+                                        /7
                                     </h4>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
         </div>
-        <!-- Counter Facts End -->
-        <!-- about section start -->
-        <section class="about container-fluid service overflow-hidden pt-5" id="about">
+    </section>
+    <!-- Counter Facts End -->
+    <!-- about section start -->
+     <section class="services container-fluid service overflow-hidden pt-5" id="about">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="section-title st-center">
-                            <h3>WelCome to Sept</h3>
-                            <p>We are a creative Designer</p>
+                            <h3>OUR SERVICES</h3>
+
+    {{-- <h2>
+        Innovative Digital Solutions Designed to Accelerate Business Growth
+    </h2> --}}
+
+    <p>
+        Innovative Digital Solutions Designed to Accelerate Business Growth
+    </p>
                         </div>
                         <div class="row g-4">
                             <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s"
@@ -660,7 +672,7 @@
             </div>
         </section>
         <!-- about section end -->
-        <section class="call-2-acction" data-stellar-background-ratio="0.4" style="background-position: 0% 16.48px">
+       {{-- <section class="call-2-acction" data-stellar-background-ratio="0.4" style="background-position: 0% 16.48px">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -2085,4 +2097,4 @@
 
             </div>
         </section> --}}
-    @endsection
+@endsection

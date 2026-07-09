@@ -10,7 +10,7 @@
 
                             <div class="footer-logo">
                                 <a href="{{ route('front.home.index') }}">
-                                   <img src="{{ asset(config('constants.CONFIG.logo.header')) }}"
+                                    <img src="{{ asset(config('constants.CONFIG.logo.header')) }}"
                                         alt="{{ config('constants.BUSINESS.name') }}">
                                 </a>
                             </div>
@@ -53,13 +53,13 @@
 
                                 <div class="footer-pera">
                                     <p class="info1">
-                                        198 West 21th Street, Suite 721, New York, NY 10010
+                                        {{ config('constants.ADDRESS.return_address') }}
                                     </p>
                                 </div>
 
                                 <ul>
-                                    <li><a href="tel:+950123456789">Phone: +95 (0) 123 456 789</a></li>
-                                    <li><a href="tel:+950123456789">Cell: +95 (0) 123 456 789</a></li>
+                                    <li><a href="tel:+950123456789">Phone:  {{ config('constants.CONTACT.country_code') }}-{{ config('constants.CONTACT.phones.0.number') }}</a></li>
+                                    <li><a href="tel:+950123456789">Cell:  {{ config('constants.CONTACT.country_code') }}-{{ config('constants.CONTACT.phones.1.number') }}</a></li>
                                 </ul>
 
                             </div>
@@ -76,23 +76,14 @@
 
                                     <form target="_blank"
                                         action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                                        method="get"
-                                        class="subscribe_form relative mail_part"
-                                        novalidate>
+                                        method="get" class="subscribe_form relative mail_part" novalidate>
 
-                                        <input
-                                            type="email"
-                                            name="EMAIL"
-                                            id="newsletter-form-email"
-                                            placeholder="Email Address"
-                                            class="placeholder hide-on-focus"
-                                            onfocus="this.placeholder=''"
-                                            onblur="this.placeholder='Email Address'">
+                                        <input type="email" name="EMAIL" id="newsletter-form-email"
+                                            placeholder="Email Address" class="placeholder hide-on-focus"
+                                            onfocus="this.placeholder=''" onblur="this.placeholder='Email Address'">
 
                                         <div class="form-icon">
-                                            <button
-                                                type="submit"
-                                                id="newsletter-submit"
+                                            <button type="submit" id="newsletter-submit"
                                                 class="email_icon newsletter-submit button-contactForm">
                                                 SIGN UP
                                             </button>
@@ -119,9 +110,11 @@
 
                     <div class="col-xl-12">
 
-                        <div class="footer-copy-right">
+                        <div class="footer-copy-right text-center">
                             <p>
                                 Copyright &copy; {{ date('Y') }}
+                                <a href="{{ route(config('constants.HEADERS.0.route')) }}"
+                                    class="text-decoration-none">Deovate World</a>.
                                 All Rights Reserved.
                             </p>
                         </div>
