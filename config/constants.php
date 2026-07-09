@@ -232,12 +232,14 @@ return [
             'keywords'       => 'Deovate World, Web Design, Website Development, SEO Services, Digital Marketing Agency, Branding Agency, Laravel Development, eCommerce Website Development, Mobile App Development, Graphic Design, UI UX Design, Software Development, Website Maintenance, WordPress Development, Shopify Development, Social Media Marketing, Search Engine Optimization, PPC Advertising, Logo Design, Corporate Branding, Website Redesign, Web Application Development',
         ],
         'logo' => [
+            'header' => 'assets/front/img/logo/header-logo.png',
             'big' => 'assets/front/img/logo/logo.png',
             'small' => 'assets/front/img/logo/loder-logo.png',
             'loader_logo' => 'assets/front/img/logo/loder-logo.png',
             'favicon' => 'assets/front/img/logo/favicon.ico',
         ],
         'alt' => config('constants.BUSINESS.name', 'Deovate World'),
+        'footer_info' => 'Deovate Technologies delivers secure, scalable, and high-performance digital solutions including web development, mobile applications, UI/UX design, and digital marketing for clients worldwide. ',
 
     ],
 

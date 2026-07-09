@@ -18,7 +18,7 @@
 
     @include('front.partials.preloader')
 
-    {{-- @include('front.partials.header') --}}
+    @include('front.partials.header')
 
     <main>
         @yield('content')

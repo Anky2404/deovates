@@ -45,7 +45,7 @@
                         <div class="col-xl-2 col-lg-2 col-md-2">
                             <div class="logo">
                                 <a href="{{ route(config('constants.HEADERS.0.route')) }}" class="big-logo">
-                                    <img src="{{ asset(config('constants.CONFIG.light_logo')) }}"
+                                    <img src="{{ asset(config('constants.CONFIG.logo.header')) }}"
                                         alt="{{ config('constants.BUSINESS.name') }}">
                                 </a>
 

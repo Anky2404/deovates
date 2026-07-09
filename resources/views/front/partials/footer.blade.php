@@ -10,15 +10,15 @@
 
                             <div class="footer-logo">
                                 <a href="{{ route('front.home.index') }}">
-                                    <img src="{{ asset('assets/front/img/logo/logo2_footer.png') }}" alt="Footer Logo">
+                                   <img src="{{ asset(config('constants.CONFIG.logo.header')) }}"
+                                        alt="{{ config('constants.BUSINESS.name') }}">
                                 </a>
                             </div>
 
                             <div class="footer-tittle">
                                 <div class="footer-pera">
                                     <p class="info1">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                        Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        {{ config('constants.CONFIG.footer_info') }}
                                     </p>
                                 </div>
                             </div>
