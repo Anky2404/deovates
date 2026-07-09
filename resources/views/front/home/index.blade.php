@@ -1,6 +1,6 @@
 @extends('front.layouts.app')
 @section('content')
-    <section>
+    {{-- <section>
         <!-- slider Area Start-->
         <div class="slider-area">
             <div class="slider-active">
@@ -2084,5 +2084,5 @@
                 </div>
 
             </div>
-        </section>
+        </section> --}}
     @endsection

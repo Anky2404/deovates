@@ -37,12 +37,24 @@ return [
     |
     */
 
+    // 'guards' => [
+    //     'web' => [
+    //         'driver' => 'session',
+    //         'provider' => 'users',
+    //     ],
+    // ],
+
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
+    config('constants.GUARDS.web') => [
+        'driver'   => 'session',
+        'provider' => config('constants.PROVIDERS.web'),
     ],
+
+    config('constants.GUARDS.admin') => [
+        'driver'   => 'session',
+        'provider' =>  config('constants.PROVIDERS.admin'),
+    ],
+],
 
     /*
     |--------------------------------------------------------------------------
