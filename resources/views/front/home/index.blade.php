@@ -413,6 +413,9 @@
     </p>
                         </div>
                         <div class="row g-4">
+                            @foreach ($services as $service)
+
+
                             <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s"
                                 style="
                     visibility: visible;
@@ -422,13 +425,13 @@
                                 <div class="service-item">
                                     <div class="service-inner">
                                         <div class="service-img">
-                                            <img src="{{ asset('assets/front/img/service-1.jpg') }}" class="img-fluid w-100 rounded"
+                                            <img src="{{ !empty($service['featured_image']) ? asset('storage/'.$service['featured_image']) : asset('assets/frontend/images/1768234677_web-application.webp') }}" class="img-fluid w-100 rounded"
                                                 alt="Image">
                                         </div>
                                         <div class="service-title">
                                             <div class="service-title-name">
                                                 <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                    <a href="#" class="h4 text-white mb-0">Job Visa</a>
+                                                    <a href="#" class="h4 text-white mb-0">{{ $service->title }}</a>
                                                 </div>
                                                 <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
                                                     href="#">Explore More
@@ -436,17 +439,14 @@
                                             </div>
                                             <div class="service-content pb-4">
                                                 <a href="#">
-                                                    <h4 class="text-white mb-4 py-3">Job Visa</h4>
+                                                    <h4 class="text-white mb-4 py-3">{{ $service->title }}</h4>
                                                 </a>
                                                 <div class="px-4">
                                                     <p class="mb-4">
-                                                        Lorem ipsum dolor sit amet consectetur,
-                                                        adipisicing elit. Mollitia fugit dolores nesciunt
-                                                        adipisci obcaecati veritatis cum, ratione
-                                                        aspernatur autem velit.
+                                                        {!! $service->short_description !!}
                                                     </p>
                                                     <a class="btn btn-primary border-secondary rounded-pill py-3 px-5"
-                                                        href="#">Explore More
+                                                        href="{{ route('front.services.details', $service['slug']) }}">Explore More
                                                     </a>
                                                 </div>
                                             </div>
@@ -454,249 +454,54 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.3s"
-                                style="
-                    visibility: visible;
-                    animation-delay: 0.3s;
-                    animation-name: fadeInUp;
-                  ">
-                                <div class="service-item">
-                                    <div class="service-inner">
-                                        <div class="service-img">
-                                            <img src="{{ asset('assets/front/img/service-2.jpg') }}" class="img-fluid w-100 rounded"
-                                                alt="Image">
-                                        </div>
-                                        <div class="service-title">
-                                            <div class="service-title-name">
-                                                <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                    <a href="#" class="h4 text-white mb-0">Business Visa
-                                                    </a>
-                                                </div>
-                                                <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
-                                                    href="#">Explore More
-                                                </a>
-                                            </div>
-                                            <div class="service-content pb-4">
-                                                <a href="#">
-                                                    <h4 class="text-white mb-4 py-3">Business Visa</h4>
-                                                </a>
-                                                <div class="px-4">
-                                                    <p class="mb-4">
-                                                        Lorem ipsum dolor sit amet consectetur,
-                                                        adipisicing elit. Mollitia fugit dolores nesciunt
-                                                        adipisci obcaecati veritatis cum, ratione
-                                                        aspernatur autem velit.
-                                                    </p>
-                                                    <a class="btn btn-primary border-secondary rounded-pill text-white py-3 px-5"
-                                                        href="#">Explore More
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.5s"
-                                style="
-                    visibility: visible;
-                    animation-delay: 0.5s;
-                    animation-name: fadeInUp;
-                  ">
-                                <div class="service-item">
-                                    <div class="service-inner">
-                                        <div class="service-img">
-                                            <img src="{{ asset('assets/front/img/service-3.jpg') }}" class="img-fluid w-100 rounded"
-                                                alt="Image">
-                                        </div>
-                                        <div class="service-title">
-                                            <div class="service-title-name">
-                                                <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                    <a href="#" class="h4 text-white mb-0">Diplometic Visa
-                                                    </a>
-                                                </div>
-                                                <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
-                                                    href="#">Explore More
-                                                </a>
-                                            </div>
-                                            <div class="service-content pb-4">
-                                                <a href="#">
-                                                    <h4 class="text-white mb-4 py-3">
-                                                        Diplometic Visa
-                                                    </h4>
-                                                </a>
-                                                <div class="px-4">
-                                                    <p class="mb-4">
-                                                        Lorem ipsum dolor sit amet consectetur,
-                                                        adipisicing elit. Mollitia fugit dolores nesciunt
-                                                        adipisci obcaecati veritatis cum, ratione
-                                                        aspernatur autem velit.
-                                                    </p>
-                                                    <a class="btn btn-primary border-secondary rounded-pill text-white py-3 px-5"
-                                                        href="#">Explore More
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s"
-                                style="
-                    visibility: visible;
-                    animation-delay: 0.1s;
-                    animation-name: fadeInUp;
-                  ">
-                                <div class="service-item">
-                                    <div class="service-inner">
-                                        <div class="service-img">
-                                            <img src="{{ asset('assets/front/img/service-1.jpg') }}" class="img-fluid w-100 rounded"
-                                                alt="Image">
-                                        </div>
-                                        <div class="service-title">
-                                            <div class="service-title-name">
-                                                <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                    <a href="#" class="h4 text-white mb-0">Students Visa
-                                                    </a>
-                                                </div>
-                                                <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
-                                                    href="#">Explore More
-                                                </a>
-                                            </div>
-                                            <div class="service-content pb-4">
-                                                <a href="#">
-                                                    <h4 class="text-white mb-4 py-3">Students Visa</h4>
-                                                </a>
-                                                <div class="px-4">
-                                                    <p class="mb-4">
-                                                        Lorem ipsum dolor sit amet consectetur,
-                                                        adipisicing elit. Mollitia fugit dolores nesciunt
-                                                        adipisci obcaecati veritatis cum, ratione
-                                                        aspernatur autem velit.
-                                                    </p>
-                                                    <a class="btn btn-primary border-secondary rounded-pill text-white py-3 px-5"
-                                                        href="#">Explore More
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.3s"
-                                style="
-                    visibility: visible;
-                    animation-delay: 0.3s;
-                    animation-name: fadeInUp;
-                  ">
-                                <div class="service-item">
-                                    <div class="service-inner">
-                                        <div class="service-img">
-                                            <img src="{{ asset('assets/front/img/service-2.jpg') }}" class="img-fluid w-100 rounded"
-                                                alt="Image">
-                                        </div>
-                                        <div class="service-title">
-                                            <div class="service-title-name">
-                                                <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                    <a href="#" class="h4 text-white mb-0">Residence Visa
-                                                    </a>
-                                                </div>
-                                                <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
-                                                    href="#">Explore More
-                                                </a>
-                                            </div>
-                                            <div class="service-content pb-4">
-                                                <a href="#">
-                                                    <h4 class="text-white mb-4 py-3">Residence Visa</h4>
-                                                </a>
-                                                <div class="px-4">
-                                                    <p class="mb-4">
-                                                        Lorem ipsum dolor sit amet consectetur,
-                                                        adipisicing elit. Mollitia fugit dolores nesciunt
-                                                        adipisci obcaecati veritatis cum, ratione
-                                                        aspernatur autem velit.
-                                                    </p>
-                                                    <a class="btn btn-primary border-secondary rounded-pill text-white py-3 px-5"
-                                                        href="#">Explore More
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.5s"
-                                style="
-                    visibility: visible;
-                    animation-delay: 0.5s;
-                    animation-name: fadeInUp;
-                  ">
-                                <div class="service-item">
-                                    <div class="service-inner">
-                                        <div class="service-img">
-                                            <img src="{{ asset('assets/front/img/service-3.jpg') }}" class="img-fluid w-100 rounded"
-                                                alt="Image">
-                                        </div>
-                                        <div class="service-title">
-                                            <div class="service-title-name">
-                                                <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                    <a href="#" class="h4 text-white mb-0">Tourist Visa
-                                                    </a>
-                                                </div>
-                                                <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
-                                                    href="#">Explore More
-                                                </a>
-                                            </div>
-                                            <div class="service-content pb-4">
-                                                <a href="#">
-                                                    <h4 class="text-white mb-4 py-3">Tourist Visa</h4>
-                                                </a>
-                                                <div class="px-4">
-                                                    <p class="mb-4">
-                                                        Lorem ipsum dolor sit amet consectetur,
-                                                        adipisicing elit. Mollitia fugit dolores nesciunt
-                                                        adipisci obcaecati veritatis cum, ratione
-                                                        aspernatur autem velit.
-                                                    </p>
-                                                    <a class="btn btn-primary border-secondary rounded-pill text-white py-3 px-5"
-                                                        href="#">Explore More
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
         </section>
         <!-- about section end -->
-       {{-- <section class="call-2-acction" data-stellar-background-ratio="0.4" style="background-position: 0% 16.48px">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="c2a">
-                            <h2>Omnibus reliquar rebus</h2>
-                            <p>
-                                Evertitur depravatum illo tamquam novum, possent intus
-                                laudatur hinc grate aristoteli per splendido soluta fabulae,
-                                ne aristippi cui deleniti nostros illud.
-                            </p>
-                            <a href="#" class="btn btn-main btn-lg">Purchase Now</a>
-                        </div>
-                    </div>
+      <section class="call-2-acction" data-stellar-background-ratio="0.4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="section-title st-center">
+                    <h3>LET'S BUILD SOMETHING EXCEPTIONAL</h3>
+
+                    <p>
+                        Transform Your Vision into Powerful Digital Solutions
+                    </p>
                 </div>
+
+                <div class="c2a">
+
+                    <p>
+                        Whether you're launching a startup, modernizing your business, or scaling your digital presence, Deovate World delivers custom websites, business software, eCommerce platforms, and innovative technology solutions tailored to your goals. Partner with our experienced team to build secure, scalable, and high-performing digital products that create lasting business value.
+                    </p>
+
+                    <a href="{{ route('front.contact.index') }}" class="btn btn-main btn-lg">
+                        Start Your Project
+                    </a>
+
+                </div>
+
             </div>
-        </section>
+        </div>
+    </div>
+</section>
+
         <section class="clients py-5">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title st-center">
-                            <h3>Some Of Our Clients</h3>
-                            <p>Avocent deditum long</p>
-                        </div>
+    <h3>TECHNOLOGIES WE WORK WITH</h3>
+
+    <p>
+        Building modern, secure, and scalable digital solutions using trusted technologies and industry-leading platforms.
+    </p>
+</div>
                     </div>
                 </div>
                 <div class="clients-carousel owl-carousel owl-theme">
@@ -892,7 +697,7 @@
                 </div>
             </div>
         </section>
-        <section class="roadmap-area section-padding" id="roadmap">
+      {{--   <section class="roadmap-area section-padding" id="roadmap">
             <div class="container">
                 <div class="row">
                     <div class="col-12 text-center">

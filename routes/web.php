@@ -1,10 +1,23 @@
 <?php
 
+use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\ServiceController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('front.home.index');
-})->name('front.home.index');
+Route::name('front.')->group(function(){
+/* ================= HOME ================= */
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
+
+
+/* ================= SERVICES ================= */
+Route::prefix('services')->controller(ServiceController::class)->name('services.')->group(function(){
+Route::get('/', 'index')->name('index');
+Route::get('/{slug}', 'details')->name('details');
+});
+
+
+});
 
 Route::get('/about', function () {
     return view('front.about.index');
@@ -14,9 +27,7 @@ Route::get('/projects', function () {
     return view('front.portfolios.index');
 })->name('front.projects.index');
 
-Route::get('/services', function () {
-    return view('front.services.index');
-})->name('front.services.index');
+
 
 Route::get('/blog', function () {
     return view('front.blog.index');

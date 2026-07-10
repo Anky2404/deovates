@@ -8124,8 +8124,56 @@ del {
     background-color: #000;
 }
 
+.call-2-acction {
+    position: relative;
+    background: url('../img/c2a.png') center center/cover no-repeat;
+    padding: 100px 0;
+    overflow: hidden;
+}
+
+.call-2-acction::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 28, 63, 0.55); /* Dark overlay */
+    z-index: 1;
+}
+
+.call-2-acction .container {
+    position: relative;
+    z-index: 2;
+}
+
 .c2a {
-    max-width: 700px;
+    /* max-width: 900px; */
+    margin: auto;
+    padding: 50px;
+    border-radius: 20px;
+
+    /* Glass Effect */
+    background: rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+}
+
+.c2a h2,
+.c2a p,
+.c2a h3 {
+    color: #fff;
+}
+
+.c2a p {
+    font-size: 17px;
+    line-height: 30px;
+    opacity: .95;
+}
+
+.c2a {
+    /* max-width: 700px; */
     margin: 0 auto;
     text-align: center;
     color: #fff !important;
