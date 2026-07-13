@@ -32,23 +32,33 @@ class ServicePlatform extends Model
         ];
     }
 
+    // The service this pivot row belongs to
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }
 
+    // The linked platform
     public function platform(): BelongsTo
     {
         return $this->belongsTo(Platform::class);
     }
 
+    // Only active rows
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
+    // Sorted by display order
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('display_order');
+    }
+
+    // Only featured rows
+    public function scopeFeatured(Builder $query): Builder
+    {
+        return $query->where('is_featured', true);
     }
 }

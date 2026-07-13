@@ -1,18 +1,49 @@
-@extends('front.layouts.app')
+﻿@extends('front.layouts.app')
+
+@section('title', $data['page_header']['title'] ?? 'About Us')
 @section('content')
-    <!-- slider Area Start-->
-    <div class="slider-area ">
+
+    @php
+        $iconMap = [
+            'icon-lightbulb' => 'fas fa-lightbulb',
+            'icon-target' => 'fas fa-bullseye',
+            'icon-shield' => 'fas fa-shield-alt',
+            'icon-trophy' => 'fas fa-trophy',
+            'icon-profile-male' => 'fas fa-user',
+            'icon-clipboard' => 'fas fa-clipboard-list',
+            'icon-speedometer' => 'fas fa-tachometer-alt',
+            'icon-globe' => 'fas fa-globe',
+            'icon-heart' => 'fas fa-heart',
+            'icon-lock' => 'fas fa-lock',
+            'icon-briefcase' => 'fas fa-briefcase',
+            'icon-presentation' => 'fas fa-chalkboard-teacher',
+            'icon-refresh' => 'fas fa-sync-alt',
+            'icon-clock' => 'fas fa-clock',
+            'icon-flag' => 'fas fa-flag',
+            'icon-wallet' => 'fas fa-wallet',
+            'icon-linegraph' => 'fas fa-chart-line',
+            'icon-camera' => 'fas fa-camera',
+            'icon-map-pin' => 'fas fa-map-marker-alt',
+            'icon-bike' => 'fas fa-biking',
+            'icon-tools' => 'fas fa-tools',
+            'icon-gears' => 'fas fa-cogs',
+        ];
+        $icon = fn($key) => $iconMap[$key] ?? 'fas fa-star';
+    @endphp
+
+    <!-- Hero -->
+    <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
-            data-background="{{ asset('assets/front/img/hero/about.jpg') }}">
+            data-background="{{ \App\Helper::heroBanner('about.jpg', 'assets/front/img/hero/about.jpg') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="hero-cap pt-100">
-                            <h2>About us</h2>
-                            <nav aria-label="breadcrumb ">
+                            <h2>{{ $data['page_header']['title'] ?? 'About Us' }}</h2>
+                            <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="#">Product</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('front.home.index') }}">Home</a></li>
+                                    <li class="breadcrumb-item active">About</li>
                                 </ol>
                             </nav>
                         </div>
@@ -21,1287 +52,776 @@
             </div>
         </div>
     </div>
-    <!-- slider Area End-->
-    <!-- About Area Start -->
-    <section class="about" id="about">
-        <div class="container-xxl py-5">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="section-title st-center">
-                        <h3>WelCome to Sept</h3>
-                        <p>We are a creative Designer</p>
+
+    <!-- Who We Are -->
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
+                    <div class="position-relative" style="max-width:470px;">
+                        <img src="{{ asset('assets/front/img/about.png') }}" class="about-img" alt="Inside Deovate World">
+
+                        @php($stat = $data['growth_numbers']['items'][0] ?? null)
+                        @if ($stat)
+                            <div class="d-flex align-items-center gap-3 p-3 rounded-4"
+                                style="position:absolute; left:-24px; bottom:-24px; background:#fff; box-shadow:0 18px 40px rgba(11,28,57,.18); max-width:260px;">
+                                <div class="simple-process-number flex-shrink-0"
+                                    style="width:54px;height:54px;font-size:18px;margin:0;">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div>
+                                    <div class="h4 mb-0" style="color:#f85603;font-weight:700;">{{ $stat['count'] }}+</div>
+                                    <div class="small text-muted">{{ $stat['label'] }}</div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
+                </div>
+                <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="section-title st-start">
+                        <h3>{{ $data['who_we_are']['title'] }}</h3>
+                        <p>{{ $data['who_we_are']['subtitle'] }}</p>
+                    </div>
+                    <div class="fs-6">{!! $data['who_we_are']['description'] !!}</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision & Mission -->
+    <section class="vm-area py-5" style="background-image:url('{{ asset('assets/front/img/funfact.png') }}');">
+        <div class="vm-overlay"></div>
+        <div class="container py-5 position-relative">
+            <div class="section-title st-center st-light">
+                <h3>{{ $data['vision_mission']['title'] }}</h3>
+                <p>{{ $data['vision_mission']['subtitle']['subtitle'] }}</p>
+            </div>
+            <div class="row g-4 justify-content-center">
+                @foreach (['vision', 'mission'] as $key)
+                    @php($item = $data['vision_mission'][$key])
+                    <div class="col-md-6 col-lg-5 wow fadeInUp" data-wow-delay="{{ $loop->iteration * 0.15 }}s">
+                        <div class="vm-glass-card h-100">
+                            <div class="vm-glass-shine"></div>
+                            <div class="text-center py-4 position-relative">
+                                <div class="simple-process-number mx-auto"><i class="{{ $icon($item['icon']) }}"></i>
+                                </div>
+                                <h4>{{ $item['title'] }}</h4>
+                                <p>{{ $item['text'] }}</p>
+                                <div class="mt-3">
+                                    <span class="h3" style="color:#ff8a3d;font-weight:700;">{{ $item['stat_number'] }}</span>
+                                    <div class="small text-uppercase" style="color:rgba(255,255,255,.75);">{{ $item['stat_label'] }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Growth Numbers -->
+    <section class="counter container-fluid service overflow-hidden py-5" id="counter">
+        <div class="container-fluid counter-facts py-5">
+            <div class="container py-1">
+                <div class="section-title st-center">
+                    <h3>{{ $data['growth_numbers']['title'] }}</h3>
+                    <p>{{ $data['growth_numbers']['subtitle'] }}</p>
+                </div>
+                <div class="row g-4">
+                    @foreach ($data['growth_numbers']['items'] as $item)
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-3 wow fadeInUp"
+                            data-wow-delay="{{ 0.1 * $loop->iteration }}s">
+                            <div class="counter">
+                                <div class="counter-icon"><i class="{{ $icon($item['icon']) }}"></i></div>
+                                <div class="counter-content">
+                                    <h3>{{ $item['label'] }}</h3>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <span class="counter-value" data-toggle="counter-up">{{ $item['count'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Values -->
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="section-title st-center">
+                <h3>{{ $data['core_values']['title'] }}</h3>
+                <p>{{ $data['core_values']['subtitle'] }}</p>
+            </div>
+            <div class="row g-4">
+                @foreach ($data['core_values']['items'] as $item)
+                    <div class="col-sm-6 col-lg-3 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="office-item icon-only h-100">
+                            <div class="office-img"><i class="{{ $icon($item['icon']) }}"></i></div>
+                            <div class="office-content text-center">
+                                <h4>{{ $item['title'] }}</h4>
+                                <p>{{ $item['description'] }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section class="roadmap-area section-padding" id="roadmap">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="heading">
+                    <h5>Our Development Process</h5>
+                    <div class="space-10"></div>
+                    <h1>From Vision to Digital Success</h1>
+                    <p class="mt-3">
+                        At Deovate World, every successful project follows a proven development process.
+                        We combine strategic planning, creative design, modern technologies, and continuous
+                        support to deliver secure, scalable, and high-performing digital solutions that
+                        help businesses grow with confidence.
+                    </p>
+                </div>
+                <div class="space-60 d-none d-sm-block"></div>
+            </div>
+        </div>
+
+        <div class="process-flow">
+
+            <!-- Step 1 -->
+            <div class="process-step wow fadeInLeft" data-wow-delay="0.1s" data-slide-target="0">
+                <div class="process-chevron process-chevron--1">
+                    <span class="process-num">01</span>
+                    <span class="process-icon"><i class="fas fa-search"></i></span>
+                    <span class="process-title">Discovery</span>
                 </div>
             </div>
 
-            <div class="container">
-                <div class="row g-5">
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s"
-                        style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
-                        <div class="img-border">
-                            <img class="img-fluid" src="{{ asset('assets/front/img/about_1.jpg') }}" alt="">
-                        </div>
-                    </div>
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s"
-                        style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
-                        <div class="h-100">
+            <!-- Step 2 -->
+            <div class="process-step wow fadeInLeft" data-wow-delay="0.3s" data-slide-target="1">
+                <div class="process-chevron process-chevron--2">
+                    <span class="process-num">02</span>
+                    <span class="process-icon"><i class="fas fa-paint-brush"></i></span>
+                    <span class="process-title">Planning</span>
+                </div>
+            </div>
 
-                            <h1 class="display-6 mb-4">#1 Digital Solution With <span class="text-primary">10 Years</span>
-                                Of Experience</h1>
-                            <p>Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos.
-                                Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet
+            <!-- Step 3 -->
+            <div class="process-step wow fadeInLeft" data-wow-delay="0.5s" data-slide-target="2">
+                <div class="process-chevron process-chevron--3">
+                    <span class="process-num">03</span>
+                    <span class="process-icon"><i class="fas fa-code"></i></span>
+                    <span class="process-title">Development</span>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="process-step wow fadeInLeft" data-wow-delay="0.7s" data-slide-target="3">
+                <div class="process-chevron process-chevron--4">
+                    <span class="process-num">04</span>
+                    <span class="process-icon"><i class="fas fa-rocket"></i></span>
+                    <span class="process-title">Launch</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Laptop-frame slider showing each step's detail -->
+        <div class="laptop-mockup wow fadeInUp" data-wow-delay="0.2s">
+            <div class="laptop-screen">
+                <div class="laptop-browser-bar">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                    <span class="laptop-url">deovate.world/process</span>
+                </div>
+                <div class="laptop-screen-glass">
+                    <div class="laptop-shine"></div>
+                    <div class="laptop-slides owl-carousel">
+
+                        <div class="laptop-slide">
+                            <span class="process-num">01</span>
+                            <span class="process-icon"><i class="fas fa-search"></i></span>
+                            <h5>Project Discovery & Consultation</h5>
+                            <p>
+                                We begin by understanding your business objectives, target audience, and project
+                                requirements. Through detailed consultation and market research, we create a clear
+                                strategy that aligns technology with your long-term business goals.
                             </p>
-                            <p class="mb-4">Stet no et lorem dolor et diam, amet duo ut dolore vero eos. No stet est diam
-                                rebum amet diam ipsum. Clita clita labore, dolor duo nonumy clita sit at, sed sit sanctus
-                                dolor eos.</p>
-                            <div class="d-flex align-items-center mb-4 pb-2">
-
-                                <img class="flex-shrink-0 rounded-circle" src="{{ asset('assets/front/img/team-1.jpg') }}"
-                                    alt="" style="width:60px;height:60px;object-fit:cover;">
-
-                                <div class="ps-3">
-
-                                    <h4 class="signature mb-1">
-                                        Anky Singh Humraj
-                                    </h4>
-
-                                    <small>CEO & Founder</small>
-
-                                </div>
-
-                            </div>
-                            {{-- <a class="btn btn-primary rounded-pill py-3 px-5" href="">Read More</a> --}}
                         </div>
+
+                        <div class="laptop-slide">
+                            <span class="process-num">02</span>
+                            <span class="process-icon"><i class="fas fa-paint-brush"></i></span>
+                            <h5>Planning & UI/UX Design</h5>
+                            <p>
+                                Our designers and solution architects create intuitive user experiences,
+                                interactive prototypes, and scalable system architecture that provide
+                                the perfect foundation for successful digital products.
+                            </p>
+                        </div>
+
+                        <div class="laptop-slide">
+                            <span class="process-num">03</span>
+                            <span class="process-icon"><i class="fas fa-code"></i></span>
+                            <h5>Development & Quality Assurance</h5>
+                            <p>
+                                Using modern technologies and clean coding standards, our developers build
+                                secure, responsive, and scalable solutions. Every feature is thoroughly tested
+                                to ensure performance, reliability, and security before launch.
+                            </p>
+                        </div>
+
+                        <div class="laptop-slide">
+                            <span class="process-num">04</span>
+                            <span class="process-icon"><i class="fas fa-rocket"></i></span>
+                            <h5>Launch, Growth & Continuous Support</h5>
+                            <p>
+                                After successful deployment, we continue supporting your business with
+                                maintenance, performance optimization, security updates, feature
+                                enhancements, and technical assistance to ensure sustainable digital
+                                growth.
+                            </p>
+                        </div>
+
                     </div>
                 </div>
-                <div class="row g-5 mt-50">
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s"
-                        style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
-                        <div class="h-100">
+            </div>
+            <div class="laptop-base">
+                <span class="laptop-notch"></span>
+            </div>
+            <div class="laptop-shadow"></div>
+        </div>
+    </div>
+</section>
 
-                            <h1 class="display-6 mb-4">Why People Trust Us? Learn About Us!</h1>
-                            <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet
-                                diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna
-                                dolore erat amet</p>
-                            <div class="row g-4">
-                                <div class="col-12">
-                                    <div class="skill">
-                                        <div class="d-flex justify-content-between">
-                                            <p class="mb-2">Digital Marketing</p>
-                                            <p class="mb-2">85%</p>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="85"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 85%;"></div>
-                                        </div>
-                                    </div>
+    <!-- Founder -->
+    <section class="py-5" style="background:#f5f8fd;">
+        <div class="container py-5">
+            <div class="section-title st-center">
+                <h3>{{ $data['founder']['section_title'] }}</h3>
+                <p>{{ $data['founder']['subtitle'] }}</p>
+            </div>
+            <div class="row g-5 align-items-center justify-content-center">
+                <div class="col-lg-3 wow fadeInLeft" data-wow-delay="0.1s">
+                    <div class="phone-mockup">
+                        <div class="phone-frame">
+                            <div class="phone-notch"></div>
+                            <div class="phone-screen">
+                                <div class="phone-statusbar">
+                                    <span class="phone-brand">Deovate</span>
                                 </div>
-                                <div class="col-12">
-                                    <div class="skill">
-                                        <div class="d-flex justify-content-between">
-                                            <p class="mb-2">SEO &amp; Backlinks</p>
-                                            <p class="mb-2">90%</p>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="90"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 90%;"></div>
-                                        </div>
-                                    </div>
+                                <div class="founder-phone-photo">
+                                    <img src="{{ asset('assets/front/img/team-1.jpg') }}"
+                                        alt="{{ $data['founder']['name'] }}">
                                 </div>
-                                <div class="col-12">
-                                    <div class="skill">
-                                        <div class="d-flex justify-content-between">
-                                            <p class="mb-2">Design &amp; Development</p>
-                                            <p class="mb-2">95%</p>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="95"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 95%;"></div>
-                                        </div>
+                                <div class="founder-phone-info">
+                                    <h4>{{ $data['founder']['name'] }}</h4>
+                                    <p>{{ $data['founder']['role'] }}</p>
+                                    <div class="founder-phone-social">
+                                        @foreach ($data['founder']['social'] as $social)
+                                            <a href="{{ $social['link'] }}" target="_blank"
+                                                rel="noopener noreferrer">
+                                                <i class="fab fa-{{ $social['icon'] }}"></i>
+                                            </a>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
+                            <div class="phone-home-indicator"></div>
                         </div>
+                        <div class="phone-shadow"></div>
                     </div>
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s"
-                        style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
-                        <div class="img-border">
-                            <img class="img-fluid" src="{{ asset('assets/front/img/feature.jpg') }}" alt="">
+                </div>
+
+                <div class="col-lg-9 wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="app-tablet">
+                        <div class="tablet-frame app-tablet-frame">
+                            <div class="tablet-cam"></div>
+                            <div class="tablet-screen app-tablet-screen">
+                                <div class="tablet-statusbar">
+                                    <span class="phone-brand">Deovate</span>
+                                </div>
+
+                                <div class="app-screen-header">
+                                    <h4>Founder &amp; Leadership</h4>
+                                    <p>The vision, strategy, and technology leadership behind the company</p>
+                                </div>
+
+                                <div class="founder-tablet-body">
+                                     <p></p></p>
+                                    @foreach ($data['founder']['bio'] as $para)
+                                       <span>{{ $para }}</span>
+                                    @endforeach
+                                    </p>
+
+                                    @foreach ($data['founder']['expertise'] as $skill)
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span style="color:#073965;font-weight:600;">{{ $skill['label'] }}</span>
+                                                <span class="text-muted">{{ $skill['percent'] }}%</span>
+                                            </div>
+                                            <div class="rounded-pill overflow-hidden" style="background:#e3e8f0;height:8px;">
+                                                <div class="rounded-pill h-100"
+                                                    style="width:{{ $skill['percent'] }}%;background:linear-gradient(90deg,#073965,#f85603);">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </section>
-    <!-- Team End -->
 
-    <section class="clients py-5 bg-grey">
+    <!-- Office & Culture -->
+    <section class="vm-area py-5" style="background-image:url('{{ asset('assets/front/img/funfact.png') }}');">
+        <div class="vm-overlay"></div>
+        <div class="container py-5 position-relative">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-5 wow fadeInLeft" data-wow-delay="0.1s">
+                    <div class="office-culture-slide-frame mx-auto">
+                        <div class="office-culture-slider owl-carousel">
+                            <div><img src="{{ asset('assets/front/img/why-2.png') }}" alt="Deovate team culture"></div>
+                            <div><img src="{{ asset('assets/front/img/why-4.png') }}" alt="Deovate office"></div>
+                            <div><img src="{{ asset('assets/front/img/why-3.png') }}" alt="Deovate at work"></div>
+                            <div><img src="{{ asset('assets/front/img/why-1.png') }}" alt="Deovate strategy"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7 wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="vm-glass-card p-4 p-lg-5">
+                        <div class="vm-glass-shine"></div>
+                        <div class="position-relative">
+                            <div class="section-title st-start st-light mb-4">
+                                <h3>{{ $data['office_culture']['title'] }}</h3>
+                                <p>{{ $data['office_culture']['subtitle'] }}</p>
+                            </div>
+                            @foreach ($data['office_culture']['content'] as $para)
+                                <p style="color:rgba(255,255,255,.78);">{{ $para }}</p>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process -->
+    {{-- <section class="py-5" style="background:#f5f8fd;">
+        <div class="container py-5">
+            <div class="section-title st-center">
+                <h3>{{ $data['process']['title'] }}</h3>
+                <p>{{ $data['process']['subtitle'] }}</p>
+            </div>
+            <div class="row g-4">
+                @foreach ($data['process']['steps'] as $step)
+                    <div class="col-md-6 col-lg-3 wow fadeInUp" data-wow-delay="{{ 0.1 * $loop->iteration }}s">
+                        <div class="simple-process-item">
+                            <div class="simple-process-number">{{ $step['step'] }}</div>
+                            <h4>{{ $step['title'] }}</h4>
+                            <p>{{ $step['description'] }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section> --}}
+
+    <!-- Key Advantages -->
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="section-title st-center">
+                <h3>{{ $data['advantages']['title'] }}</h3>
+                <p>{{ $data['advantages']['subtitle'] }}</p>
+            </div>
+            <div class="row g-4">
+                @foreach ($data['advantages']['items'] as $item)
+                    <div class="col-sm-6 col-lg-3 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="office-item icon-only h-100">
+                            <div class="office-img"><i class="{{ $icon($item['icon']) }}"></i></div>
+                            <div class="office-content text-center">
+                                <h4>{{ $item['title'] }}</h4>
+                                <p>{{ $item['description'] }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+<section class="testimonials">
+
         <div class="container">
+
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>Some Of Our Clients</h3>
+                        <h3>Industries</h3>
                         <p>Avocent deditum long</p>
                     </div>
                 </div>
             </div>
-            <div class="clients-carousel owl-carousel owl-theme">
-                <div class="item">
-                    <img src="{{ asset('assets/front/img/client.png') }}" class="img-fluid" alt="Client 1">
+
+            <div class="testi-mockup wow fadeInUp" data-wow-delay="0.1s">
+                <div class="laptop-screen">
+                    <div class="laptop-browser-bar">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                        <span class="laptop-url">deovate.world/reviews</span>
+                    </div>
+                    <div class="laptop-screen-glass testi-glass">
+                        <div class="laptop-shine"></div>
+                        <div class="testimonials-carousel owl-carousel owl-theme">
+
+                            <!-- Testimonial 1 -->
+                            <div class="testimonial">
+                                <div class="testimonial-img">
+                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.png') }}" alt="John Anderson">
+                                </div>
+                                <blockquote>
+                                    <p>
+                                        Their team delivered our website ahead of schedule with
+                                        exceptional quality. Communication was excellent and
+                                        the final product exceeded our expectations.
+                                    </p>
+                                    <footer>
+                                        <strong>John Anderson</strong><br>
+                                        <cite>CEO, Tech Solutions</cite>
+                                    </footer>
+                                </blockquote>
+                            </div>
+
+                            <!-- Testimonial 2 -->
+                            <div class="testimonial">
+                                <div class="testimonial-img">
+                                    <img src="{{ asset('assets/front/img/testimonial/1.png') }}" alt="Sarah Williams">
+                                </div>
+                                <blockquote>
+                                    <p>
+                                        Professional developers with deep technical knowledge.
+                                        They successfully developed our ERP system and continue
+                                        to provide outstanding support.
+                                    </p>
+                                    <footer>
+                                        <strong>Sarah Williams</strong><br>
+                                        <cite>Operations Manager</cite>
+                                    </footer>
+                                </blockquote>
+                            </div>
+
+                            <!-- Testimonial 3 -->
+                            <div class="testimonial">
+                                <div class="testimonial-img">
+                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.png') }}" alt="Michael Brown">
+                                </div>
+                                <blockquote>
+                                    <p>
+                                        We highly recommend them for custom software development.
+                                        Our online sales increased significantly after launching
+                                        the new platform.
+                                    </p>
+                                    <footer>
+                                        <strong>Michael Brown</strong><br>
+                                        <cite>Founder, Ecommerce Hub</cite>
+                                    </footer>
+                                </blockquote>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-                <div class="item">
-                    <img src="{{ asset('assets/front/img/client2.png') }}" class="img-fluid" alt="Client 2">
+                <div class="laptop-base">
+                    <span class="laptop-notch"></span>
                 </div>
-                <div class="item">
-                    <img src="{{ asset('assets/front/img/client3.png') }}" class="img-fluid" alt="Client 3">
-                </div>
-                <div class="item">
-                    <img src="{{ asset('assets/front/img/client4.png') }}" class="img-fluid" alt="Client 4">
-                </div>
-                <div class="item">
-                    <img src="{{ asset('assets/front/img/client5.png') }}" class="img-fluid" alt="Client 5">
-                </div>
-                <div class="item">
-                    <img src="{{ asset('assets/front/img/client6.png') }}" class="img-fluid" alt="Client 6">
-                </div>
-                <div class="item">
-                    <img src="{{ asset('assets/front/img/client7.png') }}" class="img-fluid" alt="Client 7">
-                </div>
-                <div class="item">
-                    <img src="{{ asset('assets/front/img/client8.png') }}" class="img-fluid" alt="Client 8">
-                </div>
-                <div class="item">
-                    <img src="{{ asset('assets/front/img/client9.png') }}" class="img-fluid" alt="Client 9">
-                </div>
+                <div class="laptop-shadow"></div>
             </div>
+
         </div>
+
     </section>
 
-    <section class="about container-fluid service overflow-hidden pt-5" id="about">
+    {{-- @if ($testimonials->isNotEmpty())
+        <section class="testimonials py-5" style="background:#f5f8fd;">
+            <div class="container py-5">
+                <div class="section-title st-center">
+                    <h3>{{ $data['testimonials']['title'] }}</h3>
+                    <p>{{ $data['testimonials']['subtitle'] }}</p>
+                </div>
+                <div class="testi-mockup mx-auto">
+                    <div class="laptop-shine"></div>
+                    <div class="testi-glass">
+                        <div class="testimonials-carousel owl-carousel">
+                            @foreach ($testimonials as $testimonial)
+                                <div class="testimonial">
+                                    <blockquote>
+                                        <p>&ldquo;{{ $testimonial->message }}&rdquo;</p>
+                                        <footer>
+                                            <img src="{{ $testimonial->photo ? asset('storage/' . $testimonial->photo) : asset('assets/front/img/default-img.png') }}"
+                                                alt="{{ $testimonial->name }}">
+                                            <div>
+                                                <strong>{{ $testimonial->name }}</strong>
+                                                <span>{{ $testimonial->designation }}{{ $testimonial->company ? ', ' . $testimonial->company : '' }}</span>
+                                            </div>
+                                        </footer>
+                                    </blockquote>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif --}}
+
+    <!-- CTA -->
+    <section class="call-2-acction" data-stellar-background-ratio="0.4">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
+
                     <div class="section-title st-center">
-                        <h3>WelCome to Sept</h3>
-                        <p>We are a creative Designer</p>
+                        <h3>LET'S BUILD SOMETHING EXCEPTIONAL</h3>
+
+                        <p>
+                            Transform Your Vision into Powerful Digital Solutions
+                        </p>
                     </div>
-                    <div class="row g-4">
-                        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s"
-                            style="
-                    visibility: visible;
-                    animation-delay: 0.1s;
-                    animation-name: fadeInUp;
-                  ">
-                            <div class="service-item">
-                                <div class="service-inner">
-                                    <div class="service-img">
-                                        <img src="{{ asset('assets/front/img/service-1.jpg') }}"
-                                            class="img-fluid w-100 rounded" alt="Image">
-                                    </div>
-                                    <div class="service-title">
-                                        <div class="service-title-name">
-                                            <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                <a href="#" class="h4 text-white mb-0">Job Visa</a>
-                                            </div>
-                                            <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
-                                                href="#">Explore More
-                                            </a>
-                                        </div>
-                                        <div class="service-content pb-4">
-                                            <a href="#">
-                                                <h4 class="text-white mb-4 py-3">Job Visa</h4>
-                                            </a>
-                                            <div class="px-4">
-                                                <p class="mb-4">
-                                                    Lorem ipsum dolor sit amet consectetur,
-                                                    adipisicing elit. Mollitia fugit dolores nesciunt
-                                                    adipisci obcaecati veritatis cum, ratione
-                                                    aspernatur autem velit.
-                                                </p>
-                                                <a class="btn btn-primary border-secondary rounded-pill py-3 px-5"
-                                                    href="#">Explore More
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.3s"
-                            style="
-                    visibility: visible;
-                    animation-delay: 0.3s;
-                    animation-name: fadeInUp;
-                  ">
-                            <div class="service-item">
-                                <div class="service-inner">
-                                    <div class="service-img">
-                                        <img src="{{ asset('assets/front/img/service-2.jpg') }}"
-                                            class="img-fluid w-100 rounded" alt="Image">
-                                    </div>
-                                    <div class="service-title">
-                                        <div class="service-title-name">
-                                            <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                <a href="#" class="h4 text-white mb-0">Business Visa
-                                                </a>
-                                            </div>
-                                            <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
-                                                href="#">Explore More
-                                            </a>
-                                        </div>
-                                        <div class="service-content pb-4">
-                                            <a href="#">
-                                                <h4 class="text-white mb-4 py-3">Business Visa</h4>
-                                            </a>
-                                            <div class="px-4">
-                                                <p class="mb-4">
-                                                    Lorem ipsum dolor sit amet consectetur,
-                                                    adipisicing elit. Mollitia fugit dolores nesciunt
-                                                    adipisci obcaecati veritatis cum, ratione
-                                                    aspernatur autem velit.
-                                                </p>
-                                                <a class="btn btn-primary border-secondary rounded-pill text-white py-3 px-5"
-                                                    href="#">Explore More
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.5s"
-                            style="
-                    visibility: visible;
-                    animation-delay: 0.5s;
-                    animation-name: fadeInUp;
-                  ">
-                            <div class="service-item">
-                                <div class="service-inner">
-                                    <div class="service-img">
-                                        <img src="{{ asset('assets/front/img/service-3.jpg') }}"
-                                            class="img-fluid w-100 rounded" alt="Image">
-                                    </div>
-                                    <div class="service-title">
-                                        <div class="service-title-name">
-                                            <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                <a href="#" class="h4 text-white mb-0">Diplometic Visa
-                                                </a>
-                                            </div>
-                                            <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
-                                                href="#">Explore More
-                                            </a>
-                                        </div>
-                                        <div class="service-content pb-4">
-                                            <a href="#">
-                                                <h4 class="text-white mb-4 py-3">
-                                                    Diplometic Visa
-                                                </h4>
-                                            </a>
-                                            <div class="px-4">
-                                                <p class="mb-4">
-                                                    Lorem ipsum dolor sit amet consectetur,
-                                                    adipisicing elit. Mollitia fugit dolores nesciunt
-                                                    adipisci obcaecati veritatis cum, ratione
-                                                    aspernatur autem velit.
-                                                </p>
-                                                <a class="btn btn-primary border-secondary rounded-pill text-white py-3 px-5"
-                                                    href="#">Explore More
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s"
-                            style="
-                    visibility: visible;
-                    animation-delay: 0.1s;
-                    animation-name: fadeInUp;
-                  ">
-                            <div class="service-item">
-                                <div class="service-inner">
-                                    <div class="service-img">
-                                        <img src="{{ asset('assets/front/img/service-1.jpg') }}"
-                                            class="img-fluid w-100 rounded" alt="Image">
-                                    </div>
-                                    <div class="service-title">
-                                        <div class="service-title-name">
-                                            <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                <a href="#" class="h4 text-white mb-0">Students Visa
-                                                </a>
-                                            </div>
-                                            <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
-                                                href="#">Explore More
-                                            </a>
-                                        </div>
-                                        <div class="service-content pb-4">
-                                            <a href="#">
-                                                <h4 class="text-white mb-4 py-3">Students Visa</h4>
-                                            </a>
-                                            <div class="px-4">
-                                                <p class="mb-4">
-                                                    Lorem ipsum dolor sit amet consectetur,
-                                                    adipisicing elit. Mollitia fugit dolores nesciunt
-                                                    adipisci obcaecati veritatis cum, ratione
-                                                    aspernatur autem velit.
-                                                </p>
-                                                <a class="btn btn-primary border-secondary rounded-pill text-white py-3 px-5"
-                                                    href="#">Explore More
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.3s"
-                            style="
-                    visibility: visible;
-                    animation-delay: 0.3s;
-                    animation-name: fadeInUp;
-                  ">
-                            <div class="service-item">
-                                <div class="service-inner">
-                                    <div class="service-img">
-                                        <img src="{{ asset('assets/front/img/service-2.jpg') }}"
-                                            class="img-fluid w-100 rounded" alt="Image">
-                                    </div>
-                                    <div class="service-title">
-                                        <div class="service-title-name">
-                                            <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                <a href="#" class="h4 text-white mb-0">Residence Visa
-                                                </a>
-                                            </div>
-                                            <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
-                                                href="#">Explore More
-                                            </a>
-                                        </div>
-                                        <div class="service-content pb-4">
-                                            <a href="#">
-                                                <h4 class="text-white mb-4 py-3">Residence Visa</h4>
-                                            </a>
-                                            <div class="px-4">
-                                                <p class="mb-4">
-                                                    Lorem ipsum dolor sit amet consectetur,
-                                                    adipisicing elit. Mollitia fugit dolores nesciunt
-                                                    adipisci obcaecati veritatis cum, ratione
-                                                    aspernatur autem velit.
-                                                </p>
-                                                <a class="btn btn-primary border-secondary rounded-pill text-white py-3 px-5"
-                                                    href="#">Explore More
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.5s"
-                            style="
-                    visibility: visible;
-                    animation-delay: 0.5s;
-                    animation-name: fadeInUp;
-                  ">
-                            <div class="service-item">
-                                <div class="service-inner">
-                                    <div class="service-img">
-                                        <img src="{{ asset('assets/front/img/service-3.jpg') }}"
-                                            class="img-fluid w-100 rounded" alt="Image">
-                                    </div>
-                                    <div class="service-title">
-                                        <div class="service-title-name">
-                                            <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                                                <a href="#" class="h4 text-white mb-0">Tourist Visa
-                                                </a>
-                                            </div>
-                                            <a class="btn bg-light text-secondary rounded-pill py-3 px-5 mb-4"
-                                                href="#">Explore More
-                                            </a>
-                                        </div>
-                                        <div class="service-content pb-4">
-                                            <a href="#">
-                                                <h4 class="text-white mb-4 py-3">Tourist Visa</h4>
-                                            </a>
-                                            <div class="px-4">
-                                                <p class="mb-4">
-                                                    Lorem ipsum dolor sit amet consectetur,
-                                                    adipisicing elit. Mollitia fugit dolores nesciunt
-                                                    adipisci obcaecati veritatis cum, ratione
-                                                    aspernatur autem velit.
-                                                </p>
-                                                <a class="btn btn-primary border-secondary rounded-pill text-white py-3 px-5"
-                                                    href="#">Explore More
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
+                    <div class="c2a">
+
+                        <p>
+                            Whether you're launching a startup, modernizing your business, or scaling your digital presence,
+                            Deovate World delivers custom websites, business software, eCommerce platforms, and innovative
+                            technology solutions tailored to your goals. Partner with our experienced team to build secure,
+                            scalable, and high-performing digital products that create lasting business value.
+                        </p>
+
+                        <a href="{{ route('front.contact.index') }}" class="btn btn-main btn-lg">
+                            Start Your Project
+                        </a>
+
                     </div>
+
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="videos py-5 site-blocks-cover overlay inner-page-cover"
-        style="background-image: url({{ asset('assets/front/img/hero_bg_4.jpg') }}); background-attachment: fixed;">
+ <section id="faq-section" class="faq-section">
         <div class="container">
-            <div class="row align-items-center justify-content-center text-center">
+
+            <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>Some Of Our Clients</h3>
+                        <h3>Industries</h3>
                         <p>Avocent deditum long</p>
                     </div>
                 </div>
-
-
-
-                <div class="col-md-7" data-aos="fade-up" data-aos-delay="400">
-                    <a href="https://vimeo.com/channels/staffpicks/93951774"
-                        class="play-single-big mb-4 d-inline-block popup-vimeo"><span class="icon-play"></span></a>
-                    <h2 class="text-white font-weight-light mb-5 h1">View Our Services By Watching This Short Video</h2>
-
-                </div>
             </div>
-        </div>
+
+            <div class="faq-contact-grid">
+
+                <!-- LEFT: FAQ app tablet -->
+                <div class="faq-tablet-col wow fadeInLeft" data-wow-delay="0.1s">
+                    <div class="app-tablet">
+                        <div class="tablet-frame app-tablet-frame">
+                            <div class="tablet-cam"></div>
+                            <div class="tablet-screen app-tablet-screen">
+                                <div class="tablet-statusbar">
+                                    <span class="phone-brand">Deovate</span>
+                                </div>
+
+                                <div class="app-screen-header">
+                                    <h4>FAQs</h4>
+                                    <p>Quick answers to common questions</p>
+                                </div>
+
+                                <div class="faq-wrapper app-faq-list">
+
+                                    <div class="faq-item active">
+                                        <div class="faq-title">
+                                            <h5>What services does your company provide?</h5>
+                                            <span class="faq-icon">
+                                                <i class="fa fa-minus"></i>
+                                            </span>
+                                        </div>
+
+                                        <div class="faq-content" style="display:block;">
+                                            <p>
+                                                We provide website development, custom software development,
+                                                eCommerce solutions, mobile applications, UI/UX design,
+                                                cloud solutions, API integration, ERP/CRM systems, and
+                                                ongoing maintenance & support.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="faq-item">
+                                        <div class="faq-title">
+                                            <h5>How long does a website or software project take?</h5>
+                                            <span class="faq-icon">
+                                                <i class="fa fa-plus"></i>
+                                            </span>
+                                        </div>
+
+                                        <div class="faq-content">
+                                            <p>
+                                                Project timelines depend on complexity. A business website
+                                                generally takes 2–4 weeks, while custom software or enterprise
+                                                applications may take several weeks to a few months.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="faq-item">
+                                        <div class="faq-title">
+                                            <h5>Do you provide website redesign services?</h5>
+                                            <span class="faq-icon">
+                                                <i class="fa fa-plus"></i>
+                                            </span>
+                                        </div>
+
+                                        <div class="faq-content">
+                                            <p>
+                                                Yes. We redesign outdated websites with a modern UI,
+                                                better performance, improved SEO, enhanced security,
+                                                and a fully responsive design.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="faq-item">
+                                        <div class="faq-title">
+                                            <h5>Which technologies do you specialize in?</h5>
+                                            <span class="faq-icon">
+                                                <i class="fa fa-plus"></i>
+                                            </span>
+                                        </div>
+
+                                        <div class="faq-content">
+                                            <p>
+                                                We work with Laravel, PHP, React, Node.js, Java, Spring Boot,
+                                                MySQL, PostgreSQL, WordPress, Shopify, REST APIs,
+                                                AWS, Azure and modern frontend technologies.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="faq-item">
+                                        <div class="faq-title">
+                                            <h5>Will my website be mobile-friendly?</h5>
+                                            <span class="faq-icon">
+                                                <i class="fa fa-plus"></i>
+                                            </span>
+                                        </div>
+
+                                        <div class="faq-content">
+                                            <p>
+                                                Absolutely. Every website we build is fully responsive
+                                                and optimized for desktops, tablets and smartphones.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="faq-item">
+                                        <div class="faq-title">
+                                            <h5>Do you provide maintenance after project delivery?</h5>
+                                            <span class="faq-icon">
+                                                <i class="fa fa-plus"></i>
+                                            </span>
+                                        </div>
+
+                                        <div class="faq-content">
+                                            <p>
+                                                Yes. We provide maintenance, security updates,
+                                                bug fixes, performance optimization and technical
+                                                support after deployment.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tablet-home-btn"></div>
+                        </div>
+                        <div class="tablet-shadow"></div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Contact form tablet -->
+                <div class="contact-tablet-col wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="app-tablet">
+                        <div class="tablet-frame app-tablet-frame">
+                            <div class="tablet-cam"></div>
+                            <div class="tablet-screen app-tablet-screen">
+                                <div class="tablet-statusbar">
+                                    <span class="phone-brand">Deovate</span>
+                                </div>
+
+                                <div class="app-screen-header">
+                                    <h4>Get In Touch</h4>
+                                    <p>We'd love to hear about your project</p>
+                                </div>
+
+                                <form id="homeContactForm" class="app-contact-form" novalidate>
+
+                                    <div class="app-form-group">
+                                        <label for="hc-name">Full Name</label>
+                                        <input type="text" id="hc-name" name="name" required placeholder="John Doe">
+                                        <span class="app-form-error">Please enter your name.</span>
+                                    </div>
+
+                                    <div class="app-form-group">
+                                        <label for="hc-email">Email Address</label>
+                                        <input type="email" id="hc-email" name="email" required placeholder="john@example.com">
+                                        <span class="app-form-error">Please enter a valid email.</span>
+                                    </div>
+
+                                    <div class="app-form-group">
+                                        <label for="hc-phone">Phone Number</label>
+                                        <input type="tel" id="hc-phone" name="phone" placeholder="+91 12345 67890">
+                                        <span class="app-form-error">Please enter a valid phone number.</span>
+                                    </div>
+
+                                    <div class="app-form-group">
+                                        <label for="hc-message">Message</label>
+                                        <textarea id="hc-message" name="message" rows="4" required placeholder="Tell us about your project..."></textarea>
+                                        <span class="app-form-error">Please enter a message.</span>
+                                    </div>
+
+                                    <button type="submit" class="app-form-submit">
+                                        <span class="app-form-submit-text">Send Message</span>
+                                        <span class="app-form-submit-loader"></span>
+                                    </button>
+
+                                    <div class="app-form-success">
+                                        <i class="fa fa-check-circle"></i>
+                                        <p>Thanks! Your message has been noted.</p>
+                                    </div>
+
+                                </form>
+                            </div>
+                            <div class="tablet-home-btn"></div>
+                        </div>
+                        <div class="tablet-shadow"></div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </section>
 
 
-    <section class="keybenefits" id="portfolio">
-        <!-- Features Start -->
-        <div class="container-fluid features overflow-hidden py-5">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title st-center">
-                            <h3>Some Of Our Clients</h3>
-                            <p>Avocent deditum long</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-4 justify-content-center text-center">
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="feature-item text-center p-4">
-                            <div class="feature-icon p-3 mb-4">
-                                <i class="fas fa-dollar-sign fa-4x text-primary"></i>
-                            </div>
-                            <div class="feature-content d-flex flex-column">
-                                <h5 class="mb-3">Cost-Effective</h5>
-                                <p class="mb-3">Dolor, sit amet consectetur adipisicing elit. Soluta inventore cum
-                                    accusamus,</p>
-                                <a class="btn btn-secondary rounded-pill" href="#">Read More<i
-                                        class="fas fa-arrow-right ms-2"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="feature-item text-center p-4">
-                            <div class="feature-icon p-3 mb-4">
-                                <i class="fab fa-cc-visa fa-4x text-primary"></i>
-                            </div>
-                            <div class="feature-content d-flex flex-column">
-                                <h5 class="mb-3">Visa Assistance</h5>
-                                <p class="mb-3">Dolor, sit amet consectetur adipisicing elit. Soluta inventore cum
-                                    accusamus,</p>
-                                <a class="btn btn-secondary rounded-pill" href="#">Read More<i
-                                        class="fas fa-arrow-right ms-2"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.5s">
-                        <div class="feature-item text-center p-4">
-                            <div class="feature-icon p-3 mb-4">
-                                <i class="fas fa-atlas fa-4x text-primary"></i>
-                            </div>
-                            <div class="feature-content d-flex flex-column">
-                                <h5 class="mb-3">Faster Processing</h5>
-                                <p class="mb-3">Dolor, sit amet consectetur adipisicing elit. Soluta inventore cum
-                                    accusamus,</p>
-                                <a class="btn btn-secondary rounded-pill" href="#">Read More<i
-                                        class="fas fa-arrow-right ms-2"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.7s">
-                        <div class="feature-item text-center p-4">
-                            <div class="feature-icon p-3 mb-4">
-                                <i class="fas fa-users fa-4x text-primary"></i>
-                            </div>
-                            <div class="feature-content d-flex flex-column">
-                                <h5 class="mb-3">Direct Interviews</h5>
-                                <p class="mb-3">Dolor, sit amet consectetur adipisicing elit. Soluta inventore cum
-                                    accusamus,</p>
-                                <a class="btn btn-secondary rounded-pill" href="#">Read More<i
-                                        class="fas fa-arrow-right ms-2"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="feature-item text-center p-4">
-                            <div class="feature-icon p-3 mb-4">
-                                <i class="fas fa-dollar-sign fa-4x text-primary"></i>
-                            </div>
-                            <div class="feature-content d-flex flex-column">
-                                <h5 class="mb-3">Cost-Effective</h5>
-                                <p class="mb-3">Dolor, sit amet consectetur adipisicing elit. Soluta inventore cum
-                                    accusamus,</p>
-                                <a class="btn btn-secondary rounded-pill" href="#">Read More<i
-                                        class="fas fa-arrow-right ms-2"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="feature-item text-center p-4">
-                            <div class="feature-icon p-3 mb-4">
-                                <i class="fab fa-cc-visa fa-4x text-primary"></i>
-                            </div>
-                            <div class="feature-content d-flex flex-column">
-                                <h5 class="mb-3">Visa Assistance</h5>
-                                <p class="mb-3">Dolor, sit amet consectetur adipisicing elit. Soluta inventore cum
-                                    accusamus,</p>
-                                <a class="btn btn-secondary rounded-pill" href="#">Read More<i
-                                        class="fas fa-arrow-right ms-2"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.5s">
-                        <div class="feature-item text-center p-4">
-                            <div class="feature-icon p-3 mb-4">
-                                <i class="fas fa-atlas fa-4x text-primary"></i>
-                            </div>
-                            <div class="feature-content d-flex flex-column">
-                                <h5 class="mb-3">Faster Processing</h5>
-                                <p class="mb-3">Dolor, sit amet consectetur adipisicing elit. Soluta inventore cum
-                                    accusamus,</p>
-                                <a class="btn btn-secondary rounded-pill" href="#">Read More<i
-                                        class="fas fa-arrow-right ms-2"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.7s">
-                        <div class="feature-item text-center p-4">
-                            <div class="feature-icon p-3 mb-4">
-                                <i class="fas fa-users fa-4x text-primary"></i>
-                            </div>
-                            <div class="feature-content d-flex flex-column">
-                                <h5 class="mb-3">Direct Interviews</h5>
-                                <p class="mb-3">Dolor, sit amet consectetur adipisicing elit. Soluta inventore cum
-                                    accusamus,</p>
-                                <a class="btn btn-secondary rounded-pill" href="#">Read More<i
-                                        class="fas fa-arrow-right ms-2"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <a class="btn btn-primary border-secondary rounded-pill py-3 px-5 wow fadeInUp"
-                            data-wow-delay="0.1s" href="#">More Features</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Features End -->
-    </section>
-
-     <section class="roadmap-area section-padding" id="roadmap">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <div class="heading">
-                            <h5>History Timeline</h5>
-                            <div class="space-10"></div>
-                            <h1>Development Roadmap</h1>
-                        </div>
-                        <div class="space-60 d-none d-sm-block"></div>
-                    </div>
-                </div>
-                <div class="roadmap-carousel owl-carousel">
-                    <div class="roadmap-item">
-                        <div class="single-roadmap text-center road-left">
-                            <div class="single-roadmap-img">
-                                <img src="{{ asset('assets/front/img/roadmap-1.png') }}" alt="">
-                            </div>
-                            <div class="space-30"></div>
-                            <div class="roadmap-text">
-                                <p>01.03.2017</p>
-                                <div class="space-10"></div>
-                                <h5>Concept & Whitepaper</h5>
-                                <p>
-                                    The recording starts with the patter of a summer squall.
-                                    Later, a drifting tone like that of a violin appears.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="roadmap-item">
-                        <div class="single-roadmap road-right">
-                            <div class="row">
-                                <div class="col-5 align-self-center">
-                                    <div class="single-roadmap-img">
-                                        <img src="{{ asset('assets/front/img/roadmap-2.png') }}" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-7">
-                                    <div class="roadmap-text">
-                                        <p>21.06.2017</p>
-                                        <h5>Recruitment of Our Team</h5>
-                                        <p>
-                                            The recording starts with the patter of a summer squall.
-                                            Later, a drifting tone like that of a violin appears.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="roadmap-item">
-                        <div class="single-roadmap text-center road-left">
-                            <div class="single-roadmap-img">
-                                <img src="{{ asset('assets/front/img/roadmap-4.png') }}" alt="">
-                            </div>
-                            <div class="space-30"></div>
-                            <div class="roadmap-text">
-                                <p>31.08.2017</p>
-                                <div class="space-10"></div>
-                                <h5>Core Development</h5>
-                                <p>
-                                    The recording starts with the patter of a summer squall.
-                                    Later, a drifting tone like that of a violin appears.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="roadmap-item">
-                        <div class="single-roadmap road-right">
-                            <div class="row">
-                                <div class="col-5 align-self-center">
-                                    <div class="single-roadmap-img">
-                                        <img src="{{ asset('assets/front/img/roadmap-5.png') }}" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-7">
-                                    <div class="roadmap-text">
-                                        <p>30.11.2017</p>
-                                        <h5>Main Development</h5>
-                                        <p>
-                                            The recording starts with the patter of a summer squall.
-                                            Later, a drifting tone like that of a violin appears.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-        </section>
-
-        <section class="portfolio" id="portfolio">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12 no-padding">
-                        <div class="section-title st-center">
-                            <h3>What we have done</h3>
-                            <p>Avocent deditum long</p>
-                        </div>
-                        <div class="filter mb40">
-                            <form id="filter">
-                                <fieldset class="group">
-                                    <label class="btn btn-default btn-main">
-                                        <input type="radio" name="filter" value="all" checked="checked">All
-                                    </label>
-                                    <label class="btn btn-default">
-                                        <input type="radio" name="filter" value="photography">Photography
-                                    </label>
-                                    <label class="btn btn-default">
-                                        <input type="radio" name="filter" value="design">Design
-                                    </label>
-                                    <label class="btn btn-default">
-                                        <input type="radio" name="filter" value="codding">Codding
-                                    </label>
-                                </fieldset>
-                            </form>
-                            <!-- #filter -->
-                        </div>
-                        <!-- .filter .mb40 -->
-                        <div class="grid">
-                            <figure class="portfolio-item" data-groups='["photography"]'>
-                                <img src="{{ asset('assets/front/img/portfolio.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                            <figure class="portfolio-item" data-groups='["design"]'>
-                                <img src="{{ asset('assets/front/img/portfolio2.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                            <figure class="portfolio-item" data-groups='["photography"]'>
-                                <img src="{{ asset('assets/front/img/portfolio3.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                            <figure class="portfolio-item" data-groups='["design"]'>
-                                <img src="{{ asset('assets/front/img/portfolio4.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                            <figure class="portfolio-item" data-groups='["design"]'>
-                                <img src="{{ asset('assets/front/img/portfolio5.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                            <figure class="portfolio-item" data-groups='["photography"]'>
-                                <img src="{{ asset('assets/front/img/portfolio6.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                            <figure class="portfolio-item" data-groups='["codding"]'>
-                                <img src="{{ asset('assets/front/img/portfolio7.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                            <figure class="portfolio-item" data-groups='["photography"]'>
-                                <img src="{{ asset('assets/front/img/portfolio8.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                            <figure class="portfolio-item" data-groups='["codding"]'>
-                                <img src="{{ asset('assets/front/img/portfolio9.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                            <figure class="portfolio-item" data-groups='["codding"]'>
-                                <img src="{{ asset('assets/front/img/portfolio10.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                            <figure class="portfolio-item" data-groups='["design"]'>
-                                <img src="{{ asset('assets/front/img/portfolio11.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                            <figure class="portfolio-item" data-groups='["design"]'>
-                                <img src="{{ asset('assets/front/img/portfolio12.jpg') }}" alt="">
-                                <figcaption>
-                                    <h2>Nice
-                                        <span>Lily</span>
-                                    </h2>
-                                    <p>Lily likes to play with crayons and pencils</p>
-                                    <a href="#" class="btn btn-main">
-                                        <i class="fa fa-link"></i> View more
-                                    </a>
-                                </figcaption>
-                            </figure>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="call-2-acction" data-stellar-background-ratio="0.4" style="background-position: 0% 16.48px">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="c2a">
-                            <h2>Omnibus reliquar rebus</h2>
-                            <p>
-                                Evertitur depravatum illo tamquam novum, possent intus
-                                laudatur hinc grate aristoteli per splendido soluta fabulae,
-                                ne aristippi cui deleniti nostros illud.
-                            </p>
-                            <a href="#" class="btn btn-main btn-lg">Purchase Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="industries">
-            <div class="container-fluid training overflow-hidden bg-light py-5">
-                <div class="container py-5">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="section-title st-center">
-                                <h3>Industries</h3>
-                                <p>Avocent deditum long</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-4">
-                        <div class="col-lg-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.1s"
-                            style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
-                            <div class="training-item">
-                                <div class="training-inner">
-                                    <img src="{{ asset('assets/front/img/training-1.jpg') }}" class="img-fluid w-100 rounded" alt="Image">
-                                    <div class="training-title-name">
-                                        <a href="#" class="h4 text-white mb-0">IELTS</a>
-                                        <a href="#" class="h4 text-white mb-0">Coaching</a>
-                                    </div>
-                                </div>
-                                <div class="training-content bg-secondary rounded-bottom p-4">
-                                    <a href="#">
-                                        <h4 class="text-white">IELTS Coaching</h4>
-                                    </a>
-                                    <p class="text-white-50">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                        Autem, veritatis.</p>
-                                    <a class="btn btn-secondary rounded-pill text-white p-0" href="#">Read More <i
-                                            class="fa fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.3s"
-                            style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInUp;">
-                            <div class="training-item">
-                                <div class="training-inner">
-                                    <img src="{{ asset('assets/front/img/training-2.jpg') }}" class="img-fluid w-100 rounded"
-                                        alt="Image">
-                                    <div class="training-title-name">
-                                        <a href="#" class="h4 text-white mb-0">TOEFL</a>
-                                        <a href="#" class="h4 text-white mb-0">Coaching</a>
-                                    </div>
-                                </div>
-                                <div class="training-content bg-secondary rounded-bottom p-4">
-                                    <a href="#">
-                                        <h4 class="text-white">TOEFL Coaching</h4>
-                                    </a>
-                                    <p class="text-white-50">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                        Autem, veritatis.</p>
-                                    <a class="btn btn-secondary rounded-pill text-white p-0" href="#">Read More <i
-                                            class="fa fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.5s"
-                            style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
-                            <div class="training-item">
-                                <div class="training-inner">
-                                    <img src="{{ asset('assets/front/img/training-3.jpg') }}" class="img-fluid w-100 rounded"
-                                        alt="Image">
-                                    <div class="training-title-name">
-                                        <a href="#" class="h4 text-white mb-0">PTE</a>
-                                        <a href="#" class="h4 text-white mb-0">Coaching</a>
-                                    </div>
-                                </div>
-                                <div class="training-content bg-secondary rounded-bottom p-4">
-                                    <a href="#">
-                                        <h4 class="text-white">PTE Coaching</h4>
-                                    </a>
-                                    <p class="text-white-50">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                        Autem, veritatis.</p>
-                                    <a class="btn btn-secondary rounded-pill text-white p-0" href="#">Read More <i
-                                            class="fa fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.7s"
-                            style="visibility: visible; animation-delay: 0.7s; animation-name: fadeInUp;">
-                            <div class="training-item">
-                                <div class="training-inner">
-                                    <img src="{{ asset('assets/front/img/training-4.jpg') }}" class="img-fluid w-100 rounded"
-                                        alt="Image">
-                                    <div class="training-title-name">
-                                        <a href="#" class="h4 text-white mb-0">OET</a>
-                                        <a href="#" class="h4 text-white mb-0">Coaching</a>
-                                    </div>
-                                </div>
-                                <div class="training-content bg-secondary rounded-bottom p-4">
-                                    <a href="#">
-                                        <h4 class="text-white">OET Coaching</h4>
-                                    </a>
-                                    <p class="text-white-50">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                        Autem, veritatis.</p>
-                                    <a class="btn btn-secondary rounded-pill text-white p-0" href="#">Read More <i
-                                            class="fa fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 text-center">
-                            <a class="btn btn-primary border-secondary rounded-pill py-3 px-5 wow fadeInUp"
-                                data-wow-delay="0.1s" href="#"
-                                style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">View
-                                More</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="funfacts" data-stellar-background-ratio="0.4" style="background-position: 50% 47.58px;">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title st-center">
-                            <h3>Industries</h3>
-                            <p>Avocent deditum long</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="funfact">
-                            <div class="st-funfact-icon"><i class="fa fa-briefcase"></i></div>
-                            <div class="st-funfact-counter"><span class="st-ff-count" data-from="0" data-to="25964"
-                                    data-runit="1">25964</span>+</div>
-                            <strong class="funfact-title">Projects</strong>
-                        </div><!-- .funfact -->
-                    </div>
-                    <div class="col-md-3">
-                        <div class="funfact">
-                            <div class="st-funfact-icon"><i class="fa fa-clock-o"></i></div>
-                            <div class="st-funfact-counter"><span class="st-ff-count" data-from="0" data-to="35469"
-                                    data-runit="1">35469</span>+</div>
-                            <strong class="funfact-title">Hours Work</strong>
-                        </div><!-- .funfact -->
-                    </div>
-                    <div class="col-md-3">
-                        <div class="funfact">
-                            <div class="st-funfact-icon"><i class="fa fa-send"></i></div>
-                            <div class="st-funfact-counter"><span class="st-ff-count" data-from="0" data-to="86214"
-                                    data-runit="1">86214</span>+</div>
-                            <strong class="funfact-title">E-mail</strong>
-                        </div><!-- .funfact -->
-                    </div>
-                    <div class="col-md-3">
-                        <div class="funfact">
-                            <div class="st-funfact-icon"><i class="fa fa-magic"></i></div>
-                            <div class="st-funfact-counter"><span class="st-ff-count" data-from="0" data-to="3647"
-                                    data-runit="1">3647</span>+</div>
-                            <strong class="funfact-title">Completed</strong>
-                        </div><!-- .funfact -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="team-section">
-            <div class="container-fluid training overflow-hidden bg-light py-5">
-                <div class="container py-5">
-
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="section-title st-center">
-                                <h3>Industries</h3>
-                                <p>Avocent deditum long</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="team-member-wrapper clearfix">
-
-                        <div class="float-left">
-                            <div class="single-team-member">
-
-                                <div class="img">
-                                    <img src="{{ asset('assets/front/img/team/1.jpg') }}" alt="" class="img-responsive">
-
-                                    <div class="opacity tran4s">
-                                        <h4>Healthcare</h4>
-                                        <span>Industry</span>
-                                        <p>Healthcare software, HMS, Telemedicine, EMR & Patient Management.</p>
-                                    </div>
-                                </div>
-
-                                <div class="member-name">
-                                    <h6>Healthcare</h6>
-                                    <p>Industry</p>
-
-                                    <ul>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-heartbeat"></i></a></li>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-hospital-o"></i></a></li>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-medkit"></i></a></li>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-plus-square"></i></a></li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="float-left">
-                            <div class="single-team-member">
-
-                                <div class="img">
-                                    <img src="{{ asset('assets/front/img/team/2.jpg') }}" alt="" class="img-responsive">
-
-                                    <div class="opacity tran4s">
-                                        <h4>E-Commerce</h4>
-                                        <span>Industry</span>
-                                        <p>Custom Ecommerce, Marketplace, Inventory, Payment Gateway.</p>
-                                    </div>
-                                </div>
-
-                                <div class="member-name">
-                                    <h6>E-Commerce</h6>
-                                    <p>Industry</p>
-
-                                    <ul>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-shopping-cart"></i></a></li>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-credit-card"></i></a></li>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-truck"></i></a></li>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-globe"></i></a></li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="float-left">
-                            <div class="single-team-member">
-
-                                <div class="img">
-                                    <img src="{{ asset('assets/front/img/team/3.jpg') }}" alt="" class="img-responsive">
-
-                                    <div class="opacity tran4s">
-                                        <h4>Education</h4>
-                                        <span>Industry</span>
-                                        <p>School ERP, LMS, Online Classes, Student Management System.</p>
-                                    </div>
-                                </div>
-
-                                <div class="member-name">
-                                    <h6>Education</h6>
-                                    <p>Industry</p>
-
-                                    <ul>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-graduation-cap"></i></a></li>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-book"></i></a></li>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-laptop"></i></a></li>
-                                        <li><a href="#" class="tran3s round-border"><i
-                                                    class="fa fa-university"></i></a></li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-         <section class="call-us">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3>If you like to work with us</h3>
-                        <a href="#" class="btn btn-default-o btn-lg">Call Us Now</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="faq-section" class="faq-section">
-            <div class="container">
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title st-center">
-                            <h3>Industries</h3>
-                            <p>Avocent deditum long</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-wrapper">
-
-                    <div class="faq-item active">
-                        <div class="faq-title">
-                            <h5>What services does your company provide?</h5>
-                            <span class="faq-icon">
-                                <i class="fa fa-minus"></i>
-                            </span>
-                        </div>
-
-                        <div class="faq-content" style="display:block;">
-                            <p>
-                                We provide website development, custom software development,
-                                eCommerce solutions, mobile applications, UI/UX design,
-                                cloud solutions, API integration, ERP/CRM systems, and
-                                ongoing maintenance & support.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-title">
-                            <h5>How long does a website or software project take?</h5>
-                            <span class="faq-icon">
-                                <i class="fa fa-plus"></i>
-                            </span>
-                        </div>
-
-                        <div class="faq-content">
-                            <p>
-                                Project timelines depend on complexity. A business website
-                                generally takes 2–4 weeks, while custom software or enterprise
-                                applications may take several weeks to a few months.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-title">
-                            <h5>Do you provide website redesign services?</h5>
-                            <span class="faq-icon">
-                                <i class="fa fa-plus"></i>
-                            </span>
-                        </div>
-
-                        <div class="faq-content">
-                            <p>
-                                Yes. We redesign outdated websites with a modern UI,
-                                better performance, improved SEO, enhanced security,
-                                and a fully responsive design.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-title">
-                            <h5>Which technologies do you specialize in?</h5>
-                            <span class="faq-icon">
-                                <i class="fa fa-plus"></i>
-                            </span>
-                        </div>
-
-                        <div class="faq-content">
-                            <p>
-                                We work with Laravel, PHP, React, Node.js, Java, Spring Boot,
-                                MySQL, PostgreSQL, WordPress, Shopify, REST APIs,
-                                AWS, Azure and modern frontend technologies.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-title">
-                            <h5>Will my website be mobile-friendly?</h5>
-                            <span class="faq-icon">
-                                <i class="fa fa-plus"></i>
-                            </span>
-                        </div>
-
-                        <div class="faq-content">
-                            <p>
-                                Absolutely. Every website we build is fully responsive
-                                and optimized for desktops, tablets and smartphones.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-title">
-                            <h5>Do you provide maintenance after project delivery?</h5>
-                            <span class="faq-icon">
-                                <i class="fa fa-plus"></i>
-                            </span>
-                        </div>
-
-                        <div class="faq-content">
-                            <p>
-                                Yes. We provide maintenance, security updates,
-                                bug fixes, performance optimization and technical
-                                support after deployment.
-                            </p>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
 
 @endsection

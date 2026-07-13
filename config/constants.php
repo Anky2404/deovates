@@ -238,6 +238,7 @@ return [
             'loader_logo' => 'assets/front/img/logo/loder-logo.png',
             'favicon' => 'assets/front/img/logo/favicon.ico',
         ],
+        'dark_logo' => 'assets/front/img/logo/header-logo.png',
         'alt' => config('constants.BUSINESS.name', 'Deovate World'),
         'footer_info' => 'Deovate Technologies delivers secure, scalable, and high-performance digital solutions including web development, mobile applications, UI/UX design, and digital marketing for clients worldwide. ',
 
@@ -319,6 +320,10 @@ return [
         [
             'title' => 'Blog',
             'route' => 'front.blog.index',
+        ],
+        [
+            'title' => 'Career',
+            'route' => 'front.career.index',
         ],
         [
             'title' => 'Contact',

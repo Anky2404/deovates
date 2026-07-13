@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,6 +16,7 @@ class Service extends Model
 
     protected $fillable = [
         'uuid',
+        'parent_service_id',
         'title',
         'slug',
         'short_description',
@@ -90,6 +92,28 @@ class Service extends Model
     {
         return $this->hasMany(Review::class, 'reviewable_id')
             ->where('reviewable_type', self::class);
+    }
+
+    public function parentService(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_service_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_service_id')
+            ->where('is_active', true)
+            ->orderBy('display_order');
+    }
+
+    public function problems(): HasMany
+    {
+        return $this->hasMany(ServiceProblem::class)->active()->ordered();
+    }
+
+    public function solutions(): HasMany
+    {
+        return $this->hasMany(ServiceSolution::class)->active()->ordered();
     }
 
     public function scopeActive(Builder $query): Builder

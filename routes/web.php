@@ -1,53 +1,92 @@
 <?php
 
+use App\Http\Controllers\Front\AboutController;
+use App\Http\Controllers\Front\AllianceController;
+use App\Http\Controllers\Front\BlogController;
+use App\Http\Controllers\Front\CareerController;
+use App\Http\Controllers\Front\CaseStudyController;
+use App\Http\Controllers\Front\ContactController;
+use App\Http\Controllers\Front\FaqController;
+use App\Http\Controllers\Front\HireMeController;
 use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\IndustryController;
+use App\Http\Controllers\Front\LegalController;
+use App\Http\Controllers\Front\PortfolioController;
+use App\Http\Controllers\Front\PricingController;
 use App\Http\Controllers\Front\ServiceController;
+use App\Http\Controllers\Front\TechStackController;
+use App\Http\Controllers\Front\TestimonialController;
 use Illuminate\Support\Facades\Route;
 
-Route::name('front.')->group(function(){
-/* ================= HOME ================= */
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::name('front.')->group(function () {
+    /* ================= HOME ================= */
+    Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
+    /* ================= ABOUT ================= */
+    Route::get('/about', [AboutController::class, 'index'])->name('about.index');
 
+    /* ================= CONTACT ================= */
+    Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 
-/* ================= SERVICES ================= */
-Route::prefix('services')->controller(ServiceController::class)->name('services.')->group(function(){
-Route::get('/', 'index')->name('index');
-Route::get('/{slug}', 'details')->name('details');
+    /* ================= SERVICES ================= */
+    Route::prefix('services')->controller(ServiceController::class)->name('services.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{slug}', 'details')->name('details');
+    });
+
+    /* ================= PORTFOLIOS ================= */
+    Route::prefix('portfolios')->controller(PortfolioController::class)->name('portfolios.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{slug}', 'details')->name('details');
+    });
+
+    /* ================= INDUSTRIES ================= */
+    Route::prefix('industries')->controller(IndustryController::class)->name('industries.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{slug}', 'details')->name('details');
+    });
+
+    /* ================= BLOG ================= */
+    Route::prefix('blog')->controller(BlogController::class)->name('blog.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{slug}', 'details')->name('details');
+    });
+
+    /* ================= CASE STUDIES ================= */
+    Route::prefix('case-studies')->controller(CaseStudyController::class)->name('casestudies.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{slug}', 'details')->name('details');
+    });
+
+    /* ================= CAREER ================= */
+    Route::prefix('career')->controller(CareerController::class)->name('career.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{slug}', 'details')->name('details');
+    });
+
+    /* ================= TESTIMONIALS ================= */
+    Route::get('/testimonials', [TestimonialController::class, 'index'])->name('testimonials.index');
+
+    /* ================= TECH STACK ================= */
+    Route::get('/tech-stack', [TechStackController::class, 'index'])->name('techstack.index');
+
+    /* ================= HIRE ME ================= */
+    Route::get('/hire-me', [HireMeController::class, 'index'])->name('hireme.index');
+
+    /* ================= ALLIANCES ================= */
+    Route::get('/alliances', [AllianceController::class, 'index'])->name('alliances.index');
+
+    /* ================= PRICING ================= */
+    Route::get('/pricing', [PricingController::class, 'index'])->name('pricing.index');
+
+    /* ================= FAQ ================= */
+    Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
+
+    /* ================= LEGAL ================= */
+    Route::get('/legal/policy', [LegalController::class, 'privacy'])->name('legal.privacy');
+    Route::get('/legal/terms', [LegalController::class, 'terms'])->name('legal.terms');
 });
 
-
+Route::fallback(function () {
+    return response()->view('front.errors.404', [], 404);
 });
-
-Route::get('/about', function () {
-    return view('front.about.index');
-})->name('front.about.index');
-
-Route::get('/projects', function () {
-    return view('front.portfolios.index');
-})->name('front.projects.index');
-
-
-
-Route::get('/blog', function () {
-    return view('front.blog.index');
-})->name('front.blog.index');
-Route::get('/blog/details', function () {
-    return view('front.blog.index');
-})->name('front.blog.details');
-
-Route::get('/elements', function () {
-    return view('front.elements.index');
-})->name('front.elements.index');
-
-Route::get('/project-details', function () {
-    return view('front.project.details');
-})->name('front.project.details');
-
-Route::get('/service-details', function () {
-    return view('front.service.details');
-})->name('front.service.details');
-
-Route::get('/contact', function () {
-    return view('front.contact.index');
-})->name('front.contact.index');

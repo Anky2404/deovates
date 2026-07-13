@@ -95,6 +95,36 @@ class Helper
         return $data;
     }
 
+    /**
+     * Resolve a per-page hero banner from public/assets/front/img/banners/.
+     * Lets pages reference a not-yet-provided photo (e.g. a real Deovate
+     * office shot the client is generating separately) and fall back to
+     * an existing placeholder until that file actually shows up.
+     */
+    public static function heroBanner(string $filename, string $fallback = 'assets/front/img/hero/h2_hero.png'): string
+    {
+        $path = public_path('assets/front/img/banners/' . ltrim($filename, '/'));
+
+        return file_exists($path)
+            ? asset('assets/front/img/banners/' . ltrim($filename, '/'))
+            : asset($fallback);
+    }
+
+    /**
+     * Resolve a storage-relative image path to a public URL, falling back
+     * to a default image when the field is empty or the file was never
+     * actually uploaded (several seeded tables reference paths that don't
+     * exist on disk).
+     */
+    public static function img(?string $path, string $fallback = 'assets/front/img/default-img.png'): string
+    {
+        if (!empty($path) && Storage::disk('public')->exists($path)) {
+            return asset('storage/' . $path);
+        }
+
+        return asset($fallback);
+    }
+
     public static function canView($role): bool
     {
 

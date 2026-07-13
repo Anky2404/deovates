@@ -30,23 +30,33 @@ class PortfolioSkill extends Model
         ];
     }
 
+    // The portfolio this pivot row belongs to
     public function portfolio(): BelongsTo
     {
         return $this->belongsTo(Portfolio::class);
     }
 
+    // The linked skill
     public function skill(): BelongsTo
     {
         return $this->belongsTo(Skill::class);
     }
 
+    // Only active rows
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
+    // Sorted by display order
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('display_order');
+    }
+
+    // Only featured rows
+    public function scopeFeatured(Builder $query): Builder
+    {
+        return $query->where('is_featured', true);
     }
 }

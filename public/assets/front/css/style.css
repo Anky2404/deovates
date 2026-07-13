@@ -465,7 +465,7 @@ hr {
 
 .owl-carousel .owl-nav div.owl-next {
     left: auto;
-    right: -30px
+    right: -6px
 }
 
 .owl-carousel .owl-nav div.owl-next i {
@@ -8002,6 +8002,73 @@ del {
     transform: scale(1.3);
 }
 
+/*=====================================
+    WHY CHOOSE US IMAGE
+======================================*/
+
+#why-choose-us .service-img {
+  width: 350px;
+  height: 350px;
+  margin: 70px auto;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 8px solid #0b3c8a;
+  background: #fff;
+  box-shadow: 0 15px 40px rgba(11,60,138,.18);
+  position: relative;
+  flex-shrink: 0;
+  object-fit: contain !important;
+}
+
+#why-choose-us .service-img img{
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 100%;
+    min-height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    border-radius: 50%;
+
+    display: block;
+}
+
+#why-choose-us .service-item:hover .service-img{
+    transform: translateY(-8px);
+    transition: .4s ease;
+    box-shadow: 0 25px 55px rgba(11,60,138,.25);
+}
+
+#why-choose-us .service-item:hover .service-img img{
+    transform: scale(1.08);
+    transition: .4s ease;
+}
+
+@media (max-width:991px){
+
+    #why-choose-us .service-img{
+        width:220px;
+        height:220px;
+    }
+
+}
+
+@media (max-width:767px){
+
+    #why-choose-us .service-img{
+        width:180px;
+        height:180px;
+        margin-bottom:30px;
+    }
+
+}
+
 /*** Service End ***/
 
 
@@ -8314,12 +8381,12 @@ del {
 }
 
 .service-item.service-item-left {
-    border-radius: 500px 0 0 500px;
+    border-radius: 500px 24px 24px 500px;
     background: linear-gradient(to right, var(--bs-secondary), var(--bs-dark));
 }
 
 .service-item.service-item-right {
-    border-radius: 0 500px 500px 0;
+    border-radius: 24px 500px 500px 24px;
     background: linear-gradient(to left, var(--bs-secondary), var(--bs-dark));
 }
 
@@ -8327,7 +8394,7 @@ del {
 
     .service-item.service-item-left,
     .service-item.service-item-right {
-        border-radius: 500px 500px 0 0;
+        border-radius: 500px 500px 24px 24px;
         background: linear-gradient(to bottom, var(--bs-secondary), var(--bs-dark));
         text-align: center;
     }
@@ -8337,8 +8404,27 @@ del {
     align-items: center !important;
 }
 
+.industry-image{
+    width:90px;
+    height:90px;
+    object-fit:cover;
+    border-radius:50%;
+    border:4px solid #0b3c8a;
+    padding:4px;
+    background:#fff;
+}
 
-element {}
+.feature-item{
+    height:100%;
+    transition:.4s;
+}
+
+.feature-item:hover{
+    transform:translateY(-8px);
+}
+
+
+
 
 .py-5 {
     padding-top: 3rem !important;
@@ -8351,6 +8437,47 @@ element {}
     padding-left: var(--bs-gutter-x, 0.75rem);
     margin-right: auto;
     margin-left: auto;
+}
+
+/* This custom grid reimplementation never capped .container's
+   max-width at any breakpoint, so on large/ultra-wide monitors
+   rows (counter stats, process steps, card grids...) stretched
+   edge-to-edge with huge gaps between items instead of staying
+   readable. Restoring the standard responsive container caps. */
+@media (min-width: 576px) {
+    .container, .container-sm {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container, .container-sm, .container-md {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container, .container-sm, .container-md, .container-lg {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container, .container-sm, .container-md, .container-lg, .container-xl {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+        max-width: 1320px;
+    }
+}
+
+@media (min-width: 1799.98px) {
+    .container, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+        max-width: 1520px;
+    }
 }
 
 /*===================
@@ -8389,10 +8516,10 @@ roadmap area css
 .single-roadmap.road-left::before {
   position: absolute;
   content: "";
-  height: 66.5%;
+  height: 73.5%;
   width: 1px;
   background: #004cff;
-  bottom: 10.5%;
+  bottom: 3.5%;
   left: 1%;
   z-index: -1;
 }
@@ -8849,24 +8976,281 @@ roadmap area css
 }
 
 
-.call-us {
-  padding: 50px 0;
-  background-color: #4ecdc4;
-  text-align: center;
+/*======================================
+        CALL TO ACTION
+=======================================*/
+
+.call-us{
+    position:relative;
+    padding:120px 0;
+    overflow:hidden;
+    text-align:center;
+
+    background:url("../img/call-us.png") center center/cover no-repeat fixed;
 }
-.call-us h3 {
-  display: inline-block;
-  *display: inline;
-  *zoom: 1;
-  color: #fff;
-  text-transform: uppercase;
-  font-size: 30px;
-  line-height: 45px;
-  vertical-align: middle;
-  margin: 0 30px 0 0;
-  letter-spacing: 2px;
-  word-spacing: 5px;
+
+/* Overlay */
+
+.call-us::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:linear-gradient(
+        135deg,
+        rgba(255,255,255,.22),
+        rgba(226,236,252,.16),
+        rgba(255,255,255,.12)
+    );
+
+    backdrop-filter:blur(2px);
+    -webkit-backdrop-filter:blur(2px);
+
+    z-index:1;
 }
+
+.call-us>*{
+    position:relative;
+    z-index:2;
+}
+
+/*======================================
+        Glass Box
+=======================================*/
+
+.call-us-inner{
+
+    max-width:760px;
+    margin:auto;
+    padding:55px 45px;
+
+    background:rgba(255,255,255,.15);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.35);
+
+    border-radius:24px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.12),
+        inset 0 1px 0 rgba(255,255,255,.45);
+
+    transition:.4s;
+}
+
+.call-us-inner:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:
+        0 30px 70px rgba(11,60,138,.18),
+        inset 0 1px 0 rgba(255,255,255,.45);
+}
+
+/*======================================
+        Text
+=======================================*/
+
+.call-us-kicker{
+
+    display:inline-block;
+
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:4px;
+
+    text-transform:uppercase;
+
+    color:#ff6b35;
+
+    margin-bottom:18px;
+}
+
+.call-us h3{
+
+    color:#102542;
+
+    font-size:48px;
+    font-weight:700;
+    line-height:1.25;
+
+    text-transform:uppercase;
+
+    margin-bottom:20px;
+}
+
+.call-us-sub{
+
+    font-size:18px;
+    line-height:32px;
+
+    color:#4b5563;
+
+    margin-bottom:38px;
+}
+
+/*======================================
+        Buttons
+=======================================*/
+
+.call-us-actions{
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    gap:28px;
+
+    flex-wrap:wrap;
+}
+
+.call-us-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+    gap:10px;
+
+    padding:15px 35px;
+
+    border-radius:50px;
+
+    background:#0b3c8a;
+    color:#fff;
+
+    font-weight:600;
+
+    box-shadow:0 15px 35px rgba(11,60,138,.28);
+
+    transition:.35s;
+}
+
+.call-us-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 20px 45px rgba(11,60,138,.38);
+}
+
+.call-us-btn i{
+
+    font-size:15px;
+}
+
+/*======================================
+        Phone
+=======================================*/
+
+.call-us-number{
+
+    position:relative;
+
+    font-size:30px;
+    font-weight:700;
+
+    color:#0b3c8a;
+
+    text-decoration:none;
+
+    transition:.35s;
+}
+
+.call-us-number::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    bottom:-6px;
+
+    width:100%;
+    height:2px;
+
+    background:#ff6b35;
+
+    transition:.35s;
+}
+
+.call-us-number:hover{
+
+    color:#ff6b35;
+}
+
+.call-us-number:hover::after{
+
+    background:#0b3c8a;
+}
+
+/*======================================
+        Responsive
+=======================================*/
+
+@media (max-width:991px){
+
+    .call-us{
+
+        padding:90px 0;
+
+        background-attachment:scroll;
+    }
+
+    .call-us-inner{
+
+        margin:0 20px;
+        padding:40px 30px;
+    }
+
+    .call-us h3{
+
+        font-size:36px;
+    }
+
+    .call-us-number{
+
+        font-size:24px;
+    }
+}
+
+@media (max-width:767px){
+
+    .call-us{
+
+        padding:70px 0;
+    }
+
+    .call-us-inner{
+
+        padding:35px 22px;
+    }
+
+    .call-us h3{
+
+        font-size:28px;
+        line-height:40px;
+    }
+
+    .call-us-sub{
+
+        font-size:16px;
+        line-height:28px;
+    }
+
+    .call-us-actions{
+
+        flex-direction:column;
+        gap:18px;
+    }
+
+    .call-us-number{
+
+        font-size:22px;
+    }
+}
+
 
 /*** training Start ***/
 .training .training-item .training-inner {
@@ -9517,6 +9901,7 @@ footer.site-footer a:hover {
   bottom: 0px;
   border-radius: 0px 20px 20px 0px;
   height: 6px !important;
+  padding: 19px 22px;
 }
 
 
@@ -10458,5 +10843,3386 @@ ul.styled-list.list-star li:before {
     color:#fff;
 }
 
+/* ==========================================================
+   Site-wide typography + section redesign pass.
+   Font-size / color / background only — no HTML, no layout,
+   no breakpoints removed. Palette used everywhere below:
+   navy #0b3c8a / #14213d, charcoal-gray #5b6472 / #8a8f98,
+   orange #ff5f13, white/light-navy neutrals #f5f8fd / #eef3fb.
+   ========================================================== */
 
+/* ---- Section title + supporting copy (reused ~15x down the page,
+   also on the About and Portfolio pages) ----
+   h3 is the visible title everywhere in the markup, so it now carries
+   the big elegant serif treatment (per the reference screenshot);
+   p is the supporting sentence underneath, sized as a normal
+   readable paragraph instead of a second competing headline. */
+.section-title h3 {
+    font-size: 34px;
+    line-height: 44px;
+    color: #073965;
+}
+
+.section-title p {
+    font-size: 18px;
+    line-height: 30px;
+    color: #5a6472;
+}
+
+@media (max-width: 991px) {
+    .section-title h3 {
+        font-size: 28px;
+        line-height: 38px;
+    }
+}
+
+@media (max-width: 767px) {
+    .section-title h3 {
+        font-size: 24px;
+        line-height: 34px;
+    }
+
+    .section-title p {
+        font-size: 16px;
+        line-height: 26px;
+    }
+}
+
+/* ---- Achievement stat cards: drop the leftover Bootstrap pink ---- */
+.counter-facts .counter h3 {
+    color: #0b3c8a;
+}
+
+.counter-facts .counter .counter-value {
+    font-size: 34px;
+    color: #14213d;
+}
+
+/* ---- Industry cards: name (h6) was lighter than its own caption ---- */
+#team-section .team-member-wrapper .single-team-member .member-name h6 {
+    color: #14213d;
+}
+
+#team-section .team-member-wrapper .single-team-member .member-name p {
+    color: #8a8f98;
+}
+
+/* ----------------------------------------------------------------
+   4 sections were sitting on generic, off-brand stock photos
+   (an underground parking garage, a water-droplet macro shot, a
+   night sky) forced dark with a #000 fallback. Moved each to a
+   soft brand-tinted light background and flipped hard-coded white
+   text to the site's dark navy.
+   ---------------------------------------------------------------- */
+
+/* CTA — keep the branded c2a.png photo, but lighten the scrim
+   over it and turn the card into a real frosted/mirror glass
+   pane (low-opacity white + blur) so the photo shows through
+   instead of being hidden behind a solid card. */
+.call-2-acction::before {
+    background: rgba(8, 28, 63, 0.42);
+}
+
+.call-2-acction .section-title h3 {
+    color: #ff8a3d;
+}
+
+.call-2-acction .section-title p {
+    color: #ffffff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+.c2a {
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+}
+
+.c2a,
+.c2a h2,
+.c2a p,
+.c2a h3 {
+    color: #ffffff !important;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Achievement stat strip — was an unrelated dark garage photo. */
+/* .funfacts {
+    background-image: none;
+    background-color: #f5f8fd;
+} */
+
+.funfacts .funfact {
+    color: #14213d;
+}
+
+.funfacts .funfact .st-funfact-icon {
+    color: #ff5f13;
+}
+
+.funfacts .funfact .st-funfact-counter {
+    color: #0b3c8a;
+    font-weight: 700;
+}
+
+.funfacts .funfact .funfact-title {
+    color: #5b6472;
+}
+
+.funfacts .section-title p {
+    color: #14213d;
+}
+
+/* Newsletter strip — was a water-droplet macro photo. */
+.subscribe {
+    background-color: #eef3fb;
+    /* background-image: linear-gradient(135deg, #eef3fb 0%, #f7eee7 100%); */
+}
+
+.subscribe .subscribe-title,
+.subscribe .subscribe-or {
+    color: #14213d;
+}
+
+.subscribe .section-title p {
+    color: #14213d;
+}
+
+/* Testimonials — was a night-sky photo. */
+.testimonials {
+    background-image: none;
+    background-color: #f5f8fd;
+    color: #14213d;
+}
+
+.testimonial .testimonial-img:before {
+    color: #ff5f13;
+}
+
+.testimonial blockquote p {
+    color: #3d4759;
+}
+
+.testimonial blockquote footer,
+.testimonial blockquote small,
+.testimonial blockquote .small,
+.testimonial footer {
+    color: #14213d;
+}
+
+.testimonials-carousel .owl-dot span {
+    background: #0b3c8a;
+    opacity: 0.25;
+}
+
+.testimonials-carousel .owl-dot.active span {
+    background: #ff5f13;
+    opacity: 1;
+}
+
+.testimonials .section-title p {
+    color: #14213d;
+}
+
+/* ----------------------------------------------------------------
+   "Why Choose Us" pill cards: background was a near-black gradient
+   (var(--bs-secondary) -> var(--bs-dark)) with heading/paragraph
+   text left at their default dark-navy color on top of it — i.e.
+   almost unreadable. Flipped to a white/light card that matches
+   the section's own soft-blue backdrop, added a lift-and-glow
+   hover animation, and re-pointed the photo frame + button off
+   the stray theme pink onto the brand navy/orange pair.
+   ---------------------------------------------------------------- */
+.service-item.service-item-left,
+.service-item.service-item-right {
+    box-shadow: 0 15px 40px rgba(11, 60, 138, 0.10);
+    transition: transform .4s ease, box-shadow .4s ease;
+}
+
+.service-item.service-item-left {
+    background: linear-gradient(to right, #ffffff, #f2f6fc);
+}
+
+.service-item.service-item-right {
+    background: linear-gradient(to left, #ffffff, #f2f6fc);
+}
+
+.service-item.service-item-left:hover,
+.service-item.service-item-right:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 55px rgba(11, 60, 138, 0.18);
+}
+
+@media (max-width: 767.98px) {
+    .service-item.service-item-left,
+    .service-item.service-item-right {
+        background: linear-gradient(to bottom, #ffffff, #f2f6fc);
+    }
+}
+
+.service-item .service-img::before {
+    border-color: rgba(11, 60, 138, 0.15);
+    transition: border-color .4s ease, transform .4s ease;
+}
+
+.service-item:hover .service-img::before {
+    border-color: rgba(255, 95, 19, 0.35);
+}
+
+.service-item .service-img img {
+    transition: transform .5s ease;
+}
+
+.service-item:hover .service-img img {
+    transform: scale(1.08);
+}
+
+.why-choose-us .btn-outline-primary {
+    color: #0b3c8a;
+    border-color: #0b3c8a;
+}
+
+.why-choose-us .btn-outline-primary:hover {
+    color: #fff;
+    background-color: #ff5f13;
+    border-color: #ff5f13;
+}
+
+/* ----------------------------------------------------------------
+   Roadmap: was a flat, plain #031b69 blue fill with the heading
+   and every timeline item's text left at the default dark-navy
+   color — invisible on top of it. Swapped the flat fill for a
+   layered navy gradient with a soft dot-grid texture and glow
+   accents (kept it a dark section on purpose for rhythm against
+   the light sections around it), moved the connector lines and
+   hover state off blue/pink onto the orange brand accent, and
+   gave every text element in the section an explicit light color.
+   ---------------------------------------------------------------- */
+.roadmap-area {
+    background:
+        radial-gradient(circle at 15% 20%, rgba(255, 95, 19, 0.14), transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(11, 60, 138, 0.35), transparent 45%),
+        linear-gradient(135deg, #0b1c39 0%, #0e2a52 55%, #0b3c8a 100%);
+    position: relative;
+}
+
+.roadmap-area::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 22px 22px;
+    pointer-events: none;
+}
+
+.roadmap-area .heading h5 {
+    color: #ff9152;
+    letter-spacing: 2px;
+}
+
+.roadmap-area .heading h1 {
+    color: #ffffff;
+}
+
+/* ----------------------------------------------------------------
+   Process flow — PowerPoint-style connected arrow/chevron steps,
+   replacing the carousel. Each step slides in from the left as the
+   section scrolls into view (wow.js fadeInLeft, staggered delay
+   per step in the blade markup — 0.1s/0.3s/0.5s/0.7s — so they
+   reveal one at a time instead of all at once). Chevron colors
+   sweep navy -> orange across the 4 steps to read as a progression
+   toward launch. Below 992px the chevrons (which only read
+   correctly pointing sideways in a row) become a vertical
+   timeline: numbered circle + icon, connected by a line, with the
+   text beside it.
+   ---------------------------------------------------------------- */
+.process-flow {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.process-step {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.process-chevron {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 130px;
+    margin: 0 0 26px -34px;
+    padding: 0 34px 0 46px;
+    clip-path: polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%, 18% 50%);
+    box-shadow: 0 12px 26px rgba(8, 20, 45, 0.35);
+}
+
+.process-step:first-child .process-chevron {
+    margin-left: 0;
+    clip-path: polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%);
+    padding-left: 20px;
+}
+
+.process-step:nth-child(1) .process-chevron { background: linear-gradient(135deg, #14213d, #0b3c8a); z-index: 4; }
+.process-step:nth-child(2) .process-chevron { background: linear-gradient(135deg, #0b3c8a, #2f6fd6); z-index: 3; }
+.process-step:nth-child(3) .process-chevron { background: linear-gradient(135deg, #2f6fd6, #ff8a3d); z-index: 2; }
+.process-step:nth-child(4) .process-chevron { background: linear-gradient(135deg, #ff8a3d, #ff5f13); z-index: 1; }
+
+.process-num {
+    font-family: "Oswald", sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.process-icon {
+    font-size: 26px;
+    color: #ffffff;
+    margin: 6px 0;
+}
+
+.process-title {
+    font-family: "Oswald", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.process-desc h5 {
+    color: #ffffff;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.process-desc p {
+    color: #b9c4d9;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+@media (max-width: 991px) {
+    .process-flow {
+        display: block;
+    }
+
+    .process-step {
+        display: flex;
+        align-items: flex-start;
+        text-align: left;
+        gap: 22px;
+        padding: 0;
+        position: relative;
+        padding-bottom: 40px;
+    }
+
+    .process-step:not(:last-child)::before {
+        content: "";
+        position: absolute;
+        top: 64px;
+        left: 31px;
+        width: 2px;
+        height: calc(100% - 64px);
+        background: rgba(255, 255, 255, 0.18);
+    }
+
+    .process-chevron {
+        clip-path: none;
+        flex-direction: row;
+        gap: 12px;
+        width: 64px;
+        height: 64px;
+        min-width: 64px;
+        margin: 0;
+        padding: 0;
+        border-radius: 50%;
+        box-shadow: 0 10px 22px rgba(8, 20, 45, 0.35);
+    }
+
+    .process-step:first-child .process-chevron {
+        clip-path: none;
+        padding-left: 0;
+    }
+
+    .process-num {
+        display: none;
+    }
+
+    .process-icon {
+        margin: 0;
+        font-size: 22px;
+    }
+
+    .process-title {
+        display: none;
+    }
+
+    .process-step {
+        padding-bottom: 26px;
+    }
+
+    .process-step:not(:last-child)::before {
+        top: 64px;
+        height: calc(100% - 38px);
+    }
+}
+
+/* Steps are clickable — they jump the laptop slider below (see
+   main.js) — and the active one gets a lift + brighter ring so the
+   chevrons double as a progress indicator for whichever slide is
+   showing. */
+.process-step {
+    cursor: pointer;
+}
+
+.process-step .process-chevron {
+    transition: transform .35s ease, filter .35s ease;
+}
+
+.process-step:hover .process-chevron {
+    filter: brightness(1.08);
+}
+
+.process-step.is-active .process-chevron {
+    transform: scale(1.05);
+    filter: brightness(1.15);
+}
+
+.process-step.is-active .process-num {
+    color: #ffffff;
+}
+
+@media (max-width: 991px) {
+    .process-step.is-active .process-chevron {
+        transform: scale(1.12);
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25), 0 10px 22px rgba(8, 20, 45, 0.35);
+    }
+}
+
+/* ----------------------------------------------------------------
+   Laptop-frame slider — each step's full title/description now
+   plays inside a laptop mockup: dark bezel, browser-style title
+   bar, and a frosted "mirror" glass screen (translucent + blur)
+   with a soft diagonal shine that sweeps across on a loop. The
+   owl-carousel inside cross-fades between steps (animateIn/Out)
+   instead of the default hard slide, synced to the chevrons above.
+   ---------------------------------------------------------------- */
+.laptop-mockup {
+    max-width: 860px;
+    margin: 56px auto 0;
+}
+
+.laptop-screen {
+    position: relative;
+    background: #0b1220;
+    border-radius: 16px 16px 4px 4px;
+    padding: 6px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.laptop-browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 16px;
+}
+
+.laptop-browser-bar .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-red { background: #ff5f56; }
+.dot-yellow { background: #ffbd2e; }
+.dot-green { background: #27c93f; }
+
+.laptop-url {
+    margin: 0 auto;
+    font-size: 12px;
+    letter-spacing: .5px;
+    color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 4px 18px;
+}
+
+.laptop-screen-glass {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    min-height: 300px;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(255, 95, 19, 0.16), transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(47, 111, 214, 0.25), transparent 50%),
+        linear-gradient(135deg, #14213d 0%, #0b1c39 100%);
+}
+
+.laptop-shine {
+    position: absolute;
+    inset: -20%;
+    background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.10) 48%, transparent 62%);
+    background-size: 250% 250%;
+    animation: laptopMirrorShine 7s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+@keyframes laptopMirrorShine {
+    0% { background-position: 220% -20%; }
+    50% { background-position: -20% 120%; }
+    100% { background-position: 220% -20%; }
+}
+
+.laptop-slides {
+    position: relative;
+    z-index: 1;
+}
+
+.laptop-slide {
+    text-align: center;
+    padding: 46px 60px 54px;
+}
+
+.laptop-slide .process-num {
+    display: block;
+    font-family: "Oswald", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #ff8a3d;
+    margin-bottom: 8px;
+}
+
+.laptop-slide .process-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 18px;
+}
+
+.laptop-slide h5 {
+    color: #ffffff;
+    font-size: 22px;
+    margin-bottom: 14px;
+}
+
+.laptop-slide p {
+    color: #b9c4d9;
+    font-size: 15px;
+    line-height: 26px;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.laptop-mockup .owl-carousel {
+    padding-bottom: 44px;
+    position: relative;
+}
+
+.laptop-mockup .owl-nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 4px;
+    text-align: center;
+    z-index: 3;
+}
+
+.laptop-mockup .owl-nav div {
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 6px;
+    transform: none;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.laptop-mockup .owl-nav div:hover {
+    background: #ff5f13;
+    color: #fff;
+}
+
+.laptop-mockup .owl-dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 56px;
+    text-align: center;
+    z-index: 3;
+}
+
+.laptop-mockup .owl-dots .owl-dot span {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.laptop-mockup .owl-dots .owl-dot.active span {
+    background: #ff5f13;
+}
+
+.laptop-base {
+    height: 16px;
+    background: linear-gradient(180deg, #1c2947, #0b1220);
+    border-radius: 0 0 10px 10px;
+    position: relative;
+    margin: 0 18px;
+}
+
+.laptop-notch {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 6px;
+    background: #060a14;
+    border-radius: 0 0 8px 8px;
+}
+
+.laptop-shadow {
+    height: 18px;
+    max-width: 92%;
+    margin: 6px auto 0;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.35), transparent 75%);
+}
+
+@media (max-width: 767px) {
+    .laptop-slide {
+        padding: 34px 22px 44px;
+    }
+
+    .laptop-slide h5 {
+        font-size: 18px;
+    }
+}
+
+/* ==========================================================
+   Grid gutter fix — cards ke beech missing gap.
+   The .row/.g-0.../.g-4 rules above (line ~31) define
+   --bs-gutter-y correctly (e.g. .g-4 sets 1.5rem), but the rule
+   that actually spends that variable on the grid columns
+   (".row > * { margin-top: var(--bs-gutter-y) }") was missing
+   from this stylesheet, so every multi-row ".row.g-*" grid had
+   0px vertical gap between rows regardless of which g-* class it
+   used — confirmed on the Services, Technologies and Industries
+   card grids, where second-row cards butt straight into the
+   first row with no space. This restores that one rule so the
+   gutter classes already in the markup work as declared, with no
+   other layout/spacing/design change.
+   ========================================================== */
+.row > * {
+    margin-top: var(--bs-gutter-y);
+}
+
+/* Industries cards: the hover-reveal description panel
+   (.training-content) was hidden with "bottom:-100%", a
+   percentage of the CARD's own height (~180px, set by the image).
+   The panel itself is taller than that (~220-270px, depending on
+   how much description text it holds), so -100% wasn't enough to
+   push it fully out of view — its top edge poked back up into the
+   visible card, overlapping the title underneath it. Switching to
+   a transform-based slide (measured against the panel's own
+   height, not the card's) hides it completely regardless of how
+   tall its text makes it. */
+.training .training-item .training-content {
+    bottom: 0;
+    transform: translateY(100%);
+}
+
+.training .training-item:hover .training-content {
+    bottom: 0;
+    transform: translateY(0);
+}
+
+/* ----------------------------------------------------------------
+   Testimonials — moved into the same laptop-frame/mirror-glass
+   mockup used for the development-process slider, for a consistent
+   "device screen" language across the page. Reuses .laptop-screen /
+   .laptop-browser-bar / .laptop-shine / .laptop-base etc. as-is;
+   only the inner .testimonial layout and colors are overridden
+   here since it now sits on the dark glass instead of the light
+   section background. The carousel already had autoplay (one
+   testimonial at a time) — swapped its hard slide for a cross-fade
+   (animateIn/animateOut in main.js) and gave it the same
+   bottom-center nav/dots treatment as the process slider.
+   ---------------------------------------------------------------- */
+.testi-mockup {
+    max-width: 760px;
+    margin: 50px auto 0;
+}
+
+.testi-glass {
+    min-height: 340px;
+}
+
+.testi-glass .testimonials-carousel {
+    max-width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.testi-glass .testimonial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0;
+    padding: 46px 55px 30px;
+}
+
+.testi-glass .testimonial-img {
+    float: none;
+    margin: 0 0 22px;
+}
+
+.testi-glass .testimonial-img img {
+    width: 84px !important;
+    height: 84px;
+    border: 3px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.testi-glass .testimonial-img:after {
+    display: none;
+}
+
+.testi-glass .testimonial-img:before {
+    content: '\201C';
+    position: absolute;
+    left: 50%;
+    top: -22px;
+    transform: translateX(-50%);
+    font-size: 46px;
+    color: #ff8a3d;
+    font-family: Georgia, serif;
+}
+
+.testi-glass blockquote p {
+    color: #d7deee;
+    font-size: 17px;
+    line-height: 28px;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.testi-glass .testimonial footer {
+    margin-top: 20px;
+    color: #ffffff;
+}
+
+.testi-glass .testimonial footer strong {
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.testi-glass .testimonial footer cite {
+    color: #ff8a3d;
+    font-style: normal;
+    font-size: 13px;
+    letter-spacing: .5px;
+}
+
+.testi-mockup .owl-carousel {
+    padding-bottom: 44px;
+    position: relative;
+}
+
+.testi-mockup .owl-nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 4px;
+    text-align: center;
+    z-index: 3;
+}
+
+.testi-mockup .owl-nav div {
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 6px;
+    transform: none;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.testi-mockup .owl-nav div:hover {
+    background: #ff5f13;
+    color: #fff;
+}
+
+.testi-mockup .owl-dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 56px;
+    margin-top: 0;
+    text-align: center;
+    z-index: 3;
+}
+
+.testi-mockup .owl-dots .owl-dot span {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.testi-mockup .owl-dots .owl-dot.active span {
+    background: #ff5f13;
+}
+
+@media (max-width: 767px) {
+    .testi-glass .testimonial {
+        padding: 40px 24px 26px;
+    }
+}
+
+/* ----------------------------------------------------------------
+   Industries card, take 3 — was a static 3-up float:left grid.
+   Rebuilt as a touch-style mobile phone mockup (bezel, camera
+   notch, "Deovate" status bar, home indicator) with a fading
+   owl-carousel slider inside the screen: photo on top, a real
+   button below it, and the existing name/designation/description
+   overlay revealed on hover — same content, new device frame.
+   ---------------------------------------------------------------- */
+.phones-carousel {
+    margin-top: 50px;
+}
+
+.phone-mockup {
+    max-width: 280px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.phone-frame {
+    position: relative;
+    background: #0b1220;
+    border-radius: 42px;
+    padding: 14px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.phone-notch {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 22px;
+    background: #0b1220;
+    border-radius: 0 0 16px 16px;
+    z-index: 5;
+}
+
+.phone-notch::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 8px;
+    transform: translateX(-50%);
+    width: 34px;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.phone-screen {
+    position: relative;
+    border-radius: 28px;
+    background: #14213d;
+}
+
+.phone-statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 0 8px;
+}
+
+.phone-brand {
+    font-family: "Oswald", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.phone-brand::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff5f13;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.phone-slide {
+    background: #ffffff;
+    overflow: hidden;
+    border-radius: 0 0 28px 28px;
+}
+
+.phone-slide-img {
+    position: relative;
+    overflow: hidden;
+    height: 340px;
+}
+
+.phone-slide-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .6s ease;
+}
+
+.phone-slide:hover .phone-slide-img img {
+    transform: scale(1.06);
+}
+
+.phone-slide-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 26px;
+    background: linear-gradient(180deg, rgba(11, 28, 57, 0.75), rgba(11, 28, 57, 0.94));
+    opacity: 0;
+    transition: opacity .4s ease;
+}
+
+.phone-slide:hover .phone-slide-overlay {
+    opacity: 1;
+}
+
+.phone-slide-overlay h4 {
+    color: #ffffff;
+    font-size: 20px;
+    margin-bottom: 6px;
+}
+
+.phone-slide-overlay span {
+    color: #ff8a3d;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.phone-slide-overlay p {
+    color: #d7deee;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.phone-slide-info {
+    padding: 20px 24px 26px;
+    text-align: center;
+}
+
+.phone-slide-info h6 {
+    color: #14213d;
+    font-size: 16px;
+    margin-bottom: 14px;
+}
+
+.phone-slide-btn {
+    display: inline-block;
+    background: #0b3c8a;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    padding: 10px 26px;
+    border-radius: 24px;
+    text-decoration: none;
+    transition: background .3s ease;
+}
+
+.phone-slide-btn:hover {
+    background: #ff5f13;
+    color: #ffffff;
+}
+
+.phone-home-indicator {
+    display: block;
+    width: 100px;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.25);
+    margin: 12px auto 2px;
+}
+
+.phone-shadow {
+    height: 20px;
+    max-width: 70%;
+    margin: 10px auto 0;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3), transparent 75%);
+}
+
+/* Desktop shows all 3 phones side by side (items:3 from 992px up
+   in main.js); mobile shows one phone at a time and slides between
+   them (items:1). Nav/dots belong to .phones-carousel itself now,
+   not to an individual phone, since Owl Carousel renders them as
+   siblings of whichever phones are currently in the row. */
+.phones-carousel {
+    position: relative;
+}
+
+.phones-carousel .owl-dots {
+    display: block;
+    text-align: center;
+    margin-top: 26px;
+}
+
+.phones-carousel .owl-dots .owl-dot {
+    display: inline-block;
+}
+
+.phones-carousel .owl-dots .owl-dot span {
+    display: block;
+    width: 8px;
+    height: 8px;
+    margin: 4px;
+    border-radius: 50%;
+    background: #c7cedb;
+    opacity: 1;
+    transition: background .3s ease;
+}
+
+.phones-carousel .owl-dots .owl-dot.active span {
+    background: #ff5f13;
+}
+
+.phones-carousel .owl-nav div {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #14213d;
+    box-shadow: 0 8px 20px rgba(11, 28, 57, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.phones-carousel .owl-nav .owl-prev {
+    left: -20px;
+}
+
+.phones-carousel .owl-nav .owl-next {
+    right: -20px;
+}
+
+.phones-carousel .owl-nav div:hover {
+    background: #ff5f13;
+    color: #ffffff;
+}
+
+.phones-carousel .owl-nav .disabled {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .phones-carousel .owl-nav .owl-prev {
+        left: -46px;
+    }
+
+    .phones-carousel .owl-nav .owl-next {
+        right: -46px;
+    }
+}
+
+@media (max-width: 500px) {
+    .phone-mockup {
+        max-width: 260px;
+    }
+
+    .phone-slide-img {
+        height: 300px;
+    }
+}
+
+/* ----------------------------------------------------------------
+   Industries We Serve — .office-item had no matching CSS at all
+   (the real rules were scoped to ".contact .office .office-item",
+   an ancestor class that doesn't exist in this markup), so it was
+   rendering as a bare Bootstrap-utility card: plain image, plain
+   text, no shadow, no hover state. The carousel itself already had
+   a proper 1/2/3/4-column responsive config (main.js) and was
+   already a slider — it just had dots turned off and nothing
+   worth sliding TO visually. Gave each card a real elevated-card
+   treatment (icon badge, image zoom on hover, lift + shadow) and
+   turned dots on to make the slider affordance visible.
+   ---------------------------------------------------------------- */
+.office-carousel {
+    padding: 10px 34px 50px;
+}
+
+@media (min-width: 768px) {
+    .office-carousel {
+        padding: 10px 6px 50px;
+    }
+}
+
+.office-item {
+    background: #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(11, 28, 57, 0.08);
+    transition: transform .4s ease, box-shadow .4s ease;
+}
+
+.office-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 22px 45px rgba(11, 28, 57, 0.16);
+}
+
+.office-img {
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+}
+
+.office-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .6s ease;
+}
+
+.office-item:hover .office-img img {
+    transform: scale(1.08);
+}
+
+.office-icon {
+    position: absolute;
+    right: 18px;
+    bottom: -22px;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0b3c8a, #ff5f13);
+    color: #ffffff;
+    font-size: 20px;
+    box-shadow: 0 10px 22px rgba(11, 28, 57, 0.3);
+    border: 3px solid #ffffff;
+}
+
+.office-content {
+    padding: 34px 24px 26px;
+}
+
+.office-content h4 {
+    color: #14213d;
+    font-size: 19px;
+    margin-bottom: 10px;
+}
+
+.office-content p {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 0;
+}
+
+.office-carousel .owl-stage-outer {
+    overflow: hidden;
+    padding: 6px 0 4px;
+}
+
+.office-carousel .owl-nav div {
+    position: absolute;
+    top: 38%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #14213d;
+    box-shadow: 0 8px 20px rgba(11, 28, 57, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .3s ease, color .3s ease;
+}
+
+.office-carousel .owl-nav .owl-prev {
+    left: -14px;
+}
+
+.office-carousel .owl-nav .owl-next {
+    right: -14px;
+}
+
+.office-carousel .owl-nav div:hover {
+    background: #ff5f13;
+    color: #ffffff;
+}
+
+@media (min-width: 992px) {
+    .office-carousel .owl-nav .owl-prev {
+        left: -22px;
+    }
+
+    .office-carousel .owl-nav .owl-next {
+        right: -22px;
+    }
+}
+
+.office-carousel .owl-dots {
+    text-align: center;
+    margin-top: 14px;
+}
+
+.office-carousel .owl-dots .owl-dot span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 4px;
+    border-radius: 50%;
+    background: #d7dce6;
+    transition: background .3s ease, transform .3s ease;
+}
+
+.office-carousel .owl-dots .owl-dot.active span {
+    background: #ff5f13;
+    transform: scale(1.2);
+}
+
+/* ----------------------------------------------------------------
+   Blog section — same idea as the industries phone mockups, this
+   time as a tablet frame (thicker bezel, no notch, a centered
+   home button) since a blog reads more naturally on a bigger
+   screen. Same responsive carousel pattern already proven on the
+   industries section: one tablet on mobile, up to 3 side by side
+   on desktop (main.js), loop:false + properly-sized dots + nav
+   positioned so overflow:hidden never traps it outside the frame.
+   ---------------------------------------------------------------- */
+.tablets-carousel {
+    position: relative;
+    margin-top: 40px;
+    padding: 6px 34px 50px;
+}
+
+@media (min-width: 768px) {
+    .tablets-carousel {
+        padding: 6px 30px 50px;
+    }
+}
+
+.tablet-mockup {
+    max-width: 340px;
+    margin: 0 auto;
+}
+
+.tablet-frame {
+    position: relative;
+    background: #14213d;
+    border-radius: 26px;
+    padding: 16px 14px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tablet-cam {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 auto 10px;
+}
+
+.tablet-screen {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.tablet-statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 0;
+    background: #14213d;
+}
+
+.tablet-slide-img {
+    height: 170px;
+    overflow: hidden;
+}
+
+.tablet-slide-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .6s ease;
+}
+
+.tablet-mockup:hover .tablet-slide-img img {
+    transform: scale(1.06);
+}
+
+.tablet-slide-info {
+    padding: 20px 22px 26px;
+}
+
+.tablet-meta {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    color: #ff5f13;
+    margin-bottom: 8px;
+}
+
+.tablet-slide-info h6 {
+    margin-bottom: 10px;
+    line-height: 22px;
+}
+
+.tablet-slide-info h6 a {
+    color: #14213d;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.tablet-slide-info h6 a:hover {
+    color: #0b3c8a;
+}
+
+.tablet-slide-info p {
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 20px;
+    margin-bottom: 16px;
+}
+
+.tablet-slide-btn {
+    display: inline-block;
+    background: #0b3c8a;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    padding: 9px 22px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background .3s ease;
+}
+
+.tablet-slide-btn:hover {
+    background: #ff5f13;
+    color: #ffffff;
+}
+
+.tablet-home-btn {
+    width: 26px;
+    height: 26px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    margin: 12px auto 2px;
+}
+
+.tablet-shadow {
+    height: 18px;
+    max-width: 75%;
+    margin: 10px auto 0;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.28), transparent 75%);
+}
+
+.tablets-carousel .owl-stage-outer {
+    overflow: hidden;
+    padding: 6px 0 4px;
+}
+
+.tablets-carousel .owl-nav div {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #14213d;
+    box-shadow: 0 8px 20px rgba(11, 28, 57, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .3s ease, color .3s ease;
+}
+
+.tablets-carousel .owl-nav .owl-prev {
+    left: -6px;
+}
+
+.tablets-carousel .owl-nav .owl-next {
+    right: -6px;
+}
+
+.tablets-carousel .owl-nav div:hover {
+    background: #ff5f13;
+    color: #ffffff;
+}
+
+.tablets-carousel .owl-nav .disabled {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .tablets-carousel .owl-nav .owl-prev {
+        left: -2px;
+    }
+
+    .tablets-carousel .owl-nav .owl-next {
+        right: -2px;
+    }
+}
+
+.tablets-carousel .owl-dots {
+    text-align: center;
+    margin-top: 18px;
+}
+
+.tablets-carousel .owl-dots .owl-dot span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 4px;
+    border-radius: 50%;
+    background: #d7dce6;
+    transition: background .3s ease, transform .3s ease;
+}
+
+.tablets-carousel .owl-dots .owl-dot.active span {
+    background: #ff5f13;
+    transform: scale(1.2);
+}
+
+
+.faq-contact-grid {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.faq-tablet-col,
+.contact-tablet-col {
+    flex: 1 1 440px;
+    /* max-width: 460px; */
+}
+
+.app-tablet {
+    /* max-width: 440px; */
+    margin: 0 auto;
+}
+
+.app-tablet-frame {
+    padding: 18px 16px;
+}
+
+.app-tablet-screen {
+    display: flex;
+    flex-direction: column;
+    min-height: 560px;
+}
+
+.app-screen-header {
+    padding: 22px 24px 6px;
+    text-align: center;
+}
+
+.app-screen-header h4 {
+    color: #14213d;
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.app-screen-header p {
+    color: #8a8f98;
+    font-size: 13px;
+    margin: 0;
+}
+
+/* --- FAQ, restyled for the app screen --- */
+.app-faq-list.faq-wrapper {
+    max-width: 100%;
+    margin: 10px 0 0;
+    padding: 4px 18px 18px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.app-faq-list .faq-item {
+    background: #f5f8fd;
+    box-shadow: none;
+    margin-bottom: 12px;
+    border-radius: 14px;
+}
+
+.app-faq-list .faq-item:hover {
+    transform: none;
+    background: #eef3fb;
+}
+
+.app-faq-list .faq-item.active {
+    border-left: 4px solid #ff5f13;
+    background: #eef3fb;
+}
+
+.app-faq-list .faq-title {
+    padding: 16px 18px;
+}
+
+.app-faq-list .faq-title h5 {
+    font-size: 14px;
+    color: #14213d;
+    padding-right: 12px;
+}
+
+.app-faq-list .faq-icon {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    background: #0b3c8a;
+    font-size: 12px;
+}
+
+.app-faq-list .faq-item.active .faq-icon {
+    background: #ff5f13;
+    transform: rotate(180deg);
+}
+
+.app-faq-list .faq-content {
+    padding: 0 18px 16px;
+}
+
+.app-faq-list .faq-content p {
+    font-size: 13px;
+    line-height: 22px;
+    color: #6b7280;
+}
+
+.app-faq-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.app-faq-list::-webkit-scrollbar-thumb {
+    background: #d7dce6;
+    border-radius: 10px;
+}
+
+/* --- Contact form --- */
+.app-contact-form {
+    padding: 14px 24px 26px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform .1s ease;
+}
+
+.app-contact-form.shake {
+    animation: appFormShake .45s ease;
+}
+
+@keyframes appFormShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(7px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(3px); }
+}
+
+.app-form-group {
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.app-form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    color: #14213d;
+    margin-bottom: 6px;
+}
+
+.app-form-group input,
+.app-form-group textarea {
+    width: 100%;
+    border: 1.5px solid #e3e8f1;
+    background: #f8fafd;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 13px;
+    color: #14213d;
+    outline: none;
+    resize: none;
+    transition: border-color .25s ease, background .25s ease;
+}
+
+.app-form-group input:focus,
+.app-form-group textarea:focus {
+    border-color: #0b3c8a;
+    background: #ffffff;
+}
+
+.app-form-group.is-valid input,
+.app-form-group.is-valid textarea {
+    border-color: #22c07a;
+}
+
+.app-form-group.has-error input,
+.app-form-group.has-error textarea {
+    border-color: #ff4d4f;
+    background: #fff6f6;
+}
+
+.app-form-error {
+    display: none;
+    color: #ff4d4f;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.app-form-group.has-error .app-form-error {
+    display: block;
+    animation: appFieldErrorIn .25s ease;
+}
+
+@keyframes appFieldErrorIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.app-form-submit {
+    position: relative;
+    border: none;
+    background: #0b3c8a;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    padding: 13px 20px;
+    border-radius: 24px;
+    cursor: pointer;
+    margin-top: 6px;
+    overflow: hidden;
+    transition: background .3s ease, transform .15s ease;
+}
+
+.app-form-submit:hover {
+    background: #ff5f13;
+}
+
+.app-form-submit:active {
+    transform: scale(.97);
+}
+
+.app-form-submit-loader {
+    display: none;
+    width: 16px;
+    height: 16px;
+    margin: 0 auto;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: appSpin .7s linear infinite;
+}
+
+@keyframes appSpin {
+    to { transform: rotate(360deg); }
+}
+
+.app-form-submit.is-loading .app-form-submit-text {
+    display: none;
+}
+
+.app-form-submit.is-loading .app-form-submit-loader {
+    display: block;
+}
+
+.app-form-submit:disabled {
+    cursor: default;
+    opacity: .85;
+}
+
+.app-form-success {
+    display: none;
+    position: absolute;
+    inset: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #ffffff;
+    padding: 0 30px;
+}
+
+.app-form-success i {
+    font-size: 46px;
+    color: #22c07a;
+    margin-bottom: 14px;
+    animation: appSuccessPop .5s ease;
+}
+
+@keyframes appSuccessPop {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+.app-form-success p {
+    color: #14213d;
+    font-size: 14px;
+    line-height: 22px;
+    margin: 0;
+}
+
+.app-contact-form.is-submitted .app-form-success {
+    display: flex;
+    animation: appFadeIn .3s ease;
+}
+
+@keyframes appFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width: 991px) {
+    .faq-contact-grid {
+        gap: 60px;
+    }
+}
+
+/* ==========================================================
+   Global typography pass — matching the reference screenshot:
+   elegant serif for titles/big statements, clean condensed
+   sans for small kicker labels, body copy left on the existing
+   sans-serif. Two fonts referenced sitewide were never actually
+   loaded (no <link>/@import for either), so they'd been silently
+   falling back the whole time:
+     - "Oswald" (kickers, phone/tablet labels, process-step
+       numbers) fell back to the browser default, which happened
+       to render as a plain sans.
+     - .section-title h3/p both requested "Oswald" with no
+       fallback keyword at all, which made unstyled browsers use
+       their default *serif* — that's the accidental origin of
+       the serif look on every section heading throughout this
+       session's screenshots. Now loading both fonts for real
+       (head.blade.php) and using Playfair Display intentionally
+       for the big serif headline instead of relying on that
+       fallback accident.
+   ========================================================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Playfair Display", serif;
+    color: #073965;
+}
+
+.section-title h3 {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: none;
+}
+
+.section-title p {
+    font-family: "Barlow", sans-serif;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+    max-width: 760px;
+    margin: 16px auto 0;
+}
+
+.app-screen-header h4,
+.laptop-slide h5,
+.testi-glass blockquote footer strong,
+.office-content h4,
+.tablet-slide-info h6 a,
+.call-us h3,
+.process-desc h5 {
+    font-family: "Playfair Display", serif;
+}
+
+/* ==========================================================
+   Inner pages (Services/Portfolios/Industries/Blog/Contact/
+   About) — shared components reused across their listing +
+   detail views instead of one-off page CSS.
+   ========================================================== */
+
+/* Simple numbered process steps (services.json / contact.json /
+   about.json all share the same {step,title,description} shape). */
+.simple-process-item {
+    text-align: center;
+    padding: 10px;
+}
+
+.simple-process-number {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #073965, #f85603);
+    color: #fff;
+    font-family: "Playfair Display", serif;
+    font-size: 24px;
+    font-weight: 700;
+    box-shadow: 0 12px 26px rgba(7, 57, 101, 0.22);
+}
+
+.simple-process-item h4 {
+    font-size: 19px;
+    margin-bottom: 10px;
+    color: #073965;
+}
+
+.simple-process-item p {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 24px;
+    margin-bottom: 0;
+}
+
+/* Industries have no photography, only an icon class — reuse the
+   .office-item card shell but swap the photo for a gradient icon
+   panel so the card language stays consistent site-wide. */
+.office-item.icon-only .office-img {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #073965, #0b3c8a 55%, #f85603);
+}
+
+.office-item.icon-only .office-img i {
+    font-size: 44px;
+    color: #fff;
+}
+
+.office-item.icon-only .office-icon {
+    bottom: -22px;
+}
+
+.section-title.st-start {
+    text-align: left;
+}
+
+.section-title.st-start::before {
+    margin: 0 0 20px;
+}
+
+.section-title.st-start p {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: none;
+}
+
+/* Simple content grid card meta row (category / date / reading time) */
+.content-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    font-size: 13px;
+    color: #f85603;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 8px;
+}
+
+/* Career index page — each opening shown inside its own phone
+   mockup (was a single laptop frame with 4 cards inside), padded
+   out with static placeholder roles when fewer than 4 real
+   openings exist. */
+.career-phone {
+    max-width: 100%;
+}
+
+.career-phone-banner {
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #073965, #0b3c8a 55%, #f85603);
+    color: #fff;
+    font-size: 30px;
+}
+
+.career-phone-info {
+    background: #ffffff;
+    padding: 18px 16px 20px;
+    text-align: center;
+}
+
+.career-phone-info h5 {
+    color: #073965;
+    font-size: 15px;
+    margin-bottom: 12px;
+    min-height: 38px;
+}
+
+.career-phone-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.career-phone-meta span i {
+    color: #f85603;
+    width: 14px;
+    margin-right: 4px;
+}
+
+/* Legal pages (Privacy Policy / Terms) — was plain stacked
+   heading/paragraph text; now a sticky "On This Page" nav +
+   help card on the left, icon-led section rows on the right. */
+.legal-sidebar {
+    position: sticky;
+    top: 110px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 28px 26px;
+    box-shadow: 0 15px 40px rgba(11, 28, 57, 0.08);
+    margin-bottom: 24px;
+}
+
+.legal-updated {
+    display: inline-flex;
+    align-items: center;
+    background: #f5f8fd;
+    color: #073965;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 30px;
+    margin-bottom: 22px;
+}
+
+.legal-sidebar h5 {
+    color: #073965;
+    font-size: 15px;
+    margin-bottom: 14px;
+}
+
+.legal-toc {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.legal-toc li {
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.legal-toc li:last-child {
+    border-bottom: none;
+}
+
+.legal-toc a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 2px;
+    color: #4b5563;
+    font-size: 13px;
+    text-decoration: none;
+    transition: color 0.25s ease;
+}
+
+.legal-toc a i {
+    color: #f85603;
+    width: 16px;
+    flex-shrink: 0;
+}
+
+.legal-toc a:hover {
+    color: #073965;
+}
+
+.legal-help-card {
+    background: linear-gradient(160deg, #073965, #0b3c8a);
+    border-radius: 20px;
+    padding: 28px 26px;
+    text-align: center;
+    color: #fff;
+}
+
+.legal-help-card i {
+    font-size: 30px;
+    color: #ff8a3d;
+    margin-bottom: 12px;
+}
+
+.legal-help-card h6 {
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.legal-help-card p {
+    color: #cfd9ea;
+    font-size: 13px;
+    margin-bottom: 18px;
+}
+
+.legal-intro {
+    color: #4b5563;
+    font-size: 16px;
+    line-height: 28px;
+    margin-bottom: 30px;
+}
+
+.legal-section {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 26px;
+    margin-bottom: 26px;
+    border-bottom: 1px solid #eef1f5;
+    scroll-margin-top: 110px;
+}
+
+.legal-section:last-child {
+    border-bottom: none;
+}
+
+.legal-section-icon {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #073965, #f85603);
+    color: #fff;
+    font-size: 19px;
+}
+
+.legal-section h4 {
+    color: #073965;
+    margin-bottom: 8px;
+}
+
+.legal-section p {
+    color: #6b7280;
+    line-height: 25px;
+    margin-bottom: 0;
+}
+
+.legal-section p a {
+    color: #f85603;
+    font-weight: 600;
+}
+
+@media (max-width: 991px) {
+    .legal-sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 575px) {
+    .legal-section {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+/* ==========================================================
+   Site header — refreshed nav typography, an animated
+   underline on links instead of a flat color swap, a smoother
+   sticky-scroll transition (was an instant background snap),
+   a gradient/lift CTA button, and livelier top-bar icons.
+   ========================================================== */
+.header-area .header-top {
+    background: linear-gradient(90deg, rgba(7, 57, 101, 0.4), rgba(248, 86, 3, 0.12));
+}
+
+.header-area .header-top .header-info-left ul li {
+    display: inline-flex;
+    align-items: center;
+}
+
+.header-area .header-top .header-info-left ul li i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(248, 86, 3, 0.18);
+    color: #f85603;
+    font-size: 11px;
+    margin-right: 8px;
+}
+
+.header-area .header-top .header-info-right .header-social li a {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.header-area .header-top .header-info-right .header-social li a:hover {
+    transform: translateY(-2px);
+}
+
+.header-bottom,
+.header-sticky {
+    transition: background 0.35s ease, box-shadow 0.35s ease, padding 0.35s ease;
+}
+
+.header-sticky.sticky-bar.sticky {
+    background: rgba(11, 20, 41, 0.96);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.main-header .logo a img {
+    transition: transform 0.35s ease;
+}
+
+.main-header .logo a:hover img {
+    transform: scale(1.05);
+}
+
+.main-header .main-menu ul li a {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    position: relative;
+}
+
+.main-header .main-menu ul li a::after {
+    content: "";
+    position: absolute;
+    left: 19px;
+    right: 19px;
+    bottom: 30px;
+    height: 2px;
+    background: #f85603;
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease;
+}
+
+.header-sticky.sticky-bar.sticky .main-menu ul li a::after {
+    bottom: 17px;
+}
+
+.main-header .main-menu ul li:hover>a::after,
+.main-header .main-menu ul li a.active::after {
+    transform: scaleX(1);
+}
+
+.main-header .main-menu ul li a.active {
+    color: #f85603;
+}
+
+.header-right-btn .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #f85603, #ff8a3d);
+    border: none;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    box-shadow: 0 10px 24px rgba(248, 86, 3, 0.35);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header-right-btn .btn::after {
+    content: "\f178";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.header-right-btn .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px rgba(248, 86, 3, 0.45);
+    color: #fff;
+}
+
+.header-right-btn .btn:hover::after {
+    transform: translateX(4px);
+}
+
+@media (max-width: 991px) {
+    .header-area .header-top {
+        background: rgba(7, 57, 101, 0.5);
+    }
+}
+
+/* Mobile dropdown nav (slicknav) — was plain unstyled list items */
+.slicknav_menu .slicknav_nav {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 45px rgba(7, 57, 101, 0.25);
+    padding: 10px 6px;
+    overflow: hidden;
+}
+
+.slicknav_menu .slicknav_nav li {
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.slicknav_menu .slicknav_nav li:last-child {
+    border-bottom: none;
+}
+
+.slicknav_menu .slicknav_nav a {
+    color: #073965;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 16px;
+    transition: color 0.25s ease, padding-left 0.25s ease;
+}
+
+.slicknav_menu .slicknav_nav a:hover {
+    color: #f85603;
+    padding-left: 22px;
+}
+
+.slicknav_btn {
+    background: linear-gradient(135deg, #073965, #f85603);
+    border-radius: 10px;
+    padding: 9px 10px;
+    margin: 0;
+}
+
+/* Pricing page — each plan shown inside its own phone mockup
+   ("Deovate" status bar), the highlighted plan gets a ribbon and
+   a slightly elevated/scaled frame instead of the old plain
+   scale(1.03) card. */
+.pricing-phone {
+    max-width: 300px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.pricing-phone--highlight {
+    max-width: 320px;
+    transform: scale(1.04);
+    z-index: 2;
+}
+
+@media (max-width: 991px) {
+    .pricing-phone--highlight {
+        transform: none;
+    }
+}
+
+.pricing-phone-ribbon {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff8a3d;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 30px;
+    box-shadow: 0 10px 22px rgba(255, 95, 19, 0.35);
+    z-index: 5;
+}
+
+.pricing-phone-body {
+    background: #ffffff;
+    padding: 24px 22px 26px;
+    text-align: center;
+}
+
+.pricing-phone-body--highlight {
+    background: linear-gradient(160deg, #073965, #0b3c8a);
+}
+
+.pricing-phone-body h4 {
+    color: #073965;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.pricing-phone-body--highlight h4 {
+    color: #ffffff;
+}
+
+.pricing-phone-body p {
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 20px;
+    min-height: 40px;
+}
+
+.pricing-phone-body--highlight p {
+    color: #cfd9ea;
+}
+
+.pricing-phone-price {
+    margin: 14px 0 18px;
+}
+
+.pricing-phone-price .amount {
+    display: block;
+    font-family: "Playfair Display", serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #f85603;
+}
+
+.pricing-phone-body--highlight .pricing-phone-price .amount {
+    color: #ffffff;
+}
+
+.pricing-phone-price .period {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #9aa5b1;
+}
+
+.pricing-phone-body--highlight .pricing-phone-price .period {
+    color: #cfd9ea;
+}
+
+.pricing-phone-body ul {
+    margin-bottom: 20px;
+}
+
+.pricing-phone-body ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    color: #4b5563;
+    line-height: 20px;
+    margin-bottom: 8px;
+}
+
+.pricing-phone-body--highlight ul li {
+    color: #e3e8f0;
+}
+
+.pricing-phone-body ul li i {
+    color: #f85603;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+.pricing-phone-body--highlight ul li i {
+    color: #ff8a3d;
+}
+
+.pricing-phone-body .btn {
+    font-size: 13px;
+}
+
+/* Contact page — form inside a tablet frame on desktop / phone
+   frame on mobile, contact details styled as a native app inside
+   its own phone frame (both device widths already used elsewhere,
+   just wired up on this page). */
+.contact-form-tablet {
+    margin: 0 auto;
+}
+
+.contact-form-phone,
+.contact-info-phone {
+    margin: 0 auto;
+}
+
+.contact-info-app {
+    background: #ffffff;
+    padding: 22px 20px 26px;
+}
+
+.contact-info-app ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 20px;
+    margin-bottom: 8px;
+}
+
+.contact-info-app ul li i {
+    color: #22c07a;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+.contact-info-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f5f8fd;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+    text-decoration: none;
+    transition: background 0.25s ease;
+}
+
+.contact-info-card:hover {
+    background: #eef3fb;
+}
+
+.contact-info-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #073965, #f85603);
+    color: #fff;
+    font-size: 15px;
+}
+
+.contact-info-label {
+    display: block;
+    font-size: 11px;
+    color: #9aa5b1;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.contact-info-value {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #073965;
+    word-break: break-word;
+}
+
+/* Career details + apply popup — triggered by "View Role", shows
+   full job details (scrollable) inside a large browser frame with
+   an apply form underneath, all within one modal. */
+.career-modal .modal-dialog {
+    max-width: 1000px;
+}
+
+.career-modal-mockup {
+    max-width: 100%;
+    margin: 0;
+}
+
+.career-modal-close {
+    position: absolute;
+    top: -18px;
+    right: -18px;
+    z-index: 5;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #f85603;
+    color: #fff;
+    font-size: 16px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+
+.career-modal-glass {
+    background: #ffffff;
+    max-height: 72vh;
+    overflow-y: auto;
+}
+
+.career-modal-body {
+    padding: 34px 40px 40px;
+    text-align: left;
+}
+
+.career-modal-body h3 {
+    color: #073965;
+    margin-bottom: 14px;
+}
+
+.career-modal-body h5 {
+    color: #073965;
+    margin-top: 22px;
+    margin-bottom: 8px;
+}
+
+.career-modal-body p {
+    color: #6b7280;
+    line-height: 24px;
+}
+
+.career-modal-meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 14px 22px;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.career-modal-skill {
+    background: #f5f8fd;
+    color: #073965;
+    border: 1px solid #e3e8f0;
+    border-radius: 30px;
+    padding: 6px 16px;
+    font-size: 12px;
+}
+
+.career-modal-divider {
+    border-color: #e3e8f0;
+    margin: 28px 0 22px;
+}
+
+.career-modal-sub {
+    margin-bottom: 20px !important;
+}
+
+@media (max-width: 767px) {
+    .career-modal-body {
+        padding: 26px 20px 30px;
+    }
+}
+
+/* Career "Don't See Your Role?" general application — desktop
+   browser frame / mobile phone frame, same form partial in both. */
+.career-apply-glass {
+    background: #ffffff;
+    padding: 10px;
+}
+
+.career-apply-panel {
+    padding: 34px 44px 40px;
+}
+
+.career-apply-panel--phone {
+    background: #ffffff;
+    padding: 22px 18px 26px;
+    border-radius: 0 0 28px 28px;
+}
+
+.career-apply-header h4 {
+    color: #073965;
+    margin-bottom: 8px;
+}
+
+.career-apply-header p {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 22px;
+}
+
+.career-apply-panel--phone .career-apply-header h4 {
+    font-size: 17px;
+}
+
+.career-apply-panel--phone .career-apply-header p {
+    font-size: 12px;
+    margin-bottom: 16px;
+}
+
+.career-phone-info .btn {
+    font-size: 12px;
+    padding: 10px 14px;
+}
+
+/* Blog details page — featured image + meta row + rich content
+   typography. The plain <img class="img-fluid"> let the fallback
+   placeholder (default-img.png, a near-square light graphic)
+   stretch into a tall, mostly-empty box since nothing constrained
+   its aspect ratio; now cropped to a fixed 16:9 frame either way. */
+.blog-featured-image {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(11, 28, 57, 0.14);
+    margin-bottom: 28px;
+}
+
+.blog-featured-image img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+}
+
+.blog-featured-category {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #f85603;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 30px;
+    box-shadow: 0 10px 24px rgba(255, 95, 19, 0.35);
+}
+
+.blog-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 22px;
+    margin-bottom: 26px;
+    border-bottom: 1px solid #e3e8f0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.blog-meta-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #073965;
+}
+
+.blog-meta-author img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Rich content typography — headings, lists, tables, quotes and
+   inline images inside the WYSIWYG blog body. */
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+    color: #073965;
+    margin-top: 34px;
+    margin-bottom: 16px;
+}
+
+.blog-content p {
+    color: #4b5563;
+    line-height: 28px;
+    margin-bottom: 20px;
+}
+
+.blog-content ul,
+.blog-content ol {
+    margin-bottom: 20px;
+    padding-left: 6px;
+}
+
+.blog-content ul li,
+.blog-content ol li {
+    color: #4b5563;
+    line-height: 26px;
+    margin-bottom: 10px;
+    padding-left: 8px;
+}
+
+.blog-content ul {
+    list-style: none;
+}
+
+.blog-content ul li::before {
+    content: "\f00c";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: #f85603;
+    margin-right: 10px;
+    margin-left: -18px;
+}
+
+.blog-content img {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(11, 28, 57, 0.12);
+    margin: 10px 0 26px;
+}
+
+.blog-content blockquote {
+    border-left: 4px solid #f85603;
+    background: #f5f8fd;
+    padding: 22px 26px;
+    border-radius: 0 14px 14px 0;
+    color: #073965;
+    font-style: italic;
+    font-size: 17px;
+    margin: 26px 0;
+}
+
+.blog-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 26px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(11, 28, 57, 0.08);
+}
+
+.blog-content table th {
+    background: #073965;
+    color: #fff;
+    text-align: left;
+    padding: 12px 16px;
+    font-weight: 600;
+}
+
+.blog-content table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e3e8f0;
+    color: #4b5563;
+}
+
+.blog-content table tr:nth-child(even) td {
+    background: #f5f8fd;
+}
+
+.blog-content a {
+    color: #f85603;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* Service details page — "Problem & Solution" — two independent
+   browser-frame sliders side by side (service_problems / driven
+   by service_solutions), each with its own owl-carousel. */
+.ps-frame-label {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    border-radius: 30px;
+    margin-bottom: 16px;
+}
+
+.ps-frame-label--problem {
+    background: rgba(255, 95, 19, 0.12);
+    color: #ff5f13;
+}
+
+.ps-frame-label--solution {
+    background: rgba(7, 57, 101, 0.1);
+    color: #073965;
+}
+
+.ps-mockup {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.ps-slide {
+    display: flex;
+    flex-direction: column;
+    min-height: 380px;
+}
+
+.ps-slide-img {
+    height: 200px;
+    overflow: hidden;
+}
+
+.ps-slide-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.ps-slide-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #073965, #f85603);
+    color: #fff;
+    font-size: 26px;
+    margin: 40px auto 0;
+    box-shadow: 0 14px 30px rgba(7, 57, 101, 0.35);
+}
+
+.ps-slide-body {
+    padding: 28px 34px 34px;
+    text-align: left;
+    flex: 1;
+}
+
+.ps-slide--solution .ps-slide-body {
+    text-align: center;
+}
+
+.ps-slide-body h5 {
+    color: #ffffff;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.ps-slide-body p {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 14px;
+    line-height: 24px;
+    margin-bottom: 0;
+}
+
+.problem-carousel .owl-dots,
+.solution-carousel .owl-dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 4;
+}
+
+.problem-carousel .owl-dots .owl-dot span,
+.solution-carousel .owl-dots .owl-dot span {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    margin: 0;
+}
+
+.problem-carousel .owl-dots .owl-dot.active span,
+.solution-carousel .owl-dots .owl-dot.active span {
+    background: #ff8a3d;
+    width: 20px;
+    border-radius: 5px;
+}
+
+@media (max-width: 991px) {
+    .ps-slide {
+        min-height: 340px;
+    }
+}
+
+/* Service details page — "What's Included" child-services slider,
+   reusing the laptop/browser frame but wider, since it's meant to
+   read as a big desktop screen showcasing each sub-service (image,
+   icon, title, full description) one at a time. Driven by
+   Service::children() (self-referential parent_service_id). */
+.child-service-mockup {
+    max-width: 1040px;
+    margin: 20px auto 0;
+}
+
+.child-service-slide {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 380px;
+}
+
+.child-service-slide-img {
+    flex: 1 1 44%;
+    max-width: 44%;
+    overflow: hidden;
+}
+
+.child-service-slide-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    min-height: 380px;
+}
+
+.child-service-slide-body {
+    flex: 1 1 56%;
+    max-width: 56%;
+    padding: 44px 46px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.child-service-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #073965, #f85603);
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.child-service-slide-body h4 {
+    color: #ffffff;
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.child-service-slide-body p {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 14px;
+    line-height: 24px;
+    margin-bottom: 20px;
+}
+
+.child-services-carousel .owl-nav div {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(7, 57, 101, 0.75);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    z-index: 4;
+}
+
+.child-services-carousel .owl-nav .owl-prev { left: 14px; }
+.child-services-carousel .owl-nav .owl-next { right: 14px; }
+
+.child-services-carousel .owl-nav div:hover {
+    background: #f85603;
+}
+
+.child-services-carousel .owl-dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 4;
+}
+
+.child-services-carousel .owl-dots .owl-dot span {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    margin: 0;
+}
+
+.child-services-carousel .owl-dots .owl-dot.active span {
+    background: #f85603;
+    width: 20px;
+    border-radius: 5px;
+}
+
+@media (max-width: 767px) {
+    .child-service-slide-img,
+    .child-service-slide-body {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .child-service-slide-img img {
+        min-height: 220px;
+    }
+
+    .child-service-slide-body {
+        padding: 30px 24px;
+    }
+}
+
+/* Service details page — featured image shown inside the same
+   browser/laptop frame used elsewhere, plus a redesigned sticky
+   sidebar (was a plain gray box) with an icon badge, accent bar,
+   and a proper stat row instead of a bare bullet list. */
+.service-showcase {
+    position: relative;
+    margin-top: 0 !important;
+    max-width: none;
+}
+
+.service-showcase .laptop-screen-glass img {
+    width: 100%;
+    height: auto;
+    display: block;
+    position: relative;
+}
+
+.service-showcase-icon {
+    position: absolute;
+    left: 36px;
+    bottom: -26px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #073965, #f85603);
+    color: #fff;
+    font-size: 24px;
+    box-shadow: 0 14px 30px rgba(7, 57, 101, 0.35);
+    border: 4px solid #fff;
+    z-index: 3;
+}
+
+.service-showcase-badge {
+    position: absolute;
+    top: 46px;
+    right: 26px;
+    background: #ff8a3d;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 30px;
+    box-shadow: 0 10px 24px rgba(255, 95, 19, 0.35);
+    z-index: 3;
+}
+
+.service-sidebar {
+    position: sticky;
+    top: 110px;
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 46px 30px 30px;
+    box-shadow: 0 20px 50px rgba(11, 28, 57, 0.1);
+    overflow: hidden;
+}
+
+.service-sidebar-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #073965, #f85603);
+}
+
+.service-sidebar-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #073965, #0b3c8a);
+    color: #fff;
+    font-size: 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 22px rgba(7, 57, 101, 0.25);
+}
+
+.service-stat-row {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.service-stat {
+    flex: 1;
+    background: #f5f8fd;
+    border-radius: 14px;
+    padding: 14px 12px;
+    text-align: center;
+}
+
+.service-stat-value {
+    font-family: "Playfair Display", serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #073965;
+}
+
+.service-stat-label {
+    font-size: 12px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-top: 2px;
+}
+
+.service-sidebar-call {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #073965;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.service-sidebar-call:hover {
+    color: #f85603;
+}
+
+@media (max-width: 991px) {
+    .service-sidebar {
+        top: 20px;
+    }
+}
+
+/* About page "Founder & Leadership" — photo + social links inside
+   the phone mockup, bio + expertise bars inside the app-tablet
+   mockup, reusing both device-frame components already built. */
+.founder-phone-photo {
+    height: 280px;
+    overflow: hidden;
+}
+
+.founder-phone-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.founder-phone-info {
+    background: #ffffff;
+    padding: 18px 16px 22px;
+    text-align: center;
+}
+
+.founder-phone-info h4 {
+    color: #073965;
+    font-size: 18px;
+    margin-bottom: 2px;
+}
+
+.founder-phone-info p {
+    color: #6b7280;
+    font-size: 12px;
+    margin-bottom: 14px;
+}
+
+.founder-phone-social {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.founder-phone-social a {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #073965, #f85603);
+    color: #ffffff;
+    font-size: 14px;
+    box-shadow: 0 8px 16px rgba(7, 57, 101, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.founder-phone-social a:hover {
+    transform: translateY(-3px) scale(1.06);
+}
+
+.founder-tablet-body {
+    padding: 6px 26px 26px;
+}
+
+.founder-tablet-body p {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+/* About page "Office & Culture" — reduced single-image fade
+   slider (was a 4-photo grid of mismatched stock landmark
+   photos) sitting on the same fixed-bg glass treatment as
+   Vision & Mission. */
+.office-culture-slide-frame {
+    position: relative;
+    max-width: 420px;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+    border: 6px solid rgba(255, 255, 255, 0.15);
+}
+
+.office-culture-slider .item img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    display: block;
+}
+
+.office-culture-slider .owl-dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.office-culture-slider .owl-dots .owl-dot span {
+    display: block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+    margin: 0;
+}
+
+.office-culture-slider .owl-dots .owl-dot.active span {
+    background: #ff8a3d;
+    width: 22px;
+    border-radius: 5px;
+}
+
+@media (max-width: 991px) {
+    .office-culture-slider .item img {
+        height: 300px;
+    }
+}
+
+/* About page "Vision & Mission" — fixed parallax background photo
+   with frosted-glass ("mirror") cards, reusing the blur/shine
+   recipe already established for the testimonials laptop mockup. */
+.vm-area {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+
+.vm-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(7, 20, 41, 0.88), rgba(7, 57, 101, 0.82));
+    z-index: 0;
+}
+
+.vm-area .section-title.st-light::before {
+    filter: invert(1) brightness(2);
+    opacity: 0.5;
+}
+
+.vm-area .section-title.st-light h3 {
+    color: #ff8a3d;
+}
+
+.vm-area .section-title.st-light p {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.vm-glass-card {
+    position: relative;
+    padding: 20px 28px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+}
+
+.vm-glass-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.13);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.vm-glass-card h4 {
+    color: #ffffff;
+}
+
+.vm-glass-card p {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.vm-glass-shine {
+    position: absolute;
+    inset: -30%;
+    background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.12) 48%, transparent 62%);
+    background-size: 250% 250%;
+    animation: laptopMirrorShine 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@media (max-width: 767px) {
+    .vm-area {
+        background-attachment: scroll;
+    }
+}
+
+/* About page "Who We Are" floating stat badge — keeps it fully
+   inside the viewport on narrow screens instead of overflowing
+   past the image's negative offset. */
+@media (max-width: 575px) {
+    .about-img {
+        transform: none;
+    }
+
+    .about-img ~ div {
+        left: 8px !important;
+        bottom: -18px !important;
+        max-width: calc(100% - 16px) !important;
+    }
+}
 

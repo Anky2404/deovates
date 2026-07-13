@@ -8,8 +8,10 @@ use App\Models\Blog;
 use App\Models\CaseStudy;
 use App\Models\FaqCategory;
 use App\Models\Industry;
+use App\Models\Portfolio;
 use App\Models\PortfolioCategory;
 use App\Models\Service;
+use App\Models\Technology;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -29,8 +31,17 @@ public function index()
             ->take(6)
             ->get();
 
-        $portfolio_categories = PortfolioCategory::with('portfolios')
-            ->where('is_active', 1)
+        $portfolio_categories = PortfolioCategory::where('is_active', 1)
+            ->latest('id')
+            ->limit(10)
+            ->get();
+
+        $portfolios = Portfolio::with('category')
+        ->where('is_active', 1)
+            ->latest('id')
+            ->get();
+        $technologies = Technology::with('category')
+        ->where('is_active', 1)
             ->latest('id')
             ->get();
 
@@ -49,6 +60,8 @@ public function index()
             ->whereIn('slug', $slugs)
             ->get();
 
+
+
         $casestudies = CaseStudy::where('is_active', 1)
             ->latest('id')
             ->take(8)
@@ -65,13 +78,17 @@ public function index()
             ->latest('id')
             ->first();
 
+            // dd($portfolios);
+
         return view($this->prefix . $this->folder . 'index', compact(
             'data',
             'category',
             'blogs',
             'services',
             'industries',
+            'technologies',
             'casestudies',
+            'portfolios',
             'portfolio_categories'
         ));
 
