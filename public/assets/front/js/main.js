@@ -65,37 +65,45 @@ $(document).ready(function(){
 
 });
 
-// Roadmap Carousel
-$('.roadmap-carousel').owlCarousel({
-    loop: true,
-    nav: true,
-    margin: 30,
+// Roadmap: chevrons are a static scroll-reveal flow (see wow.js init
+// below); the step detail lives in a laptop-frame slider synced to them.
+var $laptopSlides = $('.laptop-slides');
+if ($laptopSlides.length) {
+    $laptopSlides.owlCarousel({
+        items: 1,
+        loop: true,
+        nav: true,
+        dots: true,
+        autoplay: true,
+        autoplayTimeout: 4500,
+        autoplayHoverPause: true,
+        smartSpeed: 500,
+        animateOut: 'fadeOut',
+        animateIn: 'fadeIn',
+        navText: [
+            '<i class="fa fa-long-arrow-left"></i>',
+            '<i class="fa fa-long-arrow-right"></i>'
+        ]
+    });
 
-    autoplay: true,
-    autoplayTimeout: 3000,
-    autoplaySpeed: 1000,
-    smartSpeed: 700,
-    autoplayHoverPause: true,
+    var $steps = $('.process-step');
 
-    dots: true,
-
-    navText: [
-        '<i class="fa fa-long-arrow-left"></i>',
-        '<i class="fa fa-long-arrow-right"></i>'
-    ],
-
-    responsive: {
-        0: {
-            items: 1
-        },
-        768: {
-            items: 2
-        },
-        1200: {
-            items: 3
-        }
+    function setActiveStep(index) {
+        $steps.removeClass('is-active').eq(index).addClass('is-active');
     }
-});
+    setActiveStep(0);
+
+    $laptopSlides.on('changed.owl.carousel', function (e) {
+        if (!e.namespace) return;
+        setActiveStep(e.item.index % e.item.count);
+    });
+
+    $steps.on('click', function () {
+        var target = $(this).data('slide-target');
+        $laptopSlides.trigger('to.owl.carousel', [target, 400, true]);
+        setActiveStep(target);
+    });
+}
 
 
 
@@ -269,10 +277,10 @@ $('.office-carousel').owlCarousel({
     loop: true,
     margin: 30,
     nav: true,
-    dots: false,
+    dots: true,
 
     autoplay: true,
-    autoplayTimeout: 3000,
+    autoplayTimeout: 3500,
     autoplaySpeed: 1000,
     smartSpeed: 700,
     autoplayHoverPause: true,
@@ -303,23 +311,21 @@ $('.office-carousel').owlCarousel({
 // Blog Carousel
 //==============================
 
-$('.blog-carousel').owlCarousel({
+$('.tablets-carousel').owlCarousel({
 
-    loop: true,
+    loop: false,
 
-    margin: 30,
+    margin: 28,
 
     nav: true,
 
-    dots: false,
+    dots: true,
 
     autoplay: true,
 
     autoplayTimeout: 3500,
 
-    autoplaySpeed: 800,
-
-    smartSpeed: 800,
+    smartSpeed: 700,
 
     autoplayHoverPause: true,
 
@@ -404,6 +410,91 @@ $('.blog-carousel').owlCarousel({
 
 
       //=====================================
+// Problem & Solution Sliders (Service details page)
+//=====================================
+
+$('.problem-carousel, .solution-carousel').owlCarousel({
+
+    items: 1,
+
+    loop: false,
+
+    nav: false,
+
+    dots: true,
+
+    autoplay: true,
+
+    autoplayTimeout: 4000,
+
+    smartSpeed: 600,
+
+    animateIn: 'fadeIn',
+
+    animateOut: 'fadeOut',
+
+    autoplayHoverPause: true
+
+});
+
+//=====================================
+// Child Services Slider (Service details page)
+//=====================================
+
+$('.child-services-carousel').owlCarousel({
+
+    items: 1,
+
+    loop: false,
+
+    nav: true,
+
+    navText: [
+        '<i class="fa fa-angle-left"></i>',
+        '<i class="fa fa-angle-right"></i>'
+    ],
+
+    dots: true,
+
+    autoplay: false,
+
+    smartSpeed: 600,
+
+    animateIn: 'fadeIn',
+
+    animateOut: 'fadeOut'
+
+});
+
+//=====================================
+// Office Culture Slider (About page)
+//=====================================
+
+$('.office-culture-slider').owlCarousel({
+
+    items: 1,
+
+    loop: true,
+
+    nav: false,
+
+    dots: true,
+
+    autoplay: true,
+
+    autoplayTimeout: 3500,
+
+    smartSpeed: 700,
+
+    animateIn: 'fadeIn',
+
+    animateOut: 'fadeOut',
+
+    autoplayHoverPause: true
+
+});
+
+//=====================================
 // Testimonials Carousel
 //=====================================
 
@@ -415,7 +506,47 @@ $('.testimonials-carousel').owlCarousel({
 
     margin:30,
 
-    nav:false,
+    nav:true,
+
+    navText: [
+        '<i class="fa fa-long-arrow-left"></i>',
+        '<i class="fa fa-long-arrow-right"></i>'
+    ],
+
+    dots:true,
+
+    autoplay:true,
+
+    autoplayTimeout:4500,
+
+    autoplaySpeed:1000,
+
+    smartSpeed:600,
+
+    animateIn:'fadeIn',
+
+    animateOut:'fadeOut',
+
+    autoplayHoverPause:true
+
+});
+
+//=====================================
+// Team / Industries Phone Carousel
+//=====================================
+
+$('.phones-carousel').owlCarousel({
+
+    loop:false,
+
+    margin:24,
+
+    nav:true,
+
+    navText: [
+        '<i class="fa fa-long-arrow-left"></i>',
+        '<i class="fa fa-long-arrow-right"></i>'
+    ],
 
     dots:true,
 
@@ -423,11 +554,18 @@ $('.testimonials-carousel').owlCarousel({
 
     autoplayTimeout:4000,
 
-    autoplaySpeed:1000,
+    smartSpeed:600,
 
-    smartSpeed:1000,
+    autoplayHoverPause:true,
 
-    autoplayHoverPause:true
+    responsive:{
+        0:{
+            items:1
+        },
+        992:{
+            items:3
+        }
+    }
 
 });
 
@@ -504,6 +642,78 @@ $(document).ready(function(){
 
         }
 
+    });
+
+});
+
+//=====================================
+// Contact forms (home page + /contact page)
+// client-side validation + animation only —
+// not wired to a backend yet
+//=====================================
+
+$(document).ready(function () {
+
+    function validateField($field) {
+        var el = $field.get(0);
+        var $group = $field.closest('.app-form-group');
+        var valid = el.checkValidity();
+
+        $group.toggleClass('has-error', !valid);
+        $group.toggleClass('is-valid', valid && $field.val().trim() !== '');
+
+        return valid;
+    }
+
+    // Scoped per-form so multiple .app-contact-form instances on the
+    // same page (e.g. a modal form + a page-level form) don't cross-
+    // trigger each other's shake/loading/reset state.
+    $('.app-contact-form').each(function () {
+        var $form = $(this);
+
+        $form.find('input, textarea').on('blur input', function () {
+            validateField($(this));
+        });
+
+        $form.on('submit', function (e) {
+            e.preventDefault();
+
+            var allValid = true;
+            var $firstInvalid = null;
+
+            $form.find('input, textarea').each(function () {
+                var $field = $(this);
+                if (!validateField($field)) {
+                    allValid = false;
+                    if (!$firstInvalid) $firstInvalid = $field;
+                }
+            });
+
+            if (!allValid) {
+                $form.addClass('shake');
+                setTimeout(function () { $form.removeClass('shake'); }, 500);
+                if ($firstInvalid) $firstInvalid.trigger('focus');
+                return;
+            }
+
+            var $btn = $form.find('.app-form-submit');
+            $btn.addClass('is-loading').prop('disabled', true);
+
+            // No backend endpoint exists yet for this form — this
+            // timeout simulates a submit so the loading/success
+            // animation can be reviewed. Replace with a real $.ajax /
+            // fetch POST once a route + controller are wired up.
+            setTimeout(function () {
+                $btn.removeClass('is-loading').prop('disabled', false);
+                $form.addClass('is-submitted');
+                $form.find('input, textarea').val('');
+                $form.find('.app-form-group').removeClass('is-valid has-error');
+
+                setTimeout(function () {
+                    $form.removeClass('is-submitted');
+                }, 4000);
+            }, 1100);
+        });
     });
 
 });

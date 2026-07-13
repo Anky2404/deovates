@@ -5,7 +5,7 @@
 
                 <div class="row justify-content-between">
 
-                    <div class="col-lg-4 col-md-4 col-sm-8">
+                    <div class="col-lg-3 col-md-4 col-sm-8">
                         <div class="single-footer-caption mb-30">
 
                             <div class="footer-logo">
@@ -35,7 +35,10 @@
                                 <ul>
                                     <li><a href="{{ route('front.about.index') }}">About</a></li>
                                     <li><a href="{{ route('front.services.index') }}">Services</a></li>
-                                    <li><a href="{{ route('front.projects.index') }}">Projects</a></li>
+                                    <li><a href="{{ route('front.portfolios.index') }}">Projects</a></li>
+                                    <li><a href="{{ route('front.industries.index') }}">Industries</a></li>
+                                    <li><a href="{{ route('front.casestudies.index') }}">Case Studies</a></li>
+                                    <li><a href="{{ route('front.blog.index') }}">Blog</a></li>
                                     <li><a href="{{ route('front.contact.index') }}">Contact Us</a></li>
                                 </ul>
 
@@ -44,7 +47,27 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-md-4 col-sm-7">
+                    <div class="col-lg-2 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+
+                            <div class="footer-tittle">
+                                <h4>Resources</h4>
+
+                                <ul>
+                                    <li><a href="{{ route('front.career.index') }}">Careers</a></li>
+                                    <li><a href="{{ route('front.testimonials.index') }}">Testimonials</a></li>
+                                    <li><a href="{{ route('front.techstack.index') }}">Tech Stack</a></li>
+                                    <li><a href="{{ route('front.alliances.index') }}">Alliances</a></li>
+                                    <li><a href="{{ route('front.pricing.index') }}">Pricing</a></li>
+                                    <li><a href="{{ route('front.faq.index') }}">FAQ</a></li>
+                                </ul>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-md-4 col-sm-7">
                         <div class="single-footer-caption mb-50">
 
                             <div class="footer-tittle">
@@ -60,6 +83,8 @@
                                 <ul>
                                     <li><a href="tel:+950123456789">Phone:  {{ config('constants.CONTACT.country_code') }}-{{ config('constants.CONTACT.phones.0.number') }}</a></li>
                                     <li><a href="tel:+950123456789">Cell:  {{ config('constants.CONTACT.country_code') }}-{{ config('constants.CONTACT.phones.1.number') }}</a></li>
+                                    <li><a href="{{ route('front.legal.privacy') }}">Privacy Policy</a></li>
+                                    <li><a href="{{ route('front.legal.terms') }}">Terms &amp; Conditions</a></li>
                                 </ul>
 
                             </div>

@@ -35,18 +35,27 @@ class ServiceChallenge extends Model
         ];
     }
 
+    // The service this challenge belongs to
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }
 
+    // Only active challenges
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
+    // Sorted by display order
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('display_order');
+    }
+
+    // Only featured challenges
+    public function scopeFeatured(Builder $query): Builder
+    {
+        return $query->where('is_featured', true);
     }
 }

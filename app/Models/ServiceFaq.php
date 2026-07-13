@@ -33,18 +33,27 @@ class ServiceFaq extends Model
         ];
     }
 
+    // The service this FAQ belongs to
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }
 
+    // Only active FAQs
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
+    // Sorted by display order
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('display_order');
+    }
+
+    // Only featured FAQs
+    public function scopeFeatured(Builder $query): Builder
+    {
+        return $query->where('is_featured', true);
     }
 }

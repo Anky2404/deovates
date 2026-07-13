@@ -4,62 +4,124 @@ namespace App\Http\Controllers\Front;
 
 use App\Helper;
 use App\Http\Controllers\Controller;
-use App\Models\PortfolioCategory;
 use App\Models\Service;
 use App\Models\Testimonial;
+
 class ServiceController extends Controller
 {
-    private $prefix = 'frontend.';
+    private $prefix = 'front.';
     private $folder = 'services.';
-    //Index Function
-   public function index()
-{
-    $data = Helper::readJSONData($this->folder . 'json') ?? [];
 
-    $services = Service::where('is_active', 1)
-        ->latest()
-        ->limit(6)
-        ->get();
+    public function index()
+    {
+        $data = Helper::readJSONData($this->folder . 'json');
 
-    $portfolio_categories = PortfolioCategory::with(['portfolios' => function ($query) {
-            $query->where('is_active', 1);
-        }])
-        ->where('is_active', 1)
-        ->latest()
-        ->get();
+        $services = Service::active()
+            ->ordered()
+            ->latest('id')
+            ->get();
 
-    $testimonials = Testimonial::where('location','service')->active()
-        ->orderBy('display_order', 'asc')
-        ->latest()
-        ->get();
+        $testimonials = Testimonial::active()
+            ->orderBy('display_order')
+            ->latest('id')
+            ->take(6)
+            ->get();
 
-    return view($this->prefix . $this->folder . 'index', [
-        'data' => $data,
-        'services' => $services,
-        'portfolio_categories' => $portfolio_categories,
-        'testimonials' => $testimonials
-    ]);
-}
-
-
-  public function details($uuid)
-{
-
-    $service = Service::where('uuid', $uuid)
-        ->where('is_active', 1)
-        ->first();
-
-    if (!$service) {
-        return back()->with('error', 'Service not found.');
+        return view($this->prefix . $this->folder . 'index', compact('data', 'services', 'testimonials'));
     }
 
-    // Get latest 6 services
-    $services = Service::where('is_active', 1)
-        ->where('uuid', '!=', $uuid)
-        ->orderBy('id', 'desc')
-        ->limit(6)
-        ->get();
+    public function details($slug)
+    {
+        $service = Service::active()
+            ->where('slug', $slug)
+            ->with(['faqs', 'features', 'challenges', 'technologies', 'children', 'problems', 'solutions'])
+            ->first();
 
-    return view($this->prefix . $this->folder . 'details', compact('service', 'services'));
-}
+        if (! $service) {
+            abort(404);
+        }
+
+        $service->incrementViews();
+
+        $related = Service::active()
+            ->where('id', '!=', $service->id)
+            ->ordered()
+            ->latest('id')
+            ->take(3)
+            ->get();
+
+        // No service currently has real children via parent_service_id —
+        // static placeholder "what's included" content until that data
+        // is populated, using the same field names as a real child.
+        $children = $service->children->isNotEmpty()
+            ? $service->children
+            : collect([
+                (object) [
+                    'slug' => null,
+                    'icon' => 'fas fa-lightbulb',
+                    'featured_image' => 'assets/front/img/why-1.png',
+                    'title' => 'Strategy & Planning',
+                    'description' => 'We start by understanding your goals and mapping out a clear roadmap tailored to your business needs.',
+                ],
+                (object) [
+                    'slug' => null,
+                    'icon' => 'fas fa-code',
+                    'featured_image' => 'assets/front/img/why-2.png',
+                    'title' => 'Design & Development',
+                    'description' => 'Our team designs and builds a scalable, secure solution using modern technologies and best practices.',
+                ],
+                (object) [
+                    'slug' => null,
+                    'icon' => 'fas fa-rocket',
+                    'featured_image' => 'assets/front/img/why-3.png',
+                    'title' => 'Testing & Launch',
+                    'description' => 'Every solution is thoroughly tested before a smooth, confident launch — followed by ongoing support.',
+                ],
+            ]);
+
+        // No service currently has real service_problems/service_solutions
+        // rows — static placeholder content, same field names as real
+        // rows, until that data is populated via the admin panel.
+        $problems = $service->problems->isNotEmpty()
+            ? $service->problems
+            : collect([
+                (object) [
+                    'image' => 'assets/front/img/why-4.png',
+                    'title' => 'Outdated or Slow Systems',
+                    'description' => 'Legacy platforms and slow-loading pages frustrate users and quietly cost you customers every day.',
+                ],
+                (object) [
+                    'image' => 'assets/front/img/why-3.png',
+                    'title' => 'Poor User Experience',
+                    'description' => 'Confusing navigation and clunky workflows drive visitors away before they ever convert.',
+                ],
+                (object) [
+                    'image' => 'assets/front/img/why-1.png',
+                    'title' => 'Limited Scalability',
+                    'description' => "Systems that can't grow with you become a bottleneck the moment your business gains traction.",
+                ],
+            ]);
+
+        $solutions = $service->solutions->isNotEmpty()
+            ? $service->solutions
+            : collect([
+                (object) [
+                    'icon' => 'fas fa-bolt',
+                    'title' => 'Modern, Optimized Architecture',
+                    'description' => 'We rebuild on fast, reliable, modern technology so performance is never the reason you lose a customer.',
+                ],
+                (object) [
+                    'icon' => 'fas fa-users',
+                    'title' => 'Intuitive, User-Centered Design',
+                    'description' => 'We design clear, friction-free experiences that guide users to convert and keep coming back.',
+                ],
+                (object) [
+                    'icon' => 'fas fa-chart-line',
+                    'title' => 'Scalable by Design',
+                    'description' => 'Every solution is architected to scale smoothly as your traffic and business grow.',
+                ],
+            ]);
+
+        return view($this->prefix . $this->folder . 'details', compact('service', 'related', 'children', 'problems', 'solutions'));
+    }
 }
