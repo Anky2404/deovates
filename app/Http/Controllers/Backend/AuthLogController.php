@@ -1,0 +1,121 @@
+<?php
+
+namespace App\Http\Controllers\Backend;
+
+use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
+use App\Models\AuthLog;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+/**
+ * Authentication logs are an audit trail written by AuthLog::logEvent()
+ * during the real login flow — they are not meant to be manually created
+ * by an admin. The shipped createoredit.blade.php in this view folder is
+ * actually a leftover "Blog Category" form (different fields entirely, and
+ * its <form action> posts to admin.technologies.categories.saveorupdate,
+ * not this controller), so createoredit/saveorupdate are implemented as
+ * safe no-ops rather than rendering that mismatched template.
+ */
+class AuthLogController extends Controller
+{
+    private $pagerecords;
+    private $prefix = 'backend.';
+    private $folder = 'auth.logs.';
+
+    public function __construct()
+    {
+        $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
+    }
+
+    // Index Function
+    public function index(Request $request)
+    {
+        $rows = AuthLog::with('user')->latest('id')->paginate($this->pagerecords)->withQueryString();
+        return view($this->prefix . $this->folder . 'index', compact('rows'));
+    }
+
+    // View Function
+    public function view(Request $request, $uuid)
+    {
+        try {
+            $log = AuthLog::with('user')->where('uuid', $uuid)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            Log::error('AuthLog view lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+            return redirect()->route('admin.auth.logs.index')->with('error', 'Unable to load the requested authentication log.');
+        }
+
+        return view($this->prefix . $this->folder . 'view', compact('log'));
+    }
+
+    // Create / Edit Function — not applicable; see class docblock.
+    public function createoredit(Request $request, $uuid = null)
+    {
+        return redirect()->route('admin.auth.logs.index')
+            ->with('info', 'Authentication logs are recorded automatically and cannot be manually managed.');
+    }
+
+    // Save / Update Function — not applicable; see class docblock.
+    public function saveorupdate(Request $request, $uuid = null)
+    {
+        return redirect()->route('admin.auth.logs.index')
+            ->with('info', 'Authentication logs are recorded automatically and cannot be manually managed.');
+    }
+
+    // Destroy Function
+    public function destroy(Request $request, $uuid)
+    {
+        try {
+            $log = AuthLog::where('uuid', $uuid)->firstOrFail();
+            $log->delete();
+
+            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.authlog'), [
+                'subject_type' => AuthLog::class,
+                'subject_id' => $log->id,
+                'description' => 'Deleted authentication log for event ' . $log->event,
+            ]);
+
+            return back()->with('success', 'Authentication log deleted successfully.');
+        } catch (\Throwable $e) {
+            Log::error('AuthLog destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
+    // Toggle Status Function (flips is_success — the only boolean status field on this model)
+    public function togglestatus(Request $request, $uuid)
+    {
+        try {
+            $log = AuthLog::where('uuid', $uuid)->firstOrFail();
+            $log->is_success = ! $log->is_success;
+            $log->save();
+
+            ActivityLog::log(
+                config('constants.ACTIVITY_ACTIONS.update'),
+                config('constants.MODULES.authlog'),
+                [
+                    'subject_type' => AuthLog::class,
+                    'subject_id' => $log->id,
+                    'description' => 'Marked authentication log as ' . ($log->is_success ? 'success' : 'failed'),
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $log->is_success]);
+            }
+
+            return back()->with('success', 'Authentication log status updated.');
+        } catch (\Throwable $e) {
+            Log::error('AuthLog togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+}

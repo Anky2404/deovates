@@ -21,6 +21,16 @@ return [
         0 =>  'In-active'
     ],
 
+    'FEATURED_STATUSES' => [
+        1 => 'Featured',
+        0 => 'Not Featured',
+    ],
+
+    'DEFAULT_STATUSES' => [
+        1 => 'Default',
+        0 => 'Not Default',
+    ],
+
     'ACTIONS' => [
         'create'        => 0,
         'update'        => 1,

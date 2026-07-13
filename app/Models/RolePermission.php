@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RolePermission extends Model
 {
-    use App\Traits\HasUuid;
+    use HasUuid;
 
     protected $fillable = [
         'uuid',

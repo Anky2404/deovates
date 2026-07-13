@@ -18,6 +18,19 @@ use App\Http\Controllers\Front\TechStackController;
 use App\Http\Controllers\Front\TestimonialController;
 use Illuminate\Support\Facades\Route;
 
+
+
+/*
+|--------------------------------------------------------------------------
+| BACKEND ROUTES
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('admin')->name('admin.')->group(function(){
+    return require_once base_path('./routes/admin.php');
+});
+
+
 Route::name('front.')->group(function () {
     /* ================= HOME ================= */
     Route::get('/', [HomeController::class, 'index'])->name('home.index');

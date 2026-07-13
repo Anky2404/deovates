@@ -1,0 +1,168 @@
+<?php
+
+namespace App\Http\Controllers\Backend;
+
+use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
+use App\Models\PortfolioCategory;
+use App\Services\MediaUploader;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
+
+class PortfolioCategoryController extends Controller
+{
+    private $pagerecords;
+    private $prefix = 'backend.';
+    private $folder = 'portfolios.categories.';
+
+    public function __construct(private MediaUploader $mediaUploader)
+    {
+        $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
+    }
+
+    public function index(Request $request)
+    {
+        $rows = PortfolioCategory::latest('id')
+            ->paginate($this->pagerecords)
+            ->withQueryString();
+
+        return view($this->prefix . $this->folder . 'index', compact('rows'));
+    }
+
+    public function createoredit(?string $uuid = null)
+    {
+        $category = null;
+
+        if ($uuid) {
+            $category = PortfolioCategory::where('uuid', $uuid)->firstOrFail();
+        }
+
+        return view($this->prefix . $this->folder . 'createoredit', compact('category'));
+    }
+
+    public function saveorupdate(Request $request, ?string $uuid = null)
+    {
+        $category = $uuid ? PortfolioCategory::where('uuid', $uuid)->firstOrFail() : null;
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', Rule::unique('portfolio_categories', 'slug')->ignore($category?->id)],
+            'icon' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'max:4096'],
+            'description' => ['nullable', 'string'],
+            'meta_title' => ['nullable', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'string'],
+            'display_order' => ['nullable', 'integer'],
+            'views' => ['nullable', 'integer'],
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $data = $validated;
+            unset($data['image']);
+
+            $data['is_active'] = $request->boolean('is_active');
+            $data['is_featured'] = $request->boolean('is_featured');
+
+            if ($request->hasFile('image')) {
+                $data['image'] = $this->mediaUploader->uploadSingle(
+                    $request->file('image'),
+                    'portfolio-categories',
+                    $category?->image
+                );
+            }
+
+            $isNew = ! $category;
+
+            if ($category) {
+                $category->fill($data);
+                $category->save();
+            } else {
+                $category = PortfolioCategory::create($data);
+            }
+
+            ActivityLog::log(
+                config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
+                config('constants.MODULES.portfoliocategory'),
+                [
+                    'subject_type' => PortfolioCategory::class,
+                    'subject_id' => $category->id,
+                    'new_values' => $category->getChanges(),
+                    'description' => ($isNew ? 'Created' : 'Updated') . ' portfolio category: ' . $category->name,
+                ]
+            );
+
+            DB::commit();
+
+            return redirect()->route('admin.portfolios.categories.index')->with('success', 'Portfolio category saved successfully.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('PortfolioCategory saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            return back()->withInput()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
+    public function togglestatus(Request $request, string $uuid)
+    {
+        $category = PortfolioCategory::where('uuid', $uuid)->firstOrFail();
+
+        try {
+            $category->is_active = ! $category->is_active;
+            $category->save();
+
+            ActivityLog::log(
+                config('constants.ACTIVITY_ACTIONS.' . ($category->is_active ? 'activate' : 'deactivate')),
+                config('constants.MODULES.portfoliocategory'),
+                [
+                    'subject_type' => PortfolioCategory::class,
+                    'subject_id' => $category->id,
+                    'new_values' => ['is_active' => $category->is_active],
+                    'description' => 'Toggled status of portfolio category: ' . $category->name,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $category->is_active]);
+            }
+
+            return back()->with('success', 'Status updated successfully.');
+        } catch (\Throwable $e) {
+            Log::error('PortfolioCategory togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
+    public function destroy(string $uuid)
+    {
+        $category = PortfolioCategory::where('uuid', $uuid)->firstOrFail();
+
+        try {
+            $category->delete();
+
+            ActivityLog::log(
+                config('constants.ACTIVITY_ACTIONS.delete'),
+                config('constants.MODULES.portfoliocategory'),
+                [
+                    'subject_type' => PortfolioCategory::class,
+                    'subject_id' => $category->id,
+                    'description' => 'Deleted portfolio category: ' . $category->name,
+                ]
+            );
+
+            return back()->with('success', 'Portfolio category deleted successfully.');
+        } catch (\Throwable $e) {
+            Log::error('PortfolioCategory destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+}

@@ -1,0 +1,163 @@
+<?php
+
+namespace App\Http\Controllers\Backend;
+
+use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
+use App\Models\Testimonial;
+use App\Services\MediaUploader;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+class TestimonialController extends Controller
+{
+    private $pagerecords;
+    private $prefix = 'backend.';
+    private $folder = 'testimonials.';
+
+    public function __construct(private MediaUploader $mediaUploader)
+    {
+        $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
+    }
+
+    // Index Function
+    public function index(Request $request)
+    {
+        $rows = Testimonial::latest('id')->paginate($this->pagerecords)->withQueryString();
+        return view($this->prefix . $this->folder . 'index', compact('rows'));
+    }
+
+    // Create / Edit Function
+    public function createoredit(Request $request, $uuid = null)
+    {
+        $testimonial = null;
+
+        if ($uuid) {
+            try {
+                $testimonial = Testimonial::where('uuid', $uuid)->firstOrFail();
+            } catch (ModelNotFoundException $e) {
+                throw $e;
+            } catch (\Throwable $e) {
+                Log::error('Testimonial createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                return redirect()->route('admin.testimonials.index')->with('error', 'Unable to load the requested testimonial.');
+            }
+        }
+
+        return view($this->prefix . $this->folder . 'createoredit', compact('testimonial'));
+    }
+
+    // Save / Update Function
+    public function saveorupdate(Request $request, $uuid = null)
+    {
+        $testimonial = $uuid ? Testimonial::where('uuid', $uuid)->firstOrFail() : null;
+
+        // Note: the form's file input is named "image" but the testimonials
+        // table column is "photo" (no "icon" column exists on this table,
+        // so the form's icon field is intentionally not persisted).
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'designation' => 'nullable|string|max:255',
+            'company' => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'message' => 'required|string',
+            'rating' => 'nullable|integer|min:1|max:5',
+            'display_order' => 'nullable|integer|min:0',
+            'is_featured' => 'nullable|boolean',
+            'is_active' => 'nullable|boolean',
+            'image' => 'nullable|image|max:4096',
+        ]);
+
+        unset($data['image']);
+
+        $data['display_order'] = $data['display_order'] ?? 0;
+        $data['is_featured'] = $request->boolean('is_featured');
+        $data['is_active'] = $request->boolean('is_active');
+
+        try {
+            if ($request->hasFile('image')) {
+                $data['photo'] = $this->mediaUploader->uploadSingle(
+                    $request->file('image'),
+                    'testimonials',
+                    $testimonial->photo ?? null
+                );
+            }
+
+            if ($testimonial) {
+                $testimonial->update($data);
+                $action = config('constants.ACTIVITY_ACTIONS.update');
+                $description = 'Updated testimonial ' . $testimonial->name;
+            } else {
+                $testimonial = Testimonial::create($data);
+                $action = config('constants.ACTIVITY_ACTIONS.create');
+                $description = 'Created testimonial ' . $testimonial->name;
+            }
+
+            ActivityLog::log($action, config('constants.MODULES.testimonial'), [
+                'subject_type' => Testimonial::class,
+                'subject_id' => $testimonial->id,
+                'new_values' => $testimonial->getChanges(),
+                'description' => $description,
+            ]);
+
+            return redirect()->route('admin.testimonials.index')->with('success', 'Testimonial saved successfully.');
+        } catch (\Throwable $e) {
+            Log::error('Testimonial saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->withInput()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
+    // Destroy Function
+    public function destroy(Request $request, $uuid)
+    {
+        try {
+            $testimonial = Testimonial::where('uuid', $uuid)->firstOrFail();
+            $testimonial->delete();
+
+            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.testimonial'), [
+                'subject_type' => Testimonial::class,
+                'subject_id' => $testimonial->id,
+                'description' => 'Deleted testimonial ' . $testimonial->name,
+            ]);
+
+            return back()->with('success', 'Testimonial deleted successfully.');
+        } catch (\Throwable $e) {
+            Log::error('Testimonial destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
+    // Toggle Status Function
+    public function togglestatus(Request $request, $uuid)
+    {
+        try {
+            $testimonial = Testimonial::where('uuid', $uuid)->firstOrFail();
+            $testimonial->is_active = ! $testimonial->is_active;
+            $testimonial->save();
+
+            ActivityLog::log(
+                $testimonial->is_active ? config('constants.ACTIVITY_ACTIONS.activate') : config('constants.ACTIVITY_ACTIONS.deactivate'),
+                config('constants.MODULES.testimonial'),
+                [
+                    'subject_type' => Testimonial::class,
+                    'subject_id' => $testimonial->id,
+                    'description' => ($testimonial->is_active ? 'Activated' : 'Deactivated') . ' testimonial ' . $testimonial->name,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $testimonial->is_active]);
+            }
+
+            return back()->with('success', 'Testimonial status updated.');
+        } catch (\Throwable $e) {
+            Log::error('Testimonial togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+}

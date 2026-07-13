@@ -50,9 +50,9 @@ class ActivityLogController extends Controller
         ->orderBy('name')
         ->pluck('name', 'id');
 
-    $modules = array_values(config('constants.modules', []));
+    $modules = array_values(config('constants.MODULES', []));
 
-    $actions = array_values(config('constants.activities_actions', []));
+    $actions = array_values(config('constants.ACTIVITY_ACTIONS', []));
 
     $subjectIds = ActivityLog::when($request->module, function ($q) use ($request) {
             $q->where('module', $request->module);
