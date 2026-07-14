@@ -254,6 +254,102 @@ return [
 
     ],
 
+    // Fallback SEO copy for pages that have no database-driven content of their own.
+    // Detail pages (blog, portfolio, industry, case study, career, service) pull their
+    // title/description straight from the record instead of this list.
+    'PAGE_SEO' => [
+        'home' => [
+            'title'          => 'Deovate World: Web Design, Website Development, SEO, Digital Marketing & Branding Agency',
+            'meta_description' => 'Deovate World designs and builds websites, runs SEO campaigns, and manages digital marketing for growing businesses. See how our web design, development, and branding work helps clients get found online and win more customers.',
+            'meta_keywords'  => 'web design agency, website development company, SEO services, digital marketing agency, branding agency, custom software development, mobile app development',
+        ],
+        'about' => [
+            'title'          => 'About Deovate World | Our Story, Team & Approach',
+            'meta_description' => 'Meet the team behind Deovate World and learn how we approach web design, development, and digital marketing projects for clients across industries.',
+            'meta_keywords'  => 'about deovate world, web design team, digital agency team, our approach',
+        ],
+        'services' => [
+            'title'          => 'Our Services | Web Design, Development, SEO & Digital Marketing',
+            'meta_description' => 'Browse the full range of services we offer, from web design and custom development to SEO, digital marketing, and branding, all built around your business goals.',
+            'meta_keywords'  => 'web design services, website development services, SEO services, digital marketing services, branding services',
+        ],
+        'portfolios' => [
+            'title'          => 'Our Portfolio | Websites & Digital Projects We\'ve Built',
+            'meta_description' => 'See real websites, apps, and digital campaigns we\'ve delivered for clients, and get a feel for the quality and craft behind every Deovate World project.',
+            'meta_keywords'  => 'web design portfolio, website development projects, case studies, client work',
+        ],
+        'industries' => [
+            'title'          => 'Industries We Serve | Web & Digital Solutions by Sector',
+            'meta_description' => 'From healthcare to eCommerce, see how we tailor web design, development, and digital marketing to the needs of different industries.',
+            'meta_keywords'  => 'industries we serve, ecommerce web design, healthcare website development, industry solutions',
+        ],
+        'casestudies' => [
+            'title'          => 'Case Studies | Real Results From Our Client Projects',
+            'meta_description' => 'Read how we\'ve helped businesses solve real problems with web design, development, and digital marketing, backed by measurable results.',
+            'meta_keywords'  => 'case studies, client success stories, web development results, digital marketing results',
+        ],
+        'blog' => [
+            'title'          => 'Blog | Web Design, Development & Digital Marketing Insights',
+            'meta_description' => 'Practical articles on web design, website development, SEO, and digital marketing from the Deovate World team, written for business owners and marketers.',
+            'meta_keywords'  => 'web design blog, digital marketing blog, SEO tips, website development articles',
+        ],
+        'career' => [
+            'title'          => 'Careers at Deovate World | Join Our Team',
+            'meta_description' => 'Explore open roles at Deovate World and find out what it\'s like to work with a team that builds websites, apps, and digital campaigns for real clients.',
+            'meta_keywords'  => 'deovate world careers, web design jobs, developer jobs, digital marketing jobs',
+        ],
+        'contact' => [
+            'title'          => 'Contact Us | Get in Touch With Deovate World',
+            'meta_description' => 'Have a project in mind? Contact Deovate World for web design, development, SEO, or digital marketing support, and we\'ll get back to you quickly.',
+            'meta_keywords'  => 'contact deovate world, get a quote, web design inquiry, digital marketing inquiry',
+        ],
+        'testimonials' => [
+            'title'          => 'Client Testimonials | What Our Clients Say About Us',
+            'meta_description' => 'Read honest feedback from clients who\'ve worked with Deovate World on web design, development, and digital marketing projects.',
+            'meta_keywords'  => 'client testimonials, customer reviews, deovate world reviews',
+        ],
+        'techstack' => [
+            'title'          => 'Our Tech Stack | Tools & Technologies We Work With',
+            'meta_description' => 'A look at the frameworks, languages, and platforms our team uses to design, build, and maintain fast, reliable websites and applications.',
+            'meta_keywords'  => 'tech stack, web development technologies, frameworks we use, tools we use',
+        ],
+        'alliances' => [
+            'title'          => 'Our Alliances & Partners | Deovate World',
+            'meta_description' => 'Meet the partners and technology alliances that help Deovate World deliver stronger web design, development, and digital marketing results.',
+            'meta_keywords'  => 'deovate world partners, technology alliances, business partnerships',
+        ],
+        'pricing' => [
+            'title'          => 'Pricing | Web Design & Digital Marketing Packages',
+            'meta_description' => 'Compare our web design, development, and digital marketing packages and find the option that fits your budget and business goals.',
+            'meta_keywords'  => 'web design pricing, website development cost, digital marketing packages',
+        ],
+        'faq' => [
+            'title'          => 'Frequently Asked Questions | Deovate World',
+            'meta_description' => 'Answers to the questions we hear most often about our web design, development, SEO, and digital marketing services.',
+            'meta_keywords'  => 'deovate world faq, web design questions, digital marketing questions',
+        ],
+        'hireme' => [
+            'title'          => 'Hire Our Team | Dedicated Developers & Designers',
+            'meta_description' => 'Hire dedicated developers, designers, or a full project team from Deovate World for your next web or digital product build.',
+            'meta_keywords'  => 'hire developers, hire designers, dedicated development team, hire our team',
+        ],
+        'legal_privacy' => [
+            'title'          => 'Privacy Policy | Deovate World',
+            'meta_description' => 'Read how Deovate World collects, uses, and protects your personal information when you use our website and services.',
+            'meta_keywords'  => 'privacy policy, data protection, deovate world privacy',
+        ],
+        'legal_terms' => [
+            'title'          => 'Terms & Conditions | Deovate World',
+            'meta_description' => 'The terms and conditions that govern your use of the Deovate World website and services.',
+            'meta_keywords'  => 'terms and conditions, terms of service, deovate world terms',
+        ],
+        'error_404' => [
+            'title'          => 'Page Not Found | Deovate World',
+            'meta_description' => 'The page you\'re looking for doesn\'t exist or may have moved. Head back to the Deovate World homepage to keep browsing.',
+            'meta_keywords'  => 'page not found, 404 error, deovate world',
+        ],
+    ],
+
     'MONTHS' => [
         '01' => 'January',
         '02' => 'Feburary',

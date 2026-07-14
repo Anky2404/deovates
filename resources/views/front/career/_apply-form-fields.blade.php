@@ -1,3 +1,4 @@
+<!-- Start Application Form Section -->
 <div class="career-apply-header">
     <h4>General Application</h4>
     <p>Tell us about yourself and the kind of role you're looking for.</p>
@@ -43,3 +44,4 @@
         <p>Thanks! Your application has been received.</p>
     </div>
 </form>
+<!-- End Application Form Section -->

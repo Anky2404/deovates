@@ -1,3 +1,4 @@
+<!-- Start Contact Form Section -->
 <form id="{{ $prefix }}ContactForm" class="app-contact-form" novalidate>
 
     <div class="app-form-group">
@@ -36,3 +37,4 @@
     </div>
 
 </form>
+<!-- End Contact Form Section -->

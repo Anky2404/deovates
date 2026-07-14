@@ -1,3 +1,4 @@
+<!-- Start Footer Section -->
 <footer>
     <div class="footer-main">
         <div class="footer-area footer-padding">
@@ -81,8 +82,8 @@
                                 </div>
 
                                 <ul>
-                                    <li><a href="tel:+950123456789">Phone:  {{ config('constants.CONTACT.country_code') }}-{{ config('constants.CONTACT.phones.0.number') }}</a></li>
-                                    <li><a href="tel:+950123456789">Cell:  {{ config('constants.CONTACT.country_code') }}-{{ config('constants.CONTACT.phones.1.number') }}</a></li>
+                                    <li><a href="tel:{{ config('constants.CONTACT.country_code') }}{{ config('constants.CONTACT.phones.0.number') }}">Phone: {{ config('constants.CONTACT.country_code') }}-{{ config('constants.CONTACT.phones.0.number') }}</a></li>
+                                    <li><a href="tel:{{ config('constants.CONTACT.country_code') }}{{ config('constants.CONTACT.phones.1.number') }}">Cell: {{ config('constants.CONTACT.country_code') }}-{{ config('constants.CONTACT.phones.1.number') }}</a></li>
                                     <li><a href="{{ route('front.legal.privacy') }}">Privacy Policy</a></li>
                                     <li><a href="{{ route('front.legal.terms') }}">Terms &amp; Conditions</a></li>
                                 </ul>
@@ -139,7 +140,7 @@
                             <p>
                                 Copyright &copy; {{ date('Y') }}
                                 <a href="{{ route(config('constants.HEADERS.0.route')) }}"
-                                    class="text-decoration-none">Deovate World</a>.
+                                    class="text-decoration-none">{{ config('constants.BUSINESS.name') }}</a>.
                                 All Rights Reserved.
                             </p>
                         </div>
@@ -152,3 +153,4 @@
         </div>
     </div>
 </footer>
+<!-- End Footer Section -->

@@ -1,8 +1,11 @@
 ﻿@extends('front.layouts.app')
 
-@section('title', 'Our Alliances & Partners')
+@section('title', config('constants.PAGE_SEO.alliances.title'))
+@section('meta_description', config('constants.PAGE_SEO.alliances.meta_description'))
+@section('meta_keywords', config('constants.PAGE_SEO.alliances.meta_keywords'))
 @section('content')
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -24,12 +27,14 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Businesses We Work With Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>Businesses We Work With</h3>
-                <p>Trusted partnerships that help us deliver more value to every client we serve.</p>
+                <h3>{{ \App\Helper::sectionTitle('alliances', 'listing', 'title', 'Businesses We Work With') }}</h3>
+                <p>{{ \App\Helper::sectionTitle('alliances', 'listing', 'subtitle') }}</p>
             </div>
 
             @if ($partners->isEmpty())
@@ -54,5 +59,6 @@
             @endif
         </div>
     </section>
+    <!-- End Businesses We Work With Section -->
 
 @endsection

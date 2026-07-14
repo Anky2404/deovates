@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\FaqCategory;
 use App\Models\Testimonial;
 
 class TestimonialController extends Controller
@@ -14,6 +15,12 @@ class TestimonialController extends Controller
             ->latest('id')
             ->get();
 
-        return view('front.testimonials.index', compact('testimonials'));
+        $category = FaqCategory::with('faqs')
+            ->active()
+            ->where('page', 'testimonials')
+            ->latest('id')
+            ->first();
+
+        return view('front.testimonials.index', compact('testimonials', 'category'));
     }
 }

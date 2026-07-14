@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\FaqCategory;
+use App\Models\Testimonial;
 
 class BlogController extends Controller
 {
@@ -23,7 +25,18 @@ class BlogController extends Controller
             ->latest('published_at')
             ->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('categories', 'blogs'));
+        $testimonials = Testimonial::active()
+            ->ordered()
+            ->take(6)
+            ->get();
+
+        $category = FaqCategory::with('faqs')
+            ->active()
+            ->where('page', 'blog')
+            ->latest('id')
+            ->first();
+
+        return view($this->prefix . $this->folder . 'index', compact('categories', 'blogs', 'testimonials', 'category'));
     }
 
     public function details($slug)

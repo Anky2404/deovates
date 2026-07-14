@@ -5,6 +5,7 @@
 @section('content')
 
     <!-- Hero -->
+    <!-- Start Hero Section -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
             data-background="{{ \App\Helper::img($portfolio->banner_image, 'assets/front/img/hero/h3_hero.png') }}">
@@ -27,10 +28,13 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Portfolio Details Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="row g-5">
+                <!-- Start Project Content Section -->
                 <div class="col-lg-8">
                     <img src="{{ \App\Helper::img($portfolio->featured_image) }}"
                         class="img-fluid rounded mb-4" alt="{{ $portfolio->title }}">
@@ -78,7 +82,9 @@
                         </div>
                     @endif
                 </div>
+                <!-- End Project Content Section -->
 
+                <!-- Start Sidebar Section -->
                 <div class="col-lg-4">
                     <div class="p-4 rounded-4" style="background:#f5f8fd; position:sticky; top:100px;">
                         <h4 class="mb-3" style="color:#073965;">Project Details</h4>
@@ -107,8 +113,10 @@
                             Similar Project</a>
                     </div>
                 </div>
+                <!-- End Sidebar Section -->
             </div>
 
+            <!-- Start Related Projects Section -->
             @if ($related->isNotEmpty())
                 <div class="section-title st-center mt-5">
                     <h3>More Projects</h3>
@@ -133,7 +141,9 @@
                     @endforeach
                 </div>
             @endif
+            <!-- End Related Projects Section -->
         </div>
     </section>
+    <!-- End Portfolio Details Section -->
 
 @endsection

@@ -2,19 +2,42 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\FaqCategory;
+use App\Models\Testimonial;
+use Illuminate\Support\Facades\Log;
 
 class FaqController extends Controller
 {
     public function index()
     {
-        // FaqCategory/Faq DB records are currently just placeholder
-        // seed data ("asdf" etc.) — reusing the well-authored static
-        // FAQ copy from services.json until real FAQ content is added.
-        $data = Helper::readJSONData('services.json');
-        $faqs = $data['faq']['items'] ?? [];
+        try {
+            $category = FaqCategory::with('faqs')
+                ->active()
+                ->where('page', 'faq')
+                ->latest('id')
+                ->first();
 
-        return view('front.faq.index', compact('faqs'));
+            $testimonials = Testimonial::active()
+                ->ordered()
+                ->take(6)
+                ->get();
+
+            return view('front.faq.index', compact('category', 'testimonials'));
+        } catch (\Throwable $e) {
+            Log::error('FAQ Page Error', [
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+                'trace'   => $e->getTraceAsString(),
+            ]);
+
+            if (config('app.debug')) {
+                abort(500, $e->getMessage());
+            }
+
+            return redirect('/')
+                ->with('error', 'Something went wrong. Please try again later.');
+        }
     }
 }

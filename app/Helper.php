@@ -96,6 +96,23 @@ class Helper
     }
 
     /**
+     * Look up a section's title/subtitle from the shared
+     * storage/app/data/section_titles.json file, so every front page pulls
+     * its section headings from one common, editable source instead of
+     * hardcoding them in the blade views.
+     */
+    public static function sectionTitle(string $page, string $section, string $field = 'title', string $default = ''): string
+    {
+        static $sections = null;
+
+        if ($sections === null) {
+            $sections = self::readJSONData('section_titles.json');
+        }
+
+        return $sections[$page][$section][$field] ?? $default;
+    }
+
+    /**
      * Resolve a per-page hero banner from public/assets/front/img/banners/.
      * Lets pages reference a not-yet-provided photo (e.g. a real Deovate
      * office shot the client is generating separately) and fall back to

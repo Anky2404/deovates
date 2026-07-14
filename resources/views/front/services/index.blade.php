@@ -1,8 +1,11 @@
 @extends('front.layouts.app')
 
-@section('title', $data['title'] ?? 'Our Services')
+@section('title', $data['meta_title'] ?? $data['title'] ?? config('constants.PAGE_SEO.services.title'))
+@section('meta_description', $data['meta_description'] ?? config('constants.PAGE_SEO.services.meta_description'))
+@section('meta_keywords', $data['meta_keywords'] ?? config('constants.PAGE_SEO.services.meta_keywords'))
 @section('content')
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -24,16 +27,17 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Services Grid Section -->
     <!-- Services grid -->
     <section class="services container-fluid service overflow-hidden py-5">
         <div class="container py-5">
             <div class="row">
                 <div class="col-md-12">
                     <div class="section-title st-center">
-                        <h3>What We Offer</h3>
-                        <p>Innovative digital solutions engineered to accelerate business growth, from strategy through
-                            launch and beyond.</p>
+                        <h3>{{ \App\Helper::sectionTitle('services', 'grid', 'title', 'What We Offer') }}</h3>
+                        <p>{{ \App\Helper::sectionTitle('services', 'grid', 'subtitle') }}</p>
                     </div>
 
                     @if ($services->isEmpty())
@@ -80,7 +84,9 @@
             </div>
         </div>
     </section>
+    <!-- End Services Grid Section -->
 
+    <!-- Start Roadmap Section -->
     <section class="roadmap-area section-padding" id="roadmap">
         <div class="container">
             <div class="row">
@@ -88,12 +94,9 @@
                     <div class="heading">
                         <h5>Our Development Process</h5>
                         <div class="space-10"></div>
-                        <h1>From Vision to Digital Success</h1>
+                        <h1>{{ \App\Helper::sectionTitle('services', 'roadmap', 'title', 'From Vision to Digital Success') }}</h1>
                         <p class="mt-3">
-                            At Deovate World, every successful project follows a proven development process.
-                            We combine strategic planning, creative design, modern technologies, and continuous
-                            support to deliver secure, scalable, and high-performing digital solutions that
-                            help businesses grow with confidence.
+                            {{ \App\Helper::sectionTitle('services', 'roadmap', 'subtitle') }}
                         </p>
                     </div>
                     <div class="space-60 d-none d-sm-block"></div>
@@ -208,104 +211,66 @@
             </div>
         </div>
     </section>
+    <!-- End Roadmap Section -->
 
+    <!-- Start Testimonials Section -->
     <!-- Testimonials -->
-    <section class="testimonials">
+    @if ($testimonials->isNotEmpty())
+        <section class="testimonials">
 
-        <div class="container">
+            <div class="container">
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title st-center">
-                        <h3>Industries</h3>
-                        <p>Avocent deditum long</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="testi-mockup wow fadeInUp" data-wow-delay="0.1s">
-                <div class="laptop-screen">
-                    <div class="laptop-browser-bar">
-                        <span class="dot dot-red"></span>
-                        <span class="dot dot-yellow"></span>
-                        <span class="dot dot-green"></span>
-                        <span class="laptop-url">deovate.world/reviews</span>
-                    </div>
-                    <div class="laptop-screen-glass testi-glass">
-                        <div class="laptop-shine"></div>
-                        <div class="testimonials-carousel owl-carousel owl-theme">
-
-                            <!-- Testimonial 1 -->
-                            <div class="testimonial">
-                                <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.png') }}"
-                                        alt="John Anderson">
-                                </div>
-                                <blockquote>
-                                    <p>
-                                        Their team delivered our website ahead of schedule with
-                                        exceptional quality. Communication was excellent and
-                                        the final product exceeded our expectations.
-                                    </p>
-                                    <footer>
-                                        <strong>John Anderson</strong><br>
-                                        <cite>CEO, Tech Solutions</cite>
-                                    </footer>
-                                </blockquote>
-                            </div>
-
-                            <!-- Testimonial 2 -->
-                            <div class="testimonial">
-                                <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/1.png') }}" alt="Sarah Williams">
-                                </div>
-                                <blockquote>
-                                    <p>
-                                        Professional developers with deep technical knowledge.
-                                        They successfully developed our ERP system and continue
-                                        to provide outstanding support.
-                                    </p>
-                                    <footer>
-                                        <strong>Sarah Williams</strong><br>
-                                        <cite>Operations Manager</cite>
-                                    </footer>
-                                </blockquote>
-                            </div>
-
-                            <!-- Testimonial 3 -->
-                            <div class="testimonial">
-                                <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.png') }}"
-                                        alt="Michael Brown">
-                                </div>
-                                <blockquote>
-                                    <p>
-                                        We highly recommend them for custom software development.
-                                        Our online sales increased significantly after launching
-                                        the new platform.
-                                    </p>
-                                    <footer>
-                                        <strong>Michael Brown</strong><br>
-                                        <cite>Founder, Ecommerce Hub</cite>
-                                    </footer>
-                                </blockquote>
-                            </div>
-
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title st-center">
+                            <h3>{{ \App\Helper::sectionTitle('services', 'testimonials', 'title', 'What Our Clients Say') }}</h3>
+                            <p>{{ \App\Helper::sectionTitle('services', 'testimonials', 'subtitle') }}</p>
                         </div>
                     </div>
                 </div>
-                <div class="laptop-base">
-                    <span class="laptop-notch"></span>
+
+                <div class="testi-mockup wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="laptop-screen">
+                        <div class="laptop-browser-bar">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                            <span class="laptop-url">deovate.world/reviews</span>
+                        </div>
+                        <div class="laptop-screen-glass testi-glass">
+                            <div class="laptop-shine"></div>
+                            <div class="testimonials-carousel owl-carousel owl-theme">
+                                @foreach ($testimonials as $testimonial)
+                                    <div class="testimonial">
+                                        <div class="testimonial-img">
+                                            <img src="{{ \App\Helper::img($testimonial->photo) }}" alt="{{ $testimonial->name }}">
+                                        </div>
+                                        <blockquote>
+                                            <p>{{ $testimonial->message }}</p>
+                                            <footer>
+                                                <strong>{{ $testimonial->name }}</strong><br>
+                                                <cite>{{ $testimonial->designation }}{{ $testimonial->company ? ', ' . $testimonial->company : '' }}</cite>
+                                            </footer>
+                                        </blockquote>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="laptop-base">
+                        <span class="laptop-notch"></span>
+                    </div>
+                    <div class="laptop-shadow"></div>
                 </div>
-                <div class="laptop-shadow"></div>
+
             </div>
 
-        </div>
+        </section>
+    @endif
+    <!-- End Testimonials Section -->
 
-    </section>
 
-
-
+    <!-- Start CTA Section -->
     <!-- CTA -->
     <section class="call-2-acction" data-stellar-background-ratio="0.4">
         <div class="container">
@@ -313,10 +278,10 @@
                 <div class="col-md-12">
 
                     <div class="section-title st-center">
-                        <h3>LET'S BUILD SOMETHING EXCEPTIONAL</h3>
+                        <h3>{{ \App\Helper::sectionTitle('services', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL") }}</h3>
 
                         <p>
-                            Transform Your Vision into Powerful Digital Solutions
+                            {{ \App\Helper::sectionTitle('services', 'cta', 'subtitle') }}
                         </p>
                     </div>
 
@@ -339,21 +304,24 @@
             </div>
         </div>
     </section>
+    <!-- End CTA Section -->
 
+    <!-- Start FAQ & Contact Section -->
     <section id="faq-section" class="faq-section">
         <div class="container">
 
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>Industries</h3>
-                        <p>Avocent deditum long</p>
+                        <h3>{{ \App\Helper::sectionTitle('services', 'faq', 'title', 'Frequently Asked Questions') }}</h3>
+                        <p>{{ \App\Helper::sectionTitle('services', 'faq', 'subtitle') }}</p>
                     </div>
                 </div>
             </div>
 
             <div class="faq-contact-grid">
 
+                @if ($category && $category->faqs->isNotEmpty())
                 <!-- LEFT: FAQ app tablet -->
                 <div class="faq-tablet-col wow fadeInLeft" data-wow-delay="0.1s">
                     <div class="app-tablet">
@@ -370,109 +338,20 @@
                                 </div>
 
                                 <div class="faq-wrapper app-faq-list">
+                                    @foreach ($category->faqs as $faq)
+                                        <div class="faq-item @if ($loop->first) active @endif">
+                                            <div class="faq-title">
+                                                <h5>{{ $faq->question }}</h5>
+                                                <span class="faq-icon">
+                                                    <i class="fa {{ $loop->first ? 'fa-minus' : 'fa-plus' }}"></i>
+                                                </span>
+                                            </div>
 
-                                    <div class="faq-item active">
-                                        <div class="faq-title">
-                                            <h5>What services does your company provide?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-minus"></i>
-                                            </span>
+                                            <div class="faq-content" @if ($loop->first) style="display:block;" @endif>
+                                                <p>{{ $faq->answer }}</p>
+                                            </div>
                                         </div>
-
-                                        <div class="faq-content" style="display:block;">
-                                            <p>
-                                                We provide website development, custom software development,
-                                                eCommerce solutions, mobile applications, UI/UX design,
-                                                cloud solutions, API integration, ERP/CRM systems, and
-                                                ongoing maintenance & support.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="faq-item">
-                                        <div class="faq-title">
-                                            <h5>How long does a website or software project take?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                        </div>
-
-                                        <div class="faq-content">
-                                            <p>
-                                                Project timelines depend on complexity. A business website
-                                                generally takes 2–4 weeks, while custom software or enterprise
-                                                applications may take several weeks to a few months.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="faq-item">
-                                        <div class="faq-title">
-                                            <h5>Do you provide website redesign services?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                        </div>
-
-                                        <div class="faq-content">
-                                            <p>
-                                                Yes. We redesign outdated websites with a modern UI,
-                                                better performance, improved SEO, enhanced security,
-                                                and a fully responsive design.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="faq-item">
-                                        <div class="faq-title">
-                                            <h5>Which technologies do you specialize in?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                        </div>
-
-                                        <div class="faq-content">
-                                            <p>
-                                                We work with Laravel, PHP, React, Node.js, Java, Spring Boot,
-                                                MySQL, PostgreSQL, WordPress, Shopify, REST APIs,
-                                                AWS, Azure and modern frontend technologies.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="faq-item">
-                                        <div class="faq-title">
-                                            <h5>Will my website be mobile-friendly?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                        </div>
-
-                                        <div class="faq-content">
-                                            <p>
-                                                Absolutely. Every website we build is fully responsive
-                                                and optimized for desktops, tablets and smartphones.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="faq-item">
-                                        <div class="faq-title">
-                                            <h5>Do you provide maintenance after project delivery?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                        </div>
-
-                                        <div class="faq-content">
-                                            <p>
-                                                Yes. We provide maintenance, security updates,
-                                                bug fixes, performance optimization and technical
-                                                support after deployment.
-                                            </p>
-                                        </div>
-                                    </div>
-
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="tablet-home-btn"></div>
@@ -480,6 +359,7 @@
                         <div class="tablet-shadow"></div>
                     </div>
                 </div>
+                @endif
 
                 <!-- RIGHT: Contact form tablet -->
                 <div class="contact-tablet-col wow fadeInRight" data-wow-delay="0.2s">
@@ -547,7 +427,7 @@
 
         </div>
     </section>
-
+    <!-- End FAQ & Contact Section -->
 
 
 

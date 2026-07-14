@@ -1,8 +1,11 @@
 ﻿@extends('front.layouts.app')
 
-@section('title', $data['hero']['title'] ?? 'Contact Us')
+@section('title', $data['hero']['meta_title'] ?? $data['hero']['title'] ?? config('constants.PAGE_SEO.contact.title'))
+@section('meta_description', $data['hero']['meta_description'] ?? config('constants.PAGE_SEO.contact.meta_description'))
+@section('meta_keywords', $data['hero']['meta_keywords'] ?? config('constants.PAGE_SEO.contact.meta_keywords'))
 @section('content')
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -24,7 +27,9 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Contact Form & Details Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="row g-5 justify-content-center">
@@ -127,7 +132,9 @@
             </div>
         </div>
     </section>
+    <!-- End Contact Form & Details Section -->
 
+    <!-- Start Process Section -->
     @if (!empty($data['process']['steps']))
         <section class="py-5" style="background:#f5f8fd;">
             <div class="container py-5">
@@ -150,7 +157,9 @@
             </div>
         </section>
     @endif
+    <!-- End Process Section -->
 
+    <!-- Start Map Section -->
     @if (!empty($data['map_section']['iframe_url']))
         <section class="py-5">
             <div class="container py-5">
@@ -200,5 +209,6 @@
             </div>
         </section>
     @endif
+    <!-- End Map Section -->
 
 @endsection

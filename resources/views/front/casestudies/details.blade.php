@@ -5,6 +5,7 @@
 @section('content')
 
     <!-- Hero -->
+    <!-- Start Hero Section -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
             data-background="{{ \App\Helper::img($casestudy->banner_image, 'assets/front/img/hero/h3_hero.png') }}">
@@ -27,7 +28,9 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Case Study Details Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="row g-5">
@@ -106,6 +109,7 @@
             </div>
 
             @if ($related->isNotEmpty())
+                <!-- Start Related Case Studies Section -->
                 <div class="section-title st-center mt-5">
                     <h3>More Case Studies</h3>
                 </div>
@@ -127,8 +131,10 @@
                         </div>
                     @endforeach
                 </div>
+                <!-- End Related Case Studies Section -->
             @endif
         </div>
     </section>
+    <!-- End Case Study Details Section -->
 
 @endsection

@@ -5,6 +5,7 @@
 @section('content')
 
     <!-- Hero -->
+    <!-- Start Hero Section -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
             data-background="{{ asset('assets/front/img/hero/h1_hero.png') }}">
@@ -27,7 +28,9 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Digital Solutions Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="row g-5 align-items-center">
@@ -69,5 +72,6 @@
             @endif
         </div>
     </section>
+    <!-- End Digital Solutions Section -->
 
 @endsection

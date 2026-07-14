@@ -1,8 +1,11 @@
 ﻿@extends('front.layouts.app')
 
-@section('title', 'Industries We Serve')
+@section('title', config('constants.PAGE_SEO.industries.title'))
+@section('meta_description', config('constants.PAGE_SEO.industries.meta_description'))
+@section('meta_keywords', config('constants.PAGE_SEO.industries.meta_keywords'))
 @section('content')
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -24,13 +27,14 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Solutions Built For Your Industry Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>Solutions Built For Your Industry</h3>
-                <p>Delivering innovative web development, business software, and digital solutions tailored to the
-                    unique needs of every industry we work with.</p>
+                <h3>{{ \App\Helper::sectionTitle('industries', 'listing', 'title', 'Solutions Built For Your Industry') }}</h3>
+                <p>{{ \App\Helper::sectionTitle('industries', 'listing', 'subtitle') }}</p>
             </div>
 
             @if ($industries->isEmpty())
@@ -58,5 +62,6 @@
             @endif
         </div>
     </section>
+    <!-- End Solutions Built For Your Industry Section -->
 
 @endsection

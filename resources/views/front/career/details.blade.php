@@ -5,6 +5,7 @@
 @section('content')
 
     <!-- Hero -->
+    <!-- Start Hero Section -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
             data-background="{{ asset('assets/front/img/hero/h1_hero.png') }}">
@@ -27,7 +28,9 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Career Details Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="row g-5">
@@ -99,6 +102,7 @@
             </div>
 
             @if ($related->isNotEmpty())
+                <!-- Start Related Careers Section -->
                 <div class="section-title st-center mt-5">
                     <h3>Other Open Roles</h3>
                 </div>
@@ -118,8 +122,10 @@
                         </div>
                     @endforeach
                 </div>
+                <!-- End Related Careers Section -->
             @endif
         </div>
     </section>
+    <!-- End Career Details Section -->
 
 @endsection

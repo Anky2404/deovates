@@ -1,8 +1,11 @@
 ﻿@extends('front.layouts.app')
 
-@section('title', 'Privacy Policy')
+@section('title', config('constants.PAGE_SEO.legal_privacy.title'))
+@section('meta_description', config('constants.PAGE_SEO.legal_privacy.meta_description'))
+@section('meta_keywords', config('constants.PAGE_SEO.legal_privacy.meta_keywords'))
 @section('content')
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -24,7 +27,9 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Privacy Policy Content Section -->
     @php
         $sections = [
             ['id' => 'collect', 'icon' => 'fas fa-database', 'title' => 'Information We Collect', 'body' => 'We may collect information you provide directly to us, such as your name, email address, phone number, and project details when you fill out a contact form or reach out to us.'],
@@ -55,7 +60,7 @@
                     <div class="legal-help-card wow fadeInLeft" data-wow-delay="0.2s">
                         <i class="fas fa-question-circle"></i>
                         <h6>Have Questions?</h6>
-                        <p>We're happy to walk you through how we handle your data.</p>
+                        <p>{{ \App\Helper::sectionTitle('legal_privacy', 'intro', 'subtitle', "We're happy to walk you through how we handle your data.") }}</p>
                         <a href="{{ route('front.contact.index') }}" class="btn btn-main w-100">Contact Us</a>
                     </div>
                 </div>
@@ -88,5 +93,6 @@
             </div>
         </div>
     </section>
+    <!-- End Privacy Policy Content Section -->
 
 @endsection

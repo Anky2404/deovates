@@ -1,8 +1,11 @@
 ﻿@extends('front.layouts.app')
 
-@section('title', 'Pricing')
+@section('title', config('constants.PAGE_SEO.pricing.title'))
+@section('meta_description', config('constants.PAGE_SEO.pricing.meta_description'))
+@section('meta_keywords', config('constants.PAGE_SEO.pricing.meta_keywords'))
 @section('content')
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -24,13 +27,14 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Plans That Scale With You Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>Plans That Scale With You</h3>
-                <p>Every project is different — these plans are a starting point. We'll tailor a proposal to your
-                    exact scope.</p>
+                <h3>{{ \App\Helper::sectionTitle('pricing', 'listing', 'title', 'Plans That Scale With You') }}</h3>
+                <p>{{ \App\Helper::sectionTitle('pricing', 'listing', 'subtitle') }}</p>
             </div>
 
             @php
@@ -101,5 +105,6 @@
             </div>
         </div>
     </section>
+    <!-- End Plans That Scale With You Section -->
 
 @endsection

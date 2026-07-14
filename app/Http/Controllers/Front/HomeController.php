@@ -12,6 +12,7 @@ use App\Models\Portfolio;
 use App\Models\PortfolioCategory;
 use App\Models\Service;
 use App\Models\Technology;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -78,7 +79,10 @@ public function index()
             ->latest('id')
             ->first();
 
-            // dd($portfolios);
+        $testimonials = Testimonial::active()
+            ->ordered()
+            ->take(6)
+            ->get();
 
         return view($this->prefix . $this->folder . 'index', compact(
             'data',
@@ -89,12 +93,11 @@ public function index()
             'technologies',
             'casestudies',
             'portfolios',
-            'portfolio_categories'
+            'portfolio_categories',
+            'testimonials'
         ));
 
     } catch (\Throwable $e) {
-        dd($e->getMessage());
-
         Log::error('Home Page Error', [
             'message' => $e->getMessage(),
             'file'    => $e->getFile(),

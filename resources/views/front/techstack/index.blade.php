@@ -1,8 +1,11 @@
 ﻿@extends('front.layouts.app')
 
-@section('title', 'Technologies We Work With')
+@section('title', config('constants.PAGE_SEO.techstack.title'))
+@section('meta_description', config('constants.PAGE_SEO.techstack.meta_description'))
+@section('meta_keywords', config('constants.PAGE_SEO.techstack.meta_keywords'))
 @section('content')
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -24,12 +27,14 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Tools & Technologies Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>Tools &amp; Technologies</h3>
-                <p>We build with modern, proven, and scalable technologies trusted by businesses worldwide.</p>
+                <h3>{{ \App\Helper::sectionTitle('techstack', 'listing', 'title', 'Tools & Technologies') }}</h3>
+                <p>{{ \App\Helper::sectionTitle('techstack', 'listing', 'subtitle') }}</p>
             </div>
 
             @forelse ($technologies as $categoryName => $items)
@@ -52,5 +57,6 @@
             @endforelse
         </div>
     </section>
+    <!-- End Tools & Technologies Section -->
 
 @endsection

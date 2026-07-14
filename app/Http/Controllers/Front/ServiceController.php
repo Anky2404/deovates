@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\FaqCategory;
 use App\Models\Service;
 use App\Models\Testimonial;
 
@@ -27,7 +28,13 @@ class ServiceController extends Controller
             ->take(6)
             ->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('data', 'services', 'testimonials'));
+        $category = FaqCategory::with('faqs')
+            ->active()
+            ->where('page', 'services')
+            ->latest('id')
+            ->first();
+
+        return view($this->prefix . $this->folder . 'index', compact('data', 'services', 'testimonials', 'category'));
     }
 
     public function details($slug)

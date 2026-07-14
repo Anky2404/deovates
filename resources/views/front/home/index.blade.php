@@ -1,5 +1,10 @@
 @extends('front.layouts.app')
+
+@section('title', config('constants.PAGE_SEO.home.title'))
+@section('meta_description', config('constants.PAGE_SEO.home.meta_description'))
+@section('meta_keywords', config('constants.PAGE_SEO.home.meta_keywords'))
 @section('content')
+    <!-- Start Hero Slider Section -->
     <section>
         <div class="slider-area">
             <div class="slider-active">
@@ -112,8 +117,10 @@
             </div>
         </div>
     </section>
+    <!-- End Hero Slider Section -->
     <!-- slider Area End-->
     <!-- about section start -->
+    <!-- Start About Section -->
     <section class="about" id="about">
         <div class="container">
 
@@ -122,11 +129,10 @@
 
                     <div class="section-title st-center">
 
-                        <h3>WELCOME TO <span>DEOVATE WORLD</span></h3>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'about', 'title', 'WELCOME TO DEOVATE WORLD') }}</h3>
 
                         <p>
-                            Building Modern Websites, Smart Software & Digital Solutions
-                            That Help Businesses Grow Faster.
+                            {{ \App\Helper::sectionTitle('home', 'about', 'subtitle') }}
                         </p>
 
                     </div>
@@ -239,9 +245,11 @@
 
         </div>
     </section>
+    <!-- End About Section -->
     <!-- about section end -->
 
     <!-- Counter Facts Start -->
+    <!-- Start Counter Facts Section -->
     <section class="counter container-fluid service overflow-hidden pt-5" id="counter">
         <div class="container-fluid counter-facts py-5">
             <div class="container py-1">
@@ -249,10 +257,10 @@
                     <div class="col-12">
                         <div class="section-title st-center">
 
-                            <h3>OUR ACHIEVEMENTS</h3>
+                            <h3>{{ \App\Helper::sectionTitle('home', 'achievements_counter', 'title', 'OUR ACHIEVEMENTS') }}</h3>
 
                             <p>
-                                Delivering Reliable Digital Solutions That Create Real Business Impact
+                                {{ \App\Helper::sectionTitle('home', 'achievements_counter', 'subtitle') }}
                             </p>
 
                         </div>
@@ -395,16 +403,18 @@
             </div>
         </div>
     </section>
+    <!-- End Counter Facts Section -->
     <!-- Counter Facts End -->
     <!-- about section start -->
+    <!-- Start Services Section -->
     <section class="services container-fluid service overflow-hidden pt-5" id="about">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="section-title st-center">
-                        <h3>OUR SERVICES</h3>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'services', 'title', 'OUR SERVICES') }}</h3>
                         <p>
-                            Innovative Digital Solutions Designed to Accelerate Business Growth
+                            {{ \App\Helper::sectionTitle('home', 'services', 'subtitle') }}
                         </p>
                     </div>
                     <div class="row g-4">
@@ -454,17 +464,19 @@
             </div>
         </div>
     </section>
+    <!-- End Services Section -->
     <!-- about section end -->
+    <!-- Start Call to Action Section -->
     <section class="call-2-acction" data-stellar-background-ratio="0.4">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
 
                     <div class="section-title st-center">
-                        <h3>LET'S BUILD SOMETHING EXCEPTIONAL</h3>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL") }}</h3>
 
                         <p>
-                            Transform Your Vision into Powerful Digital Solutions
+                            {{ \App\Helper::sectionTitle('home', 'cta', 'subtitle') }}
                         </p>
                     </div>
 
@@ -487,17 +499,18 @@
             </div>
         </div>
     </section>
+    <!-- End Call to Action Section -->
 
+    <!-- Start Clients Logos Section -->
     <section class="clients py-5">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>TECHNOLOGIES WE WORK WITH</h3>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'clients_strip', 'title', 'TECHNOLOGIES WE WORK WITH') }}</h3>
 
                         <p>
-                            Building modern, secure, and scalable digital solutions using trusted technologies and
-                            industry-leading platforms.
+                            {{ \App\Helper::sectionTitle('home', 'clients_strip', 'subtitle') }}
                         </p>
                     </div>
                 </div>
@@ -533,8 +546,10 @@
             </div>
         </div>
     </section>
+    <!-- End Clients Logos Section -->
 
 
+    <!-- Start Why Choose Us Section -->
     <section class="why-choose-us features bg-grey py-5" id="why-choose-us">
         <div class="container-fluid py-5">
             <div class="container py-5">
@@ -543,10 +558,9 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title st-center">
-                            <h3>WHY CHOOSE DEOVATE WORLD</h3>
+                            <h3>{{ \App\Helper::sectionTitle('home', 'why_choose_us', 'title', 'WHY CHOOSE DEOVATE WORLD') }}</h3>
                             <p>
-                                Experience, Innovation, and Technology Combined to Deliver Reliable Digital Solutions That
-                                Help Businesses Grow with Confidence.
+                                {{ \App\Helper::sectionTitle('home', 'why_choose_us', 'subtitle') }}
                             </p>
                         </div>
                     </div>
@@ -750,8 +764,10 @@
             </div>
         </div>
     </section>
+    <!-- End Why Choose Us Section -->
 
 
+    <!-- Start Roadmap Section -->
     <section class="roadmap-area section-padding" id="roadmap">
     <div class="container">
         <div class="row">
@@ -759,12 +775,9 @@
                 <div class="heading">
                     <h5>Our Development Process</h5>
                     <div class="space-10"></div>
-                    <h1>From Vision to Digital Success</h1>
+                    <h1>{{ \App\Helper::sectionTitle('home', 'roadmap', 'title', 'From Vision to Digital Success') }}</h1>
                     <p class="mt-3">
-                        At Deovate World, every successful project follows a proven development process.
-                        We combine strategic planning, creative design, modern technologies, and continuous
-                        support to deliver secure, scalable, and high-performing digital solutions that
-                        help businesses grow with confidence.
+                        {{ \App\Helper::sectionTitle('home', 'roadmap', 'subtitle') }}
                     </p>
                 </div>
                 <div class="space-60 d-none d-sm-block"></div>
@@ -879,16 +892,18 @@
         </div>
     </div>
 </section>
+    <!-- End Roadmap Section -->
 
 
 
+    <!-- Start Portfolio Section -->
     <section class="portfolio" id="portfolio">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12 no-padding">
                     <div class="section-title st-center">
-                        <h3>What we have done</h3>
-                        <p>Avocent deditum long</p>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'portfolio', 'title', 'What We Have Done') }}</h3>
+                        <p>{{ \App\Helper::sectionTitle('home', 'portfolio', 'subtitle') }}</p>
                     </div>
                     <div class="filter mb40">
                         <form id="filter">
@@ -910,7 +925,7 @@
                     <!-- .filter .mb40 -->
                     <div class="grid">
                         @foreach ($portfolios as $portfolio)
-                        <figure class="portfolio-item" data-groups='["{{ $portfolio->category->slug }}"]'>
+                        <figure class="portfolio-item" data-groups='["{{ $portfolio->category->slug ?? 'uncategorized' }}"]'>
                             <img src="{{ !empty($portfolio['featured_image']) ? asset('storage/' . $portfolio['featured_image']) : asset('assets/front/img/default-img.png') }}" alt="">
                             <figcaption>
                                 <h2>{{ $portfolio->title }}
@@ -930,7 +945,9 @@
             </div>
         </div>
     </section>
+    <!-- End Portfolio Section -->
 
+<!-- Start Technologies Section -->
 <section class="technologies" id="technologies">
 
     <div class="container-fluid features overflow-hidden py-5">
@@ -939,9 +956,9 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>Technologies We Work With</h3>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'technologies_grid', 'title', 'OUR TECH STACK') }}</h3>
                         <p>
-                            We leverage modern technologies, powerful frameworks, and industry-leading tools to build secure, scalable, and high-performance digital solutions for businesses of every size.
+                            {{ \App\Helper::sectionTitle('home', 'technologies_grid', 'subtitle') }}
                         </p>
                     </div>
                 </div>
@@ -1054,9 +1071,11 @@
     </div>
 
 </section>
+<!-- End Technologies Section -->
 
 
 
+    <!-- Start Industries Section -->
     <section class="industries" id="industries">
 
     <div class="container-fluid training overflow-hidden bg-light py-5">
@@ -1066,12 +1085,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>INDUSTRIES WE SERVE</h3>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'industries', 'title', 'INDUSTRIES WE SERVE') }}</h3>
 
                         <p>
-                            Delivering innovative web development, business software,
-                            and digital transformation solutions tailored to the
-                            unique needs of businesses across diverse industries.
+                            {{ \App\Helper::sectionTitle('home', 'industries', 'subtitle') }}
                         </p>
                     </div>
                 </div>
@@ -1174,19 +1191,20 @@
     </div>
 
 </section>
+    <!-- End Industries Section -->
 
 
+<!-- Start Achievements Funfacts Section -->
 <section class="funfacts" data-stellar-background-ratio="0.4">
     <div class="container">
 
         <div class="row">
             <div class="col-12">
                 <div class="section-title st-center">
-                    <h3>OUR ACHIEVEMENTS</h3>
+                    <h3>{{ \App\Helper::sectionTitle('home', 'achievements_funfacts', 'title', 'OUR IMPACT IN NUMBERS') }}</h3>
 
                     <p>
-                        Delivering innovative digital solutions with a strong focus on quality,
-                        performance, and long-term client success.
+                        {{ \App\Helper::sectionTitle('home', 'achievements_funfacts', 'subtitle') }}
                     </p>
                 </div>
             </div>
@@ -1297,6 +1315,7 @@
 
     </div>
 </section>
+<!-- End Achievements Funfacts Section -->
 
 
     {{-- <section class="funfacts" data-stellar-background-ratio="0.4" style="background-position: 50% 47.58px;">
@@ -1347,6 +1366,7 @@
     </section> --}}
 
 
+    <!-- Start Industries Carousel Section -->
     <section id="team-section">
         <div class="container-fluid training overflow-hidden bg-light py-5">
             <div class="container py-5">
@@ -1354,111 +1374,63 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title st-center">
-                            <h3>Industries</h3>
-                            <p>Avocent deditum long</p>
+                            <h3>{{ \App\Helper::sectionTitle('home', 'industries_carousel', 'title', 'INDUSTRIES WE POWER') }}</h3>
+                            <p>{{ \App\Helper::sectionTitle('home', 'industries_carousel', 'subtitle') }}</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="phones-carousel owl-carousel wow fadeInUp" data-wow-delay="0.1s">
 
-                    <div class="phone-mockup">
-                        <div class="phone-frame">
-                            <div class="phone-notch"></div>
-                            <div class="phone-screen">
-                                <div class="phone-statusbar">
-                                    <span class="phone-brand">Deovate</span>
-                                </div>
-                                <div class="phone-slide">
-                                    <div class="phone-slide-img">
-                                        <img src="{{ asset('assets/front/img/team/1.jpg') }}" alt="Healthcare">
-                                        <div class="phone-slide-overlay">
-                                            <h4>Healthcare</h4>
-                                            <span>Industry</span>
-                                            <p>Healthcare software, HMS, Telemedicine, EMR & Patient Management.</p>
+                    @forelse ($industries as $industry)
+                        <div class="phone-mockup">
+                            <div class="phone-frame">
+                                <div class="phone-notch"></div>
+                                <div class="phone-screen">
+                                    <div class="phone-statusbar">
+                                        <span class="phone-brand">Deovate</span>
+                                    </div>
+                                    <div class="phone-slide">
+                                        <div class="phone-slide-img">
+                                            <img src="{{ \App\Helper::img($industry->image) }}" alt="{{ $industry->name }}">
+                                            <div class="phone-slide-overlay">
+                                                <h4>{{ $industry->name }}</h4>
+                                                <span>Industry</span>
+                                                <p>{{ \Illuminate\Support\Str::limit(strip_tags($industry->description), 90) }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="phone-slide-info">
+                                            <h6>{{ $industry->name }}</h6>
+                                            <a href="{{ route('front.industries.details', $industry->slug) }}" class="phone-slide-btn">View Details</a>
                                         </div>
                                     </div>
-                                    <div class="phone-slide-info">
-                                        <h6>Healthcare</h6>
-                                        <a href="#" class="phone-slide-btn">View Details</a>
-                                    </div>
                                 </div>
+                                <div class="phone-home-indicator"></div>
                             </div>
-                            <div class="phone-home-indicator"></div>
+                            <div class="phone-shadow"></div>
                         </div>
-                        <div class="phone-shadow"></div>
-                    </div>
-
-                    <div class="phone-mockup">
-                        <div class="phone-frame">
-                            <div class="phone-notch"></div>
-                            <div class="phone-screen">
-                                <div class="phone-statusbar">
-                                    <span class="phone-brand">Deovate</span>
-                                </div>
-                                <div class="phone-slide">
-                                    <div class="phone-slide-img">
-                                        <img src="{{ asset('assets/front/img/team/2.jpg') }}" alt="E-Commerce">
-                                        <div class="phone-slide-overlay">
-                                            <h4>E-Commerce</h4>
-                                            <span>Industry</span>
-                                            <p>Custom Ecommerce, Marketplace, Inventory, Payment Gateway.</p>
-                                        </div>
-                                    </div>
-                                    <div class="phone-slide-info">
-                                        <h6>E-Commerce</h6>
-                                        <a href="#" class="phone-slide-btn">View Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="phone-home-indicator"></div>
-                        </div>
-                        <div class="phone-shadow"></div>
-                    </div>
-
-                    <div class="phone-mockup">
-                        <div class="phone-frame">
-                            <div class="phone-notch"></div>
-                            <div class="phone-screen">
-                                <div class="phone-statusbar">
-                                    <span class="phone-brand">Deovate</span>
-                                </div>
-                                <div class="phone-slide">
-                                    <div class="phone-slide-img">
-                                        <img src="{{ asset('assets/front/img/team/3.jpg') }}" alt="Education">
-                                        <div class="phone-slide-overlay">
-                                            <h4>Education</h4>
-                                            <span>Industry</span>
-                                            <p>School ERP, LMS, Online Classes, Student Management System.</p>
-                                        </div>
-                                    </div>
-                                    <div class="phone-slide-info">
-                                        <h6>Education</h6>
-                                        <a href="#" class="phone-slide-btn">View Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="phone-home-indicator"></div>
-                        </div>
-                        <div class="phone-shadow"></div>
-                    </div>
+                    @empty
+                        <p class="text-center text-muted">Industries will be listed here shortly.</p>
+                    @endforelse
 
                 </div>
 
             </div>
         </div>
     </section>
+    <!-- End Industries Carousel Section -->
 
 
+     <!-- Start Call Us Section -->
      <section class="call-us">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="call-us-inner wow fadeInUp" data-wow-delay="0.1s">
-                        <span class="call-us-kicker">Let's Talk</span>
-                        <h3>If You Like To Work With Us</h3>
+                        <span class="call-us-kicker">{{ \App\Helper::sectionTitle('home', 'call_us', 'kicker', "Let's Talk") }}</span>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'call_us', 'title', 'If You Like To Work With Us') }}</h3>
                         <p class="call-us-sub">
-                            Get in touch and let's discuss how we can bring your idea to life.
+                            {{ \App\Helper::sectionTitle('home', 'call_us', 'subtitle') }}
                         </p>
                         <div class="call-us-actions">
                             <a href="tel:{{ config('constants.CONTACT.country_code') }}{{ config('constants.CONTACT.phones.0.number') }}"
@@ -1475,7 +1447,9 @@
             </div>
         </div>
     </section>
+    <!-- End Call Us Section -->
 
+    <!-- Start Industries We Serve Section -->
     <section id="casestudies">
         <div class="container-fluid contact overflow-hidden pb-5">
             <div class="container py-5">
@@ -1484,8 +1458,8 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title st-center">
-                            <h3>Industries We Serve</h3>
-                            <p>Delivering innovative solutions across multiple industries.</p>
+                            <h3>{{ \App\Helper::sectionTitle('home', 'industries_we_serve', 'title', 'SOLUTIONS BY INDUSTRY') }}</h3>
+                            <p>{{ \App\Helper::sectionTitle('home', 'industries_we_serve', 'subtitle') }}</p>
                         </div>
                     </div>
                 </div>
@@ -1551,15 +1525,17 @@
             </div>
         </div>
     </section>
+    <!-- End Industries We Serve Section -->
 
 
+    <!-- Start Newsletter Subscribe Section -->
     <section class="subscribe">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>Industries</h3>
-                        <p>Avocent deditum long</p>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'newsletter', 'title', 'Subscribe to Our Newsletter') }}</h3>
+                        <p>{{ \App\Helper::sectionTitle('home', 'newsletter', 'subtitle') }}</p>
                     </div>
                 </div>
             </div>
@@ -1586,10 +1562,12 @@
             </div>
         </div>
     </section>
+    <!-- End Newsletter Subscribe Section -->
 
     <!--=================================
                 Latest Blog Section
         ==================================-->
+    <!-- Start Latest Blog Section -->
     <section id="blog-section" class="section-padding">
 
         <div class="container">
@@ -1597,136 +1575,56 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>Industries</h3>
-                        <p>Avocent deditum long</p>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'latest_blog', 'title', 'FROM OUR BLOG') }}</h3>
+                        <p>{{ \App\Helper::sectionTitle('home', 'latest_blog', 'subtitle') }}</p>
                     </div>
                 </div>
             </div>
 
             <div class="tablets-carousel owl-carousel wow fadeInUp" data-wow-delay="0.1s">
 
-                <!-- Blog 1 -->
-                <div class="tablet-mockup">
-                    <div class="tablet-frame">
-                        <div class="tablet-cam"></div>
-                        <div class="tablet-screen">
-                            <div class="tablet-statusbar">
-                                <span class="phone-brand">Deovate Blog</span>
-                            </div>
-                            <div class="tablet-slide">
-                                <div class="tablet-slide-img">
-                                    <img src="{{ asset('assets/front/img/blog/1.jpg') }}" alt="Top Web Development Trends in 2026">
+                @forelse ($blogs->take(4) as $blog)
+                    <div class="tablet-mockup">
+                        <div class="tablet-frame">
+                            <div class="tablet-cam"></div>
+                            <div class="tablet-screen">
+                                <div class="tablet-statusbar">
+                                    <span class="phone-brand">Deovate Blog</span>
                                 </div>
-                                <div class="tablet-slide-info">
-                                    <span class="tablet-meta">Admin &nbsp;&bull;&nbsp; 05 July 2026</span>
-                                    <h6><a href="blog-details.html">Top Web Development Trends in 2026</a></h6>
-                                    <p>
-                                        Discover the latest technologies including AI, Laravel,
-                                        React and cloud computing that are transforming modern businesses.
-                                    </p>
-                                    <a href="blog-details.html" class="tablet-slide-btn">Read More</a>
+                                <div class="tablet-slide">
+                                    <div class="tablet-slide-img">
+                                        <img src="{{ \App\Helper::img($blog->featured_image) }}" alt="{{ $blog->title }}">
+                                    </div>
+                                    <div class="tablet-slide-info">
+                                        <span class="tablet-meta">{{ $blog->author->name ?? 'Admin' }} &nbsp;&bull;&nbsp; {{ $blog->created_at->format('d F Y') }}</span>
+                                        <h6><a href="{{ route('front.blog.details', $blog->slug) }}">{{ $blog->title }}</a></h6>
+                                        <p>
+                                            {{ \Illuminate\Support\Str::limit(strip_tags($blog->excerpt), 100) }}
+                                        </p>
+                                        <a href="{{ route('front.blog.details', $blog->slug) }}" class="tablet-slide-btn">Read More</a>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="tablet-home-btn"></div>
                         </div>
-                        <div class="tablet-home-btn"></div>
+                        <div class="tablet-shadow"></div>
                     </div>
-                    <div class="tablet-shadow"></div>
-                </div>
-
-                <!-- Blog 2 -->
-                <div class="tablet-mockup">
-                    <div class="tablet-frame">
-                        <div class="tablet-cam"></div>
-                        <div class="tablet-screen">
-                            <div class="tablet-statusbar">
-                                <span class="phone-brand">Deovate Blog</span>
-                            </div>
-                            <div class="tablet-slide">
-                                <div class="tablet-slide-img">
-                                    <img src="{{ asset('assets/front/img/blog/2.jpg') }}" alt="Laravel vs Node.js — Complete Comparison">
-                                </div>
-                                <div class="tablet-slide-info">
-                                    <span class="tablet-meta">Admin &nbsp;&bull;&nbsp; 02 July 2026</span>
-                                    <h6><a href="blog-details.html">Laravel vs Node.js — Complete Comparison</a></h6>
-                                    <p>
-                                        Which framework is best for your next enterprise project?
-                                        Let's compare Laravel and Node.js in depth.
-                                    </p>
-                                    <a href="blog-details.html" class="tablet-slide-btn">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tablet-home-btn"></div>
-                    </div>
-                    <div class="tablet-shadow"></div>
-                </div>
-
-                <!-- Blog 3 -->
-                <div class="tablet-mockup">
-                    <div class="tablet-frame">
-                        <div class="tablet-cam"></div>
-                        <div class="tablet-screen">
-                            <div class="tablet-statusbar">
-                                <span class="phone-brand">Deovate Blog</span>
-                            </div>
-                            <div class="tablet-slide">
-                                <div class="tablet-slide-img">
-                                    <img src="{{ asset('assets/front/img/blog/3.jpg') }}" alt="Why Every Business Needs a Professional Website">
-                                </div>
-                                <div class="tablet-slide-info">
-                                    <span class="tablet-meta">Admin &nbsp;&bull;&nbsp; 28 June 2026</span>
-                                    <h6><a href="blog-details.html">Why Every Business Needs a Professional Website</a></h6>
-                                    <p>
-                                        Learn how a professional website increases trust,
-                                        sales and online visibility.
-                                    </p>
-                                    <a href="blog-details.html" class="tablet-slide-btn">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tablet-home-btn"></div>
-                    </div>
-                    <div class="tablet-shadow"></div>
-                </div>
-
-                <!-- Blog 4 -->
-                <div class="tablet-mockup">
-                    <div class="tablet-frame">
-                        <div class="tablet-cam"></div>
-                        <div class="tablet-screen">
-                            <div class="tablet-statusbar">
-                                <span class="phone-brand">Deovate Blog</span>
-                            </div>
-                            <div class="tablet-slide">
-                                <div class="tablet-slide-img">
-                                    <img src="{{ asset('assets/front/img/blog/4.jpg') }}" alt="SEO Strategies That Actually Work">
-                                </div>
-                                <div class="tablet-slide-info">
-                                    <span class="tablet-meta">Admin &nbsp;&bull;&nbsp; 25 June 2026</span>
-                                    <h6><a href="blog-details.html">SEO Strategies That Actually Work</a></h6>
-                                    <p>
-                                        Improve your rankings using the latest SEO
-                                        techniques and optimization strategies.
-                                    </p>
-                                    <a href="blog-details.html" class="tablet-slide-btn">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tablet-home-btn"></div>
-                    </div>
-                    <div class="tablet-shadow"></div>
-                </div>
+                @empty
+                    <p class="text-center text-muted">Blog posts will be listed here shortly.</p>
+                @endforelse
 
             </div>
 
         </div>
 
     </section>
+    <!-- End Latest Blog Section -->
 
     <!--========================================
                     Testimonials
         =========================================-->
 
+    <!-- Start Testimonials Section -->
     <section class="testimonials">
 
         <div class="container">
@@ -1734,8 +1632,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>Industries</h3>
-                        <p>Avocent deditum long</p>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'testimonials', 'title', 'WHAT OUR CLIENTS SAY') }}</h3>
+                        <p>{{ \App\Helper::sectionTitle('home', 'testimonials', 'subtitle') }}</p>
                     </div>
                 </div>
             </div>
@@ -1752,59 +1650,24 @@
                         <div class="laptop-shine"></div>
                         <div class="testimonials-carousel owl-carousel owl-theme">
 
-                            <!-- Testimonial 1 -->
-                            <div class="testimonial">
-                                <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.png') }}" alt="John Anderson">
+                            @forelse ($testimonials as $testimonial)
+                                <div class="testimonial">
+                                    <div class="testimonial-img">
+                                        <img src="{{ \App\Helper::img($testimonial->photo) }}" alt="{{ $testimonial->name }}">
+                                    </div>
+                                    <blockquote>
+                                        <p>
+                                            {{ $testimonial->message }}
+                                        </p>
+                                        <footer>
+                                            <strong>{{ $testimonial->name }}</strong><br>
+                                            <cite>{{ $testimonial->designation }}{{ $testimonial->company ? ', ' . $testimonial->company : '' }}</cite>
+                                        </footer>
+                                    </blockquote>
                                 </div>
-                                <blockquote>
-                                    <p>
-                                        Their team delivered our website ahead of schedule with
-                                        exceptional quality. Communication was excellent and
-                                        the final product exceeded our expectations.
-                                    </p>
-                                    <footer>
-                                        <strong>John Anderson</strong><br>
-                                        <cite>CEO, Tech Solutions</cite>
-                                    </footer>
-                                </blockquote>
-                            </div>
-
-                            <!-- Testimonial 2 -->
-                            <div class="testimonial">
-                                <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/1.png') }}" alt="Sarah Williams">
-                                </div>
-                                <blockquote>
-                                    <p>
-                                        Professional developers with deep technical knowledge.
-                                        They successfully developed our ERP system and continue
-                                        to provide outstanding support.
-                                    </p>
-                                    <footer>
-                                        <strong>Sarah Williams</strong><br>
-                                        <cite>Operations Manager</cite>
-                                    </footer>
-                                </blockquote>
-                            </div>
-
-                            <!-- Testimonial 3 -->
-                            <div class="testimonial">
-                                <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.png') }}" alt="Michael Brown">
-                                </div>
-                                <blockquote>
-                                    <p>
-                                        We highly recommend them for custom software development.
-                                        Our online sales increased significantly after launching
-                                        the new platform.
-                                    </p>
-                                    <footer>
-                                        <strong>Michael Brown</strong><br>
-                                        <cite>Founder, Ecommerce Hub</cite>
-                                    </footer>
-                                </blockquote>
-                            </div>
+                            @empty
+                                <p class="text-center text-muted">Client testimonials will be shown here shortly.</p>
+                            @endforelse
 
                         </div>
                     </div>
@@ -1818,20 +1681,22 @@
         </div>
 
     </section>
+    <!-- End Testimonials Section -->
 
 
     <!--========================================
                         FAQ SECTION
         =========================================-->
 
+    <!-- Start FAQ and Contact Section -->
     <section id="faq-section" class="faq-section">
         <div class="container">
 
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>Industries</h3>
-                        <p>Avocent deditum long</p>
+                        <h3>{{ \App\Helper::sectionTitle('home', 'faq', 'title', 'Frequently Asked Questions') }}</h3>
+                        <p>{{ \App\Helper::sectionTitle('home', 'faq', 'subtitle') }}</p>
                     </div>
                 </div>
             </div>
@@ -1855,107 +1720,40 @@
 
                                 <div class="faq-wrapper app-faq-list">
 
-                                    <div class="faq-item active">
-                                        <div class="faq-title">
-                                            <h5>What services does your company provide?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-minus"></i>
-                                            </span>
-                                        </div>
+                                    @forelse ($category->faqs ?? [] as $faq)
+                                        <div class="faq-item @if ($loop->first) active @endif">
+                                            <div class="faq-title">
+                                                <h5>{{ $faq->question }}</h5>
+                                                <span class="faq-icon">
+                                                    <i class="fa fa-{{ $loop->first ? 'minus' : 'plus' }}"></i>
+                                                </span>
+                                            </div>
 
-                                        <div class="faq-content" style="display:block;">
-                                            <p>
-                                                We provide website development, custom software development,
-                                                eCommerce solutions, mobile applications, UI/UX design,
-                                                cloud solutions, API integration, ERP/CRM systems, and
-                                                ongoing maintenance & support.
-                                            </p>
+                                            <div class="faq-content" @if ($loop->first) style="display:block;" @endif>
+                                                <p>
+                                                    {{ $faq->answer }}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @empty
+                                        <div class="faq-item active">
+                                            <div class="faq-title">
+                                                <h5>What services does your company provide?</h5>
+                                                <span class="faq-icon">
+                                                    <i class="fa fa-minus"></i>
+                                                </span>
+                                            </div>
 
-                                    <div class="faq-item">
-                                        <div class="faq-title">
-                                            <h5>How long does a website or software project take?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
+                                            <div class="faq-content" style="display:block;">
+                                                <p>
+                                                    We provide website development, custom software development,
+                                                    eCommerce solutions, mobile applications, UI/UX design,
+                                                    cloud solutions, API integration, ERP/CRM systems, and
+                                                    ongoing maintenance & support.
+                                                </p>
+                                            </div>
                                         </div>
-
-                                        <div class="faq-content">
-                                            <p>
-                                                Project timelines depend on complexity. A business website
-                                                generally takes 2–4 weeks, while custom software or enterprise
-                                                applications may take several weeks to a few months.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="faq-item">
-                                        <div class="faq-title">
-                                            <h5>Do you provide website redesign services?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                        </div>
-
-                                        <div class="faq-content">
-                                            <p>
-                                                Yes. We redesign outdated websites with a modern UI,
-                                                better performance, improved SEO, enhanced security,
-                                                and a fully responsive design.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="faq-item">
-                                        <div class="faq-title">
-                                            <h5>Which technologies do you specialize in?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                        </div>
-
-                                        <div class="faq-content">
-                                            <p>
-                                                We work with Laravel, PHP, React, Node.js, Java, Spring Boot,
-                                                MySQL, PostgreSQL, WordPress, Shopify, REST APIs,
-                                                AWS, Azure and modern frontend technologies.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="faq-item">
-                                        <div class="faq-title">
-                                            <h5>Will my website be mobile-friendly?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                        </div>
-
-                                        <div class="faq-content">
-                                            <p>
-                                                Absolutely. Every website we build is fully responsive
-                                                and optimized for desktops, tablets and smartphones.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="faq-item">
-                                        <div class="faq-title">
-                                            <h5>Do you provide maintenance after project delivery?</h5>
-                                            <span class="faq-icon">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                        </div>
-
-                                        <div class="faq-content">
-                                            <p>
-                                                Yes. We provide maintenance, security updates,
-                                                bug fixes, performance optimization and technical
-                                                support after deployment.
-                                            </p>
-                                        </div>
-                                    </div>
+                                    @endforelse
 
                                 </div>
                             </div>
@@ -2028,4 +1826,5 @@
 
         </div>
     </section>
+    <!-- End FAQ and Contact Section -->
 @endsection

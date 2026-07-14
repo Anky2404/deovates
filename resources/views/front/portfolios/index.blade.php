@@ -1,8 +1,11 @@
 ﻿@extends('front.layouts.app')
 
-@section('title', 'Our Portfolio')
+@section('title', config('constants.PAGE_SEO.portfolios.title'))
+@section('meta_description', config('constants.PAGE_SEO.portfolios.meta_description'))
+@section('meta_keywords', config('constants.PAGE_SEO.portfolios.meta_keywords'))
 @section('content')
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -24,12 +27,14 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Work We're Proud Of Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>Work We're Proud Of</h3>
-                <p>A showcase of digital products, websites, and platforms we've designed and built for our clients.</p>
+                <h3>{{ \App\Helper::sectionTitle('portfolios', 'listing', 'title', "Work We're Proud Of") }}</h3>
+                <p>{{ \App\Helper::sectionTitle('portfolios', 'listing', 'subtitle') }}</p>
             </div>
 
             @if ($categories->isNotEmpty())
@@ -71,5 +76,6 @@
             @endif
         </div>
     </section>
+    <!-- End Work We're Proud Of Section -->
 
 @endsection

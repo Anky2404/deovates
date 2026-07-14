@@ -1,3 +1,4 @@
+<!-- Start Header Section -->
 <header>
     <div class="header-area header-transparent">
         <div class="main-header">
@@ -14,10 +15,6 @@
                                 <li>
                                     {{ config('constants.CONTACT.emails.0.address') }}
                                 </li>
-                                {{-- <li>
-                                    Mon - Sat {{ config('constants.BUSINESS.timings_weekdays') }},
-                                    Sunday - {{ config('constants.BUSINESS.timings_weekend') }}
-                                </li> --}}
                             </ul>
                         </div>
 
@@ -96,3 +93,4 @@
         </div>
     </div>
 </header>
+<!-- End Header Section -->

@@ -11,6 +11,7 @@
                 : asset('assets/front/img/default-img.png');
     @endphp
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -33,7 +34,9 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Blog Content Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="row g-5">
@@ -125,7 +128,9 @@
             @endif
         </div>
     </section>
+    <!-- End Blog Content Section -->
 
+    <!-- Start Development Process Section -->
     <section class="roadmap-area section-padding" id="roadmap">
         <div class="container">
             <div class="row">
@@ -253,7 +258,9 @@
             </div>
         </div>
     </section>
+    <!-- End Development Process Section -->
 
+    <!-- Start Testimonials Section -->
     <!-- Testimonials -->
     <section class="testimonials">
 
@@ -348,9 +355,11 @@
         </div>
 
     </section>
+    <!-- End Testimonials Section -->
 
 
 
+    <!-- Start CTA Section -->
     <!-- CTA -->
     <section class="call-2-acction" data-stellar-background-ratio="0.4">
         <div class="container">
@@ -384,7 +393,9 @@
             </div>
         </div>
     </section>
+    <!-- End CTA Section -->
 
+    <!-- Start FAQ Section -->
     <section id="faq-section" class="faq-section">
         <div class="container">
 
@@ -592,6 +603,7 @@
 
         </div>
     </section>
+    <!-- End FAQ Section -->
 
 
 @endsection

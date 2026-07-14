@@ -1,8 +1,11 @@
 ﻿@extends('front.layouts.app')
 
-@section('title', 'Hire Our Team')
+@section('title', config('constants.PAGE_SEO.hireme.title'))
+@section('meta_description', config('constants.PAGE_SEO.hireme.meta_description'))
+@section('meta_keywords', config('constants.PAGE_SEO.hireme.meta_keywords'))
 @section('content')
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -24,13 +27,14 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Engagement Models Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>Engagement Models Built Around You</h3>
-                <p>Whether you need a dedicated team, a fixed-scope project, or flexible hourly support, we adapt to
-                    how you like to work.</p>
+                <h3>{{ \App\Helper::sectionTitle('hireme', 'engagement_models', 'title', 'Engagement Models Built Around You') }}</h3>
+                <p>{{ \App\Helper::sectionTitle('hireme', 'engagement_models', 'subtitle') }}</p>
             </div>
 
             <div class="row g-4">
@@ -55,12 +59,14 @@
             </div>
         </div>
     </section>
+    <!-- End Engagement Models Section -->
 
+    <!-- Start How It Works Section -->
     <section class="py-5" style="background:#f5f8fd;">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>How It Works</h3>
-                <p>A simple, transparent process from first conversation to kickoff.</p>
+                <h3>{{ \App\Helper::sectionTitle('hireme', 'how_it_works', 'title', 'How It Works') }}</h3>
+                <p>{{ \App\Helper::sectionTitle('hireme', 'how_it_works', 'subtitle') }}</p>
             </div>
             <div class="row g-4">
                 @php
@@ -83,7 +89,9 @@
             </div>
         </div>
     </section>
+    <!-- End How It Works Section -->
 
+    <!-- Start CTA Section -->
     <!-- CTA -->
     <section class="call-us" style="background-image:url('{{ asset('assets/front/img/funfact.png') }}');">
         <div class="container">
@@ -97,5 +105,6 @@
             </div>
         </div>
     </section>
+    <!-- End CTA Section -->
 
 @endsection

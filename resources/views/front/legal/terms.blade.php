@@ -1,8 +1,11 @@
 ﻿@extends('front.layouts.app')
 
-@section('title', 'Terms & Conditions')
+@section('title', config('constants.PAGE_SEO.legal_terms.title'))
+@section('meta_description', config('constants.PAGE_SEO.legal_terms.meta_description'))
+@section('meta_keywords', config('constants.PAGE_SEO.legal_terms.meta_keywords'))
 @section('content')
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -24,7 +27,9 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Terms & Conditions Content Section -->
     @php
         $sections = [
             ['id' => 'use', 'icon' => 'fas fa-globe', 'title' => 'Use of Our Website', 'body' => 'You agree to use our website only for lawful purposes and in a way that does not infringe the rights of, or restrict or inhibit the use of, this website by any third party.'],
@@ -55,7 +60,7 @@
                     <div class="legal-help-card wow fadeInLeft" data-wow-delay="0.2s">
                         <i class="fas fa-question-circle"></i>
                         <h6>Have Questions?</h6>
-                        <p>We're happy to walk you through any part of these terms.</p>
+                        <p>{{ \App\Helper::sectionTitle('legal_terms', 'intro', 'subtitle', "We're happy to walk you through any part of these terms.") }}</p>
                         <a href="{{ route('front.contact.index') }}" class="btn btn-main w-100">Contact Us</a>
                     </div>
                 </div>
@@ -87,5 +92,6 @@
             </div>
         </div>
     </section>
+    <!-- End Terms & Conditions Content Section -->
 
 @endsection

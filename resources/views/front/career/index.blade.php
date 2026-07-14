@@ -1,8 +1,11 @@
 ﻿@extends('front.layouts.app')
 
-@section('title', 'Careers')
+@section('title', config('constants.PAGE_SEO.career.title'))
+@section('meta_description', config('constants.PAGE_SEO.career.meta_description'))
+@section('meta_keywords', config('constants.PAGE_SEO.career.meta_keywords'))
 @section('content')
 
+    <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
@@ -24,13 +27,14 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Join Our Team Section -->
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>Join Our Team</h3>
-                <p>We're always looking for talented people who care about quality, ownership, and building things
-                    that matter.</p>
+                <h3>{{ \App\Helper::sectionTitle('career', 'listing', 'title', 'Join Our Team') }}</h3>
+                <p>{{ \App\Helper::sectionTitle('career', 'listing', 'subtitle') }}</p>
             </div>
 
             @if ($careers->isEmpty())
@@ -77,7 +81,9 @@
             @endif
         </div>
     </section>
+    <!-- End Join Our Team Section -->
 
+    <!-- Start Career Details Modals Section -->
     <!-- Full job details + apply popup (one per real career listing) -->
     @foreach ($careers as $career)
         @if (!empty($career->slug))
@@ -204,13 +210,15 @@
             </div>
         @endif
     @endforeach
+    <!-- End Career Details Modals Section -->
 
+    <!-- Start General Application Section -->
     <!-- General application section -->
     <section class="py-5" style="background:#f5f8fd;">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>Don't See Your Role?</h3>
-                <p>Send us your application anyway — we're always happy to hear from great people.</p>
+                <h3>{{ \App\Helper::sectionTitle('career', 'general_application', 'title', "Don't See Your Role?") }}</h3>
+                <p>{{ \App\Helper::sectionTitle('career', 'general_application', 'subtitle') }}</p>
             </div>
 
             <!-- Desktop: application form inside a browser/computer frame -->
@@ -252,5 +260,6 @@
             </div>
         </div>
     </section>
+    <!-- End General Application Section -->
 
 @endsection

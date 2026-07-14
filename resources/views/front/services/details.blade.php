@@ -5,6 +5,7 @@
 @section('content')
 
     <!-- Hero -->
+    <!-- Start Hero Section -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
             data-background="{{ \App\Helper::img($service->banner_image, 'assets/front/img/hero/h2_hero.png') }}">
@@ -27,7 +28,9 @@
             </div>
         </div>
     </div>
+    <!-- End Hero Section -->
 
+    <!-- Start Service Details Section -->
     <section class="services container-fluid service overflow-hidden py-5">
         <div class="container pt-5 pb-3">
             <div class="row g-5 align-items-start">
@@ -136,7 +139,9 @@
             </div>
         </div>
     </section>
+    <!-- End Service Details Section -->
 
+    <!-- Start Services Included Section -->
     <section class="services_included container-fluid service overflow-hidden py-5 bg-grey">
         @if ($children->isNotEmpty())
                 <div class="section-title st-center mt-5">
@@ -182,7 +187,9 @@
                 </div>
             @endif
     </section>
+    <!-- End Services Included Section -->
 
+    <!-- Start Problem & Solution Section -->
     <section class="problem-solution-area container-fluid service overflow-hidden py-5">
         <div class="container py-3">
             <div class="section-title st-center">
@@ -263,7 +270,9 @@
             </div>
         </div>
     </section>
+    <!-- End Problem & Solution Section -->
 
+    <!-- Start Roadmap Section -->
          <section class="roadmap-area section-padding" id="roadmap">
     <div class="container">
         <div class="row">
@@ -391,8 +400,10 @@
         </div>
     </div>
 </section>
+    <!-- End Roadmap Section -->
 
  <!-- Testimonials -->
+    <!-- Start Testimonials Section -->
     <section class="testimonials">
 
         <div class="container">
@@ -486,10 +497,12 @@
         </div>
 
     </section>
+    <!-- End Testimonials Section -->
 
 
 
     <!-- CTA -->
+    <!-- Start CTA Section -->
     <section class="call-2-acction" data-stellar-background-ratio="0.4">
         <div class="container">
             <div class="row">
@@ -522,7 +535,9 @@
             </div>
         </div>
     </section>
+    <!-- End CTA Section -->
 
+    <!-- Start FAQ & Contact Section -->
     <section id="faq-section" class="faq-section">
         <div class="container">
 
@@ -730,5 +745,6 @@
 
         </div>
     </section>
+    <!-- End FAQ & Contact Section -->
 
 @endsection
