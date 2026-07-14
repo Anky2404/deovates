@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Deovate | Partners')
+@section('title', config('constants.BUSINESS.name') . ' | Partners')
 
 @section('content')
 

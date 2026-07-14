@@ -45,11 +45,11 @@
                             <div class="tablet-cam"></div>
                             <div class="tablet-screen app-tablet-screen">
                                 <div class="tablet-statusbar">
-                                    <span class="phone-brand">Deovate</span>
+                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                 </div>
                                 <div class="app-screen-header">
                                     <h4>Contact Form</h4>
-                                    <p>www.deovateworld.com/contact</p>
+                                    <p>{{ config('constants.BRAND_NAME') }}/contact</p>
                                 </div>
                                 @include('front.contact._form-fields', ['prefix' => 'mc'])
                             </div>
@@ -63,11 +63,11 @@
                             <div class="phone-notch"></div>
                             <div class="phone-screen">
                                 <div class="phone-statusbar">
-                                    <span class="phone-brand">Deovate</span>
+                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                 </div>
                                 <div class="app-screen-header">
                                     <h4>Contact Form</h4>
-                                    <p>www.deovateworld.com/contact</p>
+                                    <p>{{ config('constants.BRAND_NAME') }}/contact</p>
                                 </div>
                                 @include('front.contact._form-fields', ['prefix' => 'mcm'])
                             </div>
@@ -88,7 +88,7 @@
                             <div class="phone-notch"></div>
                             <div class="phone-screen">
                                 <div class="phone-statusbar">
-                                    <span class="phone-brand">Deovate</span>
+                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                 </div>
                                 <div class="contact-info-app">
                                     <ul class="list-unstyled mb-3">
@@ -175,7 +175,7 @@
                             <span class="dot dot-red"></span>
                             <span class="dot dot-yellow"></span>
                             <span class="dot dot-green"></span>
-                            <span class="laptop-url">maps.deovate.world/office-location</span>
+                            <span class="laptop-url">maps.{{ config('constants.BRAND_NAME') }}/office-location</span>
                         </div>
                         <div class="laptop-screen-glass">
                             <div class="laptop-shine"></div>
@@ -196,7 +196,7 @@
                         <div class="phone-notch"></div>
                         <div class="phone-screen">
                             <div class="phone-statusbar">
-                                <span class="phone-brand">Deovate Maps</span>
+                                <span class="phone-brand">{{ config('constants.BRAND_NAME') }} Maps</span>
                             </div>
                             <iframe src="{{ $data['map_section']['iframe_url'] }}" width="100%" height="420"
                                 style="border:0; display:block;" allowfullscreen loading="lazy"

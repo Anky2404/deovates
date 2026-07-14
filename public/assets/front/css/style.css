@@ -11699,7 +11699,7 @@ ul.styled-list.list-star li:before {
 /* ----------------------------------------------------------------
    Industries card, take 3 — was a static 3-up float:left grid.
    Rebuilt as a touch-style mobile phone mockup (bezel, camera
-   notch, "Deovate" status bar, home indicator) with a fading
+   notch, "{{ config('constants.BRAND_NAME') }}" status bar, home indicator) with a fading
    owl-carousel slider inside the screen: photo on top, a real
    button below it, and the existing name/designation/description
    overlay revealed on hover — same content, new device frame.
@@ -13140,7 +13140,7 @@ h6 {
 }
 
 /* Pricing page — each plan shown inside its own phone mockup
-   ("Deovate" status bar), the highlighted plan gets a ribbon and
+   ("{{ config('constants.BRAND_NAME') }}" status bar), the highlighted plan gets a ribbon and
    a slightly elevated/scaled frame instead of the old plain
    scale(1.03) card. */
 .pricing-phone {

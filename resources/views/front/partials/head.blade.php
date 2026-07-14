@@ -2,9 +2,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>@yield('title', 'Deovate World: Web Design, Website Development, SEO, Digital Marketing & Branding Agency')</title>
-<meta name="title" content="@yield('title', 'Deovate World: Web Design, Website Development, SEO, Digital Marketing & Branding Agency')">
-<meta name="description" content="@yield('meta_description', 'Deovate World designs and builds websites, runs SEO campaigns, and manages digital marketing for growing businesses. See how our web design, development, and branding work helps clients get found online and win more customers.')">
+<title>@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO, Digital Marketing & Branding Agency')</title>
+<meta name="title" content="@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO, Digital Marketing & Branding Agency')">
+<meta name="description" content="@yield('meta_description', config('constants.BUSINESS.name') . ' designs and builds websites, runs SEO campaigns, and manages digital marketing for growing businesses. See how our web design, development, and branding work helps clients get found online and win more customers.')">
 <meta name="keywords" content="@yield('meta_keywords', 'web design agency, website development, SEO services, digital marketing agency, branding agency, custom software development, mobile app development, ecommerce website development')">
 <meta name="author" content="{{ config('constants.BUSINESS.name') }}">
 <meta name="robots" content="index, follow">
@@ -19,16 +19,16 @@
 <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="@yield('title', 'Deovate World: Web Design, Website Development, SEO & Digital Marketing Agency')">
-<meta property="og:description" content="@yield('meta_description', 'Deovate World designs and builds websites, runs SEO campaigns, and manages digital marketing for growing businesses.')">
+<meta property="og:title" content="@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO & Digital Marketing Agency')">
+<meta property="og:description" content="@yield('meta_description', config('constants.BUSINESS.name') . ' designs and builds websites, runs SEO campaigns, and manages digital marketing for growing businesses.')">
 <meta property="og:image" content="@yield('og_image', asset('assets/front/img/og-image.jpg'))">
 <meta property="og:url" content="{{ url()->current() }}">
 <meta property="og:site_name" content="{{ config('constants.BUSINESS.name') }}">
 <meta property="og:locale" content="en_US">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="@yield('title', 'Deovate World')">
-<meta name="twitter:description" content="@yield('meta_description', 'Web design, website development, SEO, and digital marketing services from Deovate World.')">
+<meta name="twitter:title" content="@yield('title', config('constants.BUSINESS.name'))">
+<meta name="twitter:description" content="@yield('meta_description', 'Web design, website development, SEO, and digital marketing services from ' . config('constants.BUSINESS.name') . '.')">
 <meta name="twitter:image" content="@yield('og_image', asset('assets/front/img/og-image.jpg'))">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">

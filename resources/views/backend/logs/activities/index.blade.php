@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Deovate World | Activity Logs')
+@section('title', config('constants.BUSINESS.name') . ' | Activity Logs')
 
 @section('content')
     <div class="card">

@@ -1,5 +1,5 @@
 @extends('backend.layouts.app')
-@section('title', 'Deovate World | Dashboard')
+@section('title', config('constants.BUSINESS.name') . ' | Dashboard')
 
 @section('content')
 

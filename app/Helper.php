@@ -114,7 +114,7 @@ class Helper
 
     /**
      * Resolve a per-page hero banner from public/assets/front/img/banners/.
-     * Lets pages reference a not-yet-provided photo (e.g. a real Deovate
+     * Lets pages reference a not-yet-provided photo (e.g. a real {{ config('constants.BRAND_NAME') }}
      * office shot the client is generating separately) and fall back to
      * an existing placeholder until that file actually shows up.
      */

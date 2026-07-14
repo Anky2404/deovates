@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Deovate | Active Sessions')
+@section('title', config('constants.BUSINESS.name') . ' | Active Sessions')
 
 @section('content')
 <div class="card">

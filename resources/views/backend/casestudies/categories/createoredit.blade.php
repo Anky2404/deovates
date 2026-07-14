@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', isset($category) ? 'Deovate | Edit Case Study Category' : 'Deovate | Create Case Study Category')
+@section('title', isset($category) ? config('constants.BUSINESS.name') . ' | Edit Case Study Category' : config('constants.BUSINESS.name') . ' | Create Case Study Category')
 
 @section('content')
 

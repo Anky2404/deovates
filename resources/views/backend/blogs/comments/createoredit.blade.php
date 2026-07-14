@@ -1,8 +1,8 @@
 @extends('backend.layouts.app')
 
 @section('title', isset($comment)
-? 'Deovate | Edit Comment'
-: 'Deovate | Create Comment')
+? config('constants.BUSINESS.name') . ' | Edit Comment'
+: config('constants.BUSINESS.name') . ' | Create Comment')
 
 @section('content')
 

@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="col-lg-8">
-                    <p class="legal-intro wow fadeInUp" data-wow-delay="0.1s">Deovate World ("we", "us", "our")
+                    <p class="legal-intro wow fadeInUp" data-wow-delay="0.1s">{{ config('constants.BUSINESS.name') }} ("we", "us", "our")
                         respects your privacy and is committed to protecting the personal information you share
                         with us. This policy explains what information we collect, how we use it, and the choices
                         you have.</p>

@@ -150,7 +150,7 @@
                         <span class="dot dot-red"></span>
                         <span class="dot dot-yellow"></span>
                         <span class="dot dot-green"></span>
-                        <span class="laptop-url">deovate.world/process</span>
+                        <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/process</span>
                     </div>
                     <div class="laptop-screen-glass">
                         <div class="laptop-shine"></div>
@@ -235,7 +235,7 @@
                             <span class="dot dot-red"></span>
                             <span class="dot dot-yellow"></span>
                             <span class="dot dot-green"></span>
-                            <span class="laptop-url">deovate.world/reviews</span>
+                            <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/reviews</span>
                         </div>
                         <div class="laptop-screen-glass testi-glass">
                             <div class="laptop-shine"></div>
@@ -289,7 +289,7 @@
 
                         <p>
                             Whether you're launching a startup, modernizing your business, or scaling your digital presence,
-                            Deovate World delivers custom websites, business software, eCommerce platforms, and innovative
+                            {{ config('constants.BUSINESS.name') }} delivers custom websites, business software, eCommerce platforms, and innovative
                             technology solutions tailored to your goals. Partner with our experienced team to build secure,
                             scalable, and high-performing digital products that create lasting business value.
                         </p>
@@ -329,7 +329,7 @@
                             <div class="tablet-cam"></div>
                             <div class="tablet-screen app-tablet-screen">
                                 <div class="tablet-statusbar">
-                                    <span class="phone-brand">Deovate</span>
+                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                 </div>
 
                                 <div class="app-screen-header">
@@ -368,7 +368,7 @@
                             <div class="tablet-cam"></div>
                             <div class="tablet-screen app-tablet-screen">
                                 <div class="tablet-statusbar">
-                                    <span class="phone-brand">Deovate</span>
+                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                 </div>
 
                                 <div class="app-screen-header">

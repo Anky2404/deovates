@@ -5,7 +5,7 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>@yield('title', 'Deovate World | Dashboard')</title>
+    <title>@yield('title', config('constants.BUSINESS.name') . ' | Dashboard')</title>
     <meta name="description" content="" />
 
 

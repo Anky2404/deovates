@@ -64,7 +64,7 @@
             <div class="row g-5 align-items-center">
                 <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
                     <div class="position-relative" style="max-width:470px;">
-                        <img src="{{ asset('assets/front/img/about.png') }}" class="about-img" alt="Inside Deovate World">
+                        <img src="{{ asset('assets/front/img/about.png') }}" class="about-img" alt="Inside {{ config('constants.BUSINESS.name') }}">
 
                         @php($stat = $data['growth_numbers']['items'][0] ?? null)
                         @if ($stat)
@@ -192,7 +192,7 @@
                     <div class="space-10"></div>
                     <h1>From Vision to Digital Success</h1>
                     <p class="mt-3">
-                        At Deovate World, every successful project follows a proven development process.
+                        At {{ config('constants.BUSINESS.name') }}, every successful project follows a proven development process.
                         We combine strategic planning, creative design, modern technologies, and continuous
                         support to deliver secure, scalable, and high-performing digital solutions that
                         help businesses grow with confidence.
@@ -249,7 +249,7 @@
                     <span class="dot dot-red"></span>
                     <span class="dot dot-yellow"></span>
                     <span class="dot dot-green"></span>
-                    <span class="laptop-url">deovate.world/process</span>
+                    <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/process</span>
                 </div>
                 <div class="laptop-screen-glass">
                     <div class="laptop-shine"></div>
@@ -327,7 +327,7 @@
                             <div class="phone-notch"></div>
                             <div class="phone-screen">
                                 <div class="phone-statusbar">
-                                    <span class="phone-brand">Deovate</span>
+                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                 </div>
                                 <div class="founder-phone-photo">
                                     <img src="{{ asset('assets/front/img/team-1.jpg') }}"
@@ -358,7 +358,7 @@
                             <div class="tablet-cam"></div>
                             <div class="tablet-screen app-tablet-screen">
                                 <div class="tablet-statusbar">
-                                    <span class="phone-brand">Deovate</span>
+                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                 </div>
 
                                 <div class="app-screen-header">
@@ -405,10 +405,10 @@
                 <div class="col-lg-5 wow fadeInLeft" data-wow-delay="0.1s">
                     <div class="office-culture-slide-frame mx-auto">
                         <div class="office-culture-slider owl-carousel">
-                            <div><img src="{{ asset('assets/front/img/why-2.png') }}" alt="Deovate team culture"></div>
-                            <div><img src="{{ asset('assets/front/img/why-4.png') }}" alt="Deovate office"></div>
-                            <div><img src="{{ asset('assets/front/img/why-3.png') }}" alt="Deovate at work"></div>
-                            <div><img src="{{ asset('assets/front/img/why-1.png') }}" alt="Deovate strategy"></div>
+                            <div><img src="{{ asset('assets/front/img/why-2.png') }}" alt="{{ config('constants.BRAND_NAME') }} team culture"></div>
+                            <div><img src="{{ asset('assets/front/img/why-4.png') }}" alt="{{ config('constants.BRAND_NAME') }} office"></div>
+                            <div><img src="{{ asset('assets/front/img/why-3.png') }}" alt="{{ config('constants.BRAND_NAME') }} at work"></div>
+                            <div><img src="{{ asset('assets/front/img/why-1.png') }}" alt="{{ config('constants.BRAND_NAME') }} strategy"></div>
                         </div>
                     </div>
                 </div>
@@ -499,7 +499,7 @@
                             <span class="dot dot-red"></span>
                             <span class="dot dot-yellow"></span>
                             <span class="dot dot-green"></span>
-                            <span class="laptop-url">deovate.world/reviews</span>
+                            <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/reviews</span>
                         </div>
                         <div class="laptop-screen-glass testi-glass">
                             <div class="laptop-shine"></div>
@@ -552,7 +552,7 @@
 
                         <p>
                             Whether you're launching a startup, modernizing your business, or scaling your digital presence,
-                            Deovate World delivers custom websites, business software, eCommerce platforms, and innovative
+                            {{ config('constants.BUSINESS.name') }} delivers custom websites, business software, eCommerce platforms, and innovative
                             technology solutions tailored to your goals. Partner with our experienced team to build secure,
                             scalable, and high-performing digital products that create lasting business value.
                         </p>
@@ -592,7 +592,7 @@
                             <div class="tablet-cam"></div>
                             <div class="tablet-screen app-tablet-screen">
                                 <div class="tablet-statusbar">
-                                    <span class="phone-brand">Deovate</span>
+                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                 </div>
 
                                 <div class="app-screen-header">
@@ -631,7 +631,7 @@
                             <div class="tablet-cam"></div>
                             <div class="tablet-screen app-tablet-screen">
                                 <div class="tablet-statusbar">
-                                    <span class="phone-brand">Deovate</span>
+                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                 </div>
 
                                 <div class="app-screen-header">

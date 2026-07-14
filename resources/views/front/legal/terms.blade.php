@@ -34,8 +34,8 @@
         $sections = [
             ['id' => 'use', 'icon' => 'fas fa-globe', 'title' => 'Use of Our Website', 'body' => 'You agree to use our website only for lawful purposes and in a way that does not infringe the rights of, or restrict or inhibit the use of, this website by any third party.'],
             ['id' => 'services', 'icon' => 'fas fa-briefcase', 'title' => 'Services & Engagements', 'body' => 'Specific scope, pricing, timelines, and deliverables for any project will be agreed separately in a proposal or contract before work begins.'],
-            ['id' => 'ip', 'icon' => 'fas fa-copyright', 'title' => 'Intellectual Property', 'body' => 'Unless otherwise agreed in writing, all content on this website — including text, graphics, logos, and images — is the property of Deovate World and may not be used without permission.'],
-            ['id' => 'liability', 'icon' => 'fas fa-shield-alt', 'title' => 'Limitation of Liability', 'body' => 'Deovate World will not be liable for any indirect, incidental, or consequential damages arising from the use of our website or services.'],
+            ['id' => 'ip', 'icon' => 'fas fa-copyright', 'title' => 'Intellectual Property', 'body' => 'Unless otherwise agreed in writing, all content on this website — including text, graphics, logos, and images — is the property of ' . config('constants.BUSINESS.name') . ' and may not be used without permission.'],
+            ['id' => 'liability', 'icon' => 'fas fa-shield-alt', 'title' => 'Limitation of Liability', 'body' => config('constants.BUSINESS.name') . ' will not be liable for any indirect, incidental, or consequential damages arising from the use of our website or services.'],
             ['id' => 'changes', 'icon' => 'fas fa-sync-alt', 'title' => 'Changes to These Terms', 'body' => 'We may update these terms from time to time. Continued use of our website after changes constitutes acceptance of the updated terms.'],
         ];
     @endphp
@@ -67,7 +67,7 @@
 
                 <div class="col-lg-8">
                     <p class="legal-intro wow fadeInUp" data-wow-delay="0.1s">These Terms &amp; Conditions govern
-                        your use of the Deovate World website and services. By using our website or engaging our
+                        your use of the {{ config('constants.BUSINESS.name') }} website and services. By using our website or engaging our
                         services, you agree to these terms.</p>
 
                     @foreach ($sections as $section)

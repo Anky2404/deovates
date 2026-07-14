@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Deovate World | Site Settings')
+@section('title', config('constants.BUSINESS.name') . ' | Site Settings')
 
 @section('content')
 

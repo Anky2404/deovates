@@ -3,6 +3,7 @@ return [
     'ADMIN_PAGE_RECORDS' => 20,
     'FRONT_PAGE_RECORDS' => 50,
     'RATING_PAGE_RECORDS' => 10,
+    'BRAND_NAME' => 'Deovate',
 
     'META_STATUSES' => [
         3 =>  'Completed',

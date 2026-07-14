@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Deovate World | Case Study Categories')
+@section('title', config('constants.BUSINESS.name') . ' | Case Study Categories')
 
 @section('content')
 

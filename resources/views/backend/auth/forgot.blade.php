@@ -1,5 +1,5 @@
 @extends('backend.layouts.app')
-@section('title','Deovate World | Forgot Password')
+@section('title',config('constants.BUSINESS.name') . ' | Forgot Password')
 @section('content')
  <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner">
@@ -9,7 +9,7 @@
               <!-- Logo -->
               <div class="app-brand justify-content-center mb-6">
                 <a href="{{ route('admin.dashboard.index')}}" class="app-brand-link gap-2">
-                  <span class="app-brand-text demo text-heading fw-bold">Deovate World</span>
+                  <span class="app-brand-text demo text-heading fw-bold">{{ config('constants.BUSINESS.name') }}</span>
                 </a>
               </div>
               <!-- /Logo -->

@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Deovate World | SMTP Settings')
+@section('title', config('constants.BUSINESS.name') . ' | SMTP Settings')
 
 @section('content')
 <div class="card">

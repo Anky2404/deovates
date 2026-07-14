@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="hero-cap pt-100">
-                            <h2>Careers at Deovate</h2>
+                            <h2>Careers at {{ config('constants.BRAND_NAME') }}</h2>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ route('front.home.index') }}">Home</a></li>
@@ -48,7 +48,7 @@
                                     <div class="phone-notch"></div>
                                     <div class="phone-screen">
                                         <div class="phone-statusbar">
-                                            <span class="phone-brand">Deovate</span>
+                                            <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                         </div>
                                         <div class="career-phone-banner">
                                             <i class="fas fa-briefcase"></i>
@@ -100,7 +100,7 @@
                                     <span class="dot dot-red"></span>
                                     <span class="dot dot-yellow"></span>
                                     <span class="dot dot-green"></span>
-                                    <span class="laptop-url">deovate.world/career/{{ $career->slug }}</span>
+                                    <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/career/{{ $career->slug }}</span>
                                 </div>
                                 <div class="laptop-screen-glass career-modal-glass">
                                     <div class="career-modal-body">
@@ -228,7 +228,7 @@
                         <span class="dot dot-red"></span>
                         <span class="dot dot-yellow"></span>
                         <span class="dot dot-green"></span>
-                        <span class="laptop-url">www.deovateworld.com/career/application</span>
+                        <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/career/application</span>
                     </div>
                     <div class="laptop-screen-glass career-apply-glass">
                         <div class="career-apply-panel">
@@ -248,7 +248,7 @@
                     <div class="phone-notch"></div>
                     <div class="phone-screen">
                         <div class="phone-statusbar">
-                            <span class="phone-brand">Deovate Careers</span>
+                            <span class="phone-brand">{{ config('constants.BRAND_NAME') }} Careers</span>
                         </div>
                         <div class="career-apply-panel career-apply-panel--phone">
                             @include('front.career._apply-form-fields', ['prefix' => 'gam'])

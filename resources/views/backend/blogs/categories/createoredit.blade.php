@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', isset($category) ? 'Deovate | Edit Category' : 'Deovate | Create Category')
+@section('title', isset($category) ? config('constants.BUSINESS.name') . ' | Edit Category' : config('constants.BUSINESS.name') . ' | Create Category')
 
 @section('content')
 <div class="card">

@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Devovate World | Users')
+@section('title', config('constants.BUSINESS.name') . ' | Users')
 
 @section('content')
     <div class="row">

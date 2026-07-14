@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', isset($partner) ? 'Deovate | Edit Partner' : 'Deovate | Create Partner')
+@section('title', isset($partner) ? config('constants.BUSINESS.name') . ' | Edit Partner' : config('constants.BUSINESS.name') . ' | Create Partner')
 
 @section('content')
 

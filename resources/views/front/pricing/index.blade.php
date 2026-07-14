@@ -77,7 +77,7 @@
                                 <div class="phone-notch"></div>
                                 <div class="phone-screen">
                                     <div class="phone-statusbar">
-                                        <span class="phone-brand">Deovate</span>
+                                        <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                     </div>
                                     <div class="pricing-phone-body {{ $plan['highlight'] ? 'pricing-phone-body--highlight' : '' }}">
                                         <h4>{{ $plan['name'] }}</h4>

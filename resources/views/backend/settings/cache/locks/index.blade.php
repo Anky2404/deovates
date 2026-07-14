@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Deovate World | Cache Locks')
+@section('title', config('constants.BUSINESS.name') . ' | Cache Locks')
 
 @section('content')
 <div class="card">
