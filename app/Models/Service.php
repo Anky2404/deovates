@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Service extends Model
@@ -52,6 +53,17 @@ class Service extends Model
             'display_order' => 'integer',
             'views' => 'integer',
         ];
+    }
+
+    /**
+     * Gallery images, backed by the polymorphic Media table (collection
+     * "gallery") rather than a flat JSON column.
+     */
+    public function galleryMedia(): MorphMany
+    {
+        return $this->morphMany(Media::class, 'model')
+            ->where('collection', 'gallery')
+            ->orderBy('display_order');
     }
 
     public function faqs(): HasMany

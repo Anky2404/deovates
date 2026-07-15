@@ -9,10 +9,17 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Testimonial Lists</h5>
 
-        <a href="{{ route('admin.testimonials.createoredit') }}" class="btn btn-primary">
-            <i class="fas fa-plus me-1"></i>
-            Create Testimonial
-        </a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                data-bs-target="#testimonialsReorderModal">
+                <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+            </button>
+
+            <a href="{{ route('admin.testimonials.createoredit') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>
+                Create Testimonial
+            </a>
+        </div>
     </div>
 
     <!-- TABLE -->
@@ -127,5 +134,19 @@
         </table>
     </div>
 
+    {{-- Pagination --}}
+    <div class="card-footer">
+        {{ $rows->links('pagination::bootstrap-5') }}
+    </div>
+
 </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId' => 'testimonialsReorderModal',
+    'rows' => $reorderRows,
+    'reorderUrl' => route('admin.testimonials.reorder'),
+    'title' => 'Reorder Testimonials',
+    'labelField' => 'name',
+    'imageField' => 'photo',
+])
 @endsection

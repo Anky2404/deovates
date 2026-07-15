@@ -169,3 +169,65 @@ function isMacOS() {
 
   return /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
 }
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    document.querySelectorAll('.sortable-table').forEach(function (container) {
+
+        const url = container.dataset.url;
+
+        if (!url) return;
+
+        new Sortable(container, {
+            handle: '.drag-handle',
+            animation: 150,
+
+            onEnd: function () {
+
+                container.querySelectorAll('tr[data-uuid]').forEach(function (row, index) {
+
+                    const rowNumber = row.querySelector('.row-number');
+
+                    if (rowNumber) {
+                        rowNumber.textContent = index + 1;
+                    }
+
+                });
+
+                const order = [...container.querySelectorAll('tr[data-uuid]')].map(row => row.dataset.uuid);
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        order: order
+                    },
+                    success: function (response) {
+
+                        if (response.success) {
+                            showToast('success', response.message || 'Order updated successfully');
+
+                            if (container.dataset.reloadOnSuccess === 'true') {
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 700);
+                            }
+                        } else {
+                            showToast('error', response.message || 'Could not update order');
+                        }
+
+                    },
+                    error: function () {
+                        showToast('error', 'Could not update order');
+                    }
+                });
+
+            }
+
+        });
+
+    });
+
+});

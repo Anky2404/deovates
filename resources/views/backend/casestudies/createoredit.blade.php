@@ -160,23 +160,35 @@
 
                         <input type="file" class="form-control gallery-cropper-upload"
                             data-container="#galleryItems" data-field="gallery_items"
-                            data-start-index="{{ count($caseStudy->gallery ?? []) }}"
+                            data-start-index="{{ isset($caseStudy) ? $caseStudy->galleryMedia->count() : 0 }}"
                             data-width="800" data-height="600" multiple accept="image/*">
 
-                        <div id="galleryItems" class="d-flex flex-wrap gap-2 mt-3">
-                            @foreach ($caseStudy->gallery ?? [] as $index => $item)
-                                <div class="gallery-crop-item position-relative d-inline-block m-1 align-top" style="width:140px;">
+                        <div id="galleryItems" class="gallery-sortable d-flex flex-wrap gap-2 mt-3"
+                            data-reorder-url="{{ isset($caseStudy) ? route('admin.casestudies.galleryreorder', $caseStudy->uuid) : '' }}"
+                            data-uuid="{{ $caseStudy->uuid ?? '' }}">
+                            @foreach ((isset($caseStudy) ? $caseStudy->galleryMedia : collect()) as $index => $item)
+                                <div class="gallery-crop-item position-relative d-inline-block m-1 align-top"
+                                    style="width:140px;" data-id="{{ $item->uuid }}">
+                                    <span class="gallery-drag-handle" title="Drag to reorder"
+                                        style="position:absolute;top:2px;left:2px;z-index:9;cursor:move;background:#fff;border-radius:3px;padding:0 4px;font-size:14px;line-height:1.4;">&#9776;</span>
+
                                     <button type="button" class="btn btn-danger btn-sm remove-gallery-crop-item"
                                         style="position:absolute; top:2px; right:2px; z-index:9; padding:0 6px;">
                                         &times;
                                     </button>
 
-                                    <img src="{{ asset('storage/' . $item['path']) }}"
+                                    <img src="{{ $item->url }}"
                                         class="rounded border img-thumbnail" width="120" height="120" style="object-fit:cover;">
 
-                                    <input type="hidden" name="gallery_items[{{ $index }}][path]" value="{{ $item['path'] }}">
+                                    <input type="hidden" name="gallery_items[{{ $index }}][id]" value="{{ $item->uuid }}">
+                                    <input type="text" name="gallery_items[{{ $index }}][title]" class="form-control form-control-sm mt-1"
+                                        placeholder="Title" value="{{ $item->caption }}">
                                     <input type="text" name="gallery_items[{{ $index }}][alt]" class="form-control form-control-sm mt-1"
-                                        placeholder="Alt text" value="{{ $item['alt'] ?? '' }}">
+                                        placeholder="Alt text" value="{{ $item->alt_text }}">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm copy-gallery-link w-100 mt-1"
+                                        data-path="{{ $item->path }}" title="Copy image path">
+                                        <i class="bx bx-link"></i> Copy link
+                                    </button>
                                 </div>
                             @endforeach
                         </div>

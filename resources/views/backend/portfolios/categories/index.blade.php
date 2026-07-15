@@ -8,9 +8,16 @@
         <!-- Card Header -->
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Portfolio Category Lists</h5>
-            <a href="{{ route('admin.portfolios.categories.createoredit') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i> Create Category
-            </a>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                    data-bs-target="#portfolioCategoriesReorderModal">
+                    <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+                </button>
+
+                <a href="{{ route('admin.portfolios.categories.createoredit') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i> Create Category
+                </a>
+            </div>
         </div>
 
         <!-- Table -->
@@ -114,4 +121,13 @@
         @endif
 
     </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId' => 'portfolioCategoriesReorderModal',
+    'rows' => $reorderRows,
+    'reorderUrl' => route('admin.portfolios.categories.reorder'),
+    'title' => 'Reorder Portfolio Categories',
+    'labelField' => 'name',
+    'imageField' => 'image',
+])
 @endsection

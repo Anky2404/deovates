@@ -100,5 +100,10 @@
         </table>
     </div>
 
+    {{-- Pagination --}}
+    <div class="card-footer">
+        {{ $rows->links('pagination::bootstrap-5') }}
+    </div>
+
 </div>
 @endsection

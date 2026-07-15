@@ -9,10 +9,16 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Media Relation Lists</h5>
 
-        <a href="{{ route('admin.media.relations.createoredit') }}" class="btn btn-primary">
-            <i class="bx bx-plus me-1"></i>
-            Create Media Relation
-        </a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#mediaRelationsReorderModal">
+                <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+            </button>
+
+            <a href="{{ route('admin.media.relations.createoredit') }}" class="btn btn-primary">
+                <i class="bx bx-plus me-1"></i>
+                Create Media Relation
+            </a>
+        </div>
     </div>
 
     <!-- Table -->
@@ -133,4 +139,12 @@
     @endif
 
 </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId' => 'mediaRelationsReorderModal',
+    'rows' => $reorderRows,
+    'reorderUrl' => route('admin.media.relations.reorder'),
+    'title' => 'Reorder Media Relations',
+    'labelField' => 'label',
+])
 @endsection

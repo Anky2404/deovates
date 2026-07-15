@@ -27,7 +27,34 @@ class MarketingPartnerController extends Controller
     public function index(Request $request)
     {
         $rows = Partner::latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        $reorderRows = Partner::orderBy('display_order')->orderBy('id')->get();
+        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+    }
+
+    // Persist a new drag-and-drop order from the reorder modal.
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'string',
+        ]);
+
+        try {
+            DB::transaction(function () use ($request) {
+                foreach ($request->input('order') as $position => $uuid) {
+                    Partner::where('uuid', $uuid)->update(['display_order' => $position + 1]);
+                }
+            });
+
+            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.update'), config('constants.MODULES.partner'), [
+                'description' => 'Reordered partners',
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            Log::error('Partner reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+        }
     }
 
     // Create / Edit Function

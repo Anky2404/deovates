@@ -93,6 +93,55 @@ class MediaUploader
     }
 
     /**
+     * Promote a temp upload (from the crop-and-upload widget) straight into
+     * a permanent Media row attached to $model — the gallery-table
+     * counterpart of promoteTemp(), used by controllers whose gallery is
+     * backed by the polymorphic Media table instead of a flat JSON column.
+     * $model must already be persisted (has a primary key).
+     */
+    public function promoteTempToMedia(string $tempPath, Model $model, string $collection, string $directory, ?string $alt = null, ?string $title = null): ?Media
+    {
+        if (empty($tempPath) || ! Storage::disk($this->disk)->exists($tempPath)) {
+            return null;
+        }
+
+        $directory = trim($directory, '/');
+        $extension = pathinfo($tempPath, PATHINFO_EXTENSION) ?: 'jpg';
+        $filename = $this->resolveFilename($title ?: $alt, $extension, $directory);
+        $path = $directory . '/' . $filename;
+
+        Storage::disk($this->disk)->copy($tempPath, $path);
+        Storage::disk($this->disk)->delete($tempPath);
+
+        [$width, $height] = $this->dimensions($path);
+        $userId = Auth::guard('admin')->id() ?? Auth::guard('web')->id();
+
+        $nextOrder = Media::where('model_type', get_class($model))
+            ->where('model_id', $model->getKey())
+            ->where('collection', $collection)
+            ->max('display_order');
+
+        return Media::create([
+            'model_type' => get_class($model),
+            'model_id' => $model->getKey(),
+            'collection' => $collection,
+            'name' => $title ?: pathinfo($filename, PATHINFO_FILENAME),
+            'file_name' => $filename,
+            'mime_type' => Storage::disk($this->disk)->mimeType($path),
+            'disk' => $this->disk,
+            'path' => $path,
+            'size' => Storage::disk($this->disk)->size($path),
+            'width' => $width,
+            'height' => $height,
+            'alt_text' => $alt,
+            'caption' => $title,
+            'is_active' => true,
+            'display_order' => ($nextOrder ?? 0) + 1,
+            'uploaded_by' => $userId,
+        ]);
+    }
+
+    /**
      * When the admin supplied a name (typically the image's alt text),
      * slugify it into the stored filename instead of a random UUID —
      * falling back to a UUID when no name was given, or when the slugified

@@ -24,12 +24,14 @@ class FaqCategory extends Model
         'page',
         'short_description',
         'is_active',
+        'display_order',
     ];
 
     protected function casts(): array
     {
         return [
             'is_active' => 'boolean',
+            'display_order' => 'integer',
         ];
     }
 

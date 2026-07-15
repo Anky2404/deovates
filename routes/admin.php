@@ -108,6 +108,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
         Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+        Route::post('/reorder', 'reorder')->name('reorder');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
@@ -156,6 +157,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
+            Route::post('/galleryreorder/{uuid}', 'galleryreorder')->name('galleryreorder');
         });
 
         // Category Routes
@@ -163,6 +165,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
@@ -177,6 +180,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
         Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+        Route::post('/reorder', 'reorder')->name('reorder');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
         Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
@@ -187,6 +191,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
         Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+        Route::post('/reorder', 'reorder')->name('reorder');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
@@ -216,6 +221,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
         Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+        Route::post('/reorder', 'reorder')->name('reorder');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
@@ -226,6 +232,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
         Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+        Route::post('/reorder', 'reorder')->name('reorder');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
@@ -243,6 +250,7 @@ Route::middleware('admin.auth')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
                 Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+                Route::post('/reorder', 'reorder')->name('reorder');
                 Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
                 Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
                 Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
@@ -255,6 +263,7 @@ Route::middleware('admin.auth')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
                 Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+                Route::post('/reorder', 'reorder')->name('reorder');
                 Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
                 Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             });
@@ -267,6 +276,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
@@ -364,6 +374,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
@@ -378,9 +389,11 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
+            Route::post('/galleryreorder/{uuid}', 'galleryreorder')->name('galleryreorder');
         });
 
         // Blog Category Routes
@@ -391,6 +404,7 @@ Route::middleware('admin.auth')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
                 Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+                Route::post('/reorder', 'reorder')->name('reorder');
                 Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
                 Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             });
@@ -414,6 +428,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
         });
@@ -426,6 +441,7 @@ Route::middleware('admin.auth')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
                 Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+                Route::post('/reorder', 'reorder')->name('reorder');
                 Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
                 Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             });
@@ -435,6 +451,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
         Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+        Route::post('/reorder', 'reorder')->name('reorder');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
         Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
@@ -482,9 +499,11 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
+            Route::post('/galleryreorder/{uuid}', 'galleryreorder')->name('galleryreorder');
         });
 
         // Case Study Category Routes
@@ -492,6 +511,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
@@ -560,9 +580,11 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
+            Route::post('/galleryreorder/{uuid}', 'galleryreorder')->name('galleryreorder');
         });
 
         // Portfolio Category Routes
@@ -570,6 +592,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
@@ -582,6 +605,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
         Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+        Route::post('/reorder', 'reorder')->name('reorder');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
         Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
@@ -596,6 +620,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
@@ -606,6 +631,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
@@ -630,6 +656,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/reorder', 'reorder')->name('reorder');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
         });
@@ -699,6 +726,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
         Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+        Route::post('/reorder', 'reorder')->name('reorder');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
         Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');

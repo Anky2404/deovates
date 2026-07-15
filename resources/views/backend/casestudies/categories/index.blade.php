@@ -8,10 +8,17 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Case Study Category Lists</h5>
 
-        <a href="{{ route('admin.casestudies.categories.createoredit') }}" class="btn btn-primary">
-            <i class="fas fa-plus me-1"></i>
-            Create Category
-        </a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                data-bs-target="#caseStudyCategoriesReorderModal">
+                <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+            </button>
+
+            <a href="{{ route('admin.casestudies.categories.createoredit') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>
+                Create Category
+            </a>
+        </div>
     </div>
 
     <!-- Table -->
@@ -122,4 +129,13 @@
             {{ $rows->links('pagination::bootstrap-5') }}
         </div>
     @endif
+
+@include('backend.partials.reorder-modal', [
+    'modalId' => 'caseStudyCategoriesReorderModal',
+    'rows' => $reorderRows,
+    'reorderUrl' => route('admin.casestudies.categories.reorder'),
+    'title' => 'Reorder Case Study Categories',
+    'labelField' => 'name',
+    'imageField' => 'image',
+])
 @endsection

@@ -9,10 +9,16 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Page List</h5>
 
-        <a href="{{ route('admin.pages.createoredit') }}" class="btn btn-primary">
-            <i class="icon-base bx bx-plus"></i>
-            Create Page
-        </a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#pagesReorderModal">
+                <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+            </button>
+
+            <a href="{{ route('admin.pages.createoredit') }}" class="btn btn-primary">
+                <i class="icon-base bx bx-plus"></i>
+                Create Page
+            </a>
+        </div>
     </div>
 
     <!-- Table -->
@@ -116,4 +122,12 @@
     </div>
 
 </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId'    => 'pagesReorderModal',
+    'rows'       => $reorderRows,
+    'reorderUrl' => route('admin.pages.reorder'),
+    'title'      => 'Reorder Pages',
+    'labelField' => 'name',
+])
 @endsection

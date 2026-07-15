@@ -9,10 +9,16 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Blog Lists</h5>
 
-            <a href="{{ route('admin.blogs.createoredit') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i>
-                Create Blog
-            </a>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#blogsReorderModal">
+                    <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+                </button>
+
+                <a href="{{ route('admin.blogs.createoredit') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>
+                    Create Blog
+                </a>
+            </div>
         </div>
 
         <!-- Table -->
@@ -30,7 +36,8 @@
                     </tr>
                 </thead>
 
-                <tbody class="table-border-bottom-0">
+                <tbody>
+
                     @forelse ($rows as $index => $blog)
                         <tr>
                             <!-- SN -->
@@ -103,14 +110,30 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">
+                            <td colspan="6" class="text-center text-muted py-4">
                                 No Blogs found.
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
+                
             </table>
+
+        </div>
+
+        {{-- Pagination --}}
+        <div class="card-footer">
+            {{ $rows->links('pagination::bootstrap-5') }}
         </div>
 
     </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId'    => 'blogsReorderModal',
+    'rows'       => $reorderRows,
+    'reorderUrl' => route('admin.blogs.reorder'),
+    'title'      => 'Reorder Blogs',
+    'labelField' => 'title',
+    'imageField' => 'featured_image',
+])
 @endsection

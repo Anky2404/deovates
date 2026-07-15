@@ -24,12 +24,14 @@ class BlogCategory extends Model
         'meta_title',
         'meta_description',
         'is_active',
+        'display_order',
     ];
 
     protected function casts(): array
     {
         return [
             'is_active' => 'boolean',
+            'display_order' => 'integer',
         ];
     }
 

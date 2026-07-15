@@ -40,25 +40,73 @@
                     {{-- FEATURED IMAGE --}}
                     <label class="form-label">Featured Image</label>
 
-                    <input type="file" name="featured_image" class="form-control image-preview-input"
-                        data-preview="#featuredImagePreview">
+                    <input type="file" name="featured_image" class="form-control croppie-upload"
+                        data-preview="#featuredImagePreview" data-width="800" data-height="600" accept="image/*">
 
                     <img id="featuredImagePreview"
                         src="{{ !empty($blog->featured_image) ? asset('storage/' . $blog->featured_image) : 'https://placehold.co/130x130' }}"
                         class="mt-2 rounded border img-thumbnail" height="130" width="130">
+
+                    <input type="text" name="featured_image_alt" class="form-control mt-2"
+                        placeholder="Alt text (used for the image name too)"
+                        value="{{ old('featured_image_alt', $blog->featured_image_alt ?? '') }}">
 
                     <hr class="my-3">
 
                     {{-- OG IMAGE --}}
                     <label class="form-label">OG Image</label>
 
-                    <input type="file" name="og_image" class="form-control image-preview-input"
-                        data-preview="#ogImagePreview">
+                    <input type="file" name="og_image" class="form-control croppie-upload"
+                        data-preview="#ogImagePreview" data-width="1200" data-height="630" accept="image/*">
 
                     <img id="ogImagePreview"
                         src="{{ !empty($blog->og_image) ? asset('storage/' . $blog->og_image) : 'https://placehold.co/130x130' }}"
                         class="mt-2 rounded border img-thumbnail" height="130" width="130">
 
+                    <input type="text" name="og_image_alt" class="form-control mt-2"
+                        placeholder="Alt text (used for the image name too)"
+                        value="{{ old('og_image_alt', $blog->og_image_alt ?? '') }}">
+
+                </div>
+
+                {{-- GALLERY (multiple images, each cropped + alt/title-texted individually) --}}
+                <div class="col-md-6">
+                    <label class="form-label">Gallery Images</label>
+
+                    <input type="file" class="form-control gallery-cropper-upload"
+                        data-container="#galleryItems" data-field="gallery_items"
+                        data-start-index="{{ isset($blog) ? $blog->galleryMedia->count() : 0 }}"
+                        data-width="800" data-height="600" multiple accept="image/*">
+
+                    <div id="galleryItems" class="gallery-sortable d-flex flex-wrap gap-2 mt-3"
+                        data-reorder-url="{{ isset($blog) ? route('admin.blogs.galleryreorder', $blog->uuid) : '' }}"
+                        data-uuid="{{ $blog->uuid ?? '' }}">
+                        @foreach ((isset($blog) ? $blog->galleryMedia : collect()) as $index => $item)
+                            <div class="gallery-crop-item position-relative d-inline-block m-1 align-top"
+                                style="width:140px;" data-id="{{ $item->uuid }}">
+                                <span class="gallery-drag-handle" title="Drag to reorder"
+                                    style="position:absolute;top:2px;left:2px;z-index:9;cursor:move;background:#fff;border-radius:3px;padding:0 4px;font-size:14px;line-height:1.4;">&#9776;</span>
+
+                                <button type="button" class="btn btn-danger btn-sm remove-gallery-crop-item"
+                                    style="position:absolute; top:2px; right:2px; z-index:9; padding:0 6px;">
+                                    &times;
+                                </button>
+
+                                <img src="{{ $item->url }}"
+                                    class="rounded border img-thumbnail" width="120" height="120" style="object-fit:cover;">
+
+                                <input type="hidden" name="gallery_items[{{ $index }}][id]" value="{{ $item->uuid }}">
+                                <input type="text" name="gallery_items[{{ $index }}][title]" class="form-control form-control-sm mt-1"
+                                    placeholder="Title" value="{{ $item->caption }}">
+                                <input type="text" name="gallery_items[{{ $index }}][alt]" class="form-control form-control-sm mt-1"
+                                    placeholder="Alt text" value="{{ $item->alt_text }}">
+                                <button type="button" class="btn btn-outline-secondary btn-sm copy-gallery-link w-100 mt-1"
+                                    data-path="{{ $item->path }}" title="Copy image path">
+                                    <i class="bx bx-link"></i> Copy link
+                                </button>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
 
 
@@ -235,6 +283,9 @@
 
         </form>
     </div>
+
+    {{-- CROP MODAL (powers the croppie-upload / gallery-cropper-upload fields above) --}}
+    @include('backend.partials.modal')
 @endsection
 
 @push('scripts')

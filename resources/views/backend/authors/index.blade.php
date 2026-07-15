@@ -9,10 +9,16 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Author Lists</h5>
 
-        <a href="{{ route('admin.authors.createoredit') }}" class="btn btn-primary">
-            <i class="fas fa-plus me-1"></i>
-            Create Author
-        </a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#authorsReorderModal">
+                <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+            </button>
+
+            <a href="{{ route('admin.authors.createoredit') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>
+                Create Author
+            </a>
+        </div>
     </div>
 
     <!-- Table -->
@@ -125,4 +131,13 @@
     @endif
 
 </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId'    => 'authorsReorderModal',
+    'rows'       => $reorderRows,
+    'reorderUrl' => route('admin.authors.reorder'),
+    'title'      => 'Reorder Authors',
+    'labelField' => 'name',
+    'imageField' => 'profile_image',
+])
 @endsection

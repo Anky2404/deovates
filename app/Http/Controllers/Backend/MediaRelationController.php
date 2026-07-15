@@ -26,7 +26,44 @@ class MediaRelationController extends Controller
     public function index(Request $request)
     {
         $rows = MediaRelation::with('media')->latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        // MediaRelation has no title/name column of its own — build a
+        // display label from the linked media's name plus the collection
+        // (or model type) for the reorder modal only.
+        $reorderRows = MediaRelation::with('media')->orderBy('display_order')->orderBy('id')->get();
+        $reorderRows->each(function (MediaRelation $relation) {
+            $mediaLabel = $relation->media->name ?? ('Media #' . $relation->media_id);
+            $contextLabel = $relation->collection ?? $relation->model_type ?? 'relation';
+            $relation->label = $mediaLabel . ' — ' . $contextLabel;
+        });
+
+        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+    }
+
+    // Persist a new drag-and-drop order from the reorder modal.
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'string',
+        ]);
+
+        try {
+            DB::transaction(function () use ($request) {
+                foreach ($request->input('order') as $position => $uuid) {
+                    MediaRelation::where('uuid', $uuid)->update(['display_order' => $position + 1]);
+                }
+            });
+
+            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.update'), config('constants.MODULES.mediarelation'), [
+                'description' => 'Reordered media relations',
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            Log::error('MediaRelation reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+        }
     }
 
     // Create / Edit Function

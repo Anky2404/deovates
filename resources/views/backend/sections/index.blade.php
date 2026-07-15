@@ -9,10 +9,16 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Section Lists</h5>
 
-        <a href="{{ route('admin.sections.createoredit') }}" class="btn btn-primary">
-            <i class="bx bx-plus me-1"></i>
-            Create Section
-        </a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#sectionsReorderModal">
+                <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+            </button>
+
+            <a href="{{ route('admin.sections.createoredit') }}" class="btn btn-primary">
+                <i class="bx bx-plus me-1"></i>
+                Create Section
+            </a>
+        </div>
     </div>
 
     <!-- Table -->
@@ -115,4 +121,12 @@
     @endif
 
 </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId'    => 'sectionsReorderModal',
+    'rows'       => $reorderRows,
+    'reorderUrl' => route('admin.sections.reorder'),
+    'title'      => 'Reorder Sections',
+    'labelField' => 'name',
+])
 @endsection

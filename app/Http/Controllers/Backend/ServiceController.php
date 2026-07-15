@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Media;
 use App\Models\Platform;
 use App\Models\Service;
 use App\Models\Technology;
@@ -108,6 +109,11 @@ class ServiceController extends Controller
             'featured_image_alt' => 'nullable|string|max:255',
             'banner_image' => 'nullable|image|max:4096',
             'banner_image_alt' => 'nullable|string|max:255',
+            'gallery_items' => 'nullable|array',
+            'gallery_items.*.id' => 'nullable|string',
+            'gallery_items.*.temp' => 'nullable|string',
+            'gallery_items.*.alt' => 'nullable|string|max:255',
+            'gallery_items.*.title' => 'nullable|string|max:255',
             'is_featured' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
             'meta_title' => 'nullable|string|max:255',
@@ -124,7 +130,7 @@ class ServiceController extends Controller
         // rest (parent_service_id, rating, review_count, canonical_url,
         // views) aren't present in the view and are intentionally left
         // untouched here.
-        unset($data['platforms'], $data['technologies'], $data['faqs'], $data['features'], $data['problems']);
+        unset($data['platforms'], $data['technologies'], $data['faqs'], $data['features'], $data['problems'], $data['gallery_items']);
 
         // New services join at the end of the drag-reorderable index list,
         // rather than colliding with everything else at the column default.
@@ -155,6 +161,7 @@ class ServiceController extends Controller
                 $description = 'Created service ' . $service->title;
             }
 
+            $this->syncGalleryMedia($request, $service);
             $this->syncPlatforms($service, $request->input('platforms', []));
             $this->syncTechnologies($service, $request->input('technologies', []));
             $this->syncFaqs($service, $request->input('faqs', []));
@@ -175,6 +182,81 @@ class ServiceController extends Controller
             DB::rollBack();
             Log::error('Service saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
+    /**
+     * Sync the gallery Media rows against the submitted "gallery_items"
+     * rows — each row either updates an existing image's alt/title/order
+     * (["id" => media uuid, ...]) or promotes a freshly cropped temp upload
+     * into a new Media row (["temp" => ..., ...]). Any existing image whose
+     * row didn't survive to submission (removed on the form) is deleted.
+     */
+    private function syncGalleryMedia(Request $request, Service $service): void
+    {
+        $existing = $service->galleryMedia()->get()->keyBy('uuid');
+        $rows = (array) $request->input('gallery_items', []);
+        $keepUuids = [];
+        $position = 0;
+
+        foreach ($rows as $row) {
+            $position++;
+            $alt = $row['alt'] ?? null;
+            $title = $row['title'] ?? null;
+
+            if (!empty($row['id']) && $existing->has($row['id'])) {
+                $media = $existing->get($row['id']);
+                $media->update([
+                    'alt_text' => $alt,
+                    'caption' => $title,
+                    'name' => $title ?: $media->name,
+                    'display_order' => $position,
+                ]);
+                $keepUuids[] = $media->uuid;
+
+                continue;
+            }
+
+            if (!empty($row['temp'])) {
+                $media = $this->mediaUploader->promoteTempToMedia($row['temp'], $service, 'gallery', 'services', $alt, $title);
+
+                if ($media) {
+                    $media->update(['display_order' => $position]);
+                    $keepUuids[] = $media->uuid;
+                }
+            }
+        }
+
+        $existing->whereNotIn('uuid', $keepUuids)->each(fn (Media $media) => $this->mediaUploader->deleteMedia($media));
+    }
+
+    // Persist a drag-reordered gallery immediately (edit mode only — see
+    // image-cropper.js's persistGalleryOrder()). Only reorders items that
+    // already have a media id; unsaved (temp) items keep their position in
+    // the DOM and are only persisted (and get an id) on the next form submit.
+    public function galleryreorder(Request $request, string $uuid)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'string',
+        ]);
+
+        try {
+            $service = Service::where('uuid', $uuid)->firstOrFail();
+
+            foreach ($request->input('order') as $position => $mediaUuid) {
+                Media::where('uuid', $mediaUuid)
+                    ->where('model_type', Service::class)
+                    ->where('model_id', $service->id)
+                    ->where('collection', 'gallery')
+                    ->update(['display_order' => $position + 1]);
+            }
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            Log::error('Service galleryreorder failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
 

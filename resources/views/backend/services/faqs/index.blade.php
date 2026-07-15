@@ -9,10 +9,16 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Service Faqs Lists</h5>
 
-            <a href="{{ route('admin.services.faqs.createoredit') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i>
-                Create Service Faqs
-            </a>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#serviceFaqsReorderModal">
+                    <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+                </button>
+
+                <a href="{{ route('admin.services.faqs.createoredit') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>
+                    Create Service Faqs
+                </a>
+            </div>
         </div>
 
         <!-- Table -->
@@ -109,5 +115,18 @@
             </table>
         </div>
 
+        {{-- Pagination --}}
+        <div class="card-footer">
+            {{ $rows->links('pagination::bootstrap-5') }}
+        </div>
+
     </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId' => 'serviceFaqsReorderModal',
+    'rows' => $reorderRows,
+    'reorderUrl' => route('admin.services.faqs.reorder'),
+    'title' => 'Reorder Service FAQs',
+    'labelField' => 'question',
+])
 @endsection

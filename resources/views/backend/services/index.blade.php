@@ -31,12 +31,15 @@
                     </tr>
                 </thead>
 
-                <tbody class="table-border-bottom-0" id="serviceSortable">
+                <tbody id="serviceSortable"
+       class="sortable-table"
+       data-url="{{ route('admin.services.reorder') }}">
+             
                     @forelse ($rows as $index => $service)
                         <tr data-uuid="{{ $service->uuid }}">
-                            <td class="drag-handle" style="cursor: grab; width: 1%;">
-                                <i class="bx bx-menu text-muted"></i>
-                            </td>
+                            <td class="drag-handle" style="cursor: grab; width:1%;">
+                <i class="bx bx-menu text-muted"></i>
+            </td>
 
                             <td class="row-number">
                                 {{ $index + 1 }}
@@ -124,45 +127,5 @@
 
     </div>
 @endsection
+    
 
-@push('scripts')
-    <script src="{{ asset('assets/js/Sortable.min.js') }}"></script>
-    <script>
-        (function () {
-            const container = document.getElementById('serviceSortable');
-            if (!container) return;
-
-            new Sortable(container, {
-                handle: '.drag-handle',
-                animation: 150,
-                onEnd: function () {
-                    container.querySelectorAll('tr[data-uuid]').forEach((row, index) => {
-                        row.querySelector('.row-number').textContent = index + 1;
-                    });
-
-                    const order = Array.from(container.querySelectorAll('tr[data-uuid]'))
-                        .map(row => row.dataset.uuid);
-
-                    $.ajax({
-                        url: "{{ route('admin.services.reorder') }}",
-                        type: 'POST',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            order: order
-                        },
-                        success: function (response) {
-                            if (response.success) {
-                                showToast('success', 'Order updated successfully');
-                            } else {
-                                showToast('error', response.message || 'Could not update order');
-                            }
-                        },
-                        error: function () {
-                            showToast('error', 'Could not update order');
-                        }
-                    });
-                }
-            });
-        })();
-    </script>
-@endpush

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Blog extends Model
@@ -53,6 +54,17 @@ class Blog extends Model
             'reading_time' => 'integer',
             'comment_count' => 'integer',
         ];
+    }
+
+    /**
+     * Gallery images, backed by the polymorphic Media table (collection
+     * "gallery") rather than a flat JSON column.
+     */
+    public function galleryMedia(): MorphMany
+    {
+        return $this->morphMany(Media::class, 'model')
+            ->where('collection', 'gallery')
+            ->orderBy('display_order');
     }
 
     public function category(): BelongsTo

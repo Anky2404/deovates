@@ -28,7 +28,34 @@ class MarketingIndustryController extends Controller
     public function index(Request $request)
     {
         $rows = Industry::with('category')->latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        $reorderRows = Industry::orderBy('display_order')->orderBy('id')->get();
+        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+    }
+
+    // Persist a new drag-and-drop order from the reorder modal.
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'string',
+        ]);
+
+        try {
+            DB::transaction(function () use ($request) {
+                foreach ($request->input('order') as $position => $uuid) {
+                    Industry::where('uuid', $uuid)->update(['display_order' => $position + 1]);
+                }
+            });
+
+            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.update'), config('constants.MODULES.industry'), [
+                'description' => 'Reordered industries',
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            Log::error('Industry reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+        }
     }
 
     // Create / Edit Function

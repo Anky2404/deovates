@@ -8,6 +8,7 @@ use App\Models\ActivityLog;
 use App\Models\Author;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\Media;
 use App\Models\Tag;
 use App\Services\MediaUploader;
 use Illuminate\Http\Request;
@@ -34,8 +35,35 @@ class BlogController extends Controller
             ->latest('id')
             ->paginate($this->pagerecords)
             ->withQueryString();
+        $reorderRows = Blog::orderBy('display_order')->orderBy('id')->take(300)->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+    }
+
+    // Persist a new drag-and-drop order from the reorder modal.
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'string',
+        ]);
+
+        try {
+            DB::transaction(function () use ($request) {
+                foreach ($request->input('order') as $position => $uuid) {
+                    Blog::where('uuid', $uuid)->update(['display_order' => $position + 1]);
+                }
+            });
+
+            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.update'), config('constants.MODULES.blog'), [
+                'description' => 'Reordered blogs',
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            Log::error('Blog reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+        }
     }
 
     public function createoredit(Request $request, ?string $uuid = null)
@@ -70,7 +98,14 @@ class BlogController extends Controller
             'reading_time' => ['nullable', 'integer', 'min:0'],
             'comment_count' => ['nullable', 'integer', 'min:0'],
             'featured_image' => ['nullable', 'image', 'max:2048'],
+            'featured_image_alt' => ['nullable', 'string', 'max:255'],
             'og_image' => ['nullable', 'image', 'max:2048'],
+            'og_image_alt' => ['nullable', 'string', 'max:255'],
+            'gallery_items' => ['nullable', 'array'],
+            'gallery_items.*.id' => ['nullable', 'string'],
+            'gallery_items.*.temp' => ['nullable', 'string'],
+            'gallery_items.*.alt' => ['nullable', 'string', 'max:255'],
+            'gallery_items.*.title' => ['nullable', 'string', 'max:255'],
         ]);
 
         try {
@@ -79,7 +114,7 @@ class BlogController extends Controller
             $blog = $blog ?? new Blog();
             $isNew = ! $blog->exists;
 
-            $blog->fill([
+            $data = [
                 'title' => $validated['title'],
                 'slug' => $validated['slug'] ?? null,
                 'excerpt' => $validated['excerpt'],
@@ -97,25 +132,17 @@ class BlogController extends Controller
                 'comment_count' => $validated['comment_count'] ?? 0,
                 'is_featured' => $request->boolean('is_featured'),
                 'is_active' => $request->boolean('is_active', true),
-            ]);
+                'featured_image_alt' => $validated['featured_image_alt'] ?? null,
+                'og_image_alt' => $validated['og_image_alt'] ?? null,
+            ];
 
-            if ($request->hasFile('featured_image')) {
-                $blog->featured_image = $this->mediaUploader->uploadSingle(
-                    $request->file('featured_image'),
-                    'blogs',
-                    $blog->featured_image ?: null
-                );
-            }
+            $this->applyImage($request, $data, 'featured_image', 'blogs', $blog);
+            $this->applyImage($request, $data, 'og_image', 'blogs', $blog);
 
-            if ($request->hasFile('og_image')) {
-                $blog->og_image = $this->mediaUploader->uploadSingle(
-                    $request->file('og_image'),
-                    'blogs',
-                    $blog->og_image ?: null
-                );
-            }
-
+            $blog->fill($data);
             $blog->save();
+
+            $this->syncGalleryMedia($request, $blog);
 
             $blog->tags()->sync($this->parseTagIds($request->input('tags', [])));
 
@@ -243,6 +270,81 @@ class BlogController extends Controller
             }
 
             return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
+    /**
+     * Sync the gallery Media rows against the submitted "gallery_items"
+     * rows — each row either updates an existing image's alt/title/order
+     * (["id" => media uuid, ...]) or promotes a freshly cropped temp upload
+     * into a new Media row (["temp" => ..., ...]). Any existing image whose
+     * row didn't survive to submission (removed on the form) is deleted.
+     */
+    private function syncGalleryMedia(Request $request, Blog $blog): void
+    {
+        $existing = $blog->galleryMedia()->get()->keyBy('uuid');
+        $rows = (array) $request->input('gallery_items', []);
+        $keepUuids = [];
+        $position = 0;
+
+        foreach ($rows as $row) {
+            $position++;
+            $alt = $row['alt'] ?? null;
+            $title = $row['title'] ?? null;
+
+            if (!empty($row['id']) && $existing->has($row['id'])) {
+                $media = $existing->get($row['id']);
+                $media->update([
+                    'alt_text' => $alt,
+                    'caption' => $title,
+                    'name' => $title ?: $media->name,
+                    'display_order' => $position,
+                ]);
+                $keepUuids[] = $media->uuid;
+
+                continue;
+            }
+
+            if (!empty($row['temp'])) {
+                $media = $this->mediaUploader->promoteTempToMedia($row['temp'], $blog, 'gallery', 'blogs', $alt, $title);
+
+                if ($media) {
+                    $media->update(['display_order' => $position]);
+                    $keepUuids[] = $media->uuid;
+                }
+            }
+        }
+
+        $existing->whereNotIn('uuid', $keepUuids)->each(fn (Media $media) => $this->mediaUploader->deleteMedia($media));
+    }
+
+    // Persist a drag-reordered gallery immediately (edit mode only — see
+    // image-cropper.js's persistGalleryOrder()). Only reorders items that
+    // already have a media id; unsaved (temp) items keep their position in
+    // the DOM and are only persisted (and get an id) on the next form submit.
+    public function galleryreorder(Request $request, string $uuid)
+    {
+        $request->validate([
+            'order' => ['required', 'array'],
+            'order.*' => ['string'],
+        ]);
+
+        try {
+            $blog = Blog::where('uuid', $uuid)->firstOrFail();
+
+            foreach ($request->input('order') as $position => $mediaUuid) {
+                Media::where('uuid', $mediaUuid)
+                    ->where('model_type', Blog::class)
+                    ->where('model_id', $blog->id)
+                    ->where('collection', 'gallery')
+                    ->update(['display_order' => $position + 1]);
+            }
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            Log::error('Blog galleryreorder failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
 

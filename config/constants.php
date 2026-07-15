@@ -1,9 +1,9 @@
 <?php
 return [
-    'ADMIN_PAGE_RECORDS' => 20,
+    'ADMIN_PAGE_RECORDS' => 15,
     'FRONT_PAGE_RECORDS' => 50,
     'RATING_PAGE_RECORDS' => 10,
-    'BRAND_NAME' => 'Deovate',
+    'BRAND_NAME' => 'Test Project',
 
     'META_STATUSES' => [
         3 =>  'Completed',
@@ -160,7 +160,7 @@ return [
     ],
 
     'BUSINESS' => [
-        'name' => 'Deovate World',
+        'name' => 'Test Project',
         'gst' => '',
         'day' => 'Mon - Sat',
         'timings_weekdays' => '9:00 am to 8:00 pm',

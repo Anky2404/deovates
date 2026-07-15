@@ -23,10 +23,21 @@
  *   - data-width="800" / data-height="600" (optional) default crop output size
  * Each selected file is queued and cropped one at a time through the same
  * modal; after each file (cropped or cancelled-to-original) a new gallery
- * item card is appended with a hidden "<field>[i][temp]" path and a text
- * "<field>[i][alt]" input, then the next queued file opens automatically.
+ * item card is appended with a hidden "<field>[i][temp]" path, a text
+ * "<field>[i][title]" input, a text "<field>[i][alt]" input, an X button to
+ * remove the item, and a "Copy link" button that copies the image's
+ * relative storage path to the clipboard.
  *
- * Requires: jQuery, Bootstrap 5 modals, Croppie, and window.CROPPIE_TEMP_UPLOAD_URL.
+ * The item container additionally gets class "gallery-sortable" to enable
+ * drag-to-reorder (via Sortable.js, dragging by the grip handle on each
+ * card). On drop, item field names are renumbered to match the new order;
+ * if the container also carries data-reorder-url + data-uuid (edit mode
+ * only — there's no record to persist to yet on a create form), the new
+ * order is saved immediately via AJAX POST {uuid, order: [mediaId, ...]}
+ * (only items with an existing media id — see data-id below — participate).
+ *
+ * Requires: jQuery, Bootstrap 5 modals, Croppie, Sortable.js, and
+ * window.CROPPIE_TEMP_UPLOAD_URL.
  */
 (function () {
     'use strict';
@@ -166,14 +177,85 @@
         var wrapper = document.createElement('div');
         wrapper.className = 'gallery-crop-item position-relative d-inline-block m-1 align-top';
         wrapper.style.width = '140px';
+        wrapper.dataset.path = response.temp_path;
         wrapper.innerHTML =
+            '<span class="gallery-drag-handle" title="Drag to reorder" ' +
+            'style="position:absolute;top:2px;left:2px;z-index:9;cursor:move;background:#fff;border-radius:3px;padding:0 4px;font-size:14px;line-height:1.4;">&#9776;</span>' +
             '<button type="button" class="btn btn-danger btn-sm remove-gallery-crop-item" ' +
             'style="position:absolute;top:2px;right:2px;z-index:9;padding:0 6px;">&times;</button>' +
             '<img src="' + response.url + '" class="rounded border img-thumbnail" width="120" height="120" style="object-fit:cover;">' +
             '<input type="hidden" name="' + prefix + '[' + index + '][temp]" value="' + response.temp_path + '">' +
-            '<input type="text" name="' + prefix + '[' + index + '][alt]" class="form-control form-control-sm mt-1" placeholder="Alt text">';
+            '<input type="text" name="' + prefix + '[' + index + '][title]" class="form-control form-control-sm mt-1" placeholder="Title">' +
+            '<input type="text" name="' + prefix + '[' + index + '][alt]" class="form-control form-control-sm mt-1" placeholder="Alt text">' +
+            '<button type="button" class="btn btn-outline-secondary btn-sm copy-gallery-link w-100 mt-1" ' +
+            'data-path="' + response.temp_path + '" title="Copy image path">' +
+            '<i class="bx bx-link"></i> Copy link</button>';
 
         state.container.appendChild(wrapper);
+    }
+
+    // Renumber "<field>[i][...]" names to match the current DOM order, so a
+    // drag reorder (or a removal) is reflected correctly on form submit.
+    function reindexGalleryItems(container) {
+        Array.prototype.forEach.call(container.querySelectorAll('.gallery-crop-item'), function (item, index) {
+            Array.prototype.forEach.call(item.querySelectorAll('input[name]'), function (input) {
+                input.name = input.name.replace(/\[\d+\]/, '[' + index + ']');
+            });
+        });
+    }
+
+    // Only items that already have a media id (saved rows) can be reordered
+    // server-side; unsaved (temp, not-yet-submitted) items have no id yet
+    // and are skipped here — they'll get one, and their position, on submit.
+    function collectGalleryOrder(container) {
+        return Array.prototype.map.call(container.querySelectorAll('.gallery-crop-item'), function (item) {
+            return item.dataset.id || '';
+        }).filter(Boolean);
+    }
+
+    // In edit mode (data-reorder-url + data-uuid present) a drag persists
+    // immediately; in create mode there's no record to persist to yet, so
+    // the new order just rides along with the rest of the form on submit.
+    function persistGalleryOrder(container) {
+        var url = container.dataset.reorderUrl;
+        var uuid = container.dataset.uuid;
+        var order = collectGalleryOrder(container);
+        if (!url || !uuid || !order.length) return;
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: { _token: csrfToken(), uuid: uuid, order: order },
+            success: function (response) {
+                if (!response || !response.success) {
+                    if (typeof showToast === 'function') {
+                        showToast('error', (response && response.message) || 'Failed to save order');
+                    }
+                }
+            },
+            error: function () {
+                if (typeof showToast === 'function') {
+                    showToast('error', 'Failed to save order');
+                }
+            },
+        });
+    }
+
+    function initGallerySortable() {
+        if (typeof Sortable === 'undefined') return;
+
+        document.querySelectorAll('.gallery-sortable').forEach(function (container) {
+            if (container.sortableInstance) return;
+
+            container.sortableInstance = new Sortable(container, {
+                animation: 150,
+                handle: '.gallery-drag-handle',
+                onEnd: function () {
+                    reindexGalleryItems(container);
+                    persistGalleryOrder(container);
+                },
+            });
+        });
     }
 
     function finalizeCurrent(response) {
@@ -230,6 +312,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
+        initGallerySortable();
+
         var modalEl = document.getElementById('globalCroppieModal');
         if (!modalEl) return;
 
@@ -372,9 +456,44 @@
         // 5) REMOVE a gallery item (existing or newly-added — both use the
         //    same markup/class, see the blade views that render this widget).
         document.addEventListener('click', function (e) {
-            if (e.target.classList && e.target.classList.contains('remove-gallery-crop-item')) {
+            if (e.target.closest && e.target.closest('.remove-gallery-crop-item')) {
                 var item = e.target.closest('.gallery-crop-item');
+                var container = item ? item.closest('.gallery-sortable') : null;
                 if (item) item.remove();
+                if (container) reindexGalleryItems(container);
+                return;
+            }
+
+            // 6) COPY LINK — copies the image's relative storage path.
+            var copyBtn = e.target.closest && e.target.closest('.copy-gallery-link');
+            if (copyBtn) {
+                var path = copyBtn.dataset.path;
+                if (!path) return;
+
+                var done = function () {
+                    if (typeof showToast === 'function') showToast('success', 'Image path copied');
+                };
+                var fail = function () {
+                    if (typeof showToast === 'function') showToast('error', 'Could not copy path');
+                };
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(path).then(done, fail);
+                } else {
+                    var helper = document.createElement('textarea');
+                    helper.value = path;
+                    helper.style.position = 'fixed';
+                    helper.style.opacity = '0';
+                    document.body.appendChild(helper);
+                    helper.select();
+                    try {
+                        document.execCommand('copy');
+                        done();
+                    } catch (err) {
+                        fail();
+                    }
+                    document.body.removeChild(helper);
+                }
             }
         });
     });

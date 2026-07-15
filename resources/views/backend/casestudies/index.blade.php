@@ -9,10 +9,16 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Case Study Lists</h5>
 
-            <a href="{{ route('admin.casestudies.createoredit') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i>
-                Create Case Study
-            </a>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#casestudiesReorderModal">
+                    <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+                </button>
+
+                <a href="{{ route('admin.casestudies.createoredit') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>
+                    Create Case Study
+                </a>
+            </div>
         </div>
 
         <!-- Table -->
@@ -142,4 +148,13 @@
         @endif
 
     </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId'    => 'casestudiesReorderModal',
+    'rows'       => $reorderRows,
+    'reorderUrl' => route('admin.casestudies.reorder'),
+    'title'      => 'Reorder Case Studies',
+    'labelField' => 'title',
+    'imageField' => 'featured_image',
+])
 @endsection

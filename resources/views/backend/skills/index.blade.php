@@ -9,10 +9,16 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Skill Lists</h5>
 
-        <a href="{{ route('admin.skills.createoredit') }}" class="btn btn-primary">
-            <i class="fas fa-plus me-1"></i>
-            Create Skill
-        </a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#skillsReorderModal">
+                <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+            </button>
+
+            <a href="{{ route('admin.skills.createoredit') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>
+                Create Skill
+            </a>
+        </div>
     </div>
 
     <!-- Table -->
@@ -110,5 +116,18 @@
         </table>
     </div>
 
+    {{-- Pagination --}}
+    <div class="card-footer">
+        {{ $rows->links('pagination::bootstrap-5') }}
+    </div>
+
 </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId'    => 'skillsReorderModal',
+    'rows'       => $reorderRows,
+    'reorderUrl' => route('admin.skills.reorder'),
+    'title'      => 'Reorder Skills',
+    'labelField' => 'name',
+])
 @endsection

@@ -9,10 +9,17 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Platform Lists</h5>
 
-        <a href="{{ route('admin.platforms.createoredit') }}" class="btn btn-primary">
-            <i class="bx bx-plus me-1"></i>
-            Create Platform
-        </a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                data-bs-target="#platformsReorderModal">
+                <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+            </button>
+
+            <a href="{{ route('admin.platforms.createoredit') }}" class="btn btn-primary">
+                <i class="bx bx-plus me-1"></i>
+                Create Platform
+            </a>
+        </div>
     </div>
 
     <!-- Table -->
@@ -120,4 +127,12 @@
     @endif
 
 </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId' => 'platformsReorderModal',
+    'rows' => $reorderRows,
+    'reorderUrl' => route('admin.platforms.reorder'),
+    'title' => 'Reorder Platforms',
+    'labelField' => 'name',
+])
 @endsection

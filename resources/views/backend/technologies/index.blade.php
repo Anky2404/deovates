@@ -9,10 +9,17 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Technology Lists</h5>
 
-            <a href="{{ route('admin.technologies.createoredit') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i>
-                Create Technology
-            </a>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                    data-bs-target="#technologiesReorderModal">
+                    <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+                </button>
+
+                <a href="{{ route('admin.technologies.createoredit') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>
+                    Create Technology
+                </a>
+            </div>
         </div>
 
         <!-- Table -->
@@ -108,5 +115,19 @@
             </table>
         </div>
 
+        {{-- Pagination --}}
+        <div class="card-footer">
+            {{ $rows->links('pagination::bootstrap-5') }}
+        </div>
+
     </div>
+
+    @include('backend.partials.reorder-modal', [
+        'modalId' => 'technologiesReorderModal',
+        'rows' => $reorderRows,
+        'reorderUrl' => route('admin.technologies.reorder'),
+        'title' => 'Reorder Technologies',
+        'labelField' => 'name',
+        'imageField' => 'image',
+    ])
 @endsection

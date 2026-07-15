@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Media;
 use App\Models\Portfolio;
 use App\Models\PortfolioCategory;
 use App\Services\MediaUploader;
@@ -32,8 +33,35 @@ class PortfolioController extends Controller
             ->latest('id')
             ->paginate($this->pagerecords)
             ->withQueryString();
+        $reorderRows = Portfolio::orderBy('display_order')->orderBy('id')->take(300)->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+    }
+
+    // Persist a new drag-and-drop order from the reorder modal.
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'string',
+        ]);
+
+        try {
+            DB::transaction(function () use ($request) {
+                foreach ($request->input('order') as $position => $uuid) {
+                    Portfolio::where('uuid', $uuid)->update(['display_order' => $position + 1]);
+                }
+            });
+
+            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.update'), config('constants.MODULES.portfolio'), [
+                'description' => 'Reordered portfolios',
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            Log::error('Portfolio reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+        }
     }
 
     public function createoredit(?string $uuid = null)
@@ -66,9 +94,10 @@ class PortfolioController extends Controller
             'banner_image' => ['nullable', 'image', 'max:4096'],
             'banner_image_alt' => ['nullable', 'string', 'max:255'],
             'gallery_items' => ['nullable', 'array'],
-            'gallery_items.*.path' => ['nullable', 'string'],
+            'gallery_items.*.id' => ['nullable', 'string'],
             'gallery_items.*.temp' => ['nullable', 'string'],
             'gallery_items.*.alt' => ['nullable', 'string', 'max:255'],
+            'gallery_items.*.title' => ['nullable', 'string', 'max:255'],
             'video_url' => ['nullable', 'url', 'max:255'],
             'overview' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
@@ -100,8 +129,6 @@ class PortfolioController extends Controller
             $this->applyImage($request, $data, 'featured_image', 'portfolios', $portfolio);
             $this->applyImage($request, $data, 'banner_image', 'portfolios', $portfolio);
 
-            $data['gallery'] = $this->resolveGallery($request, $portfolio);
-
             $isNew = ! $portfolio;
 
             if ($portfolio) {
@@ -110,6 +137,8 @@ class PortfolioController extends Controller
             } else {
                 $portfolio = Portfolio::create($data);
             }
+
+            $this->syncGalleryMedia($request, $portfolio);
 
             ActivityLog::log(
                 config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
@@ -203,6 +232,36 @@ class PortfolioController extends Controller
         }
     }
 
+    // Persist a drag-reordered gallery immediately (edit mode only — see
+    // image-cropper.js's persistGalleryOrder()). Only reorders items that
+    // already have a media id; unsaved (temp) items keep their position in
+    // the DOM and are only persisted (and get an id) on the next form submit.
+    public function galleryreorder(Request $request, string $uuid)
+    {
+        $request->validate([
+            'order' => ['required', 'array'],
+            'order.*' => ['string'],
+        ]);
+
+        try {
+            $portfolio = Portfolio::where('uuid', $uuid)->firstOrFail();
+
+            foreach ($request->input('order') as $position => $mediaUuid) {
+                Media::where('uuid', $mediaUuid)
+                    ->where('model_type', Portfolio::class)
+                    ->where('model_id', $portfolio->id)
+                    ->where('collection', 'gallery')
+                    ->update(['display_order' => $position + 1]);
+            }
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            Log::error('Portfolio galleryreorder failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+        }
+    }
+
     public function destroy(string $uuid)
     {
         $portfolio = Portfolio::where('uuid', $uuid)->firstOrFail();
@@ -229,44 +288,48 @@ class PortfolioController extends Controller
     }
 
     /**
-     * Build the new gallery array from the submitted "gallery_items" rows —
-     * each row is either a kept existing image (["path" => ..., "alt" => ...])
-     * or a freshly cropped one (["temp" => ..., "alt" => ...]) promoted here.
-     * Any existing image whose row didn't survive to submission (removed on
-     * the form) gets its file deleted from disk.
+     * Sync the gallery Media rows against the submitted "gallery_items"
+     * rows — each row either updates an existing image's alt/title/order
+     * (["id" => media uuid, ...]) or promotes a freshly cropped temp upload
+     * into a new Media row (["temp" => ..., ...]). Any existing image whose
+     * row didn't survive to submission (removed on the form) is deleted.
      */
-    private function resolveGallery(Request $request, ?Portfolio $portfolio): array
+    private function syncGalleryMedia(Request $request, Portfolio $portfolio): void
     {
-        $existingPaths = array_column($portfolio->gallery ?? [], 'path');
+        $existing = $portfolio->galleryMedia()->get()->keyBy('uuid');
         $rows = (array) $request->input('gallery_items', []);
-
-        $result = [];
-        $keptPaths = [];
+        $keepUuids = [];
+        $position = 0;
 
         foreach ($rows as $row) {
+            $position++;
             $alt = $row['alt'] ?? null;
+            $title = $row['title'] ?? null;
 
-            if (!empty($row['temp'])) {
-                $path = $this->mediaUploader->promoteTemp($row['temp'], 'portfolios', null, $alt);
-
-                if ($path) {
-                    $result[] = ['path' => $path, 'alt' => $alt];
-                }
+            if (!empty($row['id']) && $existing->has($row['id'])) {
+                $media = $existing->get($row['id']);
+                $media->update([
+                    'alt_text' => $alt,
+                    'caption' => $title,
+                    'name' => $title ?: $media->name,
+                    'display_order' => $position,
+                ]);
+                $keepUuids[] = $media->uuid;
 
                 continue;
             }
 
-            if (!empty($row['path'])) {
-                $result[] = ['path' => $row['path'], 'alt' => $alt];
-                $keptPaths[] = $row['path'];
+            if (!empty($row['temp'])) {
+                $media = $this->mediaUploader->promoteTempToMedia($row['temp'], $portfolio, 'gallery', 'portfolios', $alt, $title);
+
+                if ($media) {
+                    $media->update(['display_order' => $position]);
+                    $keepUuids[] = $media->uuid;
+                }
             }
         }
 
-        foreach (array_diff($existingPaths, $keptPaths) as $removedPath) {
-            $this->mediaUploader->deleteSingle($removedPath);
-        }
-
-        return $result;
+        $existing->whereNotIn('uuid', $keepUuids)->each(fn (Media $media) => $this->mediaUploader->deleteMedia($media));
     }
 
     /**

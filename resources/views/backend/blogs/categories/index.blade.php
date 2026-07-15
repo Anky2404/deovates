@@ -9,10 +9,17 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Blog Category Lists</h5>
 
-        <a href="{{ route('admin.blogs.categories.createoredit') }}" class="btn btn-primary">
-            <i class="fas fa-plus me-1"></i>
-            Create Blog Category
-        </a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                data-bs-target="#blogCategoriesReorderModal">
+                <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+            </button>
+
+            <a href="{{ route('admin.blogs.categories.createoredit') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>
+                Create Blog Category
+            </a>
+        </div>
     </div>
 
     <!-- Table -->
@@ -99,5 +106,18 @@
         </table>
     </div>
 
+    {{-- Pagination --}}
+    <div class="card-footer">
+        {{ $rows->links('pagination::bootstrap-5') }}
+    </div>
+
 </div>
+
+@include('backend.partials.reorder-modal', [
+    'modalId' => 'blogCategoriesReorderModal',
+    'rows' => $reorderRows,
+    'reorderUrl' => route('admin.blogs.categories.reorder'),
+    'title' => 'Reorder Blog Categories',
+    'labelField' => 'name',
+])
 @endsection

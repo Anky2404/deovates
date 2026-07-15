@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Faq;
 use App\Models\FaqCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -21,9 +22,11 @@ class FaqController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
+   
+    // action below.
     public function index(Request $request)
     {
-        $rows = Faq::with('category')
+        $rows = FaqCategory::withCount('faqs')
             ->latest('id')
             ->paginate($this->pagerecords)
             ->withQueryString();
@@ -31,96 +34,160 @@ class FaqController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    public function createoredit(Request $request, ?string $id = null)
+    
+    // column, so the "order" array carries numeric ids (see index() above).
+    public function reorder(Request $request)
     {
-        // The route parameter is historically named {uuid}, but Faq has no
-        // uuid column (no HasUuid trait) — it is really the numeric id.
-        $faq = $id ? Faq::findOrFail($id) : null;
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'string',
+        ]);
 
-        $categories = FaqCategory::active()->orderBy('title')->pluck('title', 'id');
+        try {
+            DB::transaction(function () use ($request) {
+                foreach ($request->input('order') as $position => $id) {
+                    Faq::where('id', $id)->update(['display_order' => $position + 1]);
+                }
+            });
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('faq', 'categories'));
+            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.update'), config('constants.MODULES.faq'), [
+                'description' => 'Reordered FAQs',
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            Log::error('Faq reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+        }
+    }
+
+    // The "uuid" route param is a FaqCategory's uuid — this page manages every
+    // FAQ item under that one category (add / edit / remove / reorder) in a
+    // single form, mirroring FaqCategoryController::createoredit()/saveorupdate().
+    public function createoredit(Request $request, ?string $uuid = null)
+    {
+        $faqs = collect();
+        $selectedCategory = null;
+
+        if ($uuid) {
+            $selectedCategory = FaqCategory::with('faqs')->where('uuid', $uuid)->firstOrFail();
+            $faqs = $selectedCategory->faqs;
+        }
+
+        $categories = FaqCategory::active()->orderBy('title')->pluck('title', 'uuid');
+
+        return view(
+            $this->prefix . $this->folder . 'createoredit',
+            compact('faqs', 'categories', 'selectedCategory')
+        );
     }
 
     /**
-     * The create/edit view submits a single faq_category_id plus a "faqs"
-     * array of {question, answer, display_order} rows (no per-row id — see
-     * resources/views/backend/faqs/createoredit.blade.php). When editing,
-     * the first row updates the targeted Faq; any additional rows added via
-     * the "+ Add FAQ" button are created as new Faq records under the same
-     * category. When creating, every row becomes a new Faq record.
+     * The create/edit view submits a faq_category_id (category uuid) plus a
+     * "faqs" array, each row optionally carrying an "id" (existing Faq) — see
+     * resources/views/backend/faqs/createoredit.blade.php. Rows with an id are
+     * updated, rows without one are created, and any existing FAQ under the
+     * category missing from the submission (removed via the "Remove" button)
+     * is soft-deleted. Every create/update/delete is logged with its old and
+     * new values.
      */
-    public function saveorupdate(Request $request, ?string $id = null)
+    public function saveorupdate(Request $request, ?string $uuid = null)
     {
         $validated = $request->validate([
-            'faq_category_id' => ['required', 'exists:faq_categories,id'],
-            'faqs' => ['required', 'array', 'min:1'],
-            'faqs.*.question' => ['required', 'string', 'max:2000'],
-            'faqs.*.answer' => ['required', 'string'],
+            'faq_category_id' => ['required', 'exists:faq_categories,uuid'],
+            'faqs' => ['nullable', 'array'],
+            'faqs.*.id' => ['nullable', 'integer', 'exists:faq_items,id'],
+            'faqs.*.question' => ['required_with:faqs.*.answer', 'nullable', 'string', 'max:2000'],
+            'faqs.*.answer' => ['nullable', 'string'],
             'faqs.*.display_order' => ['nullable', 'integer'],
         ]);
-
-        $isActive = $request->boolean('is_active', true);
-        $items = array_values($validated['faqs']);
-        $categoryId = $validated['faq_category_id'];
 
         try {
             DB::beginTransaction();
 
-            $updatedFaq = null;
+            $category = FaqCategory::where('uuid', $validated['faq_category_id'])->firstOrFail();
 
-            if ($id) {
-                $updatedFaq = Faq::findOrFail($id);
-                $first = array_shift($items);
+            $items = collect($validated['faqs'] ?? [])
+                ->filter(fn ($item) => ! empty($item['question']))
+                ->values();
 
-                $updatedFaq->update([
-                    'faq_category_id' => $categoryId,
-                    'question' => $first['question'],
-                    'answer' => $first['answer'],
-                    'display_order' => $first['display_order'] ?? 0,
-                    'is_active' => $isActive,
-                ]);
+            $submittedIds = $items->pluck('id')->filter()->map(fn ($v) => (int) $v)->all();
 
-                ActivityLog::log(
-                    config('constants.ACTIVITY_ACTIONS.update'),
-                    config('constants.MODULES.faq'),
-                    [
-                        'subject_type' => Faq::class,
-                        'subject_id' => $updatedFaq->id,
-                        'new_values' => $updatedFaq->getChanges(),
-                        'description' => "Updated FAQ \"{$updatedFaq->question}\".",
-                    ]
-                );
-            }
+            // Remove FAQs that used to belong to this category but were
+            // dropped from the submitted list via the "Remove" button.
+            $category->faqs()
+                ->whereNotIn('id', $submittedIds ?: [0])
+                ->get()
+                ->each(function (Faq $stale) use ($category) {
+                    $oldValues = $stale->getAttributes();
+                    $stale->delete();
+
+                    ActivityLog::log(
+                        config('constants.ACTIVITY_ACTIONS.delete'),
+                        config('constants.MODULES.faq'),
+                        [
+                            'subject_type' => Faq::class,
+                            'subject_id' => $stale->id,
+                            'old_values' => $oldValues,
+                            'description' => "Removed FAQ \"{$stale->question}\" from category \"{$category->title}\".",
+                        ]
+                    );
+                });
 
             foreach ($items as $item) {
-                if (empty($item['question'])) {
-                    continue;
+                if (! empty($item['id'])) {
+                    $faq = $category->faqs()->whereKey($item['id'])->first();
+
+                    if (! $faq) {
+                        continue;
+                    }
+
+                    $oldValues = $faq->getOriginal();
+
+                    $faq->update([
+                        'question' => $item['question'],
+                        'answer' => $item['answer'] ?? '',
+                        'display_order' => $item['display_order'] ?? 0,
+                    ]);
+
+                    if ($faq->wasChanged()) {
+                        ActivityLog::log(
+                            config('constants.ACTIVITY_ACTIONS.update'),
+                            config('constants.MODULES.faq'),
+                            [
+                                'subject_type' => Faq::class,
+                                'subject_id' => $faq->id,
+                                'old_values' => Arr::only($oldValues, array_keys($faq->getChanges())),
+                                'new_values' => $faq->getChanges(),
+                                'description' => "Updated FAQ \"{$faq->question}\".",
+                            ]
+                        );
+                    }
+                } else {
+                    $newFaq = Faq::create([
+                        'faq_category_id' => $category->id,
+                        'question' => $item['question'],
+                        'answer' => $item['answer'] ?? '',
+                        'display_order' => $item['display_order'] ?? 0,
+                        'is_active' => true,
+                    ]);
+
+                    ActivityLog::log(
+                        config('constants.ACTIVITY_ACTIONS.create'),
+                        config('constants.MODULES.faq'),
+                        [
+                            'subject_type' => Faq::class,
+                            'subject_id' => $newFaq->id,
+                            'new_values' => $newFaq->getAttributes(),
+                            'description' => "Created FAQ \"{$newFaq->question}\" under category \"{$category->title}\".",
+                        ]
+                    );
                 }
-
-                $newFaq = Faq::create([
-                    'faq_category_id' => $categoryId,
-                    'question' => $item['question'],
-                    'answer' => $item['answer'] ?? '',
-                    'display_order' => $item['display_order'] ?? 0,
-                    'is_active' => $isActive,
-                ]);
-
-                ActivityLog::log(
-                    config('constants.ACTIVITY_ACTIONS.create'),
-                    config('constants.MODULES.faq'),
-                    [
-                        'subject_type' => Faq::class,
-                        'subject_id' => $newFaq->id,
-                        'new_values' => $newFaq->getAttributes(),
-                        'description' => "Created FAQ \"{$newFaq->question}\".",
-                    ]
-                );
             }
 
             DB::commit();
 
-            return redirect()->route('admin.faqs.index')->with('success', 'FAQ saved successfully.');
+            return redirect()->route('admin.faqs.createoredit', $category->uuid)->with('success', 'FAQs saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error('Faq saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
