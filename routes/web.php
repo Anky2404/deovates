@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Front\AboutController;
 use App\Http\Controllers\Front\AllianceController;
 use App\Http\Controllers\Front\BlogController;
@@ -28,6 +29,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->group(function(){
     return require_once base_path('./routes/admin.php');
+});
+
+// Named exactly "password.reset" / "password.update" because Laravel's
+// default ResetPassword notification builds its mail link from those
+// route names — renaming them breaks the emailed reset link.
+Route::prefix('admin')->middleware('admin.guest')->group(function () {
+    Route::get('/password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/password/reset', [AuthController::class, 'reset'])->name('password.update');
 });
 
 

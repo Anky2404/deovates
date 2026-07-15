@@ -70,7 +70,7 @@
                          <!-- Action -->
                             <td>
                                 @php
-                                    $actions = array_flip(config('constants.actions'));
+                                    $actions = array_flip(config('constants.ACTIONS'));
                                     $selectedActions = $up->permission->action ? explode(',', $up->permission->action) : [];
                                 @endphp
 

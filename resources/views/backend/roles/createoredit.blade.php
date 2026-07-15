@@ -41,7 +41,7 @@
            <div class="col-md-4">
     <label class="form-label">Guard *</label>
     <select name="guard" class="form-control">
-        @foreach(config('constants.guards') as $key => $label)
+        @foreach(config('constants.GUARDS') as $key => $label)
             <option value="{{ $key }}"
                 {{ old('guard', $role->guard ?? 'web') == $key ? 'selected' : '' }}>
                 {{ $label }}

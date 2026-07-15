@@ -152,4 +152,38 @@ class SkillController extends Controller
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
+
+    // Toggle Featured Function
+    public function togglefeatured(Request $request, $uuid)
+    {
+        try {
+            $skill = Skill::where('uuid', $uuid)->firstOrFail();
+            $skill->is_featured = ! $skill->is_featured;
+            $skill->save();
+
+            ActivityLog::log(
+                $skill->is_featured ? config('constants.ACTIVITY_ACTIONS.feature') : config('constants.ACTIVITY_ACTIONS.unfeature'),
+                config('constants.MODULES.skill'),
+                [
+                    'subject_type' => Skill::class,
+                    'subject_id' => $skill->id,
+                    'description' => ($skill->is_featured ? 'Marked featured' : 'Unmarked featured') . ' skill ' . $skill->name,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $skill->is_featured]);
+            }
+
+            return back()->with('success', 'Skill featured status updated.');
+        } catch (\Throwable $e) {
+            Log::error('Skill togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
 }

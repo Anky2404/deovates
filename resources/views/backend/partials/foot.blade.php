@@ -14,9 +14,13 @@
 {{-- ================= EXTRA PLUGINS ================= --}}
 <script src="{{ asset('assets/backend/vendor/libs/apex-charts/apexcharts.js') }}"></script>
 <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('assets/js/toast.js') }}"></script>
 <script src="{{ asset('assets/js/Sortable.min.js') }}"></script>
 <script src="{{ asset('assets/js/croppie.min.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+
+<script>window.CROPPIE_TEMP_UPLOAD_URL = "{{ route('admin.media.temp-upload') }}";</script>
+<script src="{{ asset('assets/js/image-cropper.js') }}"></script>
 
 <script src="{{ asset('assets/js/custom.js') }}"></script>
 
@@ -43,32 +47,12 @@
 {{-- ================= SWEETALERT TOAST ================= --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
-    const toastConfig = {
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        customClass: {
-            popup: 'swal2-toast-custom'
-        }
-    };
-
     @if(session('success'))
-        Swal.fire({
-            ...toastConfig,
-            icon: 'success',
-            title: @json(session('success'))
-        });
+        showToast('success', @json(session('success')));
     @endif
 
     @if(session('error'))
-        Swal.fire({
-            ...toastConfig,
-            icon: 'error',
-            title: @json(session('error'))
-        });
+        showToast('error', @json(session('error')));
     @endif
 });
 </script>

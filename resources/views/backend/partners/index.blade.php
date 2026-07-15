@@ -114,30 +114,22 @@
 
                     {{-- Featured --}}
                     <td>
-
-                        @if($row->is_featured)
-                            <span class="badge bg-label-warning">
-                                Featured
-                            </span>
-                        @else
-                            <span class="badge bg-label-secondary">
-                                No
-                            </span>
-                        @endif
-
+                        <div class="form-check form-switch mb-0">
+                            <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                role="switch"
+                                data-url="{{ route('admin.marketing.partners.togglefeatured', $row->uuid) }}"
+                                {{ $row->is_featured ? 'checked' : '' }}>
+                        </div>
                     </td>
 
                     {{-- Status --}}
                     <td>
-
-                        <span
-                            class="badge toggle-status cursor-pointer bg-label-{{ $row->is_active ? 'success' : 'danger' }}"
-                            data-url="{{ route('admin.marketing.partners.togglestatus', $row->uuid) }}">
-
-                            {{ $row->is_active ? 'Active' : 'Inactive' }}
-
-                        </span>
-
+                        <div class="form-check form-switch mb-0">
+                            <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                role="switch"
+                                data-url="{{ route('admin.marketing.partners.togglestatus', $row->uuid) }}"
+                                {{ $row->is_active ? 'checked' : '' }}>
+                        </div>
                     </td>
 
 
@@ -179,7 +171,7 @@
             @empty
 
                 <tr>
-                    <td colspan="11"
+                    <td colspan="9"
                         class="text-center py-5 text-muted">
 
                         No partners found.

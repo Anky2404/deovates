@@ -32,5 +32,20 @@
 <script src="{{ asset('assets/front/js/main.js') }}"></script>
 <script src="{{ asset('assets/front/js/isotope.min.js') }}"></script>
 
+{{-- ================= ALERT TOASTS ================= --}}
+<script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('assets/js/toast.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    @if(session('success'))
+        showToast('success', @json(session('success')));
+    @endif
+
+    @if(session('error'))
+        showToast('error', @json(session('error')));
+    @endif
+});
+</script>
+
 @stack('scripts')
 <!-- End Foot Scripts Section -->

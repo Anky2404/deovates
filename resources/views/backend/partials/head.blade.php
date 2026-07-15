@@ -7,6 +7,7 @@
 
     <title>@yield('title', config('constants.BUSINESS.name') . ' | Dashboard')</title>
     <meta name="description" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 
       <!-- ================= FAVICONS ================= -->

@@ -166,4 +166,38 @@ class MediaLibraryController extends Controller
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
+
+    // Toggle Featured Function
+    public function togglefeatured(Request $request, string $uuid)
+    {
+        try {
+            $media = Media::where('uuid', $uuid)->firstOrFail();
+            $media->is_featured = ! $media->is_featured;
+            $media->save();
+
+            ActivityLog::log(
+                $media->is_featured ? config('constants.ACTIVITY_ACTIONS.feature') : config('constants.ACTIVITY_ACTIONS.unfeature'),
+                config('constants.MODULES.media'),
+                [
+                    'subject_type' => Media::class,
+                    'subject_id' => $media->id,
+                    'description' => ($media->is_featured ? 'Marked featured' : 'Unmarked featured') . ' media ' . $media->name,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $media->is_featured]);
+            }
+
+            return back()->with('success', 'Media featured status updated.');
+        } catch (\Throwable $e) {
+            Log::error('Media togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
 }

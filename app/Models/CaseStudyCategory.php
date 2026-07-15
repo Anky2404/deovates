@@ -20,6 +20,7 @@ class CaseStudyCategory extends Model
         'description',
         'icon',
         'image',
+        'image_alt',
         'meta_title',
         'meta_description',
         'is_active',

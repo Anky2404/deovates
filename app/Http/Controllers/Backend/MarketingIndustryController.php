@@ -166,4 +166,38 @@ class MarketingIndustryController extends Controller
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
+
+    // Toggle Featured Function
+    public function togglefeatured(Request $request, $uuid)
+    {
+        try {
+            $industry = Industry::where('uuid', $uuid)->firstOrFail();
+            $industry->is_featured = ! $industry->is_featured;
+            $industry->save();
+
+            ActivityLog::log(
+                $industry->is_featured ? config('constants.ACTIVITY_ACTIONS.feature') : config('constants.ACTIVITY_ACTIONS.unfeature'),
+                config('constants.MODULES.industry'),
+                [
+                    'subject_type' => Industry::class,
+                    'subject_id' => $industry->id,
+                    'description' => ($industry->is_featured ? 'Marked featured' : 'Unmarked featured') . ' industry ' . $industry->name,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $industry->is_featured]);
+            }
+
+            return back()->with('success', 'Industry featured status updated.');
+        } catch (\Throwable $e) {
+            Log::error('Industry togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
 }

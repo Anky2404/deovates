@@ -158,4 +158,38 @@ class MediaRelationController extends Controller
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
+
+    // Toggle Featured Function
+    public function togglefeatured(Request $request, string $uuid)
+    {
+        try {
+            $relation = MediaRelation::where('uuid', $uuid)->firstOrFail();
+            $relation->is_featured = ! $relation->is_featured;
+            $relation->save();
+
+            ActivityLog::log(
+                $relation->is_featured ? config('constants.ACTIVITY_ACTIONS.feature') : config('constants.ACTIVITY_ACTIONS.unfeature'),
+                config('constants.MODULES.mediarelation'),
+                [
+                    'subject_type' => MediaRelation::class,
+                    'subject_id' => $relation->id,
+                    'description' => ($relation->is_featured ? 'Marked featured' : 'Unmarked featured') . ' media relation #' . $relation->id,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $relation->is_featured]);
+            }
+
+            return back()->with('success', 'Media relation featured status updated.');
+        } catch (\Throwable $e) {
+            Log::error('MediaRelation togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
 }

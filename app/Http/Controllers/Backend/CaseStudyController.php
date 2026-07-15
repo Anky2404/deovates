@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\CaseStudy;
 use App\Models\CaseStudyCategory;
 use App\Services\MediaUploader;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class CaseStudyController extends Controller
 {
+    use HandlesImageUploads;
+
     private $pagerecords;
     private $prefix = 'backend.';
     private $folder = 'casestudies.';
@@ -64,11 +66,13 @@ class CaseStudyController extends Controller
             'display_order' => ['nullable', 'integer'],
             'published_at' => ['nullable', 'date'],
             'featured_image' => ['nullable', 'image', 'max:4096'],
+            'featured_image_alt' => ['nullable', 'string', 'max:255'],
             'banner_image' => ['nullable', 'image', 'max:4096'],
-            'gallery' => ['nullable', 'array'],
-            'gallery.*' => ['nullable', 'image', 'max:4096'],
-            'old_gallery' => ['nullable', 'array'],
-            'old_gallery.*' => ['nullable', 'string'],
+            'banner_image_alt' => ['nullable', 'string', 'max:255'],
+            'gallery_items' => ['nullable', 'array'],
+            'gallery_items.*.path' => ['nullable', 'string'],
+            'gallery_items.*.temp' => ['nullable', 'string'],
+            'gallery_items.*.alt' => ['nullable', 'string', 'max:255'],
             'overview' => ['nullable', 'string'],
             'challenges' => ['nullable', 'string'],
             'solutions' => ['nullable', 'string'],
@@ -84,7 +88,7 @@ class CaseStudyController extends Controller
             DB::beginTransaction();
 
             $data = $validated;
-            unset($data['featured_image'], $data['banner_image'], $data['gallery'], $data['old_gallery']);
+            unset($data['featured_image'], $data['banner_image'], $data['gallery_items']);
 
             $data['is_active'] = $request->boolean('is_active');
             $data['is_featured'] = $request->boolean('is_featured');
@@ -92,21 +96,8 @@ class CaseStudyController extends Controller
             $data['key_metrics'] = $this->parseCommaList($request->input('key_metrics'));
             $data['meta_keywords'] = $this->parseCommaList($request->input('meta_keywords'));
 
-            if ($request->hasFile('featured_image')) {
-                $data['featured_image'] = $this->mediaUploader->uploadSingle(
-                    $request->file('featured_image'),
-                    'case-studies',
-                    $caseStudy?->featured_image
-                );
-            }
-
-            if ($request->hasFile('banner_image')) {
-                $data['banner_image'] = $this->mediaUploader->uploadSingle(
-                    $request->file('banner_image'),
-                    'case-studies',
-                    $caseStudy?->banner_image
-                );
-            }
+            $this->applyImage($request, $data, 'featured_image', 'case-studies', $caseStudy);
+            $this->applyImage($request, $data, 'banner_image', 'case-studies', $caseStudy);
 
             $data['gallery'] = $this->resolveGallery($request, $caseStudy);
 
@@ -176,6 +167,41 @@ class CaseStudyController extends Controller
         }
     }
 
+    public function togglefeatured(Request $request, string $uuid)
+    {
+        $caseStudy = CaseStudy::where('uuid', $uuid)->firstOrFail();
+
+        try {
+            $caseStudy->is_featured = ! $caseStudy->is_featured;
+            $caseStudy->save();
+
+            ActivityLog::log(
+                config('constants.ACTIVITY_ACTIONS.' . ($caseStudy->is_featured ? 'feature' : 'unfeature')),
+                config('constants.MODULES.casestudy'),
+                [
+                    'subject_type' => CaseStudy::class,
+                    'subject_id' => $caseStudy->id,
+                    'new_values' => ['is_featured' => $caseStudy->is_featured],
+                    'description' => 'Toggled featured status of case study: ' . $caseStudy->title,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $caseStudy->is_featured]);
+            }
+
+            return back()->with('success', 'Status updated successfully.');
+        } catch (\Throwable $e) {
+            Log::error('CaseStudy togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
     public function destroy(string $uuid)
     {
         $caseStudy = CaseStudy::where('uuid', $uuid)->firstOrFail();
@@ -202,27 +228,44 @@ class CaseStudyController extends Controller
     }
 
     /**
-     * Merge kept old gallery paths with newly uploaded files, deleting
-     * any previously stored images the user removed on the form.
+     * Build the new gallery array from the submitted "gallery_items" rows —
+     * each row is either a kept existing image (["path" => ..., "alt" => ...])
+     * or a freshly cropped one (["temp" => ..., "alt" => ...]) promoted here.
+     * Any existing image whose row didn't survive to submission (removed on
+     * the form) gets its file deleted from disk.
      */
     private function resolveGallery(Request $request, ?CaseStudy $caseStudy): array
     {
-        $existingGallery = $caseStudy->gallery ?? [];
-        $keptGallery = array_values(array_filter((array) $request->input('old_gallery', [])));
+        $existingPaths = array_column($caseStudy->gallery ?? [], 'path');
+        $rows = (array) $request->input('gallery_items', []);
 
-        foreach (array_diff($existingGallery, $keptGallery) as $removedPath) {
-            $this->mediaUploader->deleteSingle($removedPath);
-        }
+        $result = [];
+        $keptPaths = [];
 
-        $uploadedPaths = [];
+        foreach ($rows as $row) {
+            $alt = $row['alt'] ?? null;
 
-        foreach ((array) $request->file('gallery', []) as $file) {
-            if ($file instanceof UploadedFile) {
-                $uploadedPaths[] = $this->mediaUploader->uploadSingle($file, 'case-studies', null);
+            if (!empty($row['temp'])) {
+                $path = $this->mediaUploader->promoteTemp($row['temp'], 'case-studies', null, $alt);
+
+                if ($path) {
+                    $result[] = ['path' => $path, 'alt' => $alt];
+                }
+
+                continue;
+            }
+
+            if (!empty($row['path'])) {
+                $result[] = ['path' => $row['path'], 'alt' => $alt];
+                $keptPaths[] = $row['path'];
             }
         }
 
-        return array_values(array_merge($keptGallery, $uploadedPaths));
+        foreach (array_diff($existingPaths, $keptPaths) as $removedPath) {
+            $this->mediaUploader->deleteSingle($removedPath);
+        }
+
+        return $result;
     }
 
     private function parseCommaList(?string $value): array

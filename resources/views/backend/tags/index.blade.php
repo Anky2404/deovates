@@ -51,11 +51,12 @@
 
                             {{-- Status --}}
                             <td>
-                                <span
-                                    class="badge toggle-status cursor-pointer bg-label-{{ $tag->is_active ? 'success' : 'danger' }}"
-                                    data-url="{{ route('admin.tags.togglestatus', $tag->uuid) }}">
-                                    {{ $tag->is_active ? 'Active' : 'Inactive' }}
-                                </span>
+                                <div class="form-check form-switch mb-0">
+                                    <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                        role="switch"
+                                        data-url="{{ route('admin.tags.togglestatus', $tag->uuid) }}"
+                                        {{ $tag->is_active ? 'checked' : '' }}>
+                                </div>
                             </td>
 
 

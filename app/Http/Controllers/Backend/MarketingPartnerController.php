@@ -164,4 +164,38 @@ class MarketingPartnerController extends Controller
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
+
+    // Toggle Featured Function
+    public function togglefeatured(Request $request, $uuid)
+    {
+        try {
+            $partner = Partner::where('uuid', $uuid)->firstOrFail();
+            $partner->is_featured = ! $partner->is_featured;
+            $partner->save();
+
+            ActivityLog::log(
+                $partner->is_featured ? config('constants.ACTIVITY_ACTIONS.feature') : config('constants.ACTIVITY_ACTIONS.unfeature'),
+                config('constants.MODULES.partner'),
+                [
+                    'subject_type' => Partner::class,
+                    'subject_id' => $partner->id,
+                    'description' => ($partner->is_featured ? 'Marked featured' : 'Unmarked featured') . ' partner ' . $partner->name,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $partner->is_featured]);
+            }
+
+            return back()->with('success', 'Partner featured status updated.');
+        } catch (\Throwable $e) {
+            Log::error('Partner togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
 }

@@ -81,6 +81,8 @@ class PermissionController extends Controller
         $data['is_active'] = $request->boolean('is_active');
 
         try {
+            $oldValues = $permission ? array_intersect_key($permission->getAttributes(), $data) : [];
+
             if ($permission) {
                 $permission->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
@@ -93,10 +95,14 @@ class PermissionController extends Controller
                 $description = 'Created permission ' . $permission->name;
             }
 
+            $newValues = collect($permission->getChanges())->except('updated_at')->toArray();
+            $oldValues = collect($oldValues)->only(array_keys($newValues))->toArray();
+
             ActivityLog::log($action, config('constants.MODULES.permission'), [
                 'subject_type' => Permission::class,
                 'subject_id' => $permission->id,
-                'new_values' => $permission->getChanges(),
+                'old_values' => $oldValues,
+                'new_values' => $newValues,
                 'description' => $description,
             ]);
 

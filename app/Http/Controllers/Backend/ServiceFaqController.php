@@ -173,4 +173,38 @@ class ServiceFaqController extends Controller
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
+
+    // Toggle Featured Function
+    public function togglefeatured(Request $request, $uuid)
+    {
+        try {
+            $faq = ServiceFaq::where('uuid', $uuid)->firstOrFail();
+            $faq->is_featured = ! $faq->is_featured;
+            $faq->save();
+
+            ActivityLog::log(
+                $faq->is_featured ? config('constants.ACTIVITY_ACTIONS.feature') : config('constants.ACTIVITY_ACTIONS.unfeature'),
+                config('constants.MODULES.servicefaq'),
+                [
+                    'subject_type' => ServiceFaq::class,
+                    'subject_id' => $faq->id,
+                    'description' => ($faq->is_featured ? 'Marked featured' : 'Unmarked featured') . ' service FAQ ' . $faq->question,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $faq->is_featured]);
+            }
+
+            return back()->with('success', 'Service FAQ featured status updated.');
+        } catch (\Throwable $e) {
+            Log::error('ServiceFaq togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
 }

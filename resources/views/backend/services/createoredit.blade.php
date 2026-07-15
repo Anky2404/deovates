@@ -61,13 +61,31 @@
 
                                 <label class="form-label">Featured Image</label>
 
-                                <input type="file" class="form-control croppie-upload image-preview-input"
+                                <input type="file" class="form-control croppie-upload"
                                     name="featured_image" id="featured_image" data-preview="#featuredImagePreview"
-                                    accept="image/*">
+                                    data-width="800" data-height="600" accept="image/*">
 
                                 <img id="featuredImagePreview"
                                     src="{{ !empty($service->featured_image) ? asset('storage/' . $service->featured_image) : 'https://placehold.co/130x130' }}"
                                     class="mt-2 rounded border img-thumbnail" height="130" width="130">
+
+                                <input type="text" name="featured_image_alt" class="form-control mt-2"
+                                    placeholder="Alt text (used for the image name too)"
+                                    value="{{ old('featured_image_alt', $service->featured_image_alt ?? '') }}">
+
+                                <label class="form-label mt-3">Banner Image</label>
+
+                                <input type="file" class="form-control croppie-upload"
+                                    name="banner_image" id="banner_image" data-preview="#bannerImagePreview"
+                                    data-width="1600" data-height="600" accept="image/*">
+
+                                <img id="bannerImagePreview"
+                                    src="{{ !empty($service->banner_image) ? asset('storage/' . $service->banner_image) : 'https://placehold.co/260x100' }}"
+                                    class="mt-2 rounded border img-thumbnail" height="100" width="260">
+
+                                <input type="text" name="banner_image_alt" class="form-control mt-2"
+                                    placeholder="Alt text (used for the image name too)"
+                                    value="{{ old('banner_image_alt', $service->banner_image_alt ?? '') }}">
 
                                 <label class="form-label mt-3">Icon (CSS Class)</label>
 
@@ -225,6 +243,20 @@
                                                 </div>
                                             </div>
 
+                                            <div class="mb-2 mt-2">
+                                                <label class="form-label">Image</label>
+                                                <input type="file" class="form-control croppie-upload"
+                                                    name="features[{{ $loop->index }}][image]"
+                                                    data-preview="#featureImagePreview{{ $loop->index }}"
+                                                    data-width="300" data-height="300" accept="image/*">
+                                                <img id="featureImagePreview{{ $loop->index }}"
+                                                    src="{{ !empty($feature->image) ? asset('storage/' . $feature->image) : 'https://placehold.co/100x100' }}"
+                                                    class="mt-2 rounded border img-thumbnail" height="100" width="100">
+                                                <input type="text" name="features[{{ $loop->index }}][image_alt]"
+                                                    class="form-control mt-2" placeholder="Alt text"
+                                                    value="{{ old('features.' . $loop->index . '.image_alt', $feature->image_alt) }}">
+                                            </div>
+
                                             <div class="d-flex justify-content-between align-items-center mt-2">
                                                 <small class="text-muted">Order from preview</small>
                                                 <button type="button"
@@ -375,12 +407,17 @@
                                                 value="{{ $problem->icon }}">
 
                                             <input type="file" name="problems[{{ $loop->index }}][image]"
-                                                class="form-control mb-2 image-file image-preview-input"
-                                                data-preview="#problemImagePreview{{ $loop->index }}" accept="image/*">
+                                                class="form-control mb-2 croppie-upload"
+                                                data-preview="#problemImagePreview{{ $loop->index }}"
+                                                data-width="600" data-height="400" accept="image/*">
 
                                             <img id="problemImagePreview{{ $loop->index }}"
                                                 src="{{ !empty($problem->image) ? asset('storage/' . $problem->image) : 'https://placehold.co/130x130' }}"
                                                 class="mt-2 rounded border img-thumbnail mb-2" height="130" width="130">
+
+                                            <input type="text" name="problems[{{ $loop->index }}][image_alt]"
+                                                class="form-control mb-2" placeholder="Alt text"
+                                                value="{{ $problem->image_alt }}">
 
                                             <input type="number" name="problems[{{ $loop->index }}][views]"
                                                 class="form-control mb-2 views-text" value="{{ $problem->views ?? 0 }}">
@@ -754,6 +791,18 @@
                 </div>
             </div>
 
+            <div class="mb-2 mt-2">
+                <label class="form-label">Image</label>
+                <input type="file" class="form-control croppie-upload"
+                       name="features[${featureIndex}][image]"
+                       data-preview="#featureImagePreview${featureIndex}"
+                       data-width="300" data-height="300" accept="image/*">
+                <img id="featureImagePreview${featureIndex}" src="https://placehold.co/100x100"
+                     class="mt-2 rounded border img-thumbnail" height="100" width="100">
+                <input type="text" name="features[${featureIndex}][image_alt]"
+                       class="form-control mt-2" placeholder="Alt text">
+            </div>
+
             <div class="d-flex justify-content-between align-items-center mt-2">
                 <small class="text-muted">Order from preview</small>
                 <button type="button" class="btn btn-sm btn-danger removeFeature">
@@ -1000,8 +1049,9 @@
                 <input type="text" name="problems[${problemIndex}][challenge]" class="form-control mb-2 challenge-text" placeholder="Challenge" required>
                 <textarea name="problems[${problemIndex}][solution]" class="form-control mb-2 solution-text" rows="3" placeholder="Solution" required></textarea>
                 <input type="text" name="problems[${problemIndex}][icon]" class="form-control mb-2 icon-text" placeholder="fa-solid fa-star">
-                <input type="file" name="problems[${problemIndex}][image]" class="form-control mb-2 image-file image-preview-input" data-preview="#problemImagePreview${problemIndex}" accept="image/*">
+                <input type="file" name="problems[${problemIndex}][image]" class="form-control mb-2 croppie-upload" data-preview="#problemImagePreview${problemIndex}" data-width="600" data-height="400" accept="image/*">
                 <img id="problemImagePreview${problemIndex}" src="https://placehold.co/130x130" class="mt-2 rounded border img-thumbnail mb-2" height="130" width="130">
+                <input type="text" name="problems[${problemIndex}][image_alt]" class="form-control mb-2" placeholder="Alt text">
                 <input type="number" name="problems[${problemIndex}][views]" class="form-control mb-2 views-text" value="0">
 
                 <div class="d-flex justify-content-between">
@@ -1042,10 +1092,8 @@
         document.addEventListener('input', () => {
             if (!isSorting) refreshProblemPreview();
         });
-        document.addEventListener('change', (e) => {
-            if (!isSorting && e.target.classList.contains('image-file')) {
-                refreshProblemPreview();
-            }
+        document.getElementById('problemContainer').addEventListener('croppie:uploaded', () => {
+            if (!isSorting) refreshProblemPreview();
         });
 
         // ===============================
@@ -1066,17 +1114,14 @@
                 const featured = item.querySelector('.problem-featured').checked;
 
                 // ===============================
-                // IMAGE HANDLING
-                // Show new file if selected, otherwise show existing image
+                // IMAGE HANDLING — the crop-and-upload widget keeps this
+                // row's preview <img> current (cropped or original), so the
+                // list preview just mirrors whatever it's already showing.
                 // ===============================
                 let imageHTML = '';
-                const fileInput = item.querySelector('.image-file');
                 const existingImg = item.querySelector('img[id^="problemImagePreview"]');
 
-                if (fileInput.files[0]) {
-                    const imgURL = window.URL.createObjectURL(fileInput.files[0]);
-                    imageHTML = `<img src="${imgURL}" class="mt-2 rounded" style="max-height:80px;">`;
-                } else if (existingImg && !existingImg.src.includes('placehold.co')) {
+                if (existingImg && !existingImg.src.includes('placehold.co')) {
                     imageHTML = `<img src="${existingImg.src}" class="mt-2 rounded" style="max-height:80px;">`;
                 }
 
@@ -1145,7 +1190,7 @@
 
                 <div class="col-md-6">
                     <select class="form-select technology-select"
-                            name="technologies[${technologyIndex}][id]">
+                            name="technologies[${technologyIndex}][technology_id]">
                         ${options}
                     </select>
                 </div>

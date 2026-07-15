@@ -38,7 +38,7 @@ class RolePermissionController extends Controller
 
         if ($uuid) {
             try {
-                $rolePermission = RolePermission::where('uuid', $uuid)->firstOrFail();
+                $rolePermission = RolePermission::with(['role', 'permission'])->where('uuid', $uuid)->firstOrFail();
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
@@ -49,6 +49,16 @@ class RolePermissionController extends Controller
 
         $roles = Role::active()->orderBy('name')->get();
         $permissions = Permission::active()->orderBy('name')->get();
+
+        // If this assignment points at a role/permission that's since been
+        // deactivated, still list it (so editing doesn't silently show a
+        // blank dropdown and risk the admin re-pointing it at something else).
+        if ($rolePermission?->role && ! $roles->contains('id', $rolePermission->role_id)) {
+            $roles->push($rolePermission->role);
+        }
+        if ($rolePermission?->permission && ! $permissions->contains('id', $rolePermission->permission_id)) {
+            $permissions->push($rolePermission->permission);
+        }
 
         return view($this->prefix . $this->folder . 'createoredit', compact('rolePermission', 'roles', 'permissions'));
     }
@@ -86,6 +96,8 @@ class RolePermissionController extends Controller
         try {
             DB::beginTransaction();
 
+            $oldValues = $rolePermission ? array_intersect_key($rolePermission->getAttributes(), $data) : [];
+
             if ($rolePermission) {
                 $rolePermission->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
@@ -96,10 +108,14 @@ class RolePermissionController extends Controller
                 $description = 'Assigned permission to role';
             }
 
+            $newValues = collect($rolePermission->getChanges())->except('updated_at')->toArray();
+            $oldValues = collect($oldValues)->only(array_keys($newValues))->toArray();
+
             ActivityLog::log($action, config('constants.MODULES.rolepermission'), [
                 'subject_type' => RolePermission::class,
                 'subject_id' => $rolePermission->id,
-                'new_values' => $rolePermission->getChanges(),
+                'old_values' => $oldValues,
+                'new_values' => $newValues,
                 'description' => $description,
             ]);
 

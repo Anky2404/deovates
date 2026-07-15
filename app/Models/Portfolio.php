@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasSlug;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -27,7 +28,9 @@ class Portfolio extends Model
         'project_duration',
         'project_budget',
         'featured_image',
+        'featured_image_alt',
         'banner_image',
+        'banner_image_alt',
         'gallery',
         'video_url',
         'overview',
@@ -51,7 +54,6 @@ class Portfolio extends Model
     protected function casts(): array
     {
         return [
-            'gallery' => 'array',
             'meta_keywords' => 'array',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
@@ -59,6 +61,27 @@ class Portfolio extends Model
             'views' => 'integer',
             'published_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Each gallery item is ["path" => ..., "alt" => ...]. Old records were
+     * saved as a flat array of path strings before alt text existed —
+     * normalize those into the same shape on read so every consumer
+     * (views, controllers) only ever sees one format.
+     */
+    protected function gallery(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                $items = is_string($value) ? (json_decode($value, true) ?: []) : (array) ($value ?? []);
+
+                return array_map(
+                    fn ($item) => is_array($item) ? $item : ['path' => $item, 'alt' => null],
+                    $items
+                );
+            },
+            set: fn ($value) => json_encode($value ?? []),
+        );
     }
 
     public function category(): BelongsTo

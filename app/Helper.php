@@ -144,12 +144,7 @@ class Helper
 
     public static function canView($role): bool
     {
-
-        if (!auth('admin')->user()) {
-            return false;
-        }
-
-        return auth('admin')->user()->role->name === $role;
+        return auth('admin')->user()?->role?->name === $role;
     }
 
 

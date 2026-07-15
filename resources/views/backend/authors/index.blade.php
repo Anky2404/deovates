@@ -26,6 +26,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Status</th>
+                    <th>Featured</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
@@ -64,11 +65,22 @@
 
                          {{-- Status --}}
                                 <td>
-                                    <span
-                                        class="badge toggle-status cursor-pointer bg-label-{{ $author->is_active ? 'success' : 'danger' }}"
-                                        data-url="{{ route('admin.authors.togglestatus', $author->uuid) }}">
-                                        {{ $author->is_active ? 'Active' : 'Inactive' }}
-                                    </span>
+                                    <div class="form-check form-switch mb-0">
+                                        <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                            role="switch"
+                                            data-url="{{ route('admin.authors.togglestatus', $author->uuid) }}"
+                                            {{ $author->is_active ? 'checked' : '' }}>
+                                    </div>
+                                </td>
+
+                                {{-- Featured --}}
+                                <td>
+                                    <div class="form-check form-switch mb-0">
+                                        <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                            role="switch"
+                                            data-url="{{ route('admin.authors.togglefeatured', $author->uuid) }}"
+                                            {{ $author->is_featured ? 'checked' : '' }}>
+                                    </div>
                                 </td>
 
 
@@ -97,7 +109,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-4">
+                        <td colspan="8" class="text-center text-muted py-4">
                             No Authors found.
                         </td>
                     </tr>

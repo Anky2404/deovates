@@ -141,6 +141,41 @@ class TechnologyCategoryController extends Controller
         }
     }
 
+    public function togglefeatured(Request $request, string $uuid)
+    {
+        $category = TechnologyCategory::where('uuid', $uuid)->firstOrFail();
+
+        try {
+            $category->is_featured = ! $category->is_featured;
+            $category->save();
+
+            ActivityLog::log(
+                config('constants.ACTIVITY_ACTIONS.' . ($category->is_featured ? 'feature' : 'unfeature')),
+                config('constants.MODULES.technologycategory'),
+                [
+                    'subject_type' => TechnologyCategory::class,
+                    'subject_id' => $category->id,
+                    'new_values' => ['is_featured' => $category->is_featured],
+                    'description' => 'Toggled featured status of technology category: ' . $category->name,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $category->is_featured]);
+            }
+
+            return back()->with('success', 'Status updated successfully.');
+        } catch (\Throwable $e) {
+            Log::error('TechnologyCategory togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
     public function destroy(string $uuid)
     {
         $category = TechnologyCategory::where('uuid', $uuid)->firstOrFail();

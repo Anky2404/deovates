@@ -21,6 +21,7 @@ class Technology extends Model
         'slug',
         'icon',
         'image',
+        'image_alt',
         'technology_category_id',
         'description',
         'website_url',

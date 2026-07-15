@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 class AuthLog extends Model
 {
@@ -123,8 +124,17 @@ class AuthLog extends Model
         ?string $failureReason = null
     ): self {
 
+        if ($userId === null) {
+            foreach (array_keys(config('auth.guards', [])) as $guard) {
+                if ($user = Auth::guard($guard)->user()) {
+                    $userId = $user->id;
+                    break;
+                }
+            }
+        }
+
         return static::create([
-            'user_id'        => $userId ?? auth()->id(),
+            'user_id'        => $userId,
             'event'          => $event,
             'ip_address'     => request()->ip(),
             'user_agent'     => request()->userAgent(),

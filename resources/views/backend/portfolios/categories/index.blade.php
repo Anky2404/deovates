@@ -55,19 +55,22 @@
 
                             <!-- Featured -->
                             <td>
-                                <span
-                                    class="badge {{ $category->is_featured ? 'bg-label-success' : 'bg-label-secondary' }}">
-                                    {{ $category->is_featured ? 'Yes' : 'No' }}
-                                </span>
+                                <div class="form-check form-switch mb-0">
+                                    <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                        role="switch"
+                                        data-url="{{ route('admin.portfolios.categories.togglefeatured', $category->uuid) }}"
+                                        {{ $category->is_featured ? 'checked' : '' }}>
+                                </div>
                             </td>
 
                              {{-- Status --}}
                                 <td>
-                                    <span
-                                        class="badge toggle-status cursor-pointer bg-label-{{ $category->is_active ? 'success' : 'danger' }}"
-                                        data-url="{{ route('admin.portfolios.categories.togglestatus', $category->uuid) }}">
-                                        {{ $category->is_active ? 'Active' : 'Inactive' }}
-                                    </span>
+                                    <div class="form-check form-switch mb-0">
+                                        <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                            role="switch"
+                                            data-url="{{ route('admin.portfolios.categories.togglestatus', $category->uuid) }}"
+                                            {{ $category->is_active ? 'checked' : '' }}>
+                                    </div>
                                 </td>
 
 

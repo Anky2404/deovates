@@ -31,7 +31,7 @@
                 <label class="form-label">Module</label>
                 <select name="module" id="module" class="form-control">
                     <option value="">Select Module</option>
-                    @foreach(config('constants.modules') as $key => $label)
+                    @foreach(config('constants.MODULES') as $key => $label)
                         <option value="{{ $key }}"
                             {{ old('module', $permission->module ?? '') == $key ? 'selected' : '' }}>
                             {{ $label }}
@@ -42,14 +42,15 @@
 
             <div class="col-md-6">
                 <label class="form-label">Group</label>
-                <select name="group[]" id="group" class="form-control select2" multiple></select>
+                <select name="group[]" id="group" class="form-control select2-tags" multiple></select>
+                <small class="text-muted">Type a group name and press enter to add it as a tag.</small>
             </div>
 
             <div class="col-md-6">
                 <label class="form-label">Action Key</label>
 
                 @php
-                    $actions = config('constants.actions');
+                    $actions = config('constants.ACTIONS');
                     $selectedActions = old('action', isset($permission->action)
                         ? explode(',', $permission->action)
                         : []);
@@ -121,44 +122,33 @@
 @endphp
 
 <script>
-const GROUPS = @json(config('constants.groups'));
-const selectedModule = "{{ old('module', $permission->module ?? '') }}";
 const selectedGroups = @json($groupData);
 </script>
 
 <script>
 $(function () {
 
-    const $module = $('#module');
-    const $group = $('#group');
-
     $('.select2').select2({
         width: '100%',
         allowClear: true
     });
 
-    function renderGroups(module) {
-        const list = GROUPS[module] || [];
+    // Group is a free-text tag list (no fixed per-module vocabulary) —
+    // admins type whatever grouping label makes sense and press enter.
+    const $group = $('#group');
 
-        $group.empty();
-
-        $.each(list, function (_, item) {
-            const label = item.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-            const selected = selectedGroups.includes(item);
-            const option = new Option(label, item, selected, selected);
-            $group.append(option);
-        });
-
-        $group.trigger('change');
-    }
-
-    $module.on('change', function () {
-        renderGroups(this.value);
+    selectedGroups.forEach(function (item) {
+        if (!$group.find("option[value='" + item + "']").length) {
+            $group.append(new Option(item, item, true, true));
+        }
     });
 
-    if (selectedModule) {
-        renderGroups(selectedModule);
-    }
+    $group.select2({
+        width: '100%',
+        tags: true,
+        tokenSeparators: [','],
+        placeholder: 'Type and press enter to add a group'
+    });
 
 });
 </script>

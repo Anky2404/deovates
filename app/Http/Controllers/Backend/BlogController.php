@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Author;
@@ -16,6 +17,8 @@ use Illuminate\Validation\Rule;
 
 class BlogController extends Controller
 {
+    use HandlesImageUploads;
+
     private $pagerecords;
     private $prefix = 'backend.';
     private $folder = 'blogs.';
@@ -196,6 +199,44 @@ class BlogController extends Controller
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error('Blog togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
+    public function togglefeatured(Request $request, string $uuid)
+    {
+        try {
+            DB::beginTransaction();
+
+            $blog = Blog::where('uuid', $uuid)->firstOrFail();
+            $blog->is_featured = ! $blog->is_featured;
+            $blog->save();
+
+            ActivityLog::log(
+                config('constants.ACTIVITY_ACTIONS.' . ($blog->is_featured ? 'feature' : 'unfeature')),
+                config('constants.MODULES.blog'),
+                [
+                    'subject_type' => Blog::class,
+                    'subject_id' => $blog->id,
+                    'description' => 'Blog featured status toggled to ' . ($blog->is_featured ? 'featured' : 'unfeatured') . '.',
+                ]
+            );
+
+            DB::commit();
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $blog->is_featured]);
+            }
+
+            return back()->with('success', 'Blog featured status updated.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Blog togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

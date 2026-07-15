@@ -64,11 +64,12 @@
 
                         <!-- Status -->
                         <td>
-                            <span
-                                class="badge toggle-status cursor-pointer bg-label-{{ $template->is_active ? 'success' : 'danger' }}"
-                                data-url="{{ route('admin.templates.togglestatus', $template->uuid) }}">
-                                {{ $template->is_active ? 'Active' : 'Inactive' }}
-                            </span>
+                            <div class="form-check form-switch mb-0">
+                                <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                    role="switch"
+                                    data-url="{{ route('admin.templates.togglestatus', $template->uuid) }}"
+                                    {{ $template->is_active ? 'checked' : '' }}>
+                            </div>
                         </td>
 
                         <!-- Actions -->

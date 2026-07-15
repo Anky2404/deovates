@@ -78,7 +78,7 @@ class UserPermissionController extends Controller
 
         if ($uuid) {
             try {
-                $record = UserPermission::where('uuid', $uuid)->firstOrFail();
+                $record = UserPermission::with(['user', 'permission'])->where('uuid', $uuid)->firstOrFail();
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
@@ -89,6 +89,15 @@ class UserPermissionController extends Controller
 
         $users = User::active()->orderBy('name')->get();
         $permissions = Permission::active()->orderBy('name')->get();
+
+        // Same edit-safety as RolePermissionController: don't let a since-
+        // deactivated user/permission vanish from the dropdown while editing.
+        if ($record?->user && ! $users->contains('id', $record->user_id)) {
+            $users->push($record->user);
+        }
+        if ($record?->permission && ! $permissions->contains('id', $record->permission_id)) {
+            $permissions->push($record->permission);
+        }
 
         return view($this->prefix . $this->folder . 'createoredit', compact('record', 'users', 'permissions'));
     }
@@ -127,6 +136,8 @@ class UserPermissionController extends Controller
         try {
             DB::beginTransaction();
 
+            $oldValues = $record ? array_intersect_key($record->getAttributes(), $data) : [];
+
             if ($record) {
                 $record->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
@@ -138,10 +149,14 @@ class UserPermissionController extends Controller
                 $description = 'Assigned permission to user';
             }
 
+            $newValues = collect($record->getChanges())->except('updated_at')->toArray();
+            $oldValues = collect($oldValues)->only(array_keys($newValues))->toArray();
+
             ActivityLog::log($action, config('constants.MODULES.userpermission'), [
                 'subject_type' => UserPermission::class,
                 'subject_id' => $record->id,
-                'new_values' => $record->getChanges(),
+                'old_values' => $oldValues,
+                'new_values' => $newValues,
                 'description' => $description,
             ]);
 

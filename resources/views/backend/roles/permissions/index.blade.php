@@ -69,7 +69,7 @@
                           <!-- Action -->
                             <td>
                                 @php
-                                    $actions = array_flip(config('constants.actions'));
+                                    $actions = array_flip(config('constants.ACTIONS'));
                                     $selectedActions = $rp->permission->action ? explode(',', $rp->permission->action) : [];
                                 @endphp
 
@@ -84,19 +84,17 @@
                                 @endif
                             </td>
 
-                        <!-- Conditions -->
-                        {{-- <td title="{{ json_encode($rp->conditions) }}">
-                            {{ \Illuminate\Support\Str::limit(json_encode($rp->conditions), 40) ?? '—' }}
-                        </td> --}}
+
 
                         <!-- Allowed -->
                                 <td>
-                                    <span
-                                        class="badge toggle-status cursor-pointer bg-label-{{ $rp->is_allowed ? 'success' : 'danger' }}"
-                                        data-url="{{ route('admin.roles.permissions.togglestatus', $rp->uuid) }}"
-                                        data-type="allow">
-                                        {{ $rp->is_allowed ? 'Yes' : 'No' }}
-                                    </span>
+                                    <div class="form-check form-switch mb-0">
+                                        <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                            role="switch"
+                                            data-url="{{ route('admin.roles.permissions.togglestatus', $rp->uuid) }}"
+                                             data-type="allow"
+                                            {{ $rp->is_allowed ? 'checked' : '' }}>
+                                    </div>
                                 </td>
 
 

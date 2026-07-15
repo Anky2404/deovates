@@ -6,7 +6,6 @@
 
 <div class="card">
 
-```
 <div class="card-header d-flex justify-content-between align-items-center">
     <h5 class="mb-0">Industries</h5>
 
@@ -29,6 +28,7 @@
                 <th>Name</th>
                 <th width="180">Slug</th>
                 <th width="100" class="text-center">Status</th>
+                <th width="100" class="text-center">Featured</th>
                 <th width="130">Created</th>
                 <th width="120" class="text-center">Action</th>
             </tr>
@@ -104,15 +104,22 @@
 
                     {{-- Status --}}
                     <td class="text-center">
+                        <div class="form-check form-switch mb-0 d-flex justify-content-center">
+                            <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                role="switch"
+                                data-url="{{ route('admin.marketing.industries.togglestatus', $row->uuid) }}"
+                                {{ $row->is_active ? 'checked' : '' }}>
+                        </div>
+                    </td>
 
-                        <span
-                            class="badge toggle-status cursor-pointer bg-label-{{ $row->is_active ? 'success' : 'danger' }}"
-                            data-url="{{ route('admin.marketing.industries.togglestatus', $row->uuid) }}">
-
-                            {{ $row->is_active ? 'Active' : 'Inactive' }}
-
-                        </span>
-
+                    {{-- Featured --}}
+                    <td class="text-center">
+                        <div class="form-check form-switch mb-0 d-flex justify-content-center">
+                            <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                role="switch"
+                                data-url="{{ route('admin.marketing.industries.togglefeatured', $row->uuid) }}"
+                                {{ $row->is_featured ? 'checked' : '' }}>
+                        </div>
                     </td>
 
                     {{-- Created Date --}}
@@ -159,7 +166,7 @@
             @empty
 
                 <tr>
-                    <td colspan="8" class="text-center py-5 text-muted">
+                    <td colspan="9" class="text-center py-5 text-muted">
                         No industries found.
                     </td>
                 </tr>
@@ -195,7 +202,6 @@
     </div>
 
 @endif
-```
 
 </div>
 

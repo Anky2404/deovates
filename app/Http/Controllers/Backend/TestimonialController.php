@@ -160,4 +160,38 @@ class TestimonialController extends Controller
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
+
+    // Toggle Featured Function
+    public function togglefeatured(Request $request, $uuid)
+    {
+        try {
+            $testimonial = Testimonial::where('uuid', $uuid)->firstOrFail();
+            $testimonial->is_featured = ! $testimonial->is_featured;
+            $testimonial->save();
+
+            ActivityLog::log(
+                $testimonial->is_featured ? config('constants.ACTIVITY_ACTIONS.feature') : config('constants.ACTIVITY_ACTIONS.unfeature'),
+                config('constants.MODULES.testimonial'),
+                [
+                    'subject_type' => Testimonial::class,
+                    'subject_id' => $testimonial->id,
+                    'description' => ($testimonial->is_featured ? 'Marked featured: ' : 'Unmarked featured: ') . $testimonial->name,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $testimonial->is_featured]);
+            }
+
+            return back()->with('success', 'Testimonial featured status updated.');
+        } catch (\Throwable $e) {
+            Log::error('Testimonial togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
 }

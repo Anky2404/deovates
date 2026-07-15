@@ -19,6 +19,7 @@ class Partner extends Model
         'name',
         'slug',
         'logo',
+        'logo_alt',
         'website_url',
         'type',
         'industry',

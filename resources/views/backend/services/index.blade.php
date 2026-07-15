@@ -19,21 +19,27 @@
             <table class="table table-hover align-middle">
                 <thead class="table-dark">
                     <tr>
+                        <th></th>
                         <th>#</th>
                         <th>Image</th>
                         <th>Name</th>
                         <th>Slug</th>
                         <th>Description</th>
                         <th>Status</th>
+                        <th>Featured</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
 
-                <tbody class="table-border-bottom-0">
+                <tbody class="table-border-bottom-0" id="serviceSortable">
                     @forelse ($rows as $index => $service)
-                        <tr>
-                            <td>
-                                {{ ($rows->currentPage() - 1) * $rows->perPage() + $index + 1 }}
+                        <tr data-uuid="{{ $service->uuid }}">
+                            <td class="drag-handle" style="cursor: grab; width: 1%;">
+                                <i class="bx bx-menu text-muted"></i>
+                            </td>
+
+                            <td class="row-number">
+                                {{ $index + 1 }}
                             </td>
 
                             <td>
@@ -59,11 +65,21 @@
                             </td>
 
 <td>
-                                    <span
-                                        class="badge toggle-status cursor-pointer bg-label-{{ $service->is_active ? 'success' : 'danger' }}"
-                                        data-url="{{ route('admin.services.togglestatus', $service->uuid) }}">
-                                        {{ $service->is_active ? 'Active' : 'Inactive' }}
-                                    </span>
+                                    <div class="form-check form-switch mb-0">
+                                        <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                            role="switch"
+                                            data-url="{{ route('admin.services.togglestatus', $service->uuid) }}"
+                                            {{ $service->is_active ? 'checked' : '' }}>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="form-check form-switch mb-0">
+                                        <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                            role="switch"
+                                            data-url="{{ route('admin.services.togglefeatured', $service->uuid) }}"
+                                            {{ $service->is_featured ? 'checked' : '' }}>
+                                    </div>
                                 </td>
 
 
@@ -91,7 +107,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">
+                            <td colspan="9" class="text-center text-muted py-4">
                                 No services found.
                             </td>
                         </tr>
@@ -100,12 +116,53 @@
             </table>
         </div>
 
-        <!-- Pagination -->
-        @if ($rows->hasPages())
-            <div class="card-footer d-flex justify-content-end">
-                {{ $rows->links('pagination::bootstrap-5') }}
+        @if ($rows->isNotEmpty())
+            <div class="card-footer text-muted small">
+                <i class="bx bx-info-circle"></i> Drag rows by the handle to reorder.
             </div>
         @endif
 
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/js/Sortable.min.js') }}"></script>
+    <script>
+        (function () {
+            const container = document.getElementById('serviceSortable');
+            if (!container) return;
+
+            new Sortable(container, {
+                handle: '.drag-handle',
+                animation: 150,
+                onEnd: function () {
+                    container.querySelectorAll('tr[data-uuid]').forEach((row, index) => {
+                        row.querySelector('.row-number').textContent = index + 1;
+                    });
+
+                    const order = Array.from(container.querySelectorAll('tr[data-uuid]'))
+                        .map(row => row.dataset.uuid);
+
+                    $.ajax({
+                        url: "{{ route('admin.services.reorder') }}",
+                        type: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            order: order
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                showToast('success', 'Order updated successfully');
+                            } else {
+                                showToast('error', response.message || 'Could not update order');
+                            }
+                        },
+                        error: function () {
+                            showToast('error', 'Could not update order');
+                        }
+                    });
+                }
+            });
+        })();
+    </script>
+@endpush

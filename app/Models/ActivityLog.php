@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityLog extends Model
 {
@@ -85,15 +86,31 @@ class ActivityLog extends Model
 
     public static function log(string $action, string $module, array $data = []): self
     {
+        $actor = static::resolveActor();
+
         return static::create(array_merge([
             'action' => $action,
             'module' => $module,
-            'user_id' => auth()->id(),
-            'user_role' => auth()->user()?->role?->name,
+            'user_id' => $actor?->id,
+            'user_role' => $actor?->role?->name,
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
             'url' => request()->fullUrl(),
             'method' => request()->method(),
         ], $data));
+    }
+
+    /*=========================================
+    | ACTOR RESOLUTION (MULTI-GUARD)
+    ==========================================*/
+    protected static function resolveActor(): ?User
+    {
+        foreach (array_keys(config('auth.guards', [])) as $guard) {
+            if ($user = Auth::guard($guard)->user()) {
+                return $user;
+            }
+        }
+
+        return null;
     }
 }

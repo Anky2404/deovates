@@ -19,6 +19,7 @@ class Industry extends Model
         'slug',
         'icon',
         'image',
+        'image_alt',
         'description',
         'meta_title',
         'meta_description',

@@ -26,6 +26,7 @@
                     <th width="140">Collection</th>
                     <th width="120">Size</th>
                     <th width="120">Status</th>
+                    <th width="120">Featured</th>
                     <th width="200" class="text-center">Action</th>
                 </tr>
             </thead>
@@ -66,11 +67,22 @@
 
                         <!-- Status -->
                         <td>
-                            <span
-                                class="badge toggle-status cursor-pointer bg-label-{{ $media->is_active ? 'success' : 'danger' }}"
-                                data-url="{{ route('admin.media.library.togglestatus', $media->uuid) }}">
-                                {{ $media->is_active ? 'Active' : 'Inactive' }}
-                            </span>
+                            <div class="form-check form-switch mb-0">
+                                <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                    role="switch"
+                                    data-url="{{ route('admin.media.library.togglestatus', $media->uuid) }}"
+                                    {{ $media->is_active ? 'checked' : '' }}>
+                            </div>
+                        </td>
+
+                        <!-- Featured -->
+                        <td>
+                            <div class="form-check form-switch mb-0">
+                                <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                    role="switch"
+                                    data-url="{{ route('admin.media.library.togglefeatured', $media->uuid) }}"
+                                    {{ $media->is_featured ? 'checked' : '' }}>
+                            </div>
                         </td>
 
                         <!-- Actions -->
@@ -97,7 +109,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-4">
+                        <td colspan="8" class="text-center text-muted py-4">
                             No Media found.
                         </td>
                     </tr>

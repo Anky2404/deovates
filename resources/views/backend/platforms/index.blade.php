@@ -61,18 +61,22 @@
 
                         <!-- Featured -->
                         <td>
-                            <span class="badge bg-label-{{ $platform->is_featured ? 'primary' : 'secondary' }}">
-                                {{ $platform->is_featured ? 'Featured' : 'Not Featured' }}
-                            </span>
+                            <div class="form-check form-switch mb-0">
+                                <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                    role="switch"
+                                    data-url="{{ route('admin.platforms.togglefeatured', $platform->uuid) }}"
+                                    {{ $platform->is_featured ? 'checked' : '' }}>
+                            </div>
                         </td>
 
                         <!-- Status -->
                         <td>
-                            <span
-                                class="badge toggle-status cursor-pointer bg-label-{{ $platform->is_active ? 'success' : 'danger' }}"
-                                data-url="{{ route('admin.platforms.togglestatus', $platform->uuid) }}">
-                                {{ $platform->is_active ? 'Active' : 'Inactive' }}
-                            </span>
+                            <div class="form-check form-switch mb-0">
+                                <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                    role="switch"
+                                    data-url="{{ route('admin.platforms.togglestatus', $platform->uuid) }}"
+                                    {{ $platform->is_active ? 'checked' : '' }}>
+                            </div>
                         </td>
 
                         <!-- Actions -->

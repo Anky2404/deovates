@@ -124,12 +124,16 @@
 
                         <label class="form-label">Featured Image</label>
 
-                        <input type="file" name="featured_image" class="form-control image-preview-input"
-                            data-preview="#featuredImagePreview">
+                        <input type="file" name="featured_image" class="form-control croppie-upload"
+                            data-preview="#featuredImagePreview" data-width="800" data-height="600" accept="image/*">
 
                         <img id="featuredImagePreview"
                             src="{{ !empty($caseStudy->featured_image) ? asset('storage/' . $caseStudy->featured_image) : 'https://placehold.co/130x130' }}"
                             class="mt-2 rounded border img-thumbnail" height="130" width="130">
+
+                        <input type="text" name="featured_image_alt" class="form-control mt-2"
+                            placeholder="Alt text (used for the image name too)"
+                            value="{{ old('featured_image_alt', $caseStudy->featured_image_alt ?? '') }}">
 
                     </div>
 
@@ -137,12 +141,16 @@
 
                         <label class="form-label">Banner Image</label>
 
-                        <input type="file" name="banner_image" class="form-control image-preview-input"
-                            data-preview="#bannerImagePreview">
+                        <input type="file" name="banner_image" class="form-control croppie-upload"
+                            data-preview="#bannerImagePreview" data-width="1600" data-height="600" accept="image/*">
 
                         <img id="bannerImagePreview"
                             src="{{ !empty($caseStudy->banner_image) ? asset('storage/' . $caseStudy->banner_image) : 'https://placehold.co/130x130' }}"
                             class="mt-2 rounded border img-thumbnail" height="130" width="130">
+
+                        <input type="text" name="banner_image_alt" class="form-control mt-2"
+                            placeholder="Alt text (used for the image name too)"
+                            value="{{ old('banner_image_alt', $caseStudy->banner_image_alt ?? '') }}">
 
                     </div>
 
@@ -150,38 +158,27 @@
 
                         <label class="form-label">Gallery Images</label>
 
-                        <input type="file" name="gallery[]" class="form-control image-preview-input"
-                            id="galleryInput" data-preview="#galleryPreview" multiple>
+                        <input type="file" class="form-control gallery-cropper-upload"
+                            data-container="#galleryItems" data-field="gallery_items"
+                            data-start-index="{{ count($caseStudy->gallery ?? []) }}"
+                            data-width="800" data-height="600" multiple accept="image/*">
 
-                        <div id="galleryPreview" data-input="#galleryInput" class="d-flex flex-wrap gap-2 mt-3">
+                        <div id="galleryItems" class="d-flex flex-wrap gap-2 mt-3">
+                            @foreach ($caseStudy->gallery ?? [] as $index => $item)
+                                <div class="gallery-crop-item position-relative d-inline-block m-1 align-top" style="width:140px;">
+                                    <button type="button" class="btn btn-danger btn-sm remove-gallery-crop-item"
+                                        style="position:absolute; top:2px; right:2px; z-index:9; padding:0 6px;">
+                                        &times;
+                                    </button>
 
-                            @if (!empty($caseStudy->gallery))
+                                    <img src="{{ asset('storage/' . $item['path']) }}"
+                                        class="rounded border img-thumbnail" width="120" height="120" style="object-fit:cover;">
 
-                                @php
-                                    $galleryImages = is_array($caseStudy->gallery)
-                                        ? $caseStudy->gallery
-                                        : json_decode($caseStudy->gallery, true);
-                                @endphp
-
-                                @foreach ($galleryImages as $key => $gallery)
-                                    <div class="position-relative d-inline-block m-1 old-gallery-item"
-                                        data-image="{{ $gallery }}">
-
-                                        <button type="button" class="btn btn-danger btn-sm remove-old-image"
-                                            style="position:absolute; top:5px; right:5px; z-index:9; padding:0px 6px;">
-                                            ×
-                                        </button>
-
-                                        <img src="{{ asset('storage/' . $gallery) }}"
-                                            class="rounded border img-thumbnail" width="80" height="80">
-
-                                        <input type="hidden" name="old_gallery[]" value="{{ $gallery }}">
-
-                                    </div>
-                                @endforeach
-
-                            @endif
-
+                                    <input type="hidden" name="gallery_items[{{ $index }}][path]" value="{{ $item['path'] }}">
+                                    <input type="text" name="gallery_items[{{ $index }}][alt]" class="form-control form-control-sm mt-1"
+                                        placeholder="Alt text" value="{{ $item['alt'] ?? '' }}">
+                                </div>
+                            @endforeach
                         </div>
 
                     </div>
@@ -306,4 +303,6 @@
 
     </div>
 
+    {{-- CROP MODAL (powers the croppie-upload / gallery-cropper-upload fields above) --}}
+    @include('backend.partials.modal')
 @endsection

@@ -116,6 +116,8 @@ return [
         'delete'       => 'DELETE',
         'activate'     => 'ACTIVATE',
         'deactivate'   => 'DEACTIVATE',
+        'feature'      => 'FEATURE',
+        'unfeature'    => 'UNFEATURE',
         'new'          => 'NEW',
         'shortlisted'  => 'SHORTLISTED',
         'interview'    => 'INTERVIEW',
@@ -394,6 +396,9 @@ return [
         'web' => 'Web',
         'admin' => 'Admin',
     ],
+
+    // Matches the `phonecode` format stored on the countries table (no "+" prefix).
+    'DEFAULT_COUNTRY_CODE' => '91',
     'PROVIDERS' => [
         'web' => 'users',
         'admin' => 'admins',

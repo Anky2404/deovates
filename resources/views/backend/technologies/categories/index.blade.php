@@ -25,6 +25,7 @@
                         <th>Name</th>
                         <th>Slug</th>
                         <th>Status</th>
+                        <th>Featured</th>
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -56,11 +57,22 @@
 
                              {{-- Status --}}
                             <td>
-                                <span
-                                    class="badge toggle-status cursor-pointer bg-label-{{ $category->is_active ? 'success' : 'danger' }}"
-                                    data-url="{{ route('admin.technologies.categories.togglestatus', $category->uuid) }}">
-                                    {{ $category->is_active ? 'Active' : 'Inactive' }}
-                                </span>
+                                <div class="form-check form-switch mb-0">
+                                    <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                        role="switch"
+                                        data-url="{{ route('admin.technologies.categories.togglestatus', $category->uuid) }}"
+                                        {{ $category->is_active ? 'checked' : '' }}>
+                                </div>
+                            </td>
+
+                            {{-- Featured --}}
+                            <td>
+                                <div class="form-check form-switch mb-0">
+                                    <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                        role="switch"
+                                        data-url="{{ route('admin.technologies.categories.togglefeatured', $category->uuid) }}"
+                                        {{ $category->is_featured ? 'checked' : '' }}>
+                                </div>
                             </td>
 
                             <!-- Actions -->
@@ -87,7 +99,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">
+                            <td colspan="7" class="text-center text-muted py-4">
                                 No technology categories found.
                             </td>
                         </tr>

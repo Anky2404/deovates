@@ -43,7 +43,7 @@
                                  </div>
 
                                  <div class="flex-grow-1">
-                                     <h6 class="mb-0">{{ $user->name }}</h6>
+                                     <h6 class="mb-0">{{ $user?->name ?? 'Guest' }}</h6>
                                      <small class="text-body-secondary">
                                          {{ $user->role?->name ?? 'N/A' }}
                                      </small>
@@ -57,7 +57,7 @@
                      </li>
 
                      <li>
-                         <a class="dropdown-item" href="{{ route('admin.users.profile', ['uuid' => $user->uuid]) }}">
+                         <a class="dropdown-item" href="{{ route('admin.profile.index') }}">
                              <i class="icon-base bx bx-user icon-md me-3"></i>
                              <span>My Profile</span>
                          </a>

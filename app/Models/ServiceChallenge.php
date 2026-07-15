@@ -19,6 +19,7 @@ class ServiceChallenge extends Model
         'solution',
         'icon',
         'image',
+        'image_alt',
         'is_active',
         'is_featured',
         'display_order',

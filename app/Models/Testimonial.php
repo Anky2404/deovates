@@ -17,6 +17,7 @@ class Testimonial extends Model
         'designation',
         'company',
         'photo',
+        'photo_alt',
         'message',
         'rating',
         'video_url',

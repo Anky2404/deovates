@@ -19,6 +19,7 @@ class ServiceFeature extends Model
         'short_description',
         'icon',
         'image',
+        'image_alt',
         'is_highlighted',
         'is_active',
         'display_order',

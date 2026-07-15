@@ -63,6 +63,8 @@ class RoleController extends Controller
         $data['is_active'] = $request->boolean('is_active');
 
         try {
+            $oldValues = $role ? array_intersect_key($role->getAttributes(), $data) : [];
+
             if ($role) {
                 $role->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
@@ -73,10 +75,14 @@ class RoleController extends Controller
                 $description = 'Created role ' . $role->name;
             }
 
+            $newValues = collect($role->getChanges())->except('updated_at')->toArray();
+            $oldValues = collect($oldValues)->only(array_keys($newValues))->toArray();
+
             ActivityLog::log($action, config('constants.MODULES.role'), [
                 'subject_type' => Role::class,
                 'subject_id' => $role->id,
-                'new_values' => $role->getChanges(),
+                'old_values' => $oldValues,
+                'new_values' => $newValues,
                 'description' => $description,
             ]);
 
@@ -92,6 +98,12 @@ class RoleController extends Controller
     {
         try {
             $role = Role::where('uuid', $uuid)->firstOrFail();
+
+            $assignedUsers = $role->users()->count();
+            if ($assignedUsers > 0) {
+                return back()->with('error', "This role is still assigned to {$assignedUsers} user(s) and cannot be deleted. Reassign those users first.");
+            }
+
             $role->delete();
 
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.role'), [

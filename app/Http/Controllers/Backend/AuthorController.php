@@ -174,4 +174,38 @@ class AuthorController extends Controller
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
+
+    // Toggle Featured Function
+    public function togglefeatured(Request $request, $uuid)
+    {
+        try {
+            $author = Author::where('uuid', $uuid)->firstOrFail();
+            $author->is_featured = ! $author->is_featured;
+            $author->save();
+
+            ActivityLog::log(
+                $author->is_featured ? config('constants.ACTIVITY_ACTIONS.feature') : config('constants.ACTIVITY_ACTIONS.unfeature'),
+                config('constants.MODULES.author'),
+                [
+                    'subject_type' => Author::class,
+                    'subject_id' => $author->id,
+                    'description' => ($author->is_featured ? 'Marked featured' : 'Unmarked featured') . ' author ' . $author->name,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $author->is_featured]);
+            }
+
+            return back()->with('success', 'Author featured status updated.');
+        } catch (\Throwable $e) {
+            Log::error('Author togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
 }

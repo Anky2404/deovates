@@ -21,10 +21,10 @@
                     {{-- ROLE --}}
                     <div class="col-md-6">
                         <label class="form-label">Role</label>
-                        <select name="role_id" class="form-select" >
+                        <select name="role_id" id="role_id" class="form-select" >
                             <option value="">-- Select Role --</option>
                             @foreach ($roles as $role)
-                                <option value="{{ $role->id }}"
+                                <option value="{{ $role->id }}" data-slug="{{ $role->slug }}"
                                     {{ isset($user) && $user->role_id == $role->id ? 'selected' : '' }}>
                                     {{ $role->name }}
                                 </option>
@@ -34,8 +34,12 @@
 
                     {{-- DEPARTMENT --}}
                     <div class="col-md-6">
-                        <label class="form-label">Department</label>
-                        <select name="department_id" class="form-select" >
+                        <label class="form-label">
+                            Department
+                            <span id="departmentRequiredMark" class="text-danger">*</span>
+                            <small id="departmentOptionalNote" class="text-muted d-none">(not required for Admin / Super Admin)</small>
+                        </label>
+                        <select name="department_id" id="department_id" class="form-select" >
                             <option value="">-- Select Department --</option>
                             @foreach ($departments as $dept)
                                 <option value="{{ $dept->id }}"
@@ -77,8 +81,8 @@
 
                                 @foreach ($countries as $country)
                                     <option value="{{ $country->phonecode }}"
-                                        {{ $selectedCountry == $country->phonecode ? 'selected' : '' }}>
-                                        {{ $country->emoji }} {{ $country->phonecode }}
+                                        {{ (string) $selectedCountry === (string) $country->phonecode ? 'selected' : '' }}>
+                                        {{ $country->emoji }} +{{ $country->phonecode }}
                                     </option>
                                 @endforeach
 
@@ -107,8 +111,11 @@
     <input
         type="file"
         name="avatar"
-        class="form-control image-preview-input"
+        class="form-control croppie-upload"
         data-preview="#avatarPreview"
+        data-width="400"
+        data-height="400"
+        accept="image/*"
     >
 
     <img
@@ -117,6 +124,14 @@
         class="mt-2 rounded border img-thumbnail"
         height="130"
         width="130"
+    >
+
+    <input
+        type="text"
+        name="avatar_alt"
+        class="form-control mt-2"
+        placeholder="Alt text (used for the image name too)"
+        value="{{ old('avatar_alt', $user->avatar_alt ?? '') }}"
     >
 </div>
 
@@ -162,7 +177,29 @@
 @endsection
 @push('scripts')
     <script>
+function isAdminRoleSelected() {
+    var slug = $('#role_id option:selected').data('slug');
+    return slug === 'super-admin' || slug === 'admin';
+}
+
+function toggleDepartmentRequirement() {
+    var adminRole = isAdminRoleSelected();
+    $('#departmentRequiredMark').toggleClass('d-none', adminRole);
+    $('#departmentOptionalNote').toggleClass('d-none', !adminRole);
+}
+
+$.validator.addMethod("phoneFormat", function (value, element) {
+    return this.optional(element) || /^[0-9+\-\s()]{6,20}$/.test(value);
+}, "Please enter a valid phone number.");
+
 $(document).ready(function () {
+
+    toggleDepartmentRequirement();
+
+    $('#role_id').on('change', function () {
+        toggleDepartmentRequirement();
+        $('#userForm').valid();
+    });
 
     $("#userForm").validate({
 
@@ -175,7 +212,9 @@ $(document).ready(function () {
                 required: true
             },
             department_id: {
-                required: true
+                required: function () {
+                    return !isAdminRoleSelected();
+                }
             },
             name: {
                 required: true,
@@ -190,9 +229,9 @@ $(document).ready(function () {
             },
             phone: {
                 required: true,
-                digits: true,
+                phoneFormat: true,
                 minlength: 6,
-                maxlength: 15
+                maxlength: 20
             },
             designation: {
                 required: true
@@ -231,7 +270,7 @@ $(document).ready(function () {
             },
             phone: {
                 required: "Phone number is required.",
-                digits: "Phone must be numbers only.",
+                phoneFormat: "Please enter a valid phone number.",
                 minlength: "Phone is too short.",
                 maxlength: "Phone is too long."
             },

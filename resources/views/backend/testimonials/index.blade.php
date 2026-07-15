@@ -74,19 +74,22 @@
 
                         {{-- Status --}}
                         <td>
-                            <span
-                                class="badge toggle-status cursor-pointer bg-label-{{ $testimonial->is_active ? 'success' : 'danger' }}"
-                                data-url="{{ route('admin.testimonials.togglestatus', $testimonial->uuid) }}">
-                                {{ $testimonial->is_active ? 'Active' : 'Inactive' }}
-                            </span>
+                            <div class="form-check form-switch mb-0">
+                                <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                    role="switch"
+                                    data-url="{{ route('admin.testimonials.togglestatus', $testimonial->uuid) }}"
+                                    {{ $testimonial->is_active ? 'checked' : '' }}>
+                            </div>
                         </td>
 
                         <!-- FEATURED -->
                         <td>
-                            <span
-                                class="badge {{ $testimonial->is_featured ? 'bg-label-primary' : 'bg-label-secondary' }}">
-                                {{ $testimonial->is_featured ? 'Featured' : 'Normal' }}
-                            </span>
+                            <div class="form-check form-switch mb-0">
+                                <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                    role="switch"
+                                    data-url="{{ route('admin.testimonials.togglefeatured', $testimonial->uuid) }}"
+                                    {{ $testimonial->is_featured ? 'checked' : '' }}>
+                            </div>
                         </td>
 
                         <!-- ACTION -->

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Country;
@@ -17,6 +18,8 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    use HandlesImageUploads;
+
     private $pagerecords;
     private $prefix = 'backend.';
     private $folder = 'users.';
@@ -76,9 +79,13 @@ class UserController extends Controller
     {
         $user = $uuid ? User::where('uuid', $uuid)->firstOrFail() : null;
 
+        $isAdminRole = Role::whereIn('slug', ['super-admin', 'admin'])
+            ->where('id', $request->input('role_id'))
+            ->exists();
+
         $data = $request->validate([
             'role_id' => 'required|exists:roles,id',
-            'department_id' => 'required|exists:departments,id',
+            'department_id' => [$isAdminRole ? 'nullable' : 'required', 'exists:departments,id'],
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user?->id)],
             'username' => ['nullable', 'string', 'max:255', Rule::unique('users', 'username')->ignore($user?->id)],
@@ -86,12 +93,18 @@ class UserController extends Controller
             'designation' => 'required|string|max:255',
             'bio' => 'nullable|string',
             'avatar' => 'nullable|image|max:4096',
+            'avatar_alt' => 'nullable|string|max:255',
             'password' => [$user ? 'nullable' : 'required', 'string', 'min:6'],
             'is_active' => 'nullable|boolean',
         ]);
 
         // country_code is collected by the form for the phone dropdown UI only —
         // the users table has no matching column, so it's intentionally not persisted.
+
+        // department_id is an integer column; an admin/super-admin role can leave it
+        // blank, so normalize any empty value to null instead of letting a stray ''
+        // reach the query (department_id is nullable, but "" is not a valid int).
+        $data['department_id'] = $data['department_id'] ?: null;
 
         $data['is_active'] = $request->boolean('is_active');
 
@@ -102,15 +115,13 @@ class UserController extends Controller
         }
 
         try {
-            if ($request->hasFile('avatar')) {
-                $data['avatar'] = $this->mediaUploader->uploadSingle(
-                    $request->file('avatar'),
-                    'users',
-                    $user->avatar ?? null
-                );
-            }
+            $this->applyImage($request, $data, 'avatar', 'users', $user);
 
             DB::beginTransaction();
+
+            // Snapshot the pre-update values for the fields being written, so the
+            // activity log can show exactly what changed (never the password hash).
+            $oldValues = $user ? array_intersect_key($user->getAttributes(), $data) : [];
 
             if ($user) {
                 $user->update($data);
@@ -122,10 +133,14 @@ class UserController extends Controller
                 $description = 'Created user ' . $user->name;
             }
 
+            $newValues = collect($user->getChanges())->except(['updated_at', 'password'])->toArray();
+            $oldValues = collect($oldValues)->only(array_keys($newValues))->except('password')->toArray();
+
             ActivityLog::log($action, config('constants.MODULES.user'), [
                 'subject_type' => User::class,
                 'subject_id' => $user->id,
-                'new_values' => $user->getChanges(),
+                'old_values' => $oldValues,
+                'new_values' => $newValues,
                 'description' => $description,
             ]);
 
@@ -143,7 +158,12 @@ class UserController extends Controller
     public function destroy(Request $request, $uuid)
     {
         try {
-            $user = User::where('uuid', $uuid)->firstOrFail();
+            $user = User::with('role')->where('uuid', $uuid)->firstOrFail();
+
+            if ($user->role?->slug === 'super-admin') {
+                return back()->with('error', 'The Super Admin user cannot be deleted.');
+            }
+
             $user->delete();
 
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.user'), [

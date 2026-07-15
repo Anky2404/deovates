@@ -148,6 +148,41 @@ class TechnologyController extends Controller
         }
     }
 
+    public function togglefeatured(Request $request, string $uuid)
+    {
+        $technology = Technology::where('uuid', $uuid)->firstOrFail();
+
+        try {
+            $technology->is_featured = ! $technology->is_featured;
+            $technology->save();
+
+            ActivityLog::log(
+                config('constants.ACTIVITY_ACTIONS.' . ($technology->is_featured ? 'feature' : 'unfeature')),
+                config('constants.MODULES.technology'),
+                [
+                    'subject_type' => Technology::class,
+                    'subject_id' => $technology->id,
+                    'new_values' => ['is_featured' => $technology->is_featured],
+                    'description' => 'Toggled featured status of technology: ' . $technology->name,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $technology->is_featured]);
+            }
+
+            return back()->with('success', 'Status updated successfully.');
+        } catch (\Throwable $e) {
+            Log::error('Technology togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
     public function destroy(string $uuid)
     {
         $technology = Technology::where('uuid', $uuid)->firstOrFail();

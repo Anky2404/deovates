@@ -150,4 +150,38 @@ class PlatformController extends Controller
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
+
+    // Toggle Featured Function
+    public function togglefeatured(Request $request, string $uuid)
+    {
+        try {
+            $platform = Platform::where('uuid', $uuid)->firstOrFail();
+            $platform->is_featured = ! $platform->is_featured;
+            $platform->save();
+
+            ActivityLog::log(
+                $platform->is_featured ? config('constants.ACTIVITY_ACTIONS.feature') : config('constants.ACTIVITY_ACTIONS.unfeature'),
+                config('constants.MODULES.platform'),
+                [
+                    'subject_type' => Platform::class,
+                    'subject_id' => $platform->id,
+                    'description' => ($platform->is_featured ? 'Marked featured' : 'Unmarked featured') . ' platform ' . $platform->name,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $platform->is_featured]);
+            }
+
+            return back()->with('success', 'Platform featured status updated.');
+        } catch (\Throwable $e) {
+            Log::error('Platform togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
 }

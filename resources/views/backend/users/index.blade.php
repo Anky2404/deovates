@@ -51,11 +51,12 @@
 
                                 {{-- Status --}}
                                 <td>
-                                    <span
-                                        class="badge toggle-status cursor-pointer bg-label-{{ $user->is_active ? 'success' : 'danger' }}"
-                                        data-url="{{ route('admin.users.togglestatus', $user->uuid) }}">
-                                        {{ $user->is_active ? 'Active' : 'Inactive' }}
-                                    </span>
+                                    <div class="form-check form-switch mb-0">
+                                        <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                            role="switch"
+                                            data-url="{{ route('admin.users.togglestatus', $user->uuid) }}"
+                                            {{ $user->is_active ? 'checked' : '' }}>
+                                    </div>
                                 </td>
 
                                 {{-- Actions --}}
@@ -69,17 +70,19 @@
                                         class="btn btn-sm btn-outline-success" title="Edit">
                                         <i class="bx bx-edit"></i>
                                     </a>
-                                    
 
-                                    <form action="{{ route('admin.users.destroy', $user->uuid) }}" method="POST"
-                                       class="js-delete">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
-                                           title="Delete">
-                                            <i class="bx bx-trash"></i>
-                                        </button>
-                                    </form>
+
+                                    @if(($user->role?->slug ?? null) !== 'super-admin')
+                                        <form action="{{ route('admin.users.destroy', $user->uuid) }}" method="POST"
+                                           class="js-delete">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
+                                               title="Delete">
+                                                <i class="bx bx-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

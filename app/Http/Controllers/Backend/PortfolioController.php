@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Portfolio;
 use App\Models\PortfolioCategory;
 use App\Services\MediaUploader;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class PortfolioController extends Controller
 {
+    use HandlesImageUploads;
+
     private $pagerecords;
     private $prefix = 'backend.';
     private $folder = 'portfolios.';
@@ -60,11 +62,13 @@ class PortfolioController extends Controller
             'project_duration' => ['nullable', 'string', 'max:255'],
             'project_budget' => ['nullable', 'string', 'max:255'],
             'featured_image' => ['nullable', 'image', 'max:4096'],
+            'featured_image_alt' => ['nullable', 'string', 'max:255'],
             'banner_image' => ['nullable', 'image', 'max:4096'],
-            'gallery' => ['nullable', 'array'],
-            'gallery.*' => ['nullable', 'image', 'max:4096'],
-            'old_gallery' => ['nullable', 'array'],
-            'old_gallery.*' => ['nullable', 'string'],
+            'banner_image_alt' => ['nullable', 'string', 'max:255'],
+            'gallery_items' => ['nullable', 'array'],
+            'gallery_items.*.path' => ['nullable', 'string'],
+            'gallery_items.*.temp' => ['nullable', 'string'],
+            'gallery_items.*.alt' => ['nullable', 'string', 'max:255'],
             'video_url' => ['nullable', 'url', 'max:255'],
             'overview' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
@@ -86,28 +90,15 @@ class PortfolioController extends Controller
             DB::beginTransaction();
 
             $data = $validated;
-            unset($data['featured_image'], $data['banner_image'], $data['gallery'], $data['old_gallery']);
+            unset($data['featured_image'], $data['banner_image'], $data['gallery_items']);
 
             $data['is_active'] = $request->boolean('is_active');
             $data['is_featured'] = $request->boolean('is_featured');
             $data['published_at'] = $request->filled('published_at') ? $request->input('published_at') : null;
             $data['meta_keywords'] = $this->parseJsonList($request->input('meta_keywords'));
 
-            if ($request->hasFile('featured_image')) {
-                $data['featured_image'] = $this->mediaUploader->uploadSingle(
-                    $request->file('featured_image'),
-                    'portfolios',
-                    $portfolio?->featured_image
-                );
-            }
-
-            if ($request->hasFile('banner_image')) {
-                $data['banner_image'] = $this->mediaUploader->uploadSingle(
-                    $request->file('banner_image'),
-                    'portfolios',
-                    $portfolio?->banner_image
-                );
-            }
+            $this->applyImage($request, $data, 'featured_image', 'portfolios', $portfolio);
+            $this->applyImage($request, $data, 'banner_image', 'portfolios', $portfolio);
 
             $data['gallery'] = $this->resolveGallery($request, $portfolio);
 
@@ -177,6 +168,41 @@ class PortfolioController extends Controller
         }
     }
 
+    public function togglefeatured(Request $request, string $uuid)
+    {
+        $portfolio = Portfolio::where('uuid', $uuid)->firstOrFail();
+
+        try {
+            $portfolio->is_featured = ! $portfolio->is_featured;
+            $portfolio->save();
+
+            ActivityLog::log(
+                config('constants.ACTIVITY_ACTIONS.' . ($portfolio->is_featured ? 'feature' : 'unfeature')),
+                config('constants.MODULES.portfolio'),
+                [
+                    'subject_type' => Portfolio::class,
+                    'subject_id' => $portfolio->id,
+                    'new_values' => ['is_featured' => $portfolio->is_featured],
+                    'description' => 'Toggled featured status of portfolio: ' . $portfolio->title,
+                ]
+            );
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'status' => $portfolio->is_featured]);
+            }
+
+            return back()->with('success', 'Status updated successfully.');
+        } catch (\Throwable $e) {
+            Log::error('Portfolio togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
+            }
+
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
     public function destroy(string $uuid)
     {
         $portfolio = Portfolio::where('uuid', $uuid)->firstOrFail();
@@ -203,27 +229,44 @@ class PortfolioController extends Controller
     }
 
     /**
-     * Merge kept old gallery paths with newly uploaded files, deleting
-     * any previously stored images the user removed on the form.
+     * Build the new gallery array from the submitted "gallery_items" rows —
+     * each row is either a kept existing image (["path" => ..., "alt" => ...])
+     * or a freshly cropped one (["temp" => ..., "alt" => ...]) promoted here.
+     * Any existing image whose row didn't survive to submission (removed on
+     * the form) gets its file deleted from disk.
      */
     private function resolveGallery(Request $request, ?Portfolio $portfolio): array
     {
-        $existingGallery = $portfolio->gallery ?? [];
-        $keptGallery = array_values(array_filter((array) $request->input('old_gallery', [])));
+        $existingPaths = array_column($portfolio->gallery ?? [], 'path');
+        $rows = (array) $request->input('gallery_items', []);
 
-        foreach (array_diff($existingGallery, $keptGallery) as $removedPath) {
-            $this->mediaUploader->deleteSingle($removedPath);
-        }
+        $result = [];
+        $keptPaths = [];
 
-        $uploadedPaths = [];
+        foreach ($rows as $row) {
+            $alt = $row['alt'] ?? null;
 
-        foreach ((array) $request->file('gallery', []) as $file) {
-            if ($file instanceof UploadedFile) {
-                $uploadedPaths[] = $this->mediaUploader->uploadSingle($file, 'portfolios', null);
+            if (!empty($row['temp'])) {
+                $path = $this->mediaUploader->promoteTemp($row['temp'], 'portfolios', null, $alt);
+
+                if ($path) {
+                    $result[] = ['path' => $path, 'alt' => $alt];
+                }
+
+                continue;
+            }
+
+            if (!empty($row['path'])) {
+                $result[] = ['path' => $row['path'], 'alt' => $alt];
+                $keptPaths[] = $row['path'];
             }
         }
 
-        return array_values(array_merge($keptGallery, $uploadedPaths));
+        foreach (array_diff($existingPaths, $keptPaths) as $removedPath) {
+            $this->mediaUploader->deleteSingle($removedPath);
+        }
+
+        return $result;
     }
 
     /**

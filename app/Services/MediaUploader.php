@@ -27,12 +27,15 @@ class MediaUploader
      * original's relative path for storing in a flat model column.
      *
      * @param  array<string, array{0:int,1:int}>  $sizes  e.g. ['thumb' => [300, 300]]
+     * @param  ?string  $desiredName  Admin-supplied name (typically the alt
+     *                                text) to slugify into the filename;
+     *                                falls back to a UUID when empty.
      */
-    public function uploadSingle(UploadedFile $file, string $directory, ?string $oldPath = null, array $sizes = []): string
+    public function uploadSingle(UploadedFile $file, string $directory, ?string $oldPath = null, array $sizes = [], ?string $desiredName = null): string
     {
         $directory = trim($directory, '/');
         $extension = $file->getClientOriginalExtension() ?: 'jpg';
-        $filename = Str::uuid() . '.' . $extension;
+        $filename = $this->resolveFilename($desiredName, $extension, $directory);
         $path = $file->storeAs($directory, $filename, $this->disk);
 
         $this->generateSizes($path, $sizes);
@@ -42,6 +45,78 @@ class MediaUploader
         }
 
         return $path;
+    }
+
+    /**
+     * Store an upload (typically a cropped blob from the browser) under a
+     * short-lived "temp/" location, ahead of the final form save. Returns
+     * the relative path (to promote later) and a browser-usable URL (for
+     * the crop preview).
+     */
+    public function storeTemp(UploadedFile $file): array
+    {
+        $extension = $file->getClientOriginalExtension() ?: 'jpg';
+        $filename = Str::uuid() . '.' . $extension;
+        $path = $file->storeAs('temp', $filename, $this->disk);
+
+        return [
+            'path' => $path,
+            'url' => Storage::disk($this->disk)->url($path),
+        ];
+    }
+
+    /**
+     * Move a previously stored temp upload into its final directory,
+     * deleting the superseded file (if any). Returns null (leaving the
+     * caller to keep whatever it already had) if the temp path is empty
+     * or the file has since been cleaned up.
+     */
+    public function promoteTemp(?string $tempPath, string $directory, ?string $oldPath = null, ?string $desiredName = null): ?string
+    {
+        if (empty($tempPath) || ! Storage::disk($this->disk)->exists($tempPath)) {
+            return null;
+        }
+
+        $directory = trim($directory, '/');
+        $extension = pathinfo($tempPath, PATHINFO_EXTENSION) ?: 'jpg';
+        $filename = $this->resolveFilename($desiredName, $extension, $directory);
+        $path = $directory . '/' . $filename;
+
+        Storage::disk($this->disk)->copy($tempPath, $path);
+        Storage::disk($this->disk)->delete($tempPath);
+
+        if ($oldPath) {
+            $this->deleteSingle($oldPath);
+        }
+
+        return $path;
+    }
+
+    /**
+     * When the admin supplied a name (typically the image's alt text),
+     * slugify it into the stored filename instead of a random UUID —
+     * falling back to a UUID when no name was given, or when the slugified
+     * name collides with an existing file after a few short-suffix retries.
+     */
+    protected function resolveFilename(?string $desiredName, string $extension, string $directory): string
+    {
+        $slug = trim((string) $desiredName) !== '' ? Str::slug($desiredName) : '';
+
+        if ($slug === '') {
+            return Str::uuid() . '.' . $extension;
+        }
+
+        $candidate = "{$slug}.{$extension}";
+
+        for ($attempt = 0; $attempt < 5; $attempt++) {
+            if (! Storage::disk($this->disk)->exists(trim($directory . '/' . $candidate, '/'))) {
+                return $candidate;
+            }
+
+            $candidate = "{$slug}-" . Str::random(5) . ".{$extension}";
+        }
+
+        return Str::uuid() . '.' . $extension;
     }
 
     /**

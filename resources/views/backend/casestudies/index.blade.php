@@ -26,6 +26,7 @@
                         <th>Category</th>
                         <th>Views</th>
                         <th>Status</th>
+                        <th>Featured</th>
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -69,17 +70,22 @@
 
                             {{-- Status --}}
                             <td>
-                                <span
-                                    class="badge toggle-status cursor-pointer bg-label-{{ $caseStudy->is_active ? 'success' : 'danger' }}"
-                                    data-url="{{ route('admin.casestudies.togglestatus', $caseStudy->uuid) }}">
-                                    {{ $caseStudy->is_active ? 'Active' : 'Inactive' }}
-                                </span>
+                                <div class="form-check form-switch mb-0">
+                                    <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                        role="switch"
+                                        data-url="{{ route('admin.casestudies.togglestatus', $caseStudy->uuid) }}"
+                                        {{ $caseStudy->is_active ? 'checked' : '' }}>
+                                </div>
+                            </td>
 
-                                @if ($caseStudy->is_featured)
-                                    <span class="badge bg-label-warning ms-1">
-                                        Featured
-                                    </span>
-                                @endif
+                            {{-- Featured --}}
+                            <td>
+                                <div class="form-check form-switch mb-0">
+                                    <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                        role="switch"
+                                        data-url="{{ route('admin.casestudies.togglefeatured', $caseStudy->uuid) }}"
+                                        {{ $caseStudy->is_featured ? 'checked' : '' }}>
+                                </div>
                             </td>
 
                             <!-- Actions -->
@@ -118,7 +124,7 @@
                     @empty
 
                         <tr>
-                            <td colspan="9" class="text-center text-muted py-4">
+                            <td colspan="8" class="text-center text-muted py-4">
                                 No Case Studies Found.
                             </td>
                         </tr>
