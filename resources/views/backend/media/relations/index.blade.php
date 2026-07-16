@@ -49,10 +49,7 @@
                             @if ($relation->media && $relation->media->path && str_starts_with((string) $relation->media->mime_type, 'image/'))
                                 <img src="{{ asset('storage/' . $relation->media->path) }}"
                                      alt="{{ $relation->media->name }}"
-                                     class="rounded border"
-                                     width="45"
-                                     height="45"
-                                     style="object-fit: cover;">
+                                     class="table-thumb rounded border">
                             @else
                                 <i class="bx bx-file fs-3 text-muted"></i>
                             @endif

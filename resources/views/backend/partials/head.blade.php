@@ -63,5 +63,27 @@
             min-height: 100vh;
             overflow: hidden;
         }
+
+        /* Keep every admin listing table row the same height regardless of
+           image size or description length, so rows line up consistently
+           across all index pages. */
+        .table > tbody > tr > td {
+            height: 76px;
+            vertical-align: middle;
+        }
+
+        .table-thumb {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .description-column {
+            max-width: 320px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     </style>
 </head>

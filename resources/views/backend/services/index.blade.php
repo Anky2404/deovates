@@ -50,7 +50,7 @@
                                     !empty($service->featured_image) &&
                                         \Illuminate\Support\Facades\Storage::disk('public')->exists($service->featured_image))
                                     <img src="{{ asset('storage/' . $service->featured_image) }}" alt="{{ $service->title }}"
-                                        class="rounded" style="width:60px;height:60px;object-fit:cover;">
+                                        class="table-thumb rounded">
                                 @else
                                     <span class="text-muted">No Image</span>
                                 @endif

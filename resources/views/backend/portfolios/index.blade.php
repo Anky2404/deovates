@@ -47,7 +47,7 @@
                                     ? asset('storage/' . $portfolio->featured_image)
                                     : asset('assets/backend/img/placeholder.png');
                             @endphp
-                            <img src="{{ $image }}" alt="{{ $portfolio->title }}" class="rounded" width="60" height="40">
+                            <img src="{{ $image }}" alt="{{ $portfolio->title }}" class="table-thumb rounded">
                         </td>
 
                         <!-- Title -->

@@ -47,7 +47,7 @@
                             <td>
                                 @if ($blog->featured_image)
                                     <img src="{{ asset('storage/' . $blog->featured_image) }}" alt="{{ $blog->title }}"
-                                        class="rounded" width="50">
+                                        class="table-thumb rounded">
                                 @else
                                     <span class="text-muted">—</span>
                                 @endif

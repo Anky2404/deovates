@@ -48,7 +48,7 @@
                             <td>
                                 @if ($caseStudy->featured_image)
                                     <img src="{{ asset('storage/' . $caseStudy->featured_image) }}"
-                                        alt="{{ $caseStudy->title }}" class="rounded" width="60">
+                                        alt="{{ $caseStudy->title }}" class="table-thumb rounded">
                                 @else
                                     <span class="text-muted">—</span>
                                 @endif

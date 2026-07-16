@@ -58,9 +58,7 @@
 
                             <img src="{{ asset('storage/' . $row->logo) }}"
                                  alt="{{ $row->name }}"
-                                 width="50"
-                                 height="50"
-                                 class="rounded border object-fit-cover">
+                                 class="table-thumb rounded border">
 
                         @else
 
