@@ -34,8 +34,10 @@ class ServiceController extends Controller
    
     public function index(Request $request)
     {
-        $rows = Service::orderBy('display_order')->orderBy('id')->get();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        $rows = Service::orderBy('display_order')->orderBy('id')->paginate($this->pagerecords)->withQueryString();
+        $reorderRows = Service::orderBy('display_order')->orderBy('id')->get();
+
+        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
     // Persist a new drag-and-drop order from the index list.

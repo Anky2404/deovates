@@ -8,10 +8,17 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Service Lists</h5>
 
-            <a href="{{ route('admin.services.createoredit') }}" class="btn btn-primary">
-                <i class="bx bx-plus me-1"></i>
-                Create Service
-            </a>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                    data-bs-target="#servicesReorderModal">
+                    <i class="bx bx-sort-alt-2 me-1"></i> Reorder
+                </button>
+
+                <a href="{{ route('admin.services.createoredit') }}" class="btn btn-primary">
+                    <i class="bx bx-plus me-1"></i>
+                    Create Service
+                </a>
+            </div>
         </div>
 
         <!-- Table -->
@@ -19,7 +26,6 @@
             <table class="table table-hover align-middle">
                 <thead class="table-dark">
                     <tr>
-                        <th></th>
                         <th>#</th>
                         <th>Image</th>
                         <th>Name</th>
@@ -31,17 +37,11 @@
                     </tr>
                 </thead>
 
-                <tbody id="serviceSortable"
-       class="sortable-table"
-       data-url="{{ route('admin.services.reorder') }}">
-             
-                    @forelse ($rows as $index => $service)
-                        <tr data-uuid="{{ $service->uuid }}">
-                            <td class="drag-handle" style="cursor: grab; width:1%;">
-                <i class="bx bx-menu text-muted"></i>
-            </td>
+                <tbody>
 
-                            <td class="row-number">
+                    @forelse ($rows as $index => $service)
+                        <tr>
+                            <td>
                                 {{ $index + 1 }}
                             </td>
 
@@ -67,24 +67,23 @@
                                 {{ \Illuminate\Support\Str::limit(strip_tags($service->description), 70) }}
                             </td>
 
-<td>
-                                    <div class="form-check form-switch mb-0">
-                                        <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
-                                            role="switch"
-                                            data-url="{{ route('admin.services.togglestatus', $service->uuid) }}"
-                                            {{ $service->is_active ? 'checked' : '' }}>
-                                    </div>
-                                </td>
+                            <td>
+                                <div class="form-check form-switch mb-0">
+                                    <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                        role="switch"
+                                        data-url="{{ route('admin.services.togglestatus', $service->uuid) }}"
+                                        {{ $service->is_active ? 'checked' : '' }}>
+                                </div>
+                            </td>
 
-                                <td>
-                                    <div class="form-check form-switch mb-0">
-                                        <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
-                                            role="switch"
-                                            data-url="{{ route('admin.services.togglefeatured', $service->uuid) }}"
-                                            {{ $service->is_featured ? 'checked' : '' }}>
-                                    </div>
-                                </td>
-
+                            <td>
+                                <div class="form-check form-switch mb-0">
+                                    <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                        role="switch"
+                                        data-url="{{ route('admin.services.togglefeatured', $service->uuid) }}"
+                                        {{ $service->is_featured ? 'checked' : '' }}>
+                                </div>
+                            </td>
 
                             <!-- Actions -->
                             <td class="text-center">
@@ -110,7 +109,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center text-muted py-4">
+                            <td colspan="8" class="text-center text-muted py-4">
                                 No services found.
                             </td>
                         </tr>
@@ -119,13 +118,19 @@
             </table>
         </div>
 
-        @if ($rows->isNotEmpty())
-            <div class="card-footer text-muted small">
-                <i class="bx bx-info-circle"></i> Drag rows by the handle to reorder.
-            </div>
-        @endif
+        {{-- Pagination --}}
+        <div class="card-footer">
+            {{ $rows->links('pagination::bootstrap-5') }}
+        </div>
 
     </div>
-@endsection
-    
 
+@include('backend.partials.reorder-modal', [
+    'modalId' => 'servicesReorderModal',
+    'rows' => $reorderRows,
+    'reorderUrl' => route('admin.services.reorder'),
+    'title' => 'Reorder Services',
+    'labelField' => 'title',
+    'imageField' => 'featured_image',
+])
+@endsection
