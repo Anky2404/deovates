@@ -1,16 +1,10 @@
 <?php
+$uri = urldecode(
+    parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? ''
+);
 
-use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
-
-define('LARAVEL_START', microtime(true));
-
-if (file_exists($maintenance = __DIR__.'/storage/framework/maintenance.php')) {
-    require $maintenance;
+if ($uri !== '/' && file_exists(__DIR__.'/public'.$uri)) {
+    return false;
 }
 
-require __DIR__.'/vendor/autoload.php';
-
-$app = require_once __DIR__.'/bootstrap/app.php';
-
-$app->handleRequest(Request::capture());
+require_once __DIR__.'/public/index.php';
