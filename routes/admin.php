@@ -15,7 +15,7 @@ use App\Http\Controllers\Backend\CareerApplicationStatusController;
 use App\Http\Controllers\Backend\CareerController;
 use App\Http\Controllers\Backend\CaseStudyCategoryController;
 use App\Http\Controllers\Backend\CaseStudyController;
-use App\Http\Controllers\backend\DashboardController;
+use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DebugLogController;
 use App\Http\Controllers\Backend\DepartmentController;
 use App\Http\Controllers\Backend\EmailController;
