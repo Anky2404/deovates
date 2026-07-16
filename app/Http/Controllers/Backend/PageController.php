@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
-use App\Models\Form;
 use App\Models\Page;
+use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -68,12 +68,12 @@ class PageController extends Controller
         $page = null;
 
         if ($uuid) {
-            $page = Page::with('forms')->where('uuid', $uuid)->firstOrFail();
+            $page = Page::with('sections')->where('uuid', $uuid)->firstOrFail();
         }
 
-        $forms = Form::orderBy('name')->get();
+        $sections = Section::orderBy('name')->get();
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('page', 'forms'));
+        return view($this->prefix . $this->folder . 'createoredit', compact('page', 'sections'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -81,33 +81,31 @@ class PageController extends Controller
         $page = $uuid ? Page::where('uuid', $uuid)->firstOrFail() : null;
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('pages', 'slug')->ignore($page?->id)],
-            'title' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'template_id' => ['nullable', 'integer', 'exists:templates,id'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string', 'max:1000'],
             'meta_keywords' => ['nullable', 'string'],
             'canonical_url' => ['nullable', 'url', 'max:255'],
-            'display_order' => ['nullable', 'integer'],
-            'published_at' => ['nullable', 'date'],
             'is_active' => ['nullable'],
-            'is_homepage' => ['nullable'],
-            'form_ids' => ['nullable', 'array'],
-            'form_ids.*' => ['nullable', 'exists:forms,id'],
+            'is_published' => ['nullable'],
+            'sections' => ['nullable', 'array'],
+            'sections.order' => ['nullable', 'array'],
+            'sections.order.*' => ['integer', 'exists:sections,id'],
         ]);
 
         try {
             DB::beginTransaction();
 
             $data = $validated;
-            unset($data['form_ids'], $data['meta_keywords']);
+            unset($data['meta_keywords'], $data['sections']);
 
+            // "name" has no dedicated field in this simplified form — keep
+            // it in sync with title since the column is still NOT NULL.
+            $data['name'] = $validated['title'];
             $data['meta_keywords'] = $this->parseCommaList($request->input('meta_keywords'));
             $data['is_active'] = $request->boolean('is_active');
-            $data['is_homepage'] = $request->boolean('is_homepage');
-            $data['published_at'] = $request->filled('published_at') ? $request->input('published_at') : null;
+            $data['is_published'] = $request->boolean('is_published');
 
             $isNew = ! $page;
 
@@ -123,7 +121,18 @@ class PageController extends Controller
                 $page = Page::create($data);
             }
 
-            $page->forms()->sync($request->input('form_ids', []));
+            $sectionOrder = $request->input('sections.order', []);
+            $activeSections = $request->input('sections_active', []);
+            $sectionSync = [];
+
+            foreach ($sectionOrder as $position => $sectionId) {
+                $sectionSync[$sectionId] = [
+                    'display_order' => $position + 1,
+                    'is_active' => isset($activeSections[$sectionId]),
+                ];
+            }
+
+            $page->sections()->sync($sectionSync);
 
             ActivityLog::log(
                 config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),

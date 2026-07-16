@@ -42,6 +42,12 @@
         if (document.getElementById('description')) {
             CKEDITOR.replace('description', { height: 400 });
         }
+        if (document.getElementById('left_description')) {
+            CKEDITOR.replace('left_description', { height: 300 });
+        }
+        if (document.getElementById('right_list')) {
+            CKEDITOR.replace('right_list', { height: 300 });
+        }
     }
 </script>
 

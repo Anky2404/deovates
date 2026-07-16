@@ -8,9 +8,9 @@
     {{-- HEADER --}}
     <div class="card-header d-flex justify-content-between align-items-center">
         <div>
-            <h5 class="mb-1">{{ $form->form_heading ?? $form->name }}</h5>
-            @if(!empty($form->form_paragraph))
-                <p class="text-muted mb-0">{{ $form->form_paragraph }}</p>
+            <h5 class="mb-1">{{ $form->heading ?? $form->name }}</h5>
+            @if(!empty($form->paragraph))
+                <p class="text-muted mb-0">{{ $form->paragraph }}</p>
             @endif
         </div>
 
@@ -32,61 +32,43 @@
 
                         <label class="form-label">
                             {{ $field->label }}
-                            @if($field->is_required)
+                            @if($field->required)
                                 <span class="text-danger">*</span>
                             @endif
                         </label>
 
                         {{-- INPUT TYPES --}}
-                        @if(in_array($field->type, ['text', 'email', 'number', 'hidden']))
+                        @if(in_array($field->type, ['text', 'email', 'number', 'hidden', 'date', 'time', 'password', 'file']))
                             <input
                                 type="{{ $field->type }}"
-                                class="form-control {{ $field->css_class ?? '' }}"
-                                id="{{ $field->html_id ?? '' }}"
+                                class="form-control {{ $field->class ?? '' }}"
+                                id="{{ $field->field_id ?? '' }}"
                                 placeholder="{{ $field->placeholder ?? $field->label }}"
-                                title="{{ $field->help_text ?? '' }}"
-                                {{ $field->is_disabled ? 'disabled' : '' }}
+                                {{ $field->disabled ? 'disabled' : '' }}
                             >
 
                         {{-- TEXTAREA --}}
                         @elseif($field->type === 'textarea')
-                            @if($field->use_editor)
-                                <textarea
-                                    class="form-control {{ $field->css_class ?? '' }} ckeditor"
-                                    id="{{ $field->html_id ?? '' }}"
-                                    placeholder="{{ $field->placeholder ?? $field->label }}"
-                                    title="{{ $field->help_text ?? '' }}"
-                                    {{ $field->is_disabled ? 'disabled' : '' }}
-                                ></textarea>
-                            @else
-                                <textarea
-                                    class="form-control {{ $field->css_class ?? '' }}"
-                                    id="{{ $field->html_id ?? '' }}"
-                                    rows="3"
-                                    placeholder="{{ $field->placeholder ?? $field->label }}"
-                                    title="{{ $field->help_text ?? '' }}"
-                                    {{ $field->is_disabled ? 'disabled' : '' }}
-                                ></textarea>
-                            @endif
+                            <textarea
+                                class="form-control {{ $field->class ?? '' }} {{ $field->use_ck_editor ? 'ckeditor' : '' }}"
+                                id="{{ $field->field_id ?? '' }}"
+                                rows="3"
+                                placeholder="{{ $field->placeholder ?? $field->label }}"
+                                {{ $field->disabled ? 'disabled' : '' }}
+                            ></textarea>
 
                         {{-- SELECT --}}
-                        @elseif($field->type === 'select')
+                        @elseif(in_array($field->type, ['select', 'radio', 'checkbox']))
                             <select
-                                class="form-select {{ $field->css_class ?? '' }}"
-                                id="{{ $field->html_id ?? '' }}"
-                                {{ $field->is_disabled ? 'disabled' : '' }}
+                                class="form-select {{ $field->class ?? '' }}"
+                                id="{{ $field->field_id ?? '' }}"
+                                {{ $field->disabled ? 'disabled' : '' }}
                             >
                                 <option value="">{{ 'Select '.$field->label }}</option>
-                                @if(!empty($field->options))
-                                    @foreach(explode(',', $field->options) as $option)
-                                        <option>{{ $option }}</option>
-                                    @endforeach
-                                @endif
+                                @foreach ($field->options ?? [] as $option)
+                                    <option>{{ $option }}</option>
+                                @endforeach
                             </select>
-                        @endif
-
-                        @if(!empty($field->help_text))
-                            <small class="form-text text-muted">{{ $field->help_text }}</small>
                         @endif
 
                     </div>

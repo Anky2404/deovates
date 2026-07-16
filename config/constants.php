@@ -17,6 +17,59 @@ return [
         'blog' => 'Blog'
     ],
 
+    // Dropdown source for Section Content admin: which front-end page a
+    // section's content belongs to.
+    'PAGE_NAMES' => [
+        'home' => 'Home',
+        'about' => 'About',
+        'services' => 'Services',
+        'contact' => 'Contact',
+        'portfolios' => 'Portfolios',
+        'industries' => 'Industries',
+        'casestudies' => 'Case Studies',
+        'blog' => 'Blog',
+        'career' => 'Career',
+        'testimonials' => 'Testimonials',
+        'techstack' => 'Tech Stack',
+        'alliances' => 'Alliances',
+        'pricing' => 'Pricing',
+        'faq' => 'FAQ',
+        'hireme' => 'Hire Me',
+        'legal_privacy' => 'Privacy Policy',
+        'legal_terms' => 'Terms & Conditions',
+    ],
+
+    // Dropdown source for Section Content admin: which section, within the
+    // chosen page, this content block feeds.
+    'SECTION_NAMES' => [
+        'hero' => 'Hero',
+        'about' => 'About',
+        'services' => 'Services',
+        'cta' => 'Call To Action',
+        'clients_strip' => 'Clients Strip',
+        'why_choose_us' => 'Why Choose Us',
+        'roadmap' => 'Roadmap / Process',
+        'portfolio' => 'Portfolio',
+        'technologies_grid' => 'Technologies Grid',
+        'industries' => 'Industries',
+        'achievements_counter' => 'Achievements Counter',
+        'achievements_funfacts' => 'Achievements Funfacts',
+        'industries_carousel' => 'Industries Carousel',
+        'call_us' => 'Call Us',
+        'industries_we_serve' => 'Industries We Serve',
+        'newsletter' => 'Newsletter',
+        'latest_blog' => 'Latest Blog',
+        'testimonials' => 'Testimonials',
+        'faq' => 'FAQ',
+        'listing' => 'Listing Intro',
+        'grid' => 'Grid Intro',
+        'engagement_models' => 'Engagement Models',
+        'how_it_works' => 'How It Works',
+        'general_application' => 'General Application',
+        'intro' => 'Intro',
+        'notice' => 'Notice',
+    ],
+
     'STATUSES' => [
         1 =>  'Active',
         0 =>  'In-active'
@@ -88,6 +141,7 @@ return [
         'role'                 => 'Role',
         'rolepermission'       => 'RolePermission',
         'section'              => 'Section',
+        'sectioncontent'       => 'SectionContent',
         'service'              => 'Service',
         'servicechallenge'     => 'ServiceChallenge',
         'servicefaq'           => 'ServiceFaq',

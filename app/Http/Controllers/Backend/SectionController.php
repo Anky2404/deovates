@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Form;
+use App\Models\FormField;
 use App\Models\Section;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -62,7 +64,7 @@ class SectionController extends Controller
 
         if ($uuid) {
             try {
-                $section = Section::where('uuid', $uuid)->firstOrFail();
+                $section = Section::with('form.fields')->where('uuid', $uuid)->firstOrFail();
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
@@ -84,7 +86,7 @@ class SectionController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('sections', 'slug')->ignore($section?->id)],
             'form_id' => ['nullable', 'exists:forms,id'],
-            'content' => ['nullable', 'string'],
+            'content' => ['nullable', 'array'],
             'settings' => ['nullable', 'string'],
             'type' => ['nullable', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
@@ -93,10 +95,9 @@ class SectionController extends Controller
             'views' => ['nullable', 'integer', 'min:0'],
         ]);
 
-        // Decode safely, bad JSON must not crash save
-        $decodedContent = json_decode($data['content'] ?? '', true);
-        $data['content'] = is_array($decodedContent) ? $decodedContent : [];
+        $data['content'] = $data['content'] ?? [];
 
+        // Decode safely, bad JSON must not crash save
         $decodedSettings = json_decode($data['settings'] ?? '', true);
         $data['settings'] = is_array($decodedSettings) ? $decodedSettings : [];
 
@@ -104,6 +105,16 @@ class SectionController extends Controller
         $data['is_visible'] = $request->boolean('is_visible');
         $data['display_order'] = $data['display_order'] ?? 0;
         $data['views'] = $data['views'] ?? 0;
+
+        // Every section needs its own form so admins always get a proper
+        // field-by-field editor here instead of raw JSON — auto-build one,
+        // seeded with the mandatory label/title/subtitle fields, the first
+        // time a section is saved without one already attached.
+        $existingFormId = $data['form_id'] ?? $section?->form_id;
+
+        if (empty($existingFormId)) {
+            $data['form_id'] = $this->createDefaultSectionForm($data['name'])->id;
+        }
 
         try {
             DB::beginTransaction();
@@ -185,5 +196,50 @@ class SectionController extends Controller
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }
+    }
+
+    // Every section gets a dedicated form so its content is always editable
+    // field-by-field. Seeded with label/title/subtitle — the mandatory
+    // baseline every section shares — the admin can add more fields
+    // afterwards from the form's own "Manage Fields" editor.
+    private function createDefaultSectionForm(string $sectionName): Form
+    {
+        $baseSlug = Str::slug($sectionName) ?: 'section';
+        $slug = $baseSlug . '-form';
+
+        for ($attempt = 0; Form::where('slug', $slug)->exists(); $attempt++) {
+            $slug = $baseSlug . '-form-' . Str::random(5);
+
+            if ($attempt > 5) {
+                break;
+            }
+        }
+
+        $form = Form::create([
+            'name' => $sectionName . ' Section Form',
+            'slug' => $slug,
+            'action' => 'admin.sections.saveorupdate',
+            'form_type' => 'edit',
+            'heading_align' => 'left',
+            'is_active' => true,
+        ]);
+
+        $mandatoryFields = [
+            ['name' => 'section_label', 'label' => 'Section Label', 'sort_order' => 0],
+            ['name' => 'section_title', 'label' => 'Section Title', 'sort_order' => 1],
+            ['name' => 'section_subtitle', 'label' => 'Section Subtitle', 'sort_order' => 2],
+        ];
+
+        foreach ($mandatoryFields as $field) {
+            FormField::create($field + [
+                'form_id' => $form->id,
+                'type' => 'text',
+                'field_width' => '12',
+                'required' => true,
+                'is_active' => true,
+            ]);
+        }
+
+        return $form;
     }
 }

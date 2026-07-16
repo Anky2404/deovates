@@ -51,7 +51,7 @@
             <div class="col-md-6">
                 <label class="form-label">Form</label>
                 <select name="form_id" class="form-control">
-                    <option value="">-- none --</option>
+                    <option value="">-- create a new form automatically --</option>
                     @foreach ($forms as $id => $name)
                         <option value="{{ $id }}"
                             {{ old('form_id', $section->form_id ?? '') == $id ? 'selected' : '' }}>
@@ -59,7 +59,20 @@
                         </option>
                     @endforeach
                 </select>
+                <div class="form-text">
+                    Leave unset to auto-create a dedicated form for this section (seeded with the
+                    mandatory Section Label / Title / Subtitle fields).
+                </div>
             </div>
+
+            @if (isset($section) && $section->form)
+                <div class="col-md-6 d-flex align-items-end">
+                    <a href="{{ route('admin.pages.forms.createoredit', $section->form->uuid) }}"
+                       class="btn btn-outline-secondary">
+                        <i class="bx bx-list-plus me-1"></i> Manage Fields for This Section
+                    </a>
+                </div>
+            @endif
 
             {{-- DISPLAY ORDER --}}
             <div class="col-md-3">
@@ -79,18 +92,50 @@
                        value="{{ old('views', $section->views ?? 0) }}">
             </div>
 
-            {{-- CONTENT (JSON) --}}
-            <div class="col-md-6">
-                <label class="form-label">Content (JSON)</label>
-                <textarea name="content"
-                          class="form-control json-auto"
-                          rows="5">{{
-    old('content',
-        isset($section->content)
-            ? json_encode($section->content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-            : ''
-    )
-}}</textarea>
+            {{-- CONTENT (dynamic, one input per field on the linked form) --}}
+            <div class="col-md-12">
+                <hr class="my-2">
+                <label class="form-label fw-semibold">Content</label>
+
+                @php
+                    $contentFields = isset($section) && $section->form
+                        ? $section->form->fields
+                        : collect([
+                            (object) ['name' => 'section_label', 'label' => 'Section Label', 'type' => 'text', 'use_ck_editor' => false, 'field_width' => '12'],
+                            (object) ['name' => 'section_title', 'label' => 'Section Title', 'type' => 'text', 'use_ck_editor' => false, 'field_width' => '12'],
+                            (object) ['name' => 'section_subtitle', 'label' => 'Section Subtitle', 'type' => 'text', 'use_ck_editor' => false, 'field_width' => '12'],
+                        ]);
+                @endphp
+
+                <div class="row g-3">
+                    @foreach ($contentFields as $field)
+                        @php
+                            $fieldValue = old('content.' . $field->name, $section->content[$field->name] ?? '');
+                        @endphp
+                        <div class="col-md-{{ $field->field_width ?: 12 }}">
+                            <label class="form-label">{{ $field->label ?: $field->name }}</label>
+
+                            @if ($field->type === 'textarea')
+                                <textarea name="content[{{ $field->name }}]"
+                                          id="content_field_{{ $field->name }}"
+                                          class="form-control @if ($field->use_ck_editor ?? false) section-ckeditor-field @endif"
+                                          rows="4">{{ $fieldValue }}</textarea>
+                            @else
+                                <input type="text"
+                                       name="content[{{ $field->name }}]"
+                                       class="form-control"
+                                       value="{{ $fieldValue }}">
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+
+                @if (! isset($section) || ! $section->form)
+                    <div class="form-text mt-2">
+                        These three fields are always created for a new section. Once saved, you can add more
+                        fields (description, list, image, etc.) from "Manage Fields for This Section" above.
+                    </div>
+                @endif
             </div>
 
             {{-- SETTINGS (JSON) --}}
@@ -141,4 +186,18 @@
 
     </form>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof CKEDITOR === 'undefined') {
+        return;
+    }
+
+    document.querySelectorAll('.section-ckeditor-field').forEach(function (el) {
+        CKEDITOR.replace(el.id, { height: 250 });
+    });
+});
+</script>
+@endpush
 @endsection

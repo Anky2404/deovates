@@ -27,11 +27,10 @@
             <thead class="table-dark">
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
+                    <th>Title</th>
                     <th>Slug</th>
-                    <th>Description</th>
-                    <th>Total Sections</th>
                     <th>Status</th>
+                    <th>Published</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -42,24 +41,13 @@
                         <td>{{ $index + 1 }}</td>
 
                         <td>
-                            <strong>{{ $page->name }}</strong>
+                            <strong>{{ $page->title }}</strong>
                             @if($page->is_homepage)
                                 <span class="badge bg-label-primary ms-1">Home</span>
                             @endif
                         </td>
 
                         <td>{{ $page->slug }}</td>
-
-                        <td>
-                            {{ \Illuminate\Support\Str::limit($page->description, 50) }}
-                        </td>
-
-                        {{-- TOTAL SECTIONS --}}
-                        <td>
-                            <span class="badge bg-label-info">
-                                {{ $page->pageContents_count ?? 0 }}
-                            </span>
-                        </td>
 
                         {{-- Status --}}
                         <td>
@@ -69,6 +57,13 @@
                                     data-url="{{ route('admin.pages.togglestatus', $page->uuid) }}"
                                     {{ $page->is_active ? 'checked' : '' }}>
                             </div>
+                        </td>
+
+                        {{-- Published --}}
+                        <td>
+                            <span class="badge bg-label-{{ $page->is_published ? 'success' : 'secondary' }}">
+                                {{ $page->is_published ? 'Published' : 'Draft' }}
+                            </span>
                         </td>
 
                         <!-- Actions -->
@@ -105,7 +100,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-4">
+                        <td colspan="6" class="text-center text-muted py-4">
                             No pages found.
                         </td>
                     </tr>
@@ -128,6 +123,6 @@
     'rows'       => $reorderRows,
     'reorderUrl' => route('admin.pages.reorder'),
     'title'      => 'Reorder Pages',
-    'labelField' => 'name',
+    'labelField' => 'title',
 ])
 @endsection

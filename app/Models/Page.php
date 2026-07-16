@@ -27,6 +27,7 @@ class Page extends Model
         'meta_keywords',
         'canonical_url',
         'is_active',
+        'is_published',
         'is_homepage',
         'display_order',
         'published_at',
@@ -40,6 +41,7 @@ class Page extends Model
         return [
             'meta_keywords' => 'array',
             'is_active' => 'boolean',
+            'is_published' => 'boolean',
             'is_homepage' => 'boolean',
             'display_order' => 'integer',
             'published_at' => 'datetime',
@@ -68,6 +70,14 @@ class Page extends Model
             ->withPivot('is_active')
             ->withTimestamps()
             ->with('fields');
+    }
+
+    public function sections(): BelongsToMany
+    {
+        return $this->belongsToMany(Section::class, 'page_section_links')
+            ->withPivot('is_active', 'display_order')
+            ->withTimestamps()
+            ->orderByPivot('display_order');
     }
 
     public function content(): HasOne

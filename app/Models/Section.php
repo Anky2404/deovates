@@ -47,9 +47,10 @@ class Section extends Model
 
     public function pages(): BelongsToMany
     {
-        return $this->belongsToMany(Page::class, 'page_sections')
-            ->withPivot('is_active', 'is_visible', 'display_order', 'position', 'column', 'content_overrides', 'settings_overrides')
-            ->withTimestamps();
+        return $this->belongsToMany(Page::class, 'page_section_links')
+            ->withPivot('is_active', 'display_order')
+            ->withTimestamps()
+            ->orderByPivot('display_order');
     }
 
     public function scopeActive(Builder $query): Builder

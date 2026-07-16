@@ -20,45 +20,24 @@
 
             <div class="row g-3">
 
-                {{-- NAME --}}
+                {{-- TITLE --}}
                 <div class="col-md-6">
-                    <label class="form-label">Name</label>
-                    <input type="text" name="name" class="form-control"
-                        value="{{ old('name', $page->name ?? '') }}" required>
+                    <label class="form-label">Title *</label>
+                    <input type="text" id="title_input" name="title" class="form-control"
+                        value="{{ old('title', $page->title ?? '') }}" required>
+                    @error('title')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 {{-- SLUG --}}
                 <div class="col-md-6">
-                    <label class="form-label">Slug</label>
+                    <label class="form-label">Slug *</label>
                     <input type="text" id="slug_input" name="slug" class="form-control"
                         value="{{ old('slug', $page->slug ?? '') }}" required>
-                </div>
-
-                {{-- TITLE --}}
-                <div class="col-md-12">
-                    <label class="form-label">Title</label>
-                    <input type="text" id="title_input" name="title" class="form-control"
-                        value="{{ old('title', $page->title ?? '') }}">
-                </div>
-
-                {{-- DESCRIPTION --}}
-                <div class="col-md-12">
-                    <label class="form-label">Description</label>
-                    <textarea name="description" class="form-control" rows="3">{{ old('description', $page->description ?? '') }}</textarea>
-                </div>
-
-                {{-- TEMPLATE --}}
-                <div class="col-md-6">
-                    <label class="form-label">Template</label>
-                    <input type="text" name="template_id" class="form-control"
-                        value="{{ old('template_id', $page->template_id ?? '') }}">
-                </div>
-
-                {{-- DISPLAY ORDER --}}
-                <div class="col-md-6">
-                    <label class="form-label">Display Order</label>
-                    <input type="number" name="display_order" class="form-control"
-                        value="{{ old('display_order', $page->display_order ?? 0) }}">
+                    @error('slug')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 {{-- META TITLE --}}
@@ -68,20 +47,6 @@
                         value="{{ old('meta_title', $page->meta_title ?? '') }}">
                 </div>
 
-                {{-- META DESCRIPTION --}}
-                <div class="col-md-6">
-                    <label class="form-label">Meta Description</label>
-                    <input type="text" name="meta_description" class="form-control"
-                        value="{{ old('meta_description', $page->meta_description ?? '') }}">
-                </div>
-
-                {{-- META KEYWORDS --}}
-                <div class="col-md-6">
-                    <label class="form-label">Meta Keywords</label>
-                    <input type="text" name="meta_keywords" class="form-control"
-                        value="{{ old('meta_keywords', $page->meta_keywords ?? '') }}">
-                </div>
-
                 {{-- CANONICAL URL --}}
                 <div class="col-md-6">
                     <label class="form-label">Canonical URL</label>
@@ -89,50 +54,119 @@
                         value="{{ old('canonical_url', $page->canonical_url ?? '') }}">
                 </div>
 
-                {{-- PUBLISHED AT --}}
-                <div class="col-md-6">
-                    <label class="form-label">Published At</label>
-                    <input type="datetime-local" name="published_at" class="form-control"
-                        value="{{ old('published_at', isset($page->published_at) ? \Carbon\Carbon::parse($page->published_at)->format('Y-m-d\TH:i') : '') }}">
-                </div>
-
-                {{-- STATUS --}}
-                <div class="col-md-3">
-                    <label class="form-label">Active</label>
-                    <select name="is_active" class="form-select">
-                        <option value="1" {{ old('is_active', $page->is_active ?? 1) ? 'selected' : '' }}>Yes</option>
-                        <option value="0" {{ old('is_active', $page->is_active ?? 1) == 0 ? 'selected' : '' }}>No</option>
-                    </select>
-                </div>
-
-                {{-- HOMEPAGE --}}
-                <div class="col-md-3">
-                    <label class="form-label">Homepage</label>
-                    <select name="is_homepage" class="form-select">
-                        <option value="0" {{ old('is_homepage', $page->is_homepage ?? 0) == 0 ? 'selected' : '' }}>No</option>
-                        <option value="1" {{ old('is_homepage', $page->is_homepage ?? 0) == 1 ? 'selected' : '' }}>Yes</option>
-                    </select>
-                </div>
-
-                {{-- ================= MULTIPLE SELECT FOR FORMS ================= --}}
+                {{-- META DESCRIPTION --}}
                 <div class="col-md-12">
-    <label class="form-label">Assign Forms</label>
+                    <label class="form-label">Meta Description</label>
+                    <textarea name="meta_description" class="form-control" rows="2">{{ old('meta_description', $page->meta_description ?? '') }}</textarea>
+                </div>
 
-    <select name="form_ids[]" id="formSelect"
-        class="form-select select2" multiple>
-        
-        @foreach($forms as $form)
-            <option value="{{ $form->id }}"
-                {{ isset($page) && $page->forms->contains($form->id) ? 'selected' : '' }}>
-                {{ $form->name }}
-            </option>
-        @endforeach
+                {{-- META KEYWORDS --}}
+                <div class="col-md-12">
+                    <label class="form-label">Meta Keywords</label>
+                    <input type="text" name="meta_keywords" class="form-control"
+                        placeholder="comma, separated, keywords"
+                        value="{{ old('meta_keywords', is_array($page->meta_keywords ?? null) ? implode(', ', $page->meta_keywords) : '') }}">
+                </div>
 
-    </select>
-</div>
+                {{-- ACTIVE --}}
+                <div class="col-md-6">
+                    <div class="form-check form-switch mt-4">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               name="is_active"
+                               value="1"
+                               {{ old('is_active', $page->is_active ?? 1) ? 'checked' : '' }}>
+                        <label class="form-check-label">Active</label>
+                    </div>
+                </div>
+
+                {{-- PUBLISHED --}}
+                <div class="col-md-6">
+                    <div class="form-check form-switch mt-4">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               name="is_published"
+                               value="1"
+                               {{ old('is_published', $page->is_published ?? 0) ? 'checked' : '' }}>
+                        <label class="form-check-label">Published</label>
+                    </div>
+                </div>
 
             </div>
 
+        </div>
+
+        <hr class="m-0">
+
+        {{-- SECTIONS --}}
+        <div class="card-body">
+            <h6 class="mb-3">Sections</h6>
+
+            <div class="row g-2 align-items-end mb-3">
+                <div class="col-md-8">
+                    <label class="form-label">Add a section</label>
+                    <select id="sectionPicker" class="form-select">
+                        <option value="">Select a section to add</option>
+                        @foreach ($sections as $section)
+                            <option value="{{ $section->id }}" data-name="{{ $section->name }}">
+                                {{ $section->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" id="addSectionBtn" class="btn btn-outline-primary w-100">
+                        <i class="bx bx-plus me-1"></i> Add Section
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th></th>
+                            <th>Section</th>
+                            <th class="text-center">Active</th>
+                            <th class="text-center">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody id="assignedSectionsList">
+                        @foreach ($page?->sections ?? [] as $section)
+                            <tr data-id="{{ $section->id }}">
+                                <td class="drag-handle" style="cursor: grab; width:1%;">
+                                    <i class="bx bx-menu text-muted"></i>
+                                </td>
+                                <td>
+                                    {{ $section->name }}
+                                    <input type="hidden" name="sections[order][]" value="{{ $section->id }}">
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           name="sections_active[{{ $section->id }}]"
+                                           value="1"
+                                           {{ $section->pivot->is_active ? 'checked' : '' }}>
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-sm btn-outline-danger remove-section-row">
+                                        <i class="bx bx-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <p id="noSectionsMessage" class="text-muted text-center py-3 mb-0"
+               style="{{ isset($page) && $page->sections->isNotEmpty() ? 'display:none;' : '' }}">
+                No sections assigned yet.
+            </p>
+
+            <div class="small text-muted mt-2">
+                <i class="bx bx-info-circle"></i> Drag rows by the handle to control display order on the page.
+            </div>
         </div>
 
         <!-- Footer -->
@@ -151,18 +185,106 @@
     </form>
 
 </div>
-@endsection
+
 @push('scripts')
 <script>
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function () {
+    const list = document.getElementById('assignedSectionsList');
+    const picker = document.getElementById('sectionPicker');
+    const addBtn = document.getElementById('addSectionBtn');
+    const noSectionsMessage = document.getElementById('noSectionsMessage');
 
-    $('#formSelect').select2({
-        placeholder: "Select Forms",
-        allowClear: true,
-        width: '100%',
-        closeOnSelect: false
+    if (!list || !picker || !addBtn) {
+        return;
+    }
+
+    new Sortable(list, {
+        handle: '.drag-handle',
+        animation: 150,
     });
 
+    function toggleEmptyMessage() {
+        if (noSectionsMessage) {
+            noSectionsMessage.style.display = list.children.length ? 'none' : '';
+        }
+    }
+
+    function disablePickerOption(id) {
+        const option = picker.querySelector(`option[value="${id}"]`);
+        if (option) {
+            option.disabled = true;
+        }
+    }
+
+    function enablePickerOption(id) {
+        const option = picker.querySelector(`option[value="${id}"]`);
+        if (option) {
+            option.disabled = false;
+        }
+    }
+
+    // Existing rows already on the page shouldn't be pickable again.
+    list.querySelectorAll('tr[data-id]').forEach(function (row) {
+        disablePickerOption(row.dataset.id);
+    });
+
+    addBtn.addEventListener('click', function () {
+        const option = picker.selectedOptions[0];
+
+        if (!option || !option.value) {
+            return;
+        }
+
+        const id = option.value;
+        const name = option.dataset.name;
+
+        if (list.querySelector(`tr[data-id="${id}"]`)) {
+            return;
+        }
+
+        const row = document.createElement('tr');
+        row.dataset.id = id;
+        row.innerHTML = `
+            <td class="drag-handle" style="cursor: grab; width:1%;">
+                <i class="bx bx-menu text-muted"></i>
+            </td>
+            <td>
+                ${name}
+                <input type="hidden" name="sections[order][]" value="${id}">
+            </td>
+            <td class="text-center">
+                <input type="checkbox" class="form-check-input" name="sections_active[${id}]" value="1" checked>
+            </td>
+            <td class="text-center">
+                <button type="button" class="btn btn-sm btn-outline-danger remove-section-row">
+                    <i class="bx bx-trash"></i>
+                </button>
+            </td>
+        `;
+
+        list.appendChild(row);
+        disablePickerOption(id);
+        picker.value = '';
+        toggleEmptyMessage();
+    });
+
+    list.addEventListener('click', function (event) {
+        const button = event.target.closest('.remove-section-row');
+
+        if (!button) {
+            return;
+        }
+
+        const row = button.closest('tr[data-id]');
+        const id = row.dataset.id;
+
+        row.remove();
+        enablePickerOption(id);
+        toggleEmptyMessage();
+    });
+
+    toggleEmptyMessage();
 });
 </script>
 @endpush
+@endsection

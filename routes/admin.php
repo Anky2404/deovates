@@ -47,6 +47,7 @@ use App\Http\Controllers\Backend\PortfolioController;
 use App\Http\Controllers\Backend\ResumeController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\RolePermissionController;
+use App\Http\Controllers\Backend\SectionContentController;
 use App\Http\Controllers\Backend\SectionController;
 use App\Http\Controllers\Backend\ServiceController;
 use App\Http\Controllers\Backend\ServiceFaqController;
@@ -218,6 +219,17 @@ Route::middleware('admin.auth')->group(function () {
 
     // Sections Routes
     Route::prefix('sections')->controller(SectionController::class)->name('sections.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
+        Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+        Route::post('/reorder', 'reorder')->name('reorder');
+        Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
+        Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
+    });
+
+
+    // Section Contents Routes
+    Route::prefix('section-contents')->controller(SectionContentController::class)->name('section-contents.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
         Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');

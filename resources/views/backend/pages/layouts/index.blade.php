@@ -24,7 +24,7 @@
                         <th>#</th>
                         <th>Title</th>
                         <th>Slug</th>
-                        <th>Short Description</th>
+                        <th>Heading</th>
                         <th>Status</th>
                         <th class="text-center">Actions</th>
                     </tr>
@@ -37,8 +37,7 @@
 
                             <td><strong>{{ $layout->name }}</strong></td>
                             <td>{{ $layout->slug }}</td>
-                            <td>{{ \Carbon\Carbon::parse($layout->post_date)->format('d M, Y') }}</td>
-                            {{-- <td>{!! Str::limit($layout->short_description, 50) !!}</td> --}}
+                            <td>{{ \Illuminate\Support\Str::limit($layout->heading, 50) }}</td>
                             {{-- Status --}}
                             <td>
                                 <span
@@ -64,7 +63,7 @@
                                     </a>
 
                                     <!-- Delete Button -->
-                                    <form action="{{ route('admin.pages.forms.destroy', $layout->id) }}" method="POST"
+                                    <form action="{{ route('admin.pages.forms.destroy', $layout->uuid) }}" method="POST"
                                         class="js-delete">
                                         @csrf
                                         @method('DELETE')
@@ -82,7 +81,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center text-muted py-4">
+                            <td colspan="6" class="text-center text-muted py-4">
                                 No form layouts found.
                             </td>
                         </tr>
