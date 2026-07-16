@@ -31,10 +31,7 @@ class ServiceController extends Controller
     }
 
     // Index Function
-    //
-    // Unpaginated and ordered by display_order: the list is drag-reorderable
-    // (see reorder()), and reordering across paginated boundaries doesn't
-    // make sense.
+   
     public function index(Request $request)
     {
         $rows = Service::orderBy('display_order')->orderBy('id')->get();
