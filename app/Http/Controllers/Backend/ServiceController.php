@@ -38,8 +38,6 @@ class ServiceController extends Controller
     public function index(Request $request)
     {
         $rows = Service::orderBy('display_order')->orderBy('id')->get();
-
-        // dd($rows);
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
