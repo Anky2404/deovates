@@ -39,7 +39,7 @@ class ServiceController extends Controller
     {
         $rows = Service::orderBy('display_order')->orderBy('id')->get();
 
-        dd($rows);
+        // dd($rows);
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
