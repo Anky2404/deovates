@@ -18,7 +18,6 @@ class CareerApplicationStatusController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = ApplicationStatus::with(['application', 'changedByUser'])
@@ -29,7 +28,7 @@ class CareerApplicationStatusController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // History Function — full status progression for a single application
+    // full status progression for one application
     public function history(Request $request, $applicationUuid)
     {
         $application = CareerApplication::where('uuid', $applicationUuid)->firstOrFail();

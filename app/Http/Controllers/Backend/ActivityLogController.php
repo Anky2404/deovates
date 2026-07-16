@@ -20,7 +20,6 @@ class ActivityLogController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    //Index Function
     public function index(Request $request)
 {
     $query = ActivityLog::with('user');
@@ -61,8 +60,6 @@ class ActivityLogController extends Controller
         ->distinct()
         ->orderBy('subject_id')
         ->pluck('subject_id');
-
-        // dd($rows);
 
     return view(
         $this->prefix . $this->folder . 'index',

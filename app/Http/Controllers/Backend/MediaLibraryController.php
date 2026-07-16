@@ -22,14 +22,12 @@ class MediaLibraryController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Media::latest('id')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, ?string $uuid = null)
     {
         $media = null;
@@ -48,7 +46,6 @@ class MediaLibraryController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('media'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, ?string $uuid = null)
     {
         $media = $uuid ? Media::where('uuid', $uuid)->firstOrFail() : null;
@@ -86,7 +83,7 @@ class MediaLibraryController extends Controller
                 $action = config('constants.ACTIVITY_ACTIONS.update');
                 $description = 'Updated media ' . $media->name;
             } else {
-                // General library entry, not yet attached to any model.
+                // Not attached to a model yet
                 $data['model_type'] = null;
                 $data['model_id'] = null;
                 $data['uploaded_by'] = auth('admin')->id();
@@ -113,7 +110,6 @@ class MediaLibraryController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, string $uuid)
     {
         try {
@@ -133,7 +129,6 @@ class MediaLibraryController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, string $uuid)
     {
         try {
@@ -167,7 +162,6 @@ class MediaLibraryController extends Controller
         }
     }
 
-    // Toggle Featured Function
     public function togglefeatured(Request $request, string $uuid)
     {
         try {

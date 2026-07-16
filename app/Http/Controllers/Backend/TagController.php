@@ -22,7 +22,6 @@ class TagController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Tag::latest('id')->paginate($this->pagerecords)->withQueryString();
@@ -30,7 +29,7 @@ class TagController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a new drag-and-drop order from the reorder modal.
+    // Persist drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -56,7 +55,6 @@ class TagController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $tag = null;
@@ -75,7 +73,6 @@ class TagController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('tag'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $tag = $uuid ? Tag::where('uuid', $uuid)->firstOrFail() : null;
@@ -115,7 +112,6 @@ class TagController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -135,7 +131,6 @@ class TagController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {

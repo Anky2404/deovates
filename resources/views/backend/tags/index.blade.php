@@ -52,7 +52,7 @@
                             </td>
 
                             <td class="description-column" title="{{ $tag->meta_description }}">
-                                {{ \Illuminate\Support\Str::limit(strip_tags($tag->meta_description), 70) }}
+                                <span class="truncate-text">{{ \Illuminate\Support\Str::limit(strip_tags($tag->meta_description), 70) }}</span>
                             </td>
 
                             {{-- Status --}}

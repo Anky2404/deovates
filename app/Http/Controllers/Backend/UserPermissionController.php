@@ -13,15 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
-/**
- * This controller backs two distinct route groups:
- *  (a) admin.users.permissions.* — standard 5-shape CRUD over individual
- *      user_permissions rows (resources/views/backend/users/permissions/).
- *  (b) admin.user-permissions.*  — a bulk permission-matrix editor for a
- *      single selected user (resources/views/backend/user-permissions/).
- * Both route groups register a route named "index", so index() dispatches
- * on the resolved route name to the correct implementation.
- */
+// Backs two route groups: per-row CRUD and bulk matrix editor
 class UserPermissionController extends Controller
 {
     private $pagerecords;
@@ -33,7 +25,7 @@ class UserPermissionController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function — shared by both route groups
+    // Dispatches by resolved route name
     public function index(Request $request)
     {
         if ($request->routeIs('admin.user-permissions.index')) {
@@ -44,9 +36,7 @@ class UserPermissionController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    /**
-     * Bulk permission-matrix view for admin.user-permissions.index.
-     */
+    // Bulk permission-matrix view
     protected function matrixIndex(Request $request)
     {
         $users = User::active()->orderBy('name')->get();
@@ -71,7 +61,6 @@ class UserPermissionController extends Controller
         return view('backend.user-permissions.index', compact('users', 'permissions', 'selectedUser', 'userPermissions'));
     }
 
-    // Create / Edit Function — (a) only
     public function createoredit(Request $request, $uuid = null)
     {
         $record = null;
@@ -90,8 +79,7 @@ class UserPermissionController extends Controller
         $users = User::active()->orderBy('name')->get();
         $permissions = Permission::active()->orderBy('name')->get();
 
-        // Same edit-safety as RolePermissionController: don't let a since-
-        // deactivated user/permission vanish from the dropdown while editing.
+        // Keep deactivated user/permission visible while editing
         if ($record?->user && ! $users->contains('id', $record->user_id)) {
             $users->push($record->user);
         }
@@ -102,7 +90,6 @@ class UserPermissionController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('record', 'users', 'permissions'));
     }
 
-    // Save / Update Function — (a) only
     public function saveorupdate(Request $request, $uuid = null)
     {
         $record = $uuid ? UserPermission::where('uuid', $uuid)->firstOrFail() : null;
@@ -124,7 +111,7 @@ class UserPermissionController extends Controller
             'user_id.unique' => 'This user already has this permission assigned.',
         ]);
 
-        // JSON-auto textareas: decode safely, never let bad JSON crash the save.
+        // Never let bad JSON crash the save
         $decodedConditions = json_decode($data['conditions'] ?? '', true);
         $data['conditions'] = is_array($decodedConditions) ? $decodedConditions : [];
 
@@ -170,7 +157,6 @@ class UserPermissionController extends Controller
         }
     }
 
-    // Destroy Function — (a) only
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -190,7 +176,7 @@ class UserPermissionController extends Controller
         }
     }
 
-    // Toggle Status Function — (a) only (flips is_allowed)
+    // Flips is_allowed
     public function togglestatus(Request $request, $uuid)
     {
         try {
@@ -224,12 +210,7 @@ class UserPermissionController extends Controller
         }
     }
 
-    /**
-     * Bulk update — admin.user-permissions.update.
-     * Grants every checked permission_id for the selected user and revokes
-     * (sets is_allowed = false on) any previously-granted permission that
-     * was unchecked, without deleting the audit trail row.
-     */
+    // Bulk grant/revoke, keeps audit trail rows
     public function update(Request $request)
     {
         $data = $request->validate([

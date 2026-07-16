@@ -22,7 +22,6 @@ class MarketingIndustryCategoryController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = IndustryCategory::latest('id')->paginate($this->pagerecords)->withQueryString();
@@ -30,7 +29,7 @@ class MarketingIndustryCategoryController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a drag-and-drop order from the reorder modal on the index page.
+    // Drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -56,7 +55,6 @@ class MarketingIndustryCategoryController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $category = null;
@@ -75,7 +73,6 @@ class MarketingIndustryCategoryController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('category'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $category = $uuid ? IndustryCategory::where('uuid', $uuid)->firstOrFail() : null;
@@ -122,7 +119,6 @@ class MarketingIndustryCategoryController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -142,7 +138,6 @@ class MarketingIndustryCategoryController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {

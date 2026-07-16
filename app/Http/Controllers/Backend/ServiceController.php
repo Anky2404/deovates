@@ -30,8 +30,6 @@ class ServiceController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
-   
     public function index(Request $request)
     {
         $rows = Service::orderBy('display_order')->orderBy('id')->paginate($this->pagerecords)->withQueryString();
@@ -40,7 +38,7 @@ class ServiceController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a new drag-and-drop order from the index list.
+    // Persist drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -66,7 +64,6 @@ class ServiceController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $service = null;
@@ -90,7 +87,6 @@ class ServiceController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('service', 'platforms', 'technologies'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $service = $uuid ? Service::where('uuid', $uuid)->firstOrFail() : null;
@@ -101,9 +97,7 @@ class ServiceController extends Controller
             'short_description' => 'nullable|string',
             'description' => 'nullable|string',
             'icon' => 'nullable|string|max:255',
-            // Raw file inputs are only ever populated as a no-JS fallback —
-            // the normal path is the *_temp hidden field (see below), which
-            // carries a path already produced by the crop-and-upload widget.
+            // No-JS fallback only, temp field is normal path
             'featured_image' => 'nullable|image|max:4096',
             'featured_image_alt' => 'nullable|string|max:255',
             'banner_image' => 'nullable|image|max:4096',
@@ -125,14 +119,10 @@ class ServiceController extends Controller
             'problems' => 'nullable|array',
         ]);
 
-        // The form only manages a subset of Service's fillable columns; the
-        // rest (parent_service_id, rating, review_count, canonical_url,
-        // views) aren't present in the view and are intentionally left
-        // untouched here.
+        // Form covers only a subset of fillable columns
         unset($data['platforms'], $data['technologies'], $data['faqs'], $data['features'], $data['problems'], $data['gallery_items']);
 
-        // New services join at the end of the drag-reorderable index list,
-        // rather than colliding with everything else at the column default.
+        // New services join list end
         if (!$service) {
             $data['display_order'] = (Service::max('display_order') ?? 0) + 1;
         }
@@ -140,7 +130,7 @@ class ServiceController extends Controller
         $data['is_active'] = $request->boolean('is_active');
         $data['is_featured'] = $request->boolean('is_featured');
 
-        // JSON-auto field: decode safely, never let bad JSON crash the save.
+        // Decode safely, bad JSON must not crash save
         $decodedKeywords = json_decode($data['meta_keywords'] ?? '', true);
         $data['meta_keywords'] = is_array($decodedKeywords) ? $decodedKeywords : [];
 
@@ -184,13 +174,7 @@ class ServiceController extends Controller
         }
     }
 
-    /**
-     * Sync the gallery Media rows against the submitted "gallery_items"
-     * rows — each row either updates an existing image's alt/title/order
-     * (["id" => media uuid, ...]) or promotes a freshly cropped temp upload
-     * into a new Media row (["temp" => ..., ...]). Any existing image whose
-     * row didn't survive to submission (removed on the form) is deleted.
-     */
+    // Removed rows delete their media
     private function syncGalleryMedia(Request $request, Service $service): void
     {
         $existing = $service->galleryMedia()->get()->keyBy('uuid');
@@ -229,10 +213,7 @@ class ServiceController extends Controller
         $existing->whereNotIn('uuid', $keepUuids)->each(fn (Media $media) => $this->mediaUploader->deleteMedia($media));
     }
 
-    // Persist a drag-reordered gallery immediately (edit mode only — see
-    // image-cropper.js's persistGalleryOrder()). Only reorders items that
-    // already have a media id; unsaved (temp) items keep their position in
-    // the DOM and are only persisted (and get an id) on the next form submit.
+    // Only reorders items with existing media id
     public function galleryreorder(Request $request, string $uuid)
     {
         $request->validate([
@@ -259,7 +240,6 @@ class ServiceController extends Controller
         }
     }
 
-    // Sync FAQs from the createoredit form rows (create/update/delete).
     private function syncFaqs(Service $service, array $rows): void
     {
         $keepIds = [];
@@ -284,8 +264,7 @@ class ServiceController extends Controller
         $service->faqs()->whereNotIn('id', $keepIds)->delete();
     }
 
-    // Sync Features from the createoredit form rows, including each row's
-    // own image (via the same temp-upload/promote flow as the main images).
+    // Each row has its own image upload
     private function syncFeatures(Service $service, array $rows): void
     {
         $keepIds = [];
@@ -326,8 +305,7 @@ class ServiceController extends Controller
         $service->features()->whereNotIn('id', $keepIds)->delete();
     }
 
-    // Sync Challenges (the "Problems & Solutions" tab) from the createoredit
-    // form rows, including each row's own image.
+    // Each row has its own image upload
     private function syncProblems(Service $service, array $rows): void
     {
         $keepIds = [];
@@ -370,14 +348,7 @@ class ServiceController extends Controller
         $service->challenges()->whereNotIn('id', $keepIds)->delete();
     }
 
-    // Sync the supported-platforms pivot from the createoredit form rows.
-    //
-    // Note: the pivot's `uuid`, `is_featured` and `views` columns are all
-    // NOT NULL with no DB default, and sync() does a raw insert that
-    // bypasses ServicePlatform's HasUuid model-event hook — so newly
-    // attached rows need those supplied explicitly or the insert fails.
-    // Already-attached rows are left alone for those columns (the form has
-    // no UI for them here) so a save never clobbers values set elsewhere.
+    // New pivot rows need uuid
     private function syncPlatforms(Service $service, array $rows): void
     {
         $existingIds = $service->platforms()->pluck('platforms.id')->all();
@@ -407,8 +378,7 @@ class ServiceController extends Controller
         $service->platforms()->sync($sync);
     }
 
-    // Sync the technologies-used pivot from the createoredit form rows.
-    // See syncPlatforms() above for why new rows need an explicit uuid.
+    // New pivot rows need uuid
     private function syncTechnologies(Service $service, array $rows): void
     {
         $existingIds = $service->technologies()->pluck('technologies.id')->all();
@@ -437,7 +407,6 @@ class ServiceController extends Controller
         $service->technologies()->sync($sync);
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -457,7 +426,6 @@ class ServiceController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {
@@ -491,7 +459,6 @@ class ServiceController extends Controller
         }
     }
 
-    // Toggle Featured Function
     public function togglefeatured(Request $request, $uuid)
     {
         try {

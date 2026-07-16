@@ -22,14 +22,12 @@ class EnquiryController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Enquiry::with('assignedUser')->latest('id')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Details Function
     public function details(Request $request, $uuid)
     {
         $enquiry = Enquiry::where('uuid', $uuid)->firstOrFail();
@@ -38,7 +36,6 @@ class EnquiryController extends Controller
         return view($this->prefix . $this->folder . 'details', compact('enquiry', 'users'));
     }
 
-    // Mark As Spam Function
     public function markspam(Request $request, $uuid)
     {
         try {
@@ -75,7 +72,6 @@ class EnquiryController extends Controller
         }
     }
 
-    // Update Status Function
     public function updatestatus(Request $request, $uuid)
     {
         $enquiry = Enquiry::where('uuid', $uuid)->firstOrFail();
@@ -122,7 +118,6 @@ class EnquiryController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {

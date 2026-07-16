@@ -23,7 +23,6 @@ class MarketingPartnerController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Partner::latest('id')->paginate($this->pagerecords)->withQueryString();
@@ -31,7 +30,7 @@ class MarketingPartnerController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a new drag-and-drop order from the reorder modal.
+    // Drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -57,7 +56,6 @@ class MarketingPartnerController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $partner = null;
@@ -76,7 +74,6 @@ class MarketingPartnerController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('partner'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $partner = $uuid ? Partner::where('uuid', $uuid)->firstOrFail() : null;
@@ -138,7 +135,6 @@ class MarketingPartnerController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -158,7 +154,6 @@ class MarketingPartnerController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {
@@ -192,7 +187,6 @@ class MarketingPartnerController extends Controller
         }
     }
 
-    // Toggle Featured Function
     public function togglefeatured(Request $request, $uuid)
     {
         try {

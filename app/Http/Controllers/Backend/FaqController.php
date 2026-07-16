@@ -22,8 +22,6 @@ class FaqController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-   
-    // action below.
     public function index(Request $request)
     {
         $rows = FaqCategory::withCount('faqs')
@@ -34,8 +32,6 @@ class FaqController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    
-    // column, so the "order" array carries numeric ids (see index() above).
     public function reorder(Request $request)
     {
         $request->validate([
@@ -61,9 +57,7 @@ class FaqController extends Controller
         }
     }
 
-    // The "uuid" route param is a FaqCategory's uuid — this page manages every
-    // FAQ item under that one category (add / edit / remove / reorder) in a
-    // single form, mirroring FaqCategoryController::createoredit()/saveorupdate().
+    // Manages all FAQs in one category
     public function createoredit(Request $request, ?string $uuid = null)
     {
         $faqs = collect();
@@ -82,15 +76,7 @@ class FaqController extends Controller
         );
     }
 
-    /**
-     * The create/edit view submits a faq_category_id (category uuid) plus a
-     * "faqs" array, each row optionally carrying an "id" (existing Faq) — see
-     * resources/views/backend/faqs/createoredit.blade.php. Rows with an id are
-     * updated, rows without one are created, and any existing FAQ under the
-     * category missing from the submission (removed via the "Remove" button)
-     * is soft-deleted. Every create/update/delete is logged with its old and
-     * new values.
-     */
+    // Missing FAQ rows are deleted
     public function saveorupdate(Request $request, ?string $uuid = null)
     {
         $validated = $request->validate([
@@ -113,8 +99,7 @@ class FaqController extends Controller
 
             $submittedIds = $items->pluck('id')->filter()->map(fn ($v) => (int) $v)->all();
 
-            // Remove FAQs that used to belong to this category but were
-            // dropped from the submitted list via the "Remove" button.
+            // Delete FAQs dropped from submission
             $category->faqs()
                 ->whereNotIn('id', $submittedIds ?: [0])
                 ->get()

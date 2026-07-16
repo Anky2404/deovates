@@ -24,13 +24,11 @@ class AuthController extends Controller
     {
     }
 
-    // Index function
     public function index()
     {
         return view('backend.auth.index');
     }
 
-    // Login Submit
     public function loginsubmit(Request $req, $guard)
     {
         $req->validate([
@@ -121,13 +119,11 @@ class AuthController extends Controller
         }
     }
 
-    // Forgot Password
     public function forgot()
     {
         return view('backend.auth.forgot');
     }
 
-    // Send reset link
     public function forgotsubmit(Request $request)
     {
         $request->validate([
@@ -161,7 +157,6 @@ class AuthController extends Controller
         }
     }
 
-    // Show Reset form
     public function showResetForm(Request $request, $token)
     {
         return view('backend.auth.reset-password', [
@@ -170,7 +165,6 @@ class AuthController extends Controller
         ]);
     }
 
-    // Reset Password
     public function reset(Request $request)
     {
         $request->validate([
@@ -227,7 +221,6 @@ class AuthController extends Controller
         }
     }
 
-    // Self-service profile view
     public function profile()
     {
         $user = Auth::guard('admin')->user();
@@ -235,7 +228,6 @@ class AuthController extends Controller
         return view('backend.auth.profile', compact('user'));
     }
 
-    // Self-service profile update
     public function updateProfile(Request $request)
     {
         $user = Auth::guard('admin')->user();
@@ -277,7 +269,6 @@ class AuthController extends Controller
         }
     }
 
-    // Self-service password change
     public function changePassword(Request $request)
     {
         $request->validate([
@@ -314,7 +305,6 @@ class AuthController extends Controller
         }
     }
 
-    // Logout Function
     public function logout(Request $request, $guard)
     {
         try {

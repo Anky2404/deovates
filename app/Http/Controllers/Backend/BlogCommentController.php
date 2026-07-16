@@ -97,8 +97,7 @@ class BlogCommentController extends Controller
                 $comment->user_agent = $request->userAgent();
             }
 
-            // is_active exists on the comments table but is intentionally not
-            // mass-assignable, so it must be set directly rather than via fill().
+            // bypasses mass assignment
             $comment->is_active = $request->boolean('is_active', true);
 
             $comment->save();

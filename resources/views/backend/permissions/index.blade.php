@@ -82,8 +82,8 @@
                             </td>
 
                             <!-- Description -->
-                            <td title="{{ $permission->description }}">
-                                {{ \Illuminate\Support\Str::limit(strip_tags($permission->description), 80) }}
+                            <td class="description-column" title="{{ $permission->description }}">
+                                <span class="truncate-text">{{ \Illuminate\Support\Str::limit(strip_tags($permission->description), 80) }}</span>
                             </td>
 
                              {{-- Status --}}

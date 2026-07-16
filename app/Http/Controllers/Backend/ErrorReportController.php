@@ -9,12 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * There is no `error_reports` table or Eloquent model in this application
- * yet. This controller is built defensively so the admin nav entry never
- * crashes: every action checks Schema::hasTable() first and degrades to an
- * empty state / friendly flash message instead of throwing.
- */
+// No error_reports table yet; degrades gracefully
 class ErrorReportController extends Controller
 {
     private $pagerecords;
@@ -27,7 +22,6 @@ class ErrorReportController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         if (! Schema::hasTable($this->table)) {
@@ -41,7 +35,6 @@ class ErrorReportController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // View Function
     public function view(Request $request, $uuid)
     {
         if (! Schema::hasTable($this->table)) {
@@ -57,7 +50,6 @@ class ErrorReportController extends Controller
         return view($this->prefix . $this->folder . 'view', compact('row'));
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         if (! Schema::hasTable($this->table)) {

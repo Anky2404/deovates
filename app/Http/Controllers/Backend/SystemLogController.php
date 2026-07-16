@@ -20,7 +20,6 @@ class SystemLogController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = SystemLog::with('user')
@@ -31,7 +30,6 @@ class SystemLogController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // View Function
     public function view(Request $request, $uuid)
     {
         $row = SystemLog::with('user')->where('uuid', $uuid)->firstOrFail();
@@ -39,7 +37,7 @@ class SystemLogController extends Controller
         return view($this->prefix . $this->folder . 'view', compact('row'));
     }
 
-    // Destroy Function (read-only log — records are only removed manually by an admin)
+    // Manual delete only, read-only log
     public function destroy(Request $request, $uuid)
     {
         try {

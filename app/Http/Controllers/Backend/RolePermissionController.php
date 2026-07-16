@@ -24,14 +24,12 @@ class RolePermissionController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = RolePermission::with(['role', 'permission'])->latest('id')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $rolePermission = null;
@@ -50,9 +48,7 @@ class RolePermissionController extends Controller
         $roles = Role::active()->orderBy('name')->get();
         $permissions = Permission::active()->orderBy('name')->get();
 
-        // If this assignment points at a role/permission that's since been
-        // deactivated, still list it (so editing doesn't silently show a
-        // blank dropdown and risk the admin re-pointing it at something else).
+        // Keep deactivated role/permission in list
         if ($rolePermission?->role && ! $roles->contains('id', $rolePermission->role_id)) {
             $roles->push($rolePermission->role);
         }
@@ -63,7 +59,6 @@ class RolePermissionController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('rolePermission', 'roles', 'permissions'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $rolePermission = $uuid ? RolePermission::where('uuid', $uuid)->firstOrFail() : null;
@@ -84,7 +79,7 @@ class RolePermissionController extends Controller
             'role_id.unique' => 'This role already has this permission assigned.',
         ]);
 
-        // JSON-auto textareas: decode safely, never let bad JSON crash the save.
+        // Decode safely, bad JSON must not crash save
         $decodedConditions = json_decode($data['conditions'] ?? '', true);
         $data['conditions'] = is_array($decodedConditions) ? $decodedConditions : [];
 
@@ -129,7 +124,6 @@ class RolePermissionController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -149,7 +143,7 @@ class RolePermissionController extends Controller
         }
     }
 
-    // Toggle Status Function (flips is_allowed — the boolean the index view's badge is bound to)
+    // Flips is_allowed, drives index badge
     public function togglestatus(Request $request, $uuid)
     {
         try {

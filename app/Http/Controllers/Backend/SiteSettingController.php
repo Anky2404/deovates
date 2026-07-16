@@ -20,14 +20,13 @@ class SiteSettingController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $groups = SiteSetting::orderBy('group')->orderBy('key')->get()->groupBy('group');
         return view($this->prefix . $this->folder . 'index', compact('groups'));
     }
 
-    // Save / Update Function (bulk save — one form, many settings)
+    // Bulk save: one form, many settings
     public function saveorupdate(Request $request)
     {
         $settings = $request->input('settings', []);
@@ -41,8 +40,7 @@ class SiteSettingController extends Controller
                         continue;
                     }
 
-                    // Checkbox-type settings won't be present in the payload when unchecked,
-                    // so booleans must be normalized explicitly rather than relying on array value.
+                    // Unchecked checkboxes are absent from payload
                     if ($setting->type === 'boolean') {
                         $value = $request->boolean("settings.$key");
                     }

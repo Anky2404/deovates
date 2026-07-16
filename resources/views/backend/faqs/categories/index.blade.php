@@ -63,7 +63,7 @@
 
                         <!-- Description -->
                         <td class="description-column">
-                            <span class="text-muted">
+                            <span class="text-muted truncate-text">
                                 {{ \Illuminate\Support\Str::limit(strip_tags($category->short_description ?? ''), 60) ?: '—' }}
                             </span>
                         </td>

@@ -21,14 +21,12 @@ class PermissionController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Permission::latest('id')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $permission = null;
@@ -47,7 +45,6 @@ class PermissionController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('permission'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $permission = $uuid ? Permission::where('uuid', $uuid)->firstOrFail() : null;
@@ -67,12 +64,11 @@ class PermissionController extends Controller
             'is_active' => 'nullable|boolean',
         ]);
 
-        // The form posts group[] / action[] as multi-selects; the columns
-        // store them as comma-separated strings (see edit view's explode()).
+        // Columns store multi-select as CSV
         $data['group'] = ! empty($data['group']) ? implode(',', $data['group']) : null;
         $data['action'] = ! empty($data['action']) ? implode(',', $data['action']) : null;
 
-        // JSON-auto textarea: decode safely, never let bad JSON crash the save.
+        // Decode safely, bad JSON must not crash save
         $decodedMeta = json_decode($data['meta'] ?? '', true);
         $data['meta'] = is_array($decodedMeta) ? $decodedMeta : [];
 
@@ -88,7 +84,7 @@ class PermissionController extends Controller
                 $action = config('constants.ACTIVITY_ACTIONS.update');
                 $description = 'Updated permission ' . $permission->name;
             } else {
-                // Admin panel authenticates on the "admin" guard.
+                // Admin guard, not default guard
                 $data['created_by'] = auth('admin')->id();
                 $permission = Permission::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
@@ -113,7 +109,6 @@ class PermissionController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -133,7 +128,6 @@ class PermissionController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {

@@ -21,14 +21,12 @@ class RoleController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Role::latest('id')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $role = null;
@@ -47,7 +45,6 @@ class RoleController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('role'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $role = $uuid ? Role::where('uuid', $uuid)->firstOrFail() : null;
@@ -93,7 +90,6 @@ class RoleController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -119,7 +115,6 @@ class RoleController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {

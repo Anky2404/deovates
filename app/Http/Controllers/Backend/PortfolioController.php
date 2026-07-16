@@ -38,7 +38,7 @@ class PortfolioController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a new drag-and-drop order from the reorder modal.
+    // Persist drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -232,10 +232,7 @@ class PortfolioController extends Controller
         }
     }
 
-    // Persist a drag-reordered gallery immediately (edit mode only — see
-    // image-cropper.js's persistGalleryOrder()). Only reorders items that
-    // already have a media id; unsaved (temp) items keep their position in
-    // the DOM and are only persisted (and get an id) on the next form submit.
+    // Only reorders items with existing media id
     public function galleryreorder(Request $request, string $uuid)
     {
         $request->validate([
@@ -287,13 +284,7 @@ class PortfolioController extends Controller
         }
     }
 
-    /**
-     * Sync the gallery Media rows against the submitted "gallery_items"
-     * rows — each row either updates an existing image's alt/title/order
-     * (["id" => media uuid, ...]) or promotes a freshly cropped temp upload
-     * into a new Media row (["temp" => ..., ...]). Any existing image whose
-     * row didn't survive to submission (removed on the form) is deleted.
-     */
+    // Removed rows delete their media
     private function syncGalleryMedia(Request $request, Portfolio $portfolio): void
     {
         $existing = $portfolio->galleryMedia()->get()->keyBy('uuid');
@@ -332,10 +323,7 @@ class PortfolioController extends Controller
         $existing->whereNotIn('uuid', $keepUuids)->each(fn (Media $media) => $this->mediaUploader->deleteMedia($media));
     }
 
-    /**
-     * The "json-auto" meta_keywords textarea posts a JSON-encoded array;
-     * decode defensively and fall back to an empty array on bad input.
-     */
+    // Decode safely, bad JSON must not crash save
     private function parseJsonList(?string $value): array
     {
         if (empty($value)) {

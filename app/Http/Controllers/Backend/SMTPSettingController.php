@@ -22,14 +22,12 @@ class SMTPSettingController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = SMTPSetting::latest('id')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $smtpSetting = null;
@@ -48,7 +46,6 @@ class SMTPSettingController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('smtpSetting'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $smtpSetting = $uuid ? SMTPSetting::where('uuid', $uuid)->firstOrFail() : null;
@@ -67,7 +64,7 @@ class SMTPSettingController extends Controller
             'is_active' => 'nullable|boolean',
         ]);
 
-        // Never overwrite the stored (encrypted) password with a blank value on edit.
+        // Blank password keeps stored one
         if (empty($data['password'])) {
             unset($data['password']);
         }
@@ -100,7 +97,6 @@ class SMTPSettingController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -120,7 +116,6 @@ class SMTPSettingController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {

@@ -20,7 +20,7 @@ class HomeController extends Controller
 {
      private $prefix = 'front.';
     private $folder = 'home.';
-    //Index Function
+
 public function index()
 {
     try {

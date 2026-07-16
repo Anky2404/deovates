@@ -9,15 +9,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Authentication logs are an audit trail written by AuthLog::logEvent()
- * during the real login flow — they are not meant to be manually created
- * by an admin. The shipped createoredit.blade.php in this view folder is
- * actually a leftover "Blog Category" form (different fields entirely, and
- * its <form action> posts to admin.technologies.categories.saveorupdate,
- * not this controller), so createoredit/saveorupdate are implemented as
- * safe no-ops rather than rendering that mismatched template.
- */
+// create/edit are no-ops, logs are auto-written
 class AuthLogController extends Controller
 {
     private $pagerecords;
@@ -29,14 +21,12 @@ class AuthLogController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = AuthLog::with('user')->latest('id')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // View Function
     public function view(Request $request, $uuid)
     {
         try {
@@ -51,21 +41,20 @@ class AuthLogController extends Controller
         return view($this->prefix . $this->folder . 'view', compact('log'));
     }
 
-    // Create / Edit Function — not applicable; see class docblock.
+    // no-op, see class note
     public function createoredit(Request $request, $uuid = null)
     {
         return redirect()->route('admin.auth.logs.index')
             ->with('info', 'Authentication logs are recorded automatically and cannot be manually managed.');
     }
 
-    // Save / Update Function — not applicable; see class docblock.
+    // no-op, see class note
     public function saveorupdate(Request $request, $uuid = null)
     {
         return redirect()->route('admin.auth.logs.index')
             ->with('info', 'Authentication logs are recorded automatically and cannot be manually managed.');
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -85,7 +74,7 @@ class AuthLogController extends Controller
         }
     }
 
-    // Toggle Status Function (flips is_success — the only boolean status field on this model)
+    // flips is_success field
     public function togglestatus(Request $request, $uuid)
     {
         try {

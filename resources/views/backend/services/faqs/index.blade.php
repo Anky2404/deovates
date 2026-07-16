@@ -51,8 +51,8 @@
                                 </span>
                             </td>
 
-                            <td class="description-column">
-                                {{ $service->description }}
+                            <td class="description-column" title="{{ $service->description }}">
+                                <span class="truncate-text">{{ \Illuminate\Support\Str::limit(strip_tags($service->description), 80) }}</span>
                             </td>
 
                             {{-- Status --}}

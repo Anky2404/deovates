@@ -64,7 +64,7 @@
                             </td>
 
                             <td class="description-column" title="{{ $service->description }}">
-                                {{ \Illuminate\Support\Str::limit(strip_tags($service->description), 70) }}
+                                <span class="truncate-text">{{ \Illuminate\Support\Str::limit(strip_tags($service->description), 70) }}</span>
                             </td>
 
                             <td>

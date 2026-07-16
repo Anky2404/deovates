@@ -11,12 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
-/**
- * Second admin nav entry over the shared `templates` table (App\Models\Template),
- * scoped to type = "page" so it only ever lists/creates page templates. The
- * top-level Templates module (App\Http\Controllers\Backend\TemplateController)
- * manages the same table without this scoping.
- */
+// Scoped view of shared templates table
 class PageTemplateController extends Controller
 {
     private $pagerecords;
@@ -28,7 +23,6 @@ class PageTemplateController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Template::where('type', 'page')
@@ -40,7 +34,6 @@ class PageTemplateController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $template = null;
@@ -59,7 +52,6 @@ class PageTemplateController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('template'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $template = $uuid ? Template::where('uuid', $uuid)->firstOrFail() : null;
@@ -76,10 +68,10 @@ class PageTemplateController extends Controller
             'is_active' => ['nullable', 'boolean'],
         ]);
 
-        // This controller is scoped to page templates only.
+        // Scoped to page templates only
         $data['type'] = 'page';
 
-        // JSON-auto textareas: decode safely, never let bad JSON crash the save.
+        // Decode safely, bad JSON must not crash save
         $decodedLayouts = json_decode($data['layouts'] ?? '', true);
         $data['layouts'] = is_array($decodedLayouts) ? $decodedLayouts : [];
 
@@ -119,7 +111,6 @@ class PageTemplateController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -144,7 +135,6 @@ class PageTemplateController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {

@@ -41,8 +41,8 @@
                         </td>
 
                         <!-- Message -->
-                        <td style="max-width:300px;">
-                            <span class="text-muted">{{ \Illuminate\Support\Str::limit($row->message, 80) }}</span>
+                        <td class="description-column">
+                            <span class="text-muted truncate-text">{{ \Illuminate\Support\Str::limit($row->message, 80) }}</span>
                         </td>
 
                         <!-- User -->

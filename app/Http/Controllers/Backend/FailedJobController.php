@@ -19,14 +19,12 @@ class FailedJobController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = DB::table('failed_jobs')->orderByDesc('failed_at')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Retry Function
     public function retry(Request $request, $id)
     {
         try {
@@ -39,7 +37,6 @@ class FailedJobController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $id)
     {
         try {

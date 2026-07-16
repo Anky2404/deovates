@@ -55,7 +55,7 @@
                         <!-- Description -->
                         <td class="description-column"
                             title="{{ $department->description }}">
-                            {{ \Illuminate\Support\Str::limit(strip_tags($department->description), 80) }}
+                            <span class="truncate-text">{{ \Illuminate\Support\Str::limit(strip_tags($department->description), 80) }}</span>
                         </td>
 
                         <!-- Status -->

@@ -20,7 +20,6 @@ class NotificationController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = NotificationLog::with('user')
@@ -31,7 +30,6 @@ class NotificationController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Mark As Read Function
     public function markAsRead(Request $request, $uuid)
     {
         try {
@@ -65,7 +63,6 @@ class NotificationController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {

@@ -17,9 +17,7 @@ class CareerController extends Controller
             ->latest('id')
             ->get();
 
-        // Only one real opening exists right now — pad the grid to a
-        // full 4 columns with static placeholder roles (same field
-        // names as a real Career) until more are posted.
+        // Pad grid with placeholder roles
         $placeholders = collect([
             (object) ['slug' => null, 'title' => 'Frontend Developer', 'department' => (object) ['name' => 'Engineering'], 'location' => 'ludhiana', 'is_remote' => true, 'employment_type' => 'full-time'],
             (object) ['slug' => null, 'title' => 'Backend Developer', 'department' => (object) ['name' => 'Engineering'], 'location' => 'ludhiana', 'is_remote' => true, 'employment_type' => 'full-time'],

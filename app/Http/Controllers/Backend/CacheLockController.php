@@ -18,14 +18,12 @@ class CacheLockController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = DB::table('cache_locks')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Clear All Locks Function
     public function clear(Request $request)
     {
         try {

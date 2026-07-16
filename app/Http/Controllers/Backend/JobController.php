@@ -17,7 +17,6 @@ class JobController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = DB::table('jobs')->orderByDesc('id')->paginate($this->pagerecords)->withQueryString();

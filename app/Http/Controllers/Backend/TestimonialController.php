@@ -22,7 +22,6 @@ class TestimonialController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Testimonial::latest('id')->paginate($this->pagerecords)->withQueryString();
@@ -30,7 +29,7 @@ class TestimonialController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a drag-and-drop order from the reorder modal.
+    // Persist drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -56,7 +55,6 @@ class TestimonialController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $testimonial = null;
@@ -75,14 +73,11 @@ class TestimonialController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('testimonial'));
     }
 
-    // Save / Update Function
+    // Form field "image" maps to column "photo"
     public function saveorupdate(Request $request, $uuid = null)
     {
         $testimonial = $uuid ? Testimonial::where('uuid', $uuid)->firstOrFail() : null;
 
-        // Note: the form's file input is named "image" but the testimonials
-        // table column is "photo" (no "icon" column exists on this table,
-        // so the form's icon field is intentionally not persisted).
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'designation' => 'nullable|string|max:255',
@@ -135,7 +130,6 @@ class TestimonialController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -155,7 +149,6 @@ class TestimonialController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {
@@ -189,7 +182,6 @@ class TestimonialController extends Controller
         }
     }
 
-    // Toggle Featured Function
     public function togglefeatured(Request $request, $uuid)
     {
         try {

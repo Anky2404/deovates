@@ -18,7 +18,6 @@ class CacheController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $currentDriver = config('cache.default');
@@ -27,7 +26,6 @@ class CacheController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('currentDriver', 'availableDrivers'));
     }
 
-    // Clear Cache Function
     public function clear(Request $request)
     {
         try {

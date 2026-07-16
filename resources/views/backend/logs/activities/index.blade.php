@@ -133,8 +133,8 @@
                                 {{ $log->module ?? 'N/A' }}
                             </td>
 
-                            <td style="max-width:300px;">
-                                {{ \Illuminate\Support\Str::limit($log->description, 80) }}
+                            <td class="description-column" title="{{ $log->description }}">
+                                <span class="truncate-text">{{ \Illuminate\Support\Str::limit($log->description, 80) }}</span>
                             </td>
 
                             <td>

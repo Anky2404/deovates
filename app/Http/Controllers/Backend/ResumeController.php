@@ -20,7 +20,6 @@ class ResumeController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Resume::latest('id')->paginate($this->pagerecords)->withQueryString();
@@ -28,7 +27,6 @@ class ResumeController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // View Function
     public function view(Request $request, $uuid)
     {
         $row = Resume::with('applications')->where('uuid', $uuid)->firstOrFail();
@@ -36,7 +34,6 @@ class ResumeController extends Controller
         return view($this->prefix . $this->folder . 'view', compact('row'));
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -44,11 +41,7 @@ class ResumeController extends Controller
 
             $row = Resume::where('uuid', $uuid)->firstOrFail();
 
-            // NOTE: this is a soft delete, so the physical file behind
-            // `resume_file` is intentionally left on disk (the record — and
-            // its download link — can still be restored later). Only wire up
-            // MediaUploader::deleteSingle($row->resume_file) here if a
-            // permanent/force-delete flow is added in the future.
+            // Soft delete, file kept on disk
             $row->delete();
 
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.resume'), [

@@ -17,7 +17,6 @@ class JobBatchController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = DB::table('job_batches')->orderByDesc('created_at')->paginate($this->pagerecords)->withQueryString();

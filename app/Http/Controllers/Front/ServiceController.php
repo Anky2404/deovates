@@ -57,9 +57,7 @@ class ServiceController extends Controller
             ->take(3)
             ->get();
 
-        // No service currently has real children via parent_service_id —
-        // static placeholder "what's included" content until that data
-        // is populated, using the same field names as a real child.
+        // Placeholder children until populated
         $children = $service->children->isNotEmpty()
             ? $service->children
             : collect([
@@ -86,9 +84,7 @@ class ServiceController extends Controller
                 ],
             ]);
 
-        // No service currently has real service_problems/service_solutions
-        // rows — static placeholder content, same field names as real
-        // rows, until that data is populated via the admin panel.
+        // Placeholder problems until populated
         $problems = $service->problems->isNotEmpty()
             ? $service->problems
             : collect([

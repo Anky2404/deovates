@@ -58,8 +58,8 @@
                     </td> --}}
 
                     <!-- Comment -->
-                    <td style="max-width:300px">
-                        {{ \Illuminate\Support\Str::limit(strip_tags($comment->comment), 80) }}
+                    <td class="description-column" title="{{ strip_tags($comment->comment) }}">
+                        <span class="truncate-text">{{ \Illuminate\Support\Str::limit(strip_tags($comment->comment), 80) }}</span>
                     </td>
 
                     <!-- Likes -->

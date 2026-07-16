@@ -21,7 +21,6 @@ class DepartmentController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Department::latest('id')->paginate($this->pagerecords)->withQueryString();
@@ -29,7 +28,7 @@ class DepartmentController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a new drag-and-drop order from the reorder modal.
+    // Drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -55,7 +54,6 @@ class DepartmentController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $department = null;
@@ -74,7 +72,6 @@ class DepartmentController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('department'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $department = $uuid ? Department::where('uuid', $uuid)->firstOrFail() : null;
@@ -113,7 +110,6 @@ class DepartmentController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -133,7 +129,6 @@ class DepartmentController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {

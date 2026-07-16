@@ -30,7 +30,7 @@ class BlogCategoryController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a drag-and-drop order from the reorder modal on the index page.
+    // saves drag-drop order
     public function reorder(Request $request)
     {
         $request->validate([

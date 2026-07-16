@@ -46,7 +46,7 @@
 
                         <!-- Exception -->
                         <td class="description-column" title="{{ $failedJob->exception }}">
-                            {{ \Illuminate\Support\Str::limit(strip_tags($failedJob->exception), 80) }}
+                            <span class="truncate-text">{{ \Illuminate\Support\Str::limit(strip_tags($failedJob->exception), 80) }}</span>
                         </td>
 
                         <!-- Failed At -->

@@ -23,7 +23,6 @@ class SectionController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Section::with('form')->latest('id')->paginate($this->pagerecords)->withQueryString();
@@ -31,7 +30,7 @@ class SectionController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a new drag-and-drop order from the reorder modal.
+    // Persist drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -57,7 +56,6 @@ class SectionController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, ?string $uuid = null)
     {
         $section = null;
@@ -78,7 +76,6 @@ class SectionController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('section', 'forms'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, ?string $uuid = null)
     {
         $section = $uuid ? Section::where('uuid', $uuid)->firstOrFail() : null;
@@ -96,7 +93,7 @@ class SectionController extends Controller
             'views' => ['nullable', 'integer', 'min:0'],
         ]);
 
-        // JSON-auto textareas: decode safely, never let bad JSON crash the save.
+        // Decode safely, bad JSON must not crash save
         $decodedContent = json_decode($data['content'] ?? '', true);
         $data['content'] = is_array($decodedContent) ? $decodedContent : [];
 
@@ -138,7 +135,6 @@ class SectionController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, string $uuid)
     {
         try {
@@ -158,7 +154,6 @@ class SectionController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, string $uuid)
     {
         try {

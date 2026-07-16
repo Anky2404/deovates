@@ -22,7 +22,6 @@ class TemplateController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Template::latest('id')->paginate($this->pagerecords)->withQueryString();
@@ -30,7 +29,7 @@ class TemplateController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a drag-and-drop order from the reorder modal.
+    // Persist drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -56,7 +55,6 @@ class TemplateController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, ?string $uuid = null)
     {
         $template = null;
@@ -75,7 +73,6 @@ class TemplateController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('template'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, ?string $uuid = null)
     {
         $template = $uuid ? Template::where('uuid', $uuid)->firstOrFail() : null;
@@ -94,7 +91,7 @@ class TemplateController extends Controller
             'usage_count' => ['nullable', 'integer', 'min:0'],
         ]);
 
-        // JSON-auto textareas: decode safely, never let bad JSON crash the save.
+        // Never let bad JSON crash the save
         $decodedLayouts = json_decode($data['layouts'] ?? '', true);
         $data['layouts'] = is_array($decodedLayouts) ? $decodedLayouts : [];
 
@@ -135,7 +132,6 @@ class TemplateController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, string $uuid)
     {
         try {
@@ -155,7 +151,6 @@ class TemplateController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, string $uuid)
     {
         try {

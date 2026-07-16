@@ -22,7 +22,6 @@ class ServiceFaqController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = ServiceFaq::with('service')->latest('id')->paginate($this->pagerecords)->withQueryString();
@@ -30,7 +29,7 @@ class ServiceFaqController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a new drag-and-drop order from the reorder modal.
+    // Persist drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -56,7 +55,6 @@ class ServiceFaqController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $faq = null;
@@ -77,13 +75,7 @@ class ServiceFaqController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('faq', 'services'));
     }
 
-    // Save / Update Function
-    //
-    // The createoredit view is a bulk FAQ builder: it lets the admin pick one
-    // service and add any number of question/answer rows in a single submit.
-    // When a uuid is present (editing a single existing FAQ), only the first
-    // submitted row is applied to that record; otherwise every row becomes a
-    // new ServiceFaq for the chosen service.
+    // uuid present: only first row applied
     public function saveorupdate(Request $request, $uuid = null)
     {
         $data = $request->validate([
@@ -147,7 +139,6 @@ class ServiceFaqController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -167,7 +158,6 @@ class ServiceFaqController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {
@@ -201,7 +191,6 @@ class ServiceFaqController extends Controller
         }
     }
 
-    // Toggle Featured Function
     public function togglefeatured(Request $request, $uuid)
     {
         try {

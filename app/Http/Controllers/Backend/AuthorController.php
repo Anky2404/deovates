@@ -23,7 +23,6 @@ class AuthorController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Author::latest('id')->paginate($this->pagerecords)->withQueryString();
@@ -31,7 +30,7 @@ class AuthorController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a new drag-and-drop order from the reorder modal.
+    // saves drag-drop order
     public function reorder(Request $request)
     {
         $request->validate([
@@ -57,7 +56,6 @@ class AuthorController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $author = null;
@@ -76,7 +74,6 @@ class AuthorController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('author'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $author = $uuid ? Author::where('uuid', $uuid)->firstOrFail() : null;
@@ -100,7 +97,7 @@ class AuthorController extends Controller
             'cover_image' => 'nullable|image|max:4096',
         ]);
 
-        // JSON-auto textarea: decode safely, never let bad JSON crash the save.
+        // guards against bad JSON
         $decodedSocialLinks = json_decode($data['social_links'] ?? '', true);
         $data['social_links'] = is_array($decodedSocialLinks) ? $decodedSocialLinks : [];
 
@@ -149,7 +146,6 @@ class AuthorController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -169,7 +165,6 @@ class AuthorController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {
@@ -203,7 +198,6 @@ class AuthorController extends Controller
         }
     }
 
-    // Toggle Featured Function
     public function togglefeatured(Request $request, $uuid)
     {
         try {

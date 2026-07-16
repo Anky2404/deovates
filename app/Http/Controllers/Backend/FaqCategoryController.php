@@ -30,7 +30,7 @@ class FaqCategoryController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a drag-and-drop order from the reorder modal on the index page.
+    // Drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -63,14 +63,7 @@ class FaqCategoryController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('category'));
     }
 
-    /**
-     * The create/edit view manages the category fields alongside a nested
-     * "faqs" array, each row optionally carrying an "id" (existing Faq) —
-     * see resources/views/backend/faqs/categories/createoredit.blade.php.
-     * Rows with an id are updated, rows without one are created, and any
-     * existing FAQ under this category that is missing from the submission
-     * (i.e. removed via the "Remove" button) is soft-deleted.
-     */
+    // Missing FAQ rows are deleted
     public function saveorupdate(Request $request, ?string $uuid = null)
     {
         $category = $uuid ? FaqCategory::where('uuid', $uuid)->firstOrFail() : null;
@@ -108,8 +101,7 @@ class FaqCategoryController extends Controller
 
             $submittedIds = $items->pluck('id')->filter()->map(fn ($v) => (int) $v)->all();
 
-            // Remove FAQs that used to belong to this category but were
-            // dropped from the submitted list via the "Remove" button.
+            // Delete FAQs dropped from submission
             $category->faqs()
                 ->whereNotIn('id', $submittedIds ?: [0])
                 ->get()

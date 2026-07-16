@@ -79,11 +79,27 @@
             border-radius: 6px;
         }
 
+        /* Cap the column's width so its inner .truncate-text span (below)
+           has a real width to truncate against — max-width alone on a td
+           in an auto-layout table doesn't reliably stop text from
+           wrapping to a second line and overflowing the fixed row height. */
         .description-column {
+            width: 320px;
             max-width: 320px;
+        }
+
+        .description-column .truncate-text {
+            display: inline-block;
+            max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        /* Subtle brand-tinted zebra striping on every admin listing table. */
+        .table > tbody > tr:nth-of-type(even) {
+            background-color: rgba(105, 108, 255, 0.05);
         }
     </style>
 </head>

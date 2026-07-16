@@ -22,7 +22,6 @@ class PlatformController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Platform::latest('id')->paginate($this->pagerecords)->withQueryString();
@@ -30,7 +29,7 @@ class PlatformController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a drag-and-drop order from the reorder modal.
+    // Persist drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -56,7 +55,6 @@ class PlatformController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, ?string $uuid = null)
     {
         $platform = null;
@@ -75,7 +73,6 @@ class PlatformController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('platform'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, ?string $uuid = null)
     {
         $platform = $uuid ? Platform::where('uuid', $uuid)->firstOrFail() : null;
@@ -124,7 +121,6 @@ class PlatformController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, string $uuid)
     {
         try {
@@ -144,7 +140,6 @@ class PlatformController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, string $uuid)
     {
         try {
@@ -178,7 +173,6 @@ class PlatformController extends Controller
         }
     }
 
-    // Toggle Featured Function
     public function togglefeatured(Request $request, string $uuid)
     {
         try {

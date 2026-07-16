@@ -17,12 +17,6 @@ class SitemapController extends Controller
     {
         $sitemap = Sitemap::create();
 
-        /*
-        |----------------------
-        | STATIC FRONTEND ROUTES
-        |----------------------
-        */
-
         $staticRoutes = [
             'front.home.index'         => '/',
             'front.about.index'        => '/about',
@@ -52,11 +46,6 @@ class SitemapController extends Controller
             );
         }
 
-        /*
-        |-------------
-        | BLOG DETAILS
-        |--------------
-        */
         if (class_exists(Blog::class)) {
             Blog::where('is_active', 1)->get()->each(function ($blog) use ($sitemap) {
                 $sitemap->add(
@@ -68,11 +57,6 @@ class SitemapController extends Controller
             });
         }
 
-        /*
-        |-----------------
-        | PORTFOLIO DETAILS
-        |-----------------
-        */
         if (class_exists(Portfolio::class)) {
             Portfolio::get()->each(function ($project) use ($sitemap) {
                 $sitemap->add(
@@ -84,11 +68,6 @@ class SitemapController extends Controller
             });
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | CASE STUDY DETAILS
-        |--------------------------------------------------------------------------
-        */
         if (class_exists(CaseStudy::class)) {
             CaseStudy::get()->each(function ($case) use ($sitemap) {
                 $sitemap->add(
@@ -100,11 +79,6 @@ class SitemapController extends Controller
             });
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | JOB DETAILS (OPTIONAL)
-        |--------------------------------------------------------------------------
-        */
         if (class_exists(Career::class)) {
             Career::where('is_active', 1)->get()->each(function ($job) use ($sitemap) {
                 $sitemap->add(
@@ -116,11 +90,6 @@ class SitemapController extends Controller
             });
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | SAVE SITEMAP
-        |--------------------------------------------------------------------------
-        */
         $sitemap->writeToFile(public_path('sitemap.xml'));
 
         return response()->json([

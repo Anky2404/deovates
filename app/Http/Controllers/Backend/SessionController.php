@@ -7,17 +7,7 @@ use App\Models\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Sessions are Laravel's native session-storage rows: they're created and
- * refreshed automatically by the session driver, not by an admin form. The
- * model has no uuid/is_active/timestamps — its primary key is the session's
- * own string id. routes/admin.php nonetheless registers a full 5-route CRUD
- * block for this controller, so createoredit/saveorupdate/togglestatus are
- * implemented as safe no-ops (the shipped createoredit.blade.php in this
- * view folder is actually a leftover Blog form and posts to a different
- * route entirely — rendering it would be nonsensical, so we never do).
- * index/destroy are real and force-log-out a session by deleting its row.
- */
+// Sessions are framework-managed, not admin-editable
 class SessionController extends Controller
 {
     private $pagerecords;
@@ -29,28 +19,27 @@ class SessionController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = Session::with('user')->orderByDesc('last_activity')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Create / Edit Function — not applicable to sessions; see class docblock.
+    // No-op: sessions are auto-created
     public function createoredit(Request $request, $uuid = null)
     {
         return redirect()->route('admin.sessions.index')
             ->with('info', 'Sessions are created automatically and cannot be manually managed.');
     }
 
-    // Save / Update Function — not applicable to sessions; see class docblock.
+    // No-op: sessions are auto-created
     public function saveorupdate(Request $request, $uuid = null)
     {
         return redirect()->route('admin.sessions.index')
             ->with('info', 'Sessions are created automatically and cannot be manually managed.');
     }
 
-    // Destroy Function — {uuid} route parameter is actually the session's string id.
+    // uuid param is actually session id
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -67,7 +56,7 @@ class SessionController extends Controller
         }
     }
 
-    // Toggle Status Function — not applicable to sessions; see class docblock.
+    // No-op: sessions are auto-created
     public function togglestatus(Request $request, $uuid)
     {
         if ($request->expectsJson()) {

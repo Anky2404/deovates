@@ -38,7 +38,7 @@ class CaseStudyController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a new drag-and-drop order from the reorder modal.
+    // saves drag-drop order
     public function reorder(Request $request)
     {
         $request->validate([
@@ -231,10 +231,7 @@ class CaseStudyController extends Controller
         }
     }
 
-    // Persist a drag-reordered gallery immediately (edit mode only — see
-    // image-cropper.js's persistGalleryOrder()). Only reorders items that
-    // already have a media id; unsaved (temp) items keep their position in
-    // the DOM and are only persisted (and get an id) on the next form submit.
+    // edit mode only, skips unsaved temp items
     public function galleryreorder(Request $request, string $uuid)
     {
         $request->validate([
@@ -286,13 +283,7 @@ class CaseStudyController extends Controller
         }
     }
 
-    /**
-     * Sync the gallery Media rows against the submitted "gallery_items"
-     * rows — each row either updates an existing image's alt/title/order
-     * (["id" => media uuid, ...]) or promotes a freshly cropped temp upload
-     * into a new Media row (["temp" => ..., ...]). Any existing image whose
-     * row didn't survive to submission (removed on the form) is deleted.
-     */
+    // removed images get deleted, temp uploads promoted
     private function syncGalleryMedia(Request $request, CaseStudy $caseStudy): void
     {
         $existing = $caseStudy->galleryMedia()->get()->keyBy('uuid');

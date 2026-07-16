@@ -29,14 +29,13 @@ class UserController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = User::with(['role', 'department'])->latest('id')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Details / Profile Function (both "details" and "profile" routes point here)
+    // Also serves "profile" route
     public function details(Request $request, $uuid)
     {
         try {
@@ -51,7 +50,6 @@ class UserController extends Controller
         return view($this->prefix . $this->folder . 'details', compact('user'));
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $user = null;
@@ -74,7 +72,6 @@ class UserController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('user', 'roles', 'departments', 'countries'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $user = $uuid ? User::where('uuid', $uuid)->firstOrFail() : null;
@@ -98,18 +95,13 @@ class UserController extends Controller
             'is_active' => 'nullable|boolean',
         ]);
 
-        // country_code is collected by the form for the phone dropdown UI only —
-        // the users table has no matching column, so it's intentionally not persisted.
-
-        // department_id is an integer column; an admin/super-admin role can leave it
-        // blank, so normalize any empty value to null instead of letting a stray ''
-        // reach the query (department_id is nullable, but "" is not a valid int).
+        // country_code not persisted, UI only
+        // Normalize empty department_id to null
         $data['department_id'] = $data['department_id'] ?: null;
 
         $data['is_active'] = $request->boolean('is_active');
 
-        // Never overwrite an existing password with a blank value; the "hashed"
-        // cast on the model takes care of hashing once we assign a plain string.
+        // Blank password means keep existing
         if (empty($data['password'])) {
             unset($data['password']);
         }
@@ -119,8 +111,7 @@ class UserController extends Controller
 
             DB::beginTransaction();
 
-            // Snapshot the pre-update values for the fields being written, so the
-            // activity log can show exactly what changed (never the password hash).
+            // Snapshot for activity log diff
             $oldValues = $user ? array_intersect_key($user->getAttributes(), $data) : [];
 
             if ($user) {
@@ -154,7 +145,6 @@ class UserController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -179,7 +169,6 @@ class UserController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {

@@ -22,14 +22,11 @@ class MediaRelationController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = MediaRelation::with('media')->latest('id')->paginate($this->pagerecords)->withQueryString();
 
-        // MediaRelation has no title/name column of its own — build a
-        // display label from the linked media's name plus the collection
-        // (or model type) for the reorder modal only.
+        // Build label: no name column exists
         $reorderRows = MediaRelation::with('media')->orderBy('display_order')->orderBy('id')->get();
         $reorderRows->each(function (MediaRelation $relation) {
             $mediaLabel = $relation->media->name ?? ('Media #' . $relation->media_id);
@@ -40,7 +37,7 @@ class MediaRelationController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
     }
 
-    // Persist a new drag-and-drop order from the reorder modal.
+    // Drag-drop reorder
     public function reorder(Request $request)
     {
         $request->validate([
@@ -66,7 +63,6 @@ class MediaRelationController extends Controller
         }
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, ?string $uuid = null)
     {
         $relation = null;
@@ -87,7 +83,6 @@ class MediaRelationController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('relation', 'media'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, ?string $uuid = null)
     {
         $relation = $uuid ? MediaRelation::where('uuid', $uuid)->firstOrFail() : null;
@@ -142,7 +137,6 @@ class MediaRelationController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, string $uuid)
     {
         try {
@@ -162,7 +156,6 @@ class MediaRelationController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, string $uuid)
     {
         try {
@@ -196,7 +189,6 @@ class MediaRelationController extends Controller
         }
     }
 
-    // Toggle Featured Function
     public function togglefeatured(Request $request, string $uuid)
     {
         try {

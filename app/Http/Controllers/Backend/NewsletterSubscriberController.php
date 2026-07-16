@@ -19,21 +19,19 @@ class NewsletterSubscriberController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = NewsletterSubscriber::latest('id')->paginate($this->pagerecords)->withQueryString();
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Details Function
     public function details(Request $request, $uuid)
     {
         $subscriber = NewsletterSubscriber::where('uuid', $uuid)->firstOrFail();
         return view($this->prefix . $this->folder . 'details', compact('subscriber'));
     }
 
-    // Toggle Status Function (uses model helpers so unsubscribed_at/subscribed flags stay consistent)
+    // Keeps unsubscribed_at flag in sync
     public function togglestatus(Request $request, $uuid)
     {
         try {
@@ -71,7 +69,6 @@ class NewsletterSubscriberController extends Controller
         }
     }
 
-    // Destroy Function
     public function destroy(Request $request, $uuid)
     {
         try {

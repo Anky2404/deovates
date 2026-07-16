@@ -24,7 +24,6 @@ class PageSectionController extends Controller
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
-    // Index Function
     public function index(Request $request)
     {
         $rows = PageSection::with(['page', 'form'])
@@ -35,7 +34,6 @@ class PageSectionController extends Controller
         return view($this->prefix . $this->folder . 'index', compact('rows'));
     }
 
-    // Create / Edit Function
     public function createoredit(Request $request, $uuid = null)
     {
         $row = null;
@@ -57,7 +55,6 @@ class PageSectionController extends Controller
         return view($this->prefix . $this->folder . 'createoredit', compact('row', 'pages', 'forms'));
     }
 
-    // Save / Update Function
     public function saveorupdate(Request $request, $uuid = null)
     {
         $row = $uuid ? PageSection::where('uuid', $uuid)->firstOrFail() : null;
@@ -106,8 +103,7 @@ class PageSectionController extends Controller
         }
     }
 
-    // Destroy Function
-    // NOTE: PageSection does NOT use SoftDeletes, so this is a permanent, hard delete.
+    // Hard delete, no soft deletes
     public function destroy(Request $request, $uuid)
     {
         try {
@@ -132,7 +128,6 @@ class PageSectionController extends Controller
         }
     }
 
-    // Toggle Status Function
     public function togglestatus(Request $request, $uuid)
     {
         try {
