@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -107,7 +108,14 @@ class UserController extends Controller
         }
 
         try {
-            $this->applyImage($request, $data, 'avatar', 'users', $user);
+            $newUuid = null;
+
+            if (!$user) {
+                $newUuid = (string) Str::uuid();
+                $data['uuid'] = $newUuid;
+            }
+
+            $this->applyImage($request, $data, 'avatar', 'users', $user, $newUuid);
 
             DB::beginTransaction();
 

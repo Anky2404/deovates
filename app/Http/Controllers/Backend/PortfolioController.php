@@ -12,6 +12,7 @@ use App\Services\MediaUploader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class PortfolioController extends Controller
@@ -126,10 +127,16 @@ class PortfolioController extends Controller
             $data['published_at'] = $request->filled('published_at') ? $request->input('published_at') : null;
             $data['meta_keywords'] = $this->parseJsonList($request->input('meta_keywords'));
 
-            $this->applyImage($request, $data, 'featured_image', 'portfolios', $portfolio);
-            $this->applyImage($request, $data, 'banner_image', 'portfolios', $portfolio);
-
             $isNew = ! $portfolio;
+            $newUuid = null;
+
+            if ($isNew) {
+                $newUuid = (string) Str::uuid();
+                $data['uuid'] = $newUuid;
+            }
+
+            $this->applyImage($request, $data, 'featured_image', 'portfolios', $portfolio, $newUuid);
+            $this->applyImage($request, $data, 'banner_image', 'portfolios', $portfolio, $newUuid);
 
             if ($portfolio) {
                 $portfolio->fill($data);

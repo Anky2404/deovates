@@ -14,6 +14,7 @@ use App\Services\MediaUploader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class BlogController extends Controller
@@ -136,8 +137,15 @@ class BlogController extends Controller
                 'og_image_alt' => $validated['og_image_alt'] ?? null,
             ];
 
-            $this->applyImage($request, $data, 'featured_image', 'blogs', $blog);
-            $this->applyImage($request, $data, 'og_image', 'blogs', $blog);
+            $newUuid = null;
+
+            if ($isNew) {
+                $newUuid = (string) Str::uuid();
+                $data['uuid'] = $newUuid;
+            }
+
+            $this->applyImage($request, $data, 'featured_image', 'blogs', $blog, $newUuid);
+            $this->applyImage($request, $data, 'og_image', 'blogs', $blog, $newUuid);
 
             $blog->fill($data);
             $blog->save();

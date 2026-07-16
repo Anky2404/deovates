@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class MarketingIndustryController extends Controller
@@ -102,11 +103,23 @@ class MarketingIndustryController extends Controller
         try {
             DB::beginTransaction();
 
+            $newUuid = null;
+
+            if (!$industry) {
+                $newUuid = (string) Str::uuid();
+                $data['uuid'] = $newUuid;
+            }
+
+            $uuidForUpload = $industry?->uuid ?? $newUuid;
+
             if ($request->hasFile('image')) {
                 $data['image'] = $this->mediaUploader->uploadSingle(
                     $request->file('image'),
                     'industries',
-                    $industry->image ?? null
+                    $industry->image ?? null,
+                    [],
+                    null,
+                    $uuidForUpload
                 );
             }
 

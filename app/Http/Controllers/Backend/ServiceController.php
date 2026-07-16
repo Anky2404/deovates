@@ -123,8 +123,12 @@ class ServiceController extends Controller
         unset($data['platforms'], $data['technologies'], $data['faqs'], $data['features'], $data['problems'], $data['gallery_items']);
 
         // New services join list end
+        $newUuid = null;
+
         if (!$service) {
             $data['display_order'] = (Service::max('display_order') ?? 0) + 1;
+            $newUuid = (string) Str::uuid();
+            $data['uuid'] = $newUuid;
         }
 
         $data['is_active'] = $request->boolean('is_active');
@@ -137,8 +141,8 @@ class ServiceController extends Controller
         try {
             DB::beginTransaction();
 
-            $this->applyImage($request, $data, 'featured_image', 'services', $service);
-            $this->applyImage($request, $data, 'banner_image', 'services', $service);
+            $this->applyImage($request, $data, 'featured_image', 'services', $service, $newUuid);
+            $this->applyImage($request, $data, 'banner_image', 'services', $service, $newUuid);
 
             if ($service) {
                 $service->update($data);
@@ -286,7 +290,7 @@ class ServiceController extends Controller
             ];
 
             if (!empty($row['image_temp'])) {
-                $promoted = $this->mediaUploader->promoteTemp($row['image_temp'], 'services/features', $feature?->image, $row['image_alt'] ?? null);
+                $promoted = $this->mediaUploader->promoteTemp($row['image_temp'], 'services/' . $service->uuid . '/features', $feature?->image, $row['image_alt'] ?? null);
 
                 if ($promoted) {
                     $data['image'] = $promoted;
@@ -329,7 +333,7 @@ class ServiceController extends Controller
             ];
 
             if (!empty($row['image_temp'])) {
-                $promoted = $this->mediaUploader->promoteTemp($row['image_temp'], 'services/challenges', $problem?->image, $row['image_alt'] ?? null);
+                $promoted = $this->mediaUploader->promoteTemp($row['image_temp'], 'services/' . $service->uuid . '/challenges', $problem?->image, $row['image_alt'] ?? null);
 
                 if ($promoted) {
                     $data['image'] = $promoted;

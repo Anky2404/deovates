@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class TestimonialController extends Controller
 {
@@ -98,11 +99,23 @@ class TestimonialController extends Controller
         $data['is_active'] = $request->boolean('is_active');
 
         try {
+            $newUuid = null;
+
+            if (!$testimonial) {
+                $newUuid = (string) Str::uuid();
+                $data['uuid'] = $newUuid;
+            }
+
+            $uuidForUpload = $testimonial?->uuid ?? $newUuid;
+
             if ($request->hasFile('image')) {
                 $data['photo'] = $this->mediaUploader->uploadSingle(
                     $request->file('image'),
                     'testimonials',
-                    $testimonial->photo ?? null
+                    $testimonial->photo ?? null,
+                    [],
+                    null,
+                    $uuidForUpload
                 );
             }
 

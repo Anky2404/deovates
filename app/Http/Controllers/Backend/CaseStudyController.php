@@ -12,6 +12,7 @@ use App\Services\MediaUploader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class CaseStudyController extends Controller
@@ -125,10 +126,16 @@ class CaseStudyController extends Controller
             $data['key_metrics'] = $this->parseCommaList($request->input('key_metrics'));
             $data['meta_keywords'] = $this->parseCommaList($request->input('meta_keywords'));
 
-            $this->applyImage($request, $data, 'featured_image', 'case-studies', $caseStudy);
-            $this->applyImage($request, $data, 'banner_image', 'case-studies', $caseStudy);
-
             $isNew = ! $caseStudy;
+            $newUuid = null;
+
+            if ($isNew) {
+                $newUuid = (string) Str::uuid();
+                $data['uuid'] = $newUuid;
+            }
+
+            $this->applyImage($request, $data, 'featured_image', 'case-studies', $caseStudy, $newUuid);
+            $this->applyImage($request, $data, 'banner_image', 'case-studies', $caseStudy, $newUuid);
 
             if ($caseStudy) {
                 $caseStudy->fill($data);

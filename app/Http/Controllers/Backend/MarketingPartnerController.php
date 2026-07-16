@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class MarketingPartnerController extends Controller
@@ -100,11 +101,23 @@ class MarketingPartnerController extends Controller
         try {
             DB::beginTransaction();
 
+            $newUuid = null;
+
+            if (!$partner) {
+                $newUuid = (string) Str::uuid();
+                $data['uuid'] = $newUuid;
+            }
+
+            $uuidForUpload = $partner?->uuid ?? $newUuid;
+
             if ($request->hasFile('logo')) {
                 $data['logo'] = $this->mediaUploader->uploadSingle(
                     $request->file('logo'),
                     'partners',
-                    $partner->logo ?? null
+                    $partner->logo ?? null,
+                    [],
+                    null,
+                    $uuidForUpload
                 );
             }
 

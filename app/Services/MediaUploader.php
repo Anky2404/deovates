@@ -22,18 +22,21 @@ class MediaUploader
     protected string $disk = 'public';
 
     /**
-     * Store one image and optionally generate named sizes as sibling files
-     * (e.g. "blogs/{uuid}.jpg" + "blogs/{uuid}_thumb.jpg"). Returns the
-     * original's relative path for storing in a flat model column.
+     * Store one image and optionally generate named sizes as sibling files.
+     * When $uuid is given, the file lands at "{directory}/{uuid}/{filename}"
+     * (e.g. "blogs/3f2a.../featured.jpg") — the app-wide convention so every
+     * record's uploads live in their own folder. Returns the relative path
+     * for storing in a flat model column.
      *
      * @param  array<string, array{0:int,1:int}>  $sizes  e.g. ['thumb' => [300, 300]]
      * @param  ?string  $desiredName  Admin-supplied name (typically the alt
      *                                text) to slugify into the filename;
      *                                falls back to a UUID when empty.
      */
-    public function uploadSingle(UploadedFile $file, string $directory, ?string $oldPath = null, array $sizes = [], ?string $desiredName = null): string
+    public function uploadSingle(UploadedFile $file, string $directory, ?string $oldPath = null, array $sizes = [], ?string $desiredName = null, ?string $uuid = null): string
     {
-        $directory = trim($directory, '/');
+        $directory = $this->resolveDirectory($directory, $uuid);
+        $this->ensureDirectoryExists($directory);
         $extension = $file->getClientOriginalExtension() ?: 'jpg';
         $filename = $this->resolveFilename($desiredName, $extension, $directory);
         $path = $file->storeAs($directory, $filename, $this->disk);
@@ -55,6 +58,7 @@ class MediaUploader
      */
     public function storeTemp(UploadedFile $file): array
     {
+        $this->ensureDirectoryExists('temp');
         $extension = $file->getClientOriginalExtension() ?: 'jpg';
         $filename = Str::uuid() . '.' . $extension;
         $path = $file->storeAs('temp', $filename, $this->disk);
@@ -71,13 +75,14 @@ class MediaUploader
      * caller to keep whatever it already had) if the temp path is empty
      * or the file has since been cleaned up.
      */
-    public function promoteTemp(?string $tempPath, string $directory, ?string $oldPath = null, ?string $desiredName = null): ?string
+    public function promoteTemp(?string $tempPath, string $directory, ?string $oldPath = null, ?string $desiredName = null, ?string $uuid = null): ?string
     {
         if (empty($tempPath) || ! Storage::disk($this->disk)->exists($tempPath)) {
             return null;
         }
 
-        $directory = trim($directory, '/');
+        $directory = $this->resolveDirectory($directory, $uuid);
+        $this->ensureDirectoryExists($directory);
         $extension = pathinfo($tempPath, PATHINFO_EXTENSION) ?: 'jpg';
         $filename = $this->resolveFilename($desiredName, $extension, $directory);
         $path = $directory . '/' . $filename;
@@ -105,7 +110,8 @@ class MediaUploader
             return null;
         }
 
-        $directory = trim($directory, '/');
+        $directory = $this->resolveDirectory($directory, $model->uuid ?? null);
+        $this->ensureDirectoryExists($directory);
         $extension = pathinfo($tempPath, PATHINFO_EXTENSION) ?: 'jpg';
         $filename = $this->resolveFilename($title ?: $alt, $extension, $directory);
         $path = $directory . '/' . $filename;
@@ -139,6 +145,44 @@ class MediaUploader
             'display_order' => ($nextOrder ?? 0) + 1,
             'uploaded_by' => $userId,
         ]);
+    }
+
+    /**
+     * App-wide storage convention: "{directory}/{uuid}/..." when a uuid is
+     * available (e.g. "blogs/3f2a-.../featured.jpg"), otherwise just
+     * "{directory}/..." — used for directories with no owning record (e.g.
+     * "temp", "media-library").
+     */
+    protected function resolveDirectory(string $directory, ?string $uuid): string
+    {
+        $directory = trim($directory, '/');
+
+        return empty($uuid) ? $directory : $directory . '/' . $uuid;
+    }
+
+    /**
+     * Create the target folder (and any missing parent folders, e.g. a
+     * brand-new uuid subfolder) before writing to it, with public
+     * read/traverse permissions — the local Flysystem adapter normally does
+     * this on its own, but shared hosts can leave a freshly created folder
+     * without execute permission, which then blocks anything from being
+     * read back out of it. Safe to call on a folder that already exists.
+     */
+    protected function ensureDirectoryExists(string $directory): void
+    {
+        $directory = trim($directory, '/');
+
+        if ($directory === '' || Storage::disk($this->disk)->directoryExists($directory)) {
+            return;
+        }
+
+        Storage::disk($this->disk)->makeDirectory($directory);
+
+        $fullPath = Storage::disk($this->disk)->path($directory);
+
+        if (is_dir($fullPath)) {
+            @chmod($fullPath, 0755);
+        }
     }
 
     /**
@@ -200,7 +244,8 @@ class MediaUploader
      */
     public function uploadMultiple(array $files, Model $model, string $collection, string $directory, array $sizes = []): Collection
     {
-        $directory = trim($directory, '/');
+        $directory = $this->resolveDirectory($directory, $model->uuid ?? null);
+        $this->ensureDirectoryExists($directory);
         $userId = Auth::guard('admin')->id() ?? Auth::guard('web')->id();
 
         $nextOrder = MediaRelation::where('model_type', get_class($model))

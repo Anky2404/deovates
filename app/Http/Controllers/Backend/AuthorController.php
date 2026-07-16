@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class AuthorController extends Controller
@@ -106,11 +107,23 @@ class AuthorController extends Controller
         $data['total_blogs'] = $data['total_blogs'] ?? 0;
 
         try {
+            $newUuid = null;
+
+            if (!$author) {
+                $newUuid = (string) Str::uuid();
+                $data['uuid'] = $newUuid;
+            }
+
+            $uuidForUpload = $author?->uuid ?? $newUuid;
+
             if ($request->hasFile('profile_image')) {
                 $data['profile_image'] = $this->mediaUploader->uploadSingle(
                     $request->file('profile_image'),
                     'authors',
-                    $author->profile_image ?? null
+                    $author->profile_image ?? null,
+                    [],
+                    null,
+                    $uuidForUpload
                 );
             }
 
@@ -118,7 +131,10 @@ class AuthorController extends Controller
                 $data['cover_image'] = $this->mediaUploader->uploadSingle(
                     $request->file('cover_image'),
                     'authors',
-                    $author->cover_image ?? null
+                    $author->cover_image ?? null,
+                    [],
+                    null,
+                    $uuidForUpload
                 );
             }
 

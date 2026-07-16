@@ -9,6 +9,7 @@ use App\Services\MediaUploader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class BlogCategoryController extends Controller
@@ -83,6 +84,14 @@ class BlogCategoryController extends Controller
             $category = $category ?? new BlogCategory();
             $isNew = ! $category->exists;
 
+            $newUuid = null;
+
+            if ($isNew) {
+                $newUuid = (string) Str::uuid();
+            }
+
+            $uuidForUpload = $category->uuid ?? $newUuid;
+
             $category->fill([
                 'name' => $validated['name'],
                 'slug' => $validated['slug'] ?? null,
@@ -93,11 +102,18 @@ class BlogCategoryController extends Controller
                 'is_active' => $request->boolean('is_active', true),
             ]);
 
+            if ($isNew) {
+                $category->uuid = $newUuid;
+            }
+
             if ($request->hasFile('image')) {
                 $category->image = $this->mediaUploader->uploadSingle(
                     $request->file('image'),
                     'blog-categories',
-                    $category->image ?: null
+                    $category->image ?: null,
+                    [],
+                    null,
+                    $uuidForUpload
                 );
             }
 

@@ -174,6 +174,17 @@ class Helper
             $username    = Str::slug($model?->username ?? 'user');
             $filename    = $username . '.' . $originalExt;
 
+            // Make sure the target folder exists (and is readable) before storing
+            if (!Storage::disk('public')->directoryExists($basePath)) {
+                Storage::disk('public')->makeDirectory($basePath);
+
+                $fullPath = Storage::disk('public')->path($basePath);
+
+                if (is_dir($fullPath)) {
+                    @chmod($fullPath, 0755);
+                }
+            }
+
             // Store new file
             $storedPath = $file->storeAs($basePath, $filename, 'public');
 

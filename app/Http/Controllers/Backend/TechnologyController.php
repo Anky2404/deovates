@@ -10,6 +10,7 @@ use App\Services\MediaUploader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class TechnologyController extends Controller
@@ -102,11 +103,23 @@ class TechnologyController extends Controller
             $data['is_active'] = $request->boolean('is_active');
             $data['is_featured'] = $request->boolean('is_featured');
 
+            $newUuid = null;
+
+            if (!$technology) {
+                $newUuid = (string) Str::uuid();
+                $data['uuid'] = $newUuid;
+            }
+
+            $uuidForUpload = $technology?->uuid ?? $newUuid;
+
             if ($request->hasFile('image')) {
                 $data['image'] = $this->mediaUploader->uploadSingle(
                     $request->file('image'),
                     'technologies',
-                    $technology?->image
+                    $technology?->image,
+                    [],
+                    null,
+                    $uuidForUpload
                 );
             }
 

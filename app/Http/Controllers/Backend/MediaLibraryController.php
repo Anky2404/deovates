@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class MediaLibraryController extends Controller
 {
@@ -67,10 +68,19 @@ class MediaLibraryController extends Controller
         try {
             DB::beginTransaction();
 
+            $newUuid = null;
+
+            if (!$media) {
+                $newUuid = (string) Str::uuid();
+                $data['uuid'] = $newUuid;
+            }
+
+            $uuidForUpload = $media?->uuid ?? $newUuid;
+
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
 
-                $data['path'] = $this->mediaUploader->uploadSingle($file, 'media-library', $media->path ?? null);
+                $data['path'] = $this->mediaUploader->uploadSingle($file, 'media-library', $media->path ?? null, [], null, $uuidForUpload);
                 $data['file_name'] = $file->getClientOriginalName();
                 $data['mime_type'] = $file->getMimeType();
                 $data['size'] = $file->getSize();

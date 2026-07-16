@@ -8,14 +8,17 @@ use Illuminate\Http\Request;
 trait HandlesImageUploads
 {
     // prefers temp upload, falls back to direct file
-    protected function applyImage(Request $request, array &$data, string $field, string $directory, $model = null): void
+    // $uuid: the owning record's uuid (existing or pre-generated for a new
+    // record) so the file lands at "{directory}/{uuid}/{filename}".
+    protected function applyImage(Request $request, array &$data, string $field, string $directory, $model = null, ?string $uuid = null): void
     {
         $altText = $data[$field . '_alt'] ?? null;
         $oldPath = $model?->{$field};
         $tempPath = $request->input($field . '_temp');
+        $uuid ??= $model?->uuid;
 
         if (!empty($tempPath)) {
-            $promoted = $this->mediaUploader->promoteTemp($tempPath, $directory, $oldPath, $altText);
+            $promoted = $this->mediaUploader->promoteTemp($tempPath, $directory, $oldPath, $altText, $uuid);
 
             if ($promoted) {
                 $data[$field] = $promoted;
@@ -30,7 +33,8 @@ trait HandlesImageUploads
                 $directory,
                 $oldPath,
                 [],
-                $altText
+                $altText,
+                $uuid
             );
         }
     }
