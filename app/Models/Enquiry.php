@@ -27,6 +27,8 @@ class Enquiry extends Model
         'service_interest',
         'source',
         'status',
+        'is_read',
+        'read_at',
         'assigned_to',
         'follow_up_at',
         'admin_notes',
@@ -38,7 +40,16 @@ class Enquiry extends Model
     {
         return [
             'follow_up_at' => 'datetime',
+            'is_read' => 'boolean',
+            'read_at' => 'datetime',
         ];
+    }
+
+    public function markAsRead(): void
+    {
+        if (! $this->is_read) {
+            $this->update(['is_read' => true, 'read_at' => now()]);
+        }
     }
 
     public function assignedUser(): BelongsTo

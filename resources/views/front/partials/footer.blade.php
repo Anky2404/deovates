@@ -100,13 +100,14 @@
 
                                 <div id="mc_embed_signup">
 
-                                    <form target="_blank"
-                                        action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                                        method="get" class="subscribe_form relative mail_part" novalidate>
+                                    <form method="POST" action="{{ route('front.newsletter.subscribe') }}"
+                                        class="subscribe_form app-newsletter-form relative mail_part" novalidate>
+                                        @csrf
 
-                                        <input type="email" name="EMAIL" id="newsletter-form-email"
+                                        <input type="email" name="email" id="newsletter-form-email"
                                             placeholder="Email Address" class="placeholder hide-on-focus"
-                                            onfocus="this.placeholder=''" onblur="this.placeholder='Email Address'">
+                                            onfocus="this.placeholder=''" onblur="this.placeholder='Email Address'"
+                                            required>
 
                                         <div class="form-icon">
                                             <button type="submit" id="newsletter-submit"

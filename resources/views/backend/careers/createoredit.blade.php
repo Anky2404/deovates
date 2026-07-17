@@ -49,10 +49,10 @@
                     $etype = old('employment_type', $career->employment_type ?? '');
                 @endphp
                 <select name="employment_type" class="form-control trim">
-                    <option value="full-time" {{ $etype == 'Full Time' ? 'selected' : '' }}>Full Time</option>
-                    <option value="part-time" {{ $etype == 'Part Time' ? 'selected' : '' }}>Part Time</option>
-                    <option value="contract" {{ $etype == 'Contract' ? 'selected' : '' }}>Contract</option>
-                    <option value="internship" {{ $etype == 'Internship' ? 'selected' : '' }}>Internship</option>
+                    <option value="full-time" {{ $etype == 'full-time' ? 'selected' : '' }}>Full Time</option>
+                    <option value="part-time" {{ $etype == 'part-time' ? 'selected' : '' }}>Part Time</option>
+                    <option value="contract" {{ $etype == 'contract' ? 'selected' : '' }}>Contract</option>
+                    <option value="internship" {{ $etype == 'internship' ? 'selected' : '' }}>Internship</option>
                     <option value="freelance" {{ $etype == 'freelance' ? 'selected' : '' }}>Freelance</option>
                 </select>
             </div>
@@ -60,8 +60,14 @@
             {{-- EXPERIENCE LEVEL --}}
             <div class="col-md-4">
                 <label class="form-label">Experience Level</label>
-                <input type="text" name="experience_level" class="form-control trim"
-                       value="{{ old('experience_level', $career->experience_level ?? '') }}">
+                @php $elevel = old('experience_level', $career->experience_level ?? 'mid'); @endphp
+                <select name="experience_level" class="form-control trim">
+                    <option value="fresher" {{ $elevel == 'fresher' ? 'selected' : '' }}>Fresher</option>
+                    <option value="junior" {{ $elevel == 'junior' ? 'selected' : '' }}>Junior</option>
+                    <option value="mid" {{ $elevel == 'mid' ? 'selected' : '' }}>Mid</option>
+                    <option value="senior" {{ $elevel == 'senior' ? 'selected' : '' }}>Senior</option>
+                    <option value="lead" {{ $elevel == 'lead' ? 'selected' : '' }}>Lead</option>
+                </select>
             </div>
 
             {{-- LOCATION --}}

@@ -36,6 +36,9 @@
                             <td>{{ $rows->firstItem() + $index }}</td>
 
                             <td>
+                                @unless($row->is_read)
+                                    <span class="badge bg-label-danger me-1">New</span>
+                                @endunless
                                 <strong>{{ $row->name }}</strong>
                                 <div class="text-muted small">{{ $row->company_name }}</div>
                             </td>

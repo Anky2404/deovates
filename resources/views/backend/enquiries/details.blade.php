@@ -109,6 +109,11 @@
                 </p>
             </div>
 
+            <div class="col-md-6">
+                <strong>Read At</strong>
+                <p>{{ optional($enquiry->read_at)->format('d M Y H:i') ?? '—' }}</p>
+            </div>
+
         </div>
 
         <hr class="my-4">

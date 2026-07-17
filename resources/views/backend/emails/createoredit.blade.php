@@ -1,200 +1,143 @@
 @extends('backend.layouts.app')
 
-@section('title', isset($author) ? 'Edit Author' : 'Create Author')
+@section('title', config('constants.BUSINESS.name') . ' | Compose Email')
 
 @section('content')
-<div class="card">
+<div class="row g-4">
 
-    <div class="card-header">
-        <h5 class="mb-0">{{ isset($author) ? 'Edit' : 'Create' }} Author</h5>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Compose Email</h5>
+            </div>
+
+            <form method="POST" action="{{ route('admin.emails.saveorupdate', $email->uuid ?? null) }}">
+                @csrf
+
+                <div class="card-body row g-3">
+
+                    <input type="hidden" name="template_id" id="templateIdField" value="{{ old('template_id') }}">
+
+                    {{-- TEMPLATE PICKER --}}
+                    <div class="col-md-12">
+                        <label class="form-label">Start from a template (optional)</label>
+                        <select id="templatePicker" class="form-select">
+                            <option value="">-- blank email --</option>
+                            @foreach ($templates as $templateUuid => $name)
+                                <option value="{{ $templateUuid }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="form-text">
+                            Selecting a template links this send to it, so it also appears in Email Logs.
+                        </div>
+                    </div>
+
+                    {{-- TO --}}
+                    <div class="col-md-8">
+                        <label class="form-label">To Email *</label>
+                        <input type="email" name="to_email" class="form-control"
+                               value="{{ old('to_email', $email->to_email ?? '') }}" required>
+                        @error('to_email')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">To Name</label>
+                        <input type="text" name="to_name" class="form-control"
+                               value="{{ old('to_name', $email->to_name ?? '') }}">
+                    </div>
+
+                    {{-- SUBJECT --}}
+                    <div class="col-md-12">
+                        <label class="form-label">Subject *</label>
+                        <input type="text" id="subjectInput" name="subject" class="form-control"
+                               value="{{ old('subject', $email->subject ?? '') }}" required>
+                        @error('subject')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    {{-- BODY --}}
+                    <div class="col-md-12">
+                        <label class="form-label">Body *</label>
+                        <textarea name="body" id="description" class="form-control" rows="10" required>{{ old('body', $email->body ?? '') }}</textarea>
+                        @error('body')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                </div>
+
+                <div class="card-footer text-end">
+                    <a href="{{ route('admin.emails.index') }}" class="btn btn-secondary">Cancel</a>
+                    <button class="btn btn-primary">
+                        <i class="bx bx-send me-1"></i> Send Email
+                    </button>
+                </div>
+
+            </form>
+        </div>
     </div>
 
-    <form method="POST"
-          action="{{ route('admin.authors.saveorupdate', $author->uuid ?? null) }}"
-          enctype="multipart/form-data">
-        @csrf
-
-        <div class="card-body row g-3">
-
-            {{-- USER --}}
-            <div class="col-md-6">
-                <label class="form-label">User ID</label>
-                <input type="number"
-                       name="user_id"
-                       class="form-control"
-                       value="{{ old('user_id', $author->user_id ?? '') }}">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Preview</h5>
             </div>
-
-            {{-- NAME --}}
-            <div class="col-md-6">
-                <label class="form-label">Name *</label>
-                <input type="text"
-                       id="title_input"
-                       name="name"
-                       class="form-control"
-                       value="{{ old('name', $author->name ?? '') }}"
-                       required>
+            <div class="card-body">
+                @include('backend.partials.email-preview', [
+                    'previewId' => 'composePreview',
+                    'previewHtml' => view('emails.layout', [
+                        'subject' => $email->subject ?? 'Your Subject Here',
+                        'body' => $email->body ?? '<p>Start typing your email body — this preview updates once you open it.</p>',
+                    ])->render(),
+                ])
             </div>
+        </div>
+    </div>
 
-            {{-- SLUG --}}
-            <div class="col-md-6">
-                <label class="form-label">Slug *</label>
-                <input type="text"
-                       id="slug_input"
-                       name="slug"
-                       class="form-control"
-                       value="{{ old('slug', $author->slug ?? '') }}"
-                       required>
-            </div>
-
-            {{-- EMAIL --}}
-            <div class="col-md-6">
-                <label class="form-label">Email</label>
-                <input type="email"
-                       name="email"
-                       class="form-control"
-                       value="{{ old('email', $author->email ?? '') }}">
-            </div>
-
-            {{-- PHONE --}}
-            <div class="col-md-6">
-                <label class="form-label">Phone</label>
-                <input type="text"
-                       name="phone"
-                       class="form-control"
-                       value="{{ old('phone', $author->phone ?? '') }}">
-            </div>
-
-            {{-- DESIGNATION --}}
-            <div class="col-md-6">
-                <label class="form-label">Designation</label>
-                <input type="text"
-                       name="designation"
-                       class="form-control"
-                       value="{{ old('designation', $author->designation ?? '') }}">
-            </div>
-
-            {{-- COMPANY --}}
-            <div class="col-md-6">
-                <label class="form-label">Company</label>
-                <input type="text"
-                       name="company"
-                       class="form-control"
-                       value="{{ old('company', $author->company ?? '') }}">
-            </div>
-
-            {{-- WEBSITE --}}
-            <div class="col-md-6">
-                <label class="form-label">Website</label>
-                <input type="url"
-                       name="website"
-                       class="form-control"
-                       value="{{ old('website', $author->website ?? '') }}">
-            </div>
-
-            {{-- PROFILE IMAGE --}}
-            <div class="col-md-6">
-                <label class="form-label">Profile Image</label>
-                <input type="file" name="profile_image" class="form-control image-preview-input"
-                       data-preview="#profileImagePreview">
-
-                <img id="profileImagePreview"
-                     src="{{ !empty($author->profile_image) ? asset('storage/' . $author->profile_image) : 'https://placehold.co/130x130' }}"
-                     class="mt-2 rounded border img-thumbnail" height="130" width="130">
-            </div>
-
-            {{-- COVER IMAGE --}}
-            <div class="col-md-6">
-                <label class="form-label">Cover Image</label>
-                <input type="file" name="cover_image" class="form-control image-preview-input"
-                       data-preview="#coverImagePreview">
-
-                <img id="coverImagePreview"
-                     src="{{ !empty($author->cover_image) ? asset('storage/' . $author->cover_image) : 'https://placehold.co/130x130' }}"
-                     class="mt-2 rounded border img-thumbnail" height="130" width="130">
-            </div>
-
-            {{-- BIO --}}
-            <div class="col-md-12">
-                <label class="form-label">Bio</label>
-                <textarea name="bio"
-                          class="form-control"
-                          rows="4">{{ old('bio', $author->bio ?? '') }}</textarea>
-            </div>
-
-            {{-- SOCIAL LINKS (JSON) --}}
-            <div class="col-md-12">
-    <label class="form-label">Social Links (JSON)</label>
-    <textarea name="social_links"
-          class="form-control"
-          rows="4">{{ 
-    old('social_links', 
-        isset($author->social_links) 
-            ? json_encode($author->social_links, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) 
-            : ''
-    ) 
-}}</textarea>
-o
 </div>
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const templatePicker = document.getElementById('templatePicker');
 
-            {{-- SEO --}}
-            <div class="col-md-6">
-                <label class="form-label">Meta Title</label>
-                <input type="text"
-                       name="meta_title"
-                       class="form-control"
-                       value="{{ old('meta_title', $author->meta_title ?? '') }}">
-            </div>
+    if (!templatePicker) {
+        return;
+    }
 
-            <div class="col-md-6">
-                <label class="form-label">Meta Description</label>
-                <textarea name="meta_description"
-                          class="form-control"
-                          rows="2">{{ old('meta_description', $author->meta_description ?? '') }}</textarea>
-            </div>
+    templatePicker.addEventListener('change', function () {
+        const uuid = this.value;
+        const templateIdField = document.getElementById('templateIdField');
 
-            {{-- TOTAL BLOGS --}}
-            <div class="col-md-6">
-                <label class="form-label">Total Blogs</label>
-                <input type="number"
-                       name="total_blogs"
-                       class="form-control"
-                       value="{{ old('total_blogs', $author->total_blogs ?? 0) }}">
-            </div>
+        if (!uuid) {
+            templateIdField.value = '';
+            return;
+        }
 
-            {{-- SWITCHES --}}
-            <div class="col-md-6">
-                <div class="form-check form-switch mt-4">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="is_featured"
-                           value="1"
-                           {{ old('is_featured', $author->is_featured ?? 0) ? 'checked' : '' }}>
-                    <label class="form-check-label">Featured</label>
-                </div>
-            </div>
+        fetch('{{ route('admin.emails.templates.details', ['uuid' => ':uuid']) }}'.replace(':uuid', uuid), {
+            headers: { 'Accept': 'application/json' },
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+                document.getElementById('subjectInput').value = data.subject || '';
+                templateIdField.value = data.id || '';
 
-            <div class="col-md-6">
-                <div class="form-check form-switch mt-4">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="is_active"
-                           value="1"
-                           {{ old('is_active', $author->is_active ?? 1) ? 'checked' : '' }}>
-                    <label class="form-check-label">Active</label>
-                </div>
-            </div>
+                const editorInstance = typeof CKEDITOR !== 'undefined' ? CKEDITOR.instances.description : null;
 
-        </div>
-
-        <div class="card-footer text-end">
-            <a href="{{ route('admin.authors.index') }}" class="btn btn-secondary">Cancel</a>
-            <button class="btn btn-primary">
-                {{ isset($author) ? 'Update' : 'Create' }}
-            </button>
-        </div>
-
-    </form>
-</div>
+                if (editorInstance) {
+                    editorInstance.setData(data.body || '');
+                } else {
+                    document.getElementById('description').value = data.body || '';
+                }
+            })
+            .catch(function () {
+                showToast?.('error', 'Could not load that template.');
+            });
+    });
+});
+</script>
+@endpush
 @endsection

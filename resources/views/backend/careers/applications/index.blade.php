@@ -52,6 +52,11 @@
                                         <i class="bx bx-show-alt"></i> Details
                                     </a>
 
+                                    <a href="{{ route('admin.careers.applications.createoredit', $app->uuid) }}"
+                                        class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1">
+                                        <i class="bx bx-edit-alt"></i> Edit
+                                    </a>
+
                                     <form action="{{ route('admin.careers.applications.destroy', $app->uuid) }}" method="POST"
                                         class="js-delete">
                                         @csrf

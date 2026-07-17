@@ -1,5 +1,6 @@
 <!-- Start Contact Form Section -->
-<form id="{{ $prefix }}ContactForm" class="app-contact-form" novalidate>
+<form id="{{ $prefix }}ContactForm" class="app-contact-form" method="POST" action="{{ route('front.contact.store') }}" novalidate>
+    @csrf
 
     <div class="app-form-group">
         <label for="{{ $prefix }}-name">Full Name</label>

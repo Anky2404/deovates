@@ -477,7 +477,11 @@ Route::middleware('admin.auth')->group(function () {
         // Emails (Send Emails)
         Route::controller(EmailController::class)->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
+            Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
             Route::post('/send', 'send')->name('send');
+            Route::get('/details/{uuid}', 'details')->name('details');
+            Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         });
 
 
@@ -488,6 +492,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/details/{uuid}', 'details')->name('details');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
+            Route::post('/preview', 'preview')->name('preview');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
         });
@@ -560,6 +565,7 @@ Route::middleware('admin.auth')->group(function () {
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
             Route::get('/reject-status', 'rejectStatus')->name('reject-status');
             Route::post('/update-status/{uuid}', 'updateStatus')->name('update-status');
+            Route::get('/download-resume/{uuid}', 'downloadresume')->name('downloadresume');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         });
 

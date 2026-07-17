@@ -18,6 +18,8 @@ class NewsletterSubscriber extends Model
         'email',
         'name',
         'is_active',
+        'is_read',
+        'read_at',
         'subscribed_at',
         'unsubscribed_at',
         'is_confirmed',
@@ -33,6 +35,8 @@ class NewsletterSubscriber extends Model
     {
         return [
             'is_active' => 'boolean',
+            'is_read' => 'boolean',
+            'read_at' => 'datetime',
             'is_confirmed' => 'boolean',
             'subscribed_at' => 'datetime',
             'unsubscribed_at' => 'datetime',
@@ -70,5 +74,12 @@ class NewsletterSubscriber extends Model
     public function resubscribe(): void
     {
         $this->update(['is_active' => true, 'unsubscribed_at' => null]);
+    }
+
+    public function markAsRead(): void
+    {
+        if (! $this->is_read) {
+            $this->update(['is_read' => true, 'read_at' => now()]);
+        }
     }
 }

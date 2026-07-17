@@ -28,6 +28,17 @@ class NewsletterSubscriberController extends Controller
     public function details(Request $request, $uuid)
     {
         $subscriber = NewsletterSubscriber::where('uuid', $uuid)->firstOrFail();
+
+        if (! $subscriber->is_read) {
+            $subscriber->markAsRead();
+
+            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.view'), config('constants.MODULES.newslettersubscriber'), [
+                'subject_type' => NewsletterSubscriber::class,
+                'subject_id' => $subscriber->id,
+                'description' => 'Viewed subscriber ' . $subscriber->email,
+            ]);
+        }
+
         return view($this->prefix . $this->folder . 'details', compact('subscriber'));
     }
 

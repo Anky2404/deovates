@@ -95,6 +95,11 @@
                 <p>{{ $subscriber->created_at->format('d M Y H:i') }}</p>
             </div>
 
+            <div class="col-md-6">
+                <strong>Read At</strong>
+                <p>{{ optional($subscriber->read_at)->format('d M Y H:i') ?? '—' }}</p>
+            </div>
+
         </div>
 
     </div>

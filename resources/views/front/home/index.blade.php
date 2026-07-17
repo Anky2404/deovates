@@ -1542,10 +1542,12 @@
             <div class="row">
                 <div class="col-md-12">
 
-                    <form role="form" class="subscribe-form" novalidate="true">
+                    <form role="form" class="subscribe-form app-newsletter-form" method="POST"
+                        action="{{ route('front.newsletter.subscribe') }}" novalidate="true">
+                        @csrf
                         <div class="input-group">
                             <input type="email" class="form-control" id="mc-email" placeholder="Enter E-mail..."
-                                name="EMAIL">
+                                name="email" required>
                             <span class="input-group-btn">
                                 <button class="btn btn-main btn-lg sub-btn" type="submit">Subscribe!</button>
                             </span>

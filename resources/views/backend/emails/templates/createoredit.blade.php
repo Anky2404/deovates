@@ -45,172 +45,43 @@
                 <label class="form-label">Email Subject *</label>
                 <input type="text"
                        name="subject"
+                       id="subjectInput"
                        class="form-control"
                        value="{{ old('subject', $template->subject ?? '') }}"
                        required>
             </div>
 
-          {{-- EMAIL BODY --}}
-<div class="col-md-6">
-    <label class="form-label">Email Body *</label>
+            {{-- EMAIL BODY --}}
+            <div class="col-md-6">
+                <label class="form-label">Email Body *</label>
 
-    <textarea name="body"
-              id="description"
-              class="form-control"
-              rows="10"
-              required>{{ old('body', $template->body ?? '') }}</textarea>
+                <textarea name="body"
+                          id="description"
+                          class="form-control"
+                          rows="10"
+                          required>{{ old('body', $template->body ?? '') }}</textarea>
 
-    <small class="text-muted">
-        Use variables like
-        <code>@{{name}}</code>,
-        <code>@{{email}}</code>,
-        <code>@{{password}}</code>
-    </small>
-</div>
+                <small class="text-muted">
+                    Use variables like
+                    <code>@{{name}}</code>,
+                    <code>@{{email}}</code>,
+                    <code>@{{password}}</code>
+                </small>
+            </div>
 
-{{-- PREVIEW --}}
-<div class="col-md-6">
+            {{-- PREVIEW --}}
+            <div class="col-md-6">
+                <label class="form-label">Email Preview</label>
 
-    <label class="form-label">Email Preview</label>
-
-    <div class="border rounded p-3" style="background:#f5f7fb">
-
-        <style>
-            .email-wrapper {
-                width: 100%;
-                max-width: 650px;
-                margin: auto;
-                font-family: Arial, Helvetica, sans-serif;
-            }
-
-            .email-header {
-                background: rgb(6, 52, 112);
-                color: #fff;
-                padding: 35px 30px;
-                text-align: center;
-            }
-
-            .email-logo {
-                height: 55px;
-                margin-bottom: 12px;
-            }
-
-            .email-title {
-                margin: 0;
-                font-size: 24px;
-                font-weight: 600;
-                color: #fff;
-            }
-
-            .email-subtitle {
-                margin-top: 6px;
-                font-size: 14px;
-                opacity: 0.9;
-            }
-
-            .email-body {
-                background: #ffffff;
-                padding: 45px 40px;
-            }
-
-            .email-body p {
-                color: #6c757d;
-                font-size: 16px;
-                line-height: 1.8;
-            }
-
-            .cta-section {
-                text-align: center;
-                padding: 25px;
-                background: #ffffff;
-            }
-
-            .cta-btn {
-                background: rgb(6, 52, 112);
-                color: #fff;
-                padding: 14px 32px;
-                text-decoration: none;
-                border-radius: 6px;
-                font-weight: 600;
-                display: inline-block;
-            }
-
-            .email-footer {
-                background: #f2f5fa;
-                padding: 30px;
-                text-align: center;
-                font-size: 13px;
-                color: #666;
-            }
-        </style>
-
-        <div class="email-wrapper">
-
-            <table width="100%" cellpadding="0" cellspacing="0">
-
-                <tr>
-                    <td class="email-header">
-
-                        <img src="{{ asset('assets/frontend/images/logo.png') }}"
-                             class="email-logo"
-                             alt="Logo">
-
-                        <h2 class="email-title">
-                            {{ config('app.name') }}
-                        </h2>
-
-                        <p class="email-subtitle">
-                            Future Ready Digital Platform
-                        </p>
-
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="email-body" id="preview-body">
-
-                        {!! $template->body ?? 'Email content will appear here...' !!}
-
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="cta-section">
-
-                        <a href="{{ url('/') }}" class="cta-btn">
-                            Visit Website
-                        </a>
-
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="email-footer">
-
-                        <p>
-                            © {{ date('Y') }} {{ config('app.name') }}
-                        </p>
-
-                        <p>
-                            This email was sent automatically. If you did not request this email please ignore it.
-                        </p>
-
-                        <div>
-                            <a href="{{ url('/') }}">Website</a>
-                            <a href="#">Support</a>
-                            <a href="#">Privacy</a>
-                        </div>
-
-                    </td>
-                </tr>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>
+                @include('backend.partials.email-preview', [
+                    'previewId' => 'templateEditPreview',
+                    'alwaysRefresh' => true,
+                    'previewHtml' => view('emails.layout', [
+                        'subject' => $template->subject ?? 'Your Subject Here',
+                        'body' => $template->body ?? '<p>Email content will appear here...</p>',
+                    ])->render(),
+                ])
+            </div>
 
             {{-- VARIABLES JSON --}}
             <div class="col-md-12">
@@ -308,20 +179,63 @@
 
 @endsection
 @push('scripts')
-   <script>
-
+<script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    const textarea = document.getElementById("description");
-    const preview = document.getElementById("preview-body");
+    const subjectField = document.getElementById('subjectInput');
+    const desktopFrame = document.getElementById('templateEditPreviewIframeDesktop');
+    const mobileFrame = document.getElementById('templateEditPreviewIframeMobile');
+    let debounceTimer = null;
 
-    function updatePreview() {
-        preview.innerHTML = textarea.value;
+    function refreshPreview() {
+        const editorInstance = typeof CKEDITOR !== 'undefined' ? CKEDITOR.instances.description : null;
+        const bodyValue = editorInstance ? editorInstance.getData() : document.getElementById('description').value;
+
+        fetch('{{ route('admin.emails.templates.preview') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            },
+            body: new URLSearchParams({
+                subject: subjectField.value,
+                body: bodyValue,
+            }),
+        })
+            .then(function (response) { return response.text(); })
+            .then(function (html) {
+                [desktopFrame, mobileFrame].forEach(function (iframe) {
+                    if (!iframe) return;
+
+                    iframe.dataset.html = html;
+
+                    if (!iframe.closest('.email-open-mockup').classList.contains('d-none')) {
+                        iframe.srcdoc = html;
+                    }
+                });
+            })
+            .catch(function () {
+                // Preview is a nicety, not critical — silently skip on failure.
+            });
     }
 
-    textarea.addEventListener("keyup", updatePreview);
-    textarea.addEventListener("change", updatePreview);
+    function debouncedRefresh() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(refreshPreview, 500);
+    }
 
+    subjectField?.addEventListener('input', debouncedRefresh);
+
+    // CKEDITOR.replace() for #description runs in its own DOMContentLoaded
+    // listener (see partials/foot.blade.php) — give it a tick to finish
+    // before deciding whether the editor instance exists yet.
+    setTimeout(function () {
+        if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances.description) {
+            CKEDITOR.instances.description.on('change', debouncedRefresh);
+        } else {
+            document.getElementById('description')?.addEventListener('input', debouncedRefresh);
+        }
+    }, 0);
 });
 </script>
 

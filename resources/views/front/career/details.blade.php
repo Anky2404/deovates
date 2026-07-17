@@ -72,7 +72,7 @@
                             @if ($career->department)
                                 <li class="mb-2"><i class="fas fa-layer-group text-secondary me-2"></i>{{ $career->department->name }}</li>
                             @endif
-                            <li class="mb-2"><i class="fas fa-map-marker-alt text-secondary me-2"></i>{{ ucfirst($career->location) }}{{ $career->is_remote ? ' · Remote' : '' }}</li>
+                            <li class="mb-2"><i class="fas fa-map-marker-alt text-secondary me-2"></i>{{ ucfirst($career->location ?? '') }}{{ $career->is_remote ? ' · Remote' : '' }}</li>
                             <li class="mb-2"><i class="fas fa-briefcase text-secondary me-2"></i>{{ ucfirst(str_replace('-', ' ', $career->employment_type)) }}</li>
                             <li class="mb-2"><i class="fas fa-user-tie text-secondary me-2"></i>{{ ucfirst($career->experience_level) }} level</li>
                             <li class="mb-2"><i class="fas fa-users text-secondary me-2"></i>{{ $career->openings }} opening(s)</li>
@@ -87,7 +87,10 @@
                             @endif
                         </ul>
 
-                        @if ($career->apply_url)
+                        @if ($career->slug && $career->isOpen())
+                            <button type="button" class="btn btn-main w-100 text-center" data-bs-toggle="modal"
+                                data-bs-target="#applyJobModal">Apply Now</button>
+                        @elseif ($career->apply_url)
                             <a href="{{ $career->apply_url }}" target="_blank" rel="noopener noreferrer"
                                 class="btn btn-main w-100 text-center">Apply Now</a>
                         @elseif ($career->apply_email)
@@ -127,5 +130,86 @@
         </div>
     </section>
     <!-- End Career Details Section -->
+
+    <!-- Start Apply Job Modal -->
+    <div class="modal fade" id="applyJobModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="{{ route('front.career.apply', $career->slug) }}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color:#073965;">Apply for {{ $career->title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        @if (session('success'))
+                            <div class="alert alert-success">{{ session('success') }}</div>
+                        @endif
+                        @if (session('error'))
+                            <div class="alert alert-danger">{{ session('error') }}</div>
+                        @endif
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Full Name *</label>
+                                <input type="text" name="full_name" class="form-control" value="{{ old('full_name') }}" required>
+                                @error('full_name') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email *</label>
+                                <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                                @error('email') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input type="text" name="phone" class="form-control" value="{{ old('phone') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Portfolio URL</label>
+                                <input type="url" name="portfolio_url" class="form-control" value="{{ old('portfolio_url') }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Current Company</label>
+                                <input type="text" name="current_company" class="form-control" value="{{ old('current_company') }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Current CTC</label>
+                                <input type="number" name="current_ctc" class="form-control" value="{{ old('current_ctc') }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Notice Period (days)</label>
+                                <input type="number" name="notice_period" class="form-control" value="{{ old('notice_period') }}">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Cover Letter</label>
+                                <textarea name="cover_letter" rows="4" class="form-control">{{ old('cover_letter') }}</textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Resume (PDF/DOC, max 5MB) *</label>
+                                <input type="file" name="resume_file" class="form-control" accept=".pdf,.doc,.docx" required>
+                                @error('resume_file') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-main">Submit Application</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End Apply Job Modal -->
+
+    @if ($errors->any() || session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var modal = new bootstrap.Modal(document.getElementById('applyJobModal'));
+                modal.show();
+            });
+        </script>
+    @endif
 
 @endsection

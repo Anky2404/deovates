@@ -648,11 +648,12 @@ $(document).ready(function(){
 
 //=====================================
 // Contact forms (home page + /contact page)
-// client-side validation + animation only —
-// not wired to a backend yet
+// client-side validation + real AJAX submit to /contact
 //=====================================
 
 $(document).ready(function () {
+
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
     function validateField($field) {
         var el = $field.get(0);
@@ -663,6 +664,18 @@ $(document).ready(function () {
         $group.toggleClass('is-valid', valid && $field.val().trim() !== '');
 
         return valid;
+    }
+
+    function showFormMessage($form, isSuccess, message) {
+        var $box = $form.find('.app-form-success');
+        $box.find('i').attr('class', isSuccess ? 'fa fa-check-circle' : 'fa fa-times-circle')
+            .css('color', isSuccess ? '#22c07a' : '#e04b4b');
+        $box.find('p').text(message);
+        $form.addClass('is-submitted');
+
+        setTimeout(function () {
+            $form.removeClass('is-submitted');
+        }, 4000);
     }
 
     // Scoped per-form so multiple .app-contact-form instances on the
@@ -699,20 +712,68 @@ $(document).ready(function () {
             var $btn = $form.find('.app-form-submit');
             $btn.addClass('is-loading').prop('disabled', true);
 
-            // No backend endpoint exists yet for this form — this
-            // timeout simulates a submit so the loading/success
-            // animation can be reviewed. Replace with a real $.ajax /
-            // fetch POST once a route + controller are wired up.
-            setTimeout(function () {
+            $.ajax({
+                url: $form.attr('action'),
+                method: 'POST',
+                dataType: 'json',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                data: {
+                    name: $form.find('[name="name"]').val(),
+                    email: $form.find('[name="email"]').val(),
+                    phone: $form.find('[name="phone"]').val(),
+                    message: $form.find('[name="message"]').val()
+                }
+            }).done(function (response) {
                 $btn.removeClass('is-loading').prop('disabled', false);
-                $form.addClass('is-submitted');
+                showFormMessage($form, true, response.message || 'Thanks! Your message has been noted.');
                 $form.find('input, textarea').val('');
                 $form.find('.app-form-group').removeClass('is-valid has-error');
+            }).fail(function (xhr) {
+                $btn.removeClass('is-loading').prop('disabled', false);
+                var message = (xhr.responseJSON && xhr.responseJSON.message) || 'Something went wrong. Please try again.';
+                showFormMessage($form, false, message);
+            });
+        });
+    });
 
-                setTimeout(function () {
-                    $form.removeClass('is-submitted');
-                }, 4000);
-            }, 1100);
+    //=====================================
+    // Newsletter subscribe forms (home page + footer)
+    //=====================================
+    $('.app-newsletter-form').each(function () {
+        var $form = $(this);
+        var $result = $form.next('.subscribe-result, .mt-10.info');
+        var $btn = $form.find('button[type="submit"]');
+
+        $form.on('submit', function (e) {
+            e.preventDefault();
+
+            var $email = $form.find('input[type="email"]');
+
+            if (!$email.get(0).checkValidity()) {
+                $email.trigger('focus');
+                return;
+            }
+
+            $btn.prop('disabled', true);
+
+            $.ajax({
+                url: $form.attr('action'),
+                method: 'POST',
+                dataType: 'json',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                data: {
+                    email: $email.val(),
+                    name: $form.find('input[name="name"]').val()
+                }
+            }).done(function (response) {
+                $btn.prop('disabled', false);
+                $result.css('color', '#22c07a').text(response.message || 'Thanks for subscribing!');
+                $email.val('');
+            }).fail(function (xhr) {
+                $btn.prop('disabled', false);
+                var message = (xhr.responseJSON && xhr.responseJSON.message) || 'Something went wrong. Please try again.';
+                $result.css('color', '#e04b4b').text(message);
+            });
         });
     });
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\CareerController;
 use App\Http\Controllers\Front\CaseStudyController;
 use App\Http\Controllers\Front\ContactController;
+use App\Http\Controllers\Front\NewsletterController;
 use App\Http\Controllers\Front\FaqController;
 use App\Http\Controllers\Front\HireMeController;
 use App\Http\Controllers\Front\HomeController;
@@ -49,6 +50,9 @@ Route::name('front.')->group(function () {
 
     /* ================= CONTACT ================= */
     Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+    Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+    Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
     /* ================= SERVICES ================= */
     Route::prefix('services')->controller(ServiceController::class)->name('services.')->group(function () {
@@ -83,6 +87,7 @@ Route::name('front.')->group(function () {
     /* ================= CAREER ================= */
     Route::prefix('career')->controller(CareerController::class)->name('career.')->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::post('/{slug}/apply', 'apply')->name('apply');
         Route::get('/{slug}', 'details')->name('details');
     });
 

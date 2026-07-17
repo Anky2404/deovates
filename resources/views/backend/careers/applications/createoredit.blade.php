@@ -1,213 +1,108 @@
 @extends('backend.layouts.app')
 
-@section('title', isset($career) ? 'Edit Career' : 'Create Career')
+@section('title', isset($application) ? 'Edit Application' : 'Create Application')
 
 @section('content')
 <div class="card">
 
     <div class="card-header">
-        <h5 class="mb-0">{{ isset($career) ? 'Edit' : 'Create' }} Career</h5>
+        <h5 class="mb-0">{{ isset($application) ? 'Edit' : 'Create' }} Career Application</h5>
     </div>
 
     <form method="POST"
-          action="{{ route('admin.careers.saveorupdate', $career->uuid ?? null) }}">
+          action="{{ route('admin.careers.applications.saveorupdate', $application->uuid ?? null) }}">
         @csrf
 
         <div class="card-body row g-3">
 
-            {{-- DEPARTMENT --}}
+            {{-- CAREER --}}
             <div class="col-md-6">
-                <label class="form-label">Department *</label>
-                <select name="department_id" class="form-control" required>
-                    <option value="">Select Department</option>
-                    @foreach($departments as $department)
-                        <option value="{{ $department->id }}"
-                            {{ old('department_id', $career->department_id ?? '') == $department->id ? 'selected' : '' }}>
-                            {{ $department->name }}
+                <label class="form-label">Job Opening *</label>
+                <select name="career_id" class="form-control" required>
+                    <option value="">Select Job Opening</option>
+                    @foreach($careers as $item)
+                        <option value="{{ $item->id }}"
+                            {{ old('career_id', $application->career_id ?? '') == $item->id ? 'selected' : '' }}>
+                            {{ $item->title }}
                         </option>
                     @endforeach
                 </select>
             </div>
 
-            {{-- TITLE --}}
+            {{-- FULL NAME --}}
             <div class="col-md-6">
-                <label class="form-label">Job Title *</label>
-                <input type="text" id="title_input" name="title" class="form-control"
-                       value="{{ old('title', $career->title ?? '') }}" required>
+                <label class="form-label">Full Name *</label>
+                <input type="text" name="full_name" class="form-control"
+                       value="{{ old('full_name', $application->full_name ?? '') }}" required>
             </div>
 
-            {{-- SLUG --}}
+            {{-- EMAIL --}}
             <div class="col-md-6">
-                <label class="form-label">Slug *</label>
-                <input type="text" id="slug_input" name="slug" class="form-control"
-                       value="{{ old('slug', $career->slug ?? '') }}" required>
+                <label class="form-label">Email *</label>
+                <input type="email" name="email" class="form-control"
+                       value="{{ old('email', $application->email ?? '') }}" required>
             </div>
 
-            {{-- EMPLOYMENT TYPE --}}
+            {{-- PHONE --}}
             <div class="col-md-6">
-                <label class="form-label">Employment Type</label>
-                <select name="employment_type" class="form-control">
-                    <option value="Full Time">Full Time</option>
-                    <option value="Part Time">Part Time</option>
-                    <option value="Contract">Contract</option>
-                    <option value="Internship">Internship</option>
-                </select>
+                <label class="form-label">Phone</label>
+                <input type="text" name="phone" class="form-control"
+                       value="{{ old('phone', $application->phone ?? '') }}">
             </div>
 
-            {{-- EXPERIENCE LEVEL --}}
-            <div class="col-md-6">
-                <label class="form-label">Experience Level</label>
-                <input type="text" name="experience_level" class="form-control"
-                       value="{{ old('experience_level', $career->experience_level ?? '') }}">
-            </div>
-
-            {{-- LOCATION --}}
-            <div class="col-md-6">
-                <label class="form-label">Location</label>
-                <input type="text" name="location" class="form-control"
-                       value="{{ old('location', $career->location ?? '') }}">
-            </div>
-
-            {{-- REMOTE --}}
-            <div class="col-md-3">
-                <div class="form-check form-switch mt-4">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="is_remote"
-                           value="1"
-                           {{ old('is_remote', $career->is_remote ?? 0) ? 'checked' : '' }}>
-                    <label class="form-check-label">Remote</label>
-                </div>
-            </div>
-
-            {{-- OPENINGS --}}
-            <div class="col-md-3">
-                <label class="form-label">Openings</label>
-                <input type="number" name="openings" class="form-control"
-                       value="{{ old('openings', $career->openings ?? 1) }}">
-            </div>
-
-            {{-- SALARY --}}
+            {{-- CURRENT COMPANY --}}
             <div class="col-md-4">
-                <label class="form-label">Salary Min</label>
-                <input type="number" name="salary_min" class="form-control"
-                       value="{{ old('salary_min', $career->salary_min ?? '') }}">
+                <label class="form-label">Current Company</label>
+                <input type="text" name="current_company" class="form-control"
+                       value="{{ old('current_company', $application->current_company ?? '') }}">
             </div>
 
+            {{-- CURRENT CTC --}}
             <div class="col-md-4">
-                <label class="form-label">Salary Max</label>
-                <input type="number" name="salary_max" class="form-control"
-                       value="{{ old('salary_max', $career->salary_max ?? '') }}">
+                <label class="form-label">Current CTC</label>
+                <input type="number" name="current_ctc" class="form-control"
+                       value="{{ old('current_ctc', $application->current_ctc ?? '') }}">
             </div>
 
+            {{-- EXPECTED CTC --}}
             <div class="col-md-4">
-                <label class="form-label">Currency</label>
-                <input type="text" name="salary_currency" class="form-control"
-                       value="{{ old('salary_currency', $career->salary_currency ?? 'INR') }}">
+                <label class="form-label">Expected CTC</label>
+                <input type="number" name="expected_ctc" class="form-control"
+                       value="{{ old('expected_ctc', $application->expected_ctc ?? '') }}">
             </div>
 
-            {{-- DESCRIPTION --}}
+            {{-- NOTICE PERIOD --}}
+            <div class="col-md-4">
+                <label class="form-label">Notice Period (days)</label>
+                <input type="number" name="notice_period" class="form-control"
+                       value="{{ old('notice_period', $application->notice_period ?? '') }}">
+            </div>
+
+            {{-- PORTFOLIO --}}
+            <div class="col-md-8">
+                <label class="form-label">Portfolio URL</label>
+                <input type="url" name="portfolio_url" class="form-control"
+                       value="{{ old('portfolio_url', $application->portfolio_url ?? '') }}">
+            </div>
+
+            {{-- COVER LETTER --}}
             <div class="col-md-12">
-                <label class="form-label">Description</label>
-                <textarea name="description" class="form-control" rows="4">
-                    {{ old('description', $career->description ?? '') }}
-                </textarea>
+                <label class="form-label">Cover Letter</label>
+                <textarea name="cover_letter" class="form-control" rows="4">{{ old('cover_letter', $application->cover_letter ?? '') }}</textarea>
             </div>
 
-            {{-- RESPONSIBILITIES --}}
+            {{-- ADMIN NOTES --}}
             <div class="col-md-12">
-                <label class="form-label">Responsibilities</label>
-                <textarea name="responsibilities" class="form-control" rows="3">
-                    {{ old('responsibilities', $career->responsibilities ?? '') }}
-                </textarea>
-            </div>
-
-            {{-- REQUIREMENTS --}}
-            <div class="col-md-12">
-                <label class="form-label">Requirements</label>
-                <textarea name="requirements" class="form-control" rows="3">
-                    {{ old('requirements', $career->requirements ?? '') }}
-                </textarea>
-            </div>
-
-            {{-- BENEFITS --}}
-            <div class="col-md-12">
-                <label class="form-label">Benefits</label>
-                <textarea name="benefits" class="form-control" rows="3">
-                    {{ old('benefits', $career->benefits ?? '') }}
-                </textarea>
-            </div>
-
-            {{-- SKILLS --}}
-            <div class="col-md-12">
-                <label class="form-label">Skills (Comma separated)</label>
-                <input type="text" name="skills" class="form-control"
-                       value="{{ old('skills', $career->skills ?? '') }}">
-            </div>
-
-            {{-- APPLY INFO --}}
-            <div class="col-md-6">
-                <label class="form-label">Apply URL</label>
-                <input type="url" name="apply_url" class="form-control"
-                       value="{{ old('apply_url', $career->apply_url ?? '') }}">
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label">Apply Email</label>
-                <input type="email" name="apply_email" class="form-control"
-                       value="{{ old('apply_email', $career->apply_email ?? '') }}">
-            </div>
-
-            {{-- DEADLINE --}}
-            <div class="col-md-6">
-                <label class="form-label">Application Deadline</label>
-                <input type="date" name="application_deadline" class="form-control"
-                       value="{{ old('application_deadline', $career->application_deadline ?? '') }}">
-            </div>
-
-            {{-- SEO --}}
-            <div class="col-md-6">
-                <label class="form-label">Meta Title</label>
-                <input type="text" name="meta_title" class="form-control"
-                       value="{{ old('meta_title', $career->meta_title ?? '') }}">
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label">Meta Description</label>
-                <textarea name="meta_description" class="form-control" rows="2">
-                    {{ old('meta_description', $career->meta_description ?? '') }}
-                </textarea>
-            </div>
-
-            {{-- SWITCHES --}}
-            <div class="col-md-6">
-                <div class="form-check form-switch mt-4">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="is_active"
-                           value="1"
-                           {{ old('is_active', $career->is_active ?? 1) ? 'checked' : '' }}>
-                    <label class="form-check-label">Active</label>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="form-check form-switch mt-4">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="is_featured"
-                           value="1"
-                           {{ old('is_featured', $career->is_featured ?? 0) ? 'checked' : '' }}>
-                    <label class="form-check-label">Featured</label>
-                </div>
+                <label class="form-label">Admin Notes</label>
+                <textarea name="admin_notes" class="form-control" rows="3">{{ old('admin_notes', $application->admin_notes ?? '') }}</textarea>
             </div>
 
         </div>
 
         <div class="card-footer text-end">
-            <a href="{{ route('admin.careers.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.careers.applications.index') }}" class="btn btn-secondary">Cancel</a>
             <button class="btn btn-primary">
-                {{ isset($career) ? 'Update' : 'Create' }}
+                {{ isset($application) ? 'Update' : 'Create' }}
             </button>
         </div>
 

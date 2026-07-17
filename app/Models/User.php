@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\EmailSenderService;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -110,5 +111,35 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return in_array($this->role?->slug, ['super-admin', 'admin']);
+    }
+
+    // Replaces Laravel's default generic reset-password email with the
+    // site's own branded template (EmailTemplate slug "password-reset",
+    // auto-created on first use so it's immediately editable from
+    // Admin > Emails > Templates without any manual setup). Every send is
+    // recorded in both the Emails table and the Email Logs table via
+    // EmailSenderService::sendTemplated().
+    public function sendPasswordResetNotification($token): void
+    {
+        $resetUrl = url(route('password.reset', ['token' => $token, 'email' => $this->email], false));
+
+        app(EmailSenderService::class)->sendTemplated(
+            toEmail: $this->email,
+            toName: $this->name,
+            templateSlug: 'password-reset',
+            templateDefaults: [
+                'name' => 'Password Reset',
+                'subject' => 'Reset Your {{app_name}} Password',
+                'body' => view('emails.password-reset-fallback')->render(),
+                'variables' => ['name', 'reset_url', 'app_name'],
+                'module' => 'auth',
+            ],
+            variables: [
+                'name' => $this->name,
+                'reset_url' => $resetUrl,
+                'app_name' => config('constants.BUSINESS.name'),
+            ],
+            source: 'password-reset',
+        );
     }
 }

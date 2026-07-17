@@ -33,6 +33,16 @@ class EnquiryController extends Controller
         $enquiry = Enquiry::where('uuid', $uuid)->firstOrFail();
         $users = User::orderBy('name')->pluck('name', 'id');
 
+        if (! $enquiry->is_read) {
+            $enquiry->markAsRead();
+
+            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.view'), config('constants.MODULES.enquiry'), [
+                'subject_type' => Enquiry::class,
+                'subject_id' => $enquiry->id,
+                'description' => 'Viewed enquiry from ' . $enquiry->name,
+            ]);
+        }
+
         return view($this->prefix . $this->folder . 'details', compact('enquiry', 'users'));
     }
 

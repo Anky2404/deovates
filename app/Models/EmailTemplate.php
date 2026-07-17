@@ -64,4 +64,13 @@ class EmailTemplate extends Model
         }
         return $body;
     }
+
+    public function renderSubject(array $data = []): string
+    {
+        $subject = $this->subject;
+        foreach ($data as $key => $value) {
+            $subject = str_replace("{{" . $key . "}}", $value, $subject);
+        }
+        return $subject;
+    }
 }
