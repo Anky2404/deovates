@@ -379,7 +379,7 @@
                     'admin.pages.*',
                     'admin.pages.forms.*',
                     'admin.pages.contents.*',
-                    // 'admin.sections.*',
+                    'admin.sections.*',
                     // 'admin.templates.*',
                 ]);
             @endphp
@@ -412,14 +412,13 @@
                     </li>
 
 
-                    {{-- <li class="menu-item {{ Helper::isActive(['admin.sections.*']) }}">
+                    <li class="menu-item {{ Helper::isActive(['admin.sections.*']) }}">
                         <a href="{{ route('admin.sections.index') }}" class="menu-link">
                             <div>Sections</div>
                         </a>
                     </li>
 
-
-                    <li class="menu-item {{ Helper::isActive(['admin.templates.*']) }}">
+                    {{-- <li class="menu-item {{ Helper::isActive(['admin.templates.*']) }}">
                         <a href="{{ route('admin.templates.index') }}" class="menu-link">
                             <div>Templates</div>
                         </a>

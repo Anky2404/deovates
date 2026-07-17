@@ -18,6 +18,9 @@ class FormField extends Model
         'name',
         'label',
         'type',
+        'is_multiple',
+        'group_key',
+        'enable_croppie',
         'field_id',
         'class',
         'required',
@@ -43,6 +46,7 @@ class FormField extends Model
             'disabled' => 'boolean',
             'use_ck_editor' => 'boolean',
             'add_country_code' => 'boolean',
+            'enable_croppie' => 'boolean',
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];

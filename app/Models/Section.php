@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Section extends Model
@@ -19,30 +20,29 @@ class Section extends Model
         'name',
         'slug',
         'form_id',
-        'content',
-        'settings',
         'type',
         'is_active',
         'is_visible',
         'display_order',
-        'views',
     ];
 
     protected function casts(): array
     {
         return [
-            'content' => 'array',
-            'settings' => 'array',
             'is_active' => 'boolean',
             'is_visible' => 'boolean',
             'display_order' => 'integer',
-            'views' => 'integer',
         ];
     }
 
     public function form(): BelongsTo
     {
         return $this->belongsTo(Form::class);
+    }
+
+    public function pageContents(): HasMany
+    {
+        return $this->hasMany(PageSectionContent::class);
     }
 
     public function pages(): BelongsToMany

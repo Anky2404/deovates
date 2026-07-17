@@ -24,66 +24,19 @@
     {{-- FORM PREVIEW --}}
     <div class="card-body">
         <form>
-
-            <div class="row g-3">
-
-                @forelse($form->fields as $field)
-                    <div class="col-md-{{ $field->field_width }}">
-
-                        <label class="form-label">
-                            {{ $field->label }}
-                            @if($field->required)
-                                <span class="text-danger">*</span>
-                            @endif
-                        </label>
-
-                        {{-- INPUT TYPES --}}
-                        @if(in_array($field->type, ['text', 'email', 'number', 'hidden', 'date', 'time', 'password', 'file']))
-                            <input
-                                type="{{ $field->type }}"
-                                class="form-control {{ $field->class ?? '' }}"
-                                id="{{ $field->field_id ?? '' }}"
-                                placeholder="{{ $field->placeholder ?? $field->label }}"
-                                {{ $field->disabled ? 'disabled' : '' }}
-                            >
-
-                        {{-- TEXTAREA --}}
-                        @elseif($field->type === 'textarea')
-                            <textarea
-                                class="form-control {{ $field->class ?? '' }} {{ $field->use_ck_editor ? 'ckeditor' : '' }}"
-                                id="{{ $field->field_id ?? '' }}"
-                                rows="3"
-                                placeholder="{{ $field->placeholder ?? $field->label }}"
-                                {{ $field->disabled ? 'disabled' : '' }}
-                            ></textarea>
-
-                        {{-- SELECT --}}
-                        @elseif(in_array($field->type, ['select', 'radio', 'checkbox']))
-                            <select
-                                class="form-select {{ $field->class ?? '' }}"
-                                id="{{ $field->field_id ?? '' }}"
-                                {{ $field->disabled ? 'disabled' : '' }}
-                            >
-                                <option value="">{{ 'Select '.$field->label }}</option>
-                                @foreach ($field->options ?? [] as $option)
-                                    <option>{{ $option }}</option>
-                                @endforeach
-                            </select>
-                        @endif
-
-                    </div>
-                @empty
-                    <div class="col-12 text-center text-muted">
-                        No fields added to this form.
-                    </div>
-                @endforelse
-
-            </div>
-
+            @include('backend.partials._dynamic_form_fields', [
+                'fields' => $form->fields,
+                'idPrefix' => 'form',
+            ])
         </form>
     </div>
 
 </div>
+
+{{-- CROP MODAL (powers the croppie-upload / gallery-cropper-upload fields above) --}}
+@include('backend.partials.modal')
 @endsection
 
-
+@push('scripts')
+<script src="{{ asset('assets/js/dynamic-form-fields.js') }}"></script>
+@endpush

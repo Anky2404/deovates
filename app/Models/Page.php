@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -84,6 +85,11 @@ class Page extends Model
 {
     return $this->hasOne(PageContent::class);
 }
+
+    public function sectionContents(): HasMany
+    {
+        return $this->hasMany(PageSectionContent::class);
+    }
 
     public function scopeActive(Builder $query): Builder
     {

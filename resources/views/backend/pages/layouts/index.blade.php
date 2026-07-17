@@ -40,11 +40,12 @@
                             <td>{{ \Illuminate\Support\Str::limit($layout->heading, 50) }}</td>
                             {{-- Status --}}
                             <td>
-                                <span
-                                    class="badge toggle-status cursor-pointer bg-label-{{ $layout->is_active ? 'success' : 'danger' }}"
-                                    data-url="{{ route('admin.pages.forms.togglestatus', $layout->uuid) }}">
-                                    {{ $layout->is_active ? 'Active' : 'Inactive' }}
-                                </span>
+                                <div class="form-check form-switch mb-0">
+                                    <input type="checkbox" class="form-check-input toggle-status-switch cursor-pointer"
+                                        role="switch"
+                                        data-url="{{ route('admin.pages.forms.togglestatus', $layout->uuid) }}"
+                                        {{ $layout->is_active ? 'checked' : '' }}>
+                                </div>
                             </td>
                             <!-- Actions -->
                             <td class="text-center">

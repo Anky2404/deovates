@@ -75,7 +75,7 @@
             @endif
 
             {{-- DISPLAY ORDER --}}
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label class="form-label">Display Order</label>
                 <input type="number"
                        name="display_order"
@@ -83,77 +83,8 @@
                        value="{{ old('display_order', $section->display_order ?? 0) }}">
             </div>
 
-            {{-- VIEWS --}}
-            <div class="col-md-3">
-                <label class="form-label">Views</label>
-                <input type="number"
-                       name="views"
-                       class="form-control"
-                       value="{{ old('views', $section->views ?? 0) }}">
-            </div>
-
-            {{-- CONTENT (dynamic, one input per field on the linked form) --}}
-            <div class="col-md-12">
-                <hr class="my-2">
-                <label class="form-label fw-semibold">Content</label>
-
-                @php
-                    $contentFields = isset($section) && $section->form
-                        ? $section->form->fields
-                        : collect([
-                            (object) ['name' => 'section_label', 'label' => 'Section Label', 'type' => 'text', 'use_ck_editor' => false, 'field_width' => '12'],
-                            (object) ['name' => 'section_title', 'label' => 'Section Title', 'type' => 'text', 'use_ck_editor' => false, 'field_width' => '12'],
-                            (object) ['name' => 'section_subtitle', 'label' => 'Section Subtitle', 'type' => 'text', 'use_ck_editor' => false, 'field_width' => '12'],
-                        ]);
-                @endphp
-
-                <div class="row g-3">
-                    @foreach ($contentFields as $field)
-                        @php
-                            $fieldValue = old('content.' . $field->name, $section->content[$field->name] ?? '');
-                        @endphp
-                        <div class="col-md-{{ $field->field_width ?: 12 }}">
-                            <label class="form-label">{{ $field->label ?: $field->name }}</label>
-
-                            @if ($field->type === 'textarea')
-                                <textarea name="content[{{ $field->name }}]"
-                                          id="content_field_{{ $field->name }}"
-                                          class="form-control @if ($field->use_ck_editor ?? false) section-ckeditor-field @endif"
-                                          rows="4">{{ $fieldValue }}</textarea>
-                            @else
-                                <input type="text"
-                                       name="content[{{ $field->name }}]"
-                                       class="form-control"
-                                       value="{{ $fieldValue }}">
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
-
-                @if (! isset($section) || ! $section->form)
-                    <div class="form-text mt-2">
-                        These three fields are always created for a new section. Once saved, you can add more
-                        fields (description, list, image, etc.) from "Manage Fields for This Section" above.
-                    </div>
-                @endif
-            </div>
-
-            {{-- SETTINGS (JSON) --}}
-            <div class="col-md-6">
-                <label class="form-label">Settings (JSON)</label>
-                <textarea name="settings"
-                          class="form-control json-auto"
-                          rows="5">{{
-    old('settings',
-        isset($section->settings)
-            ? json_encode($section->settings, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-            : ''
-    )
-}}</textarea>
-            </div>
-
             {{-- SWITCHES --}}
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-check form-switch mt-4">
                     <input class="form-check-input"
                            type="checkbox"
@@ -164,7 +95,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-check form-switch mt-4">
                     <input class="form-check-input"
                            type="checkbox"
@@ -186,18 +117,4 @@
 
     </form>
 </div>
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    if (typeof CKEDITOR === 'undefined') {
-        return;
-    }
-
-    document.querySelectorAll('.section-ckeditor-field').forEach(function (el) {
-        CKEDITOR.replace(el.id, { height: 250 });
-    });
-});
-</script>
-@endpush
 @endsection

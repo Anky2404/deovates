@@ -1,0 +1,95 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 3455 >>
+stream
+BT /F2 20 Tf 72.00 720.00 Td (If You'd Like to Work With Us) Tj ET
+BT /F2 13.5 Tf 72.00 671.60 Td (SECTION ANALYSIS) Tj ET
+BT /F1 11 Tf 72.00 643.78 Td (Purpose: A phone-first alternative to the form-based CTAs elsewhere on the page, aimed at) Tj ET
+BT /F1 11 Tf 72.00 629.26 Td (visitors who would rather talk to a person than fill out another field.) Tj ET
+BT /F1 11 Tf 72.00 606.74 Td (Target Audience: Business owners and decision-makers who are ready to move quickly and) Tj ET
+BT /F1 11 Tf 72.00 592.22 Td (prefer a direct conversation over email back-and-forth - often a higher-intent segment than form) Tj ET
+BT /F1 11 Tf 72.00 577.70 Td (submitters.) Tj ET
+BT /F1 11 Tf 72.00 555.18 Td (User Intent: "I want to talk to someone right now," not read more or fill out another form.) Tj ET
+BT /F1 11 Tf 72.00 532.66 Td (Business Goal: Capture high-intent leads by making the phone number impossible to miss and) Tj ET
+BT /F1 11 Tf 72.00 518.14 Td (removing any friction between interest and a real conversation.) Tj ET
+BT /F1 11 Tf 72.00 495.62 Td (SEO Opportunity: A real office photo paired with the Deovate name and phone number is strong) Tj ET
+BT /F1 11 Tf 72.00 481.10 Td (material for Local Business / NAP \(name, address, phone\) consistency and could support) Tj ET
+BT /F1 11 Tf 72.00 466.58 Td (LocalBusiness structured data if this section is backed by schema markup.) Tj ET
+BT /F1 11 Tf 72.00 444.06 Td (Recommended CTA: Call Us Now, paired directly with the number - keep the two together) Tj ET
+BT /F1 11 Tf 72.00 429.54 Td (exactly as they are, since splitting them would add a click most visitors will not bother making.) Tj ET
+BT /F1 11 Tf 72.00 407.02 Td (Design Psychology: This reuses the rain-on-glass city photography from the homepage hero,) Tj ET
+BT /F1 11 Tf 72.00 392.50 Td (which bookends the page with the same visual language. The difference is that this shot is) Tj ET
+BT /F1 11 Tf 72.00 377.98 Td (Deovate's actual office reception with a backlit logo on the wall, which quietly answers "is this a) Tj ET
+BT /F1 11 Tf 72.00 363.46 Td (real company" - a real address behind the glass, not stock photography.) Tj ET
+BT /F1 11 Tf 72.00 340.94 Td (Content Note 1: The heading currently reads "If You Like to Work With Us," which reads as a) Tj ET
+BT /F1 11 Tf 72.00 326.42 Td (general preference rather than an invitation. "If You'd Like to Work With Us" is the grammatically) Tj ET
+BT /F1 11 Tf 72.00 311.90 Td (natural phrasing for this kind of conditional invite and should be a simple text fix.) Tj ET
+BT /F1 11 Tf 72.00 289.38 Td (Content Note 2: The subtitle line beneath the heading is low-contrast and partly obscured by the) Tj ET
+BT /F1 11 Tf 72.00 274.86 Td (potted plant in the background photo, making it hard to read in the screenshot. Worth checking) Tj ET
+BT /F1 11 Tf 72.00 260.34 Td (contrast and z-index on this line specifically, since it currently carries the explanation for why) Tj ET
+BT /F1 11 Tf 72.00 245.82 Td (someone should call.) Tj ET
+BT /F2 13.5 Tf 72.00 211.30 Td (CONTENT \(ENGLISH\)) Tj ET
+BT /F1 11 Tf 72.00 183.48 Td (Small Label: Let's Talk) Tj ET
+BT /F1 11 Tf 72.00 160.96 Td (Main Heading: If You'd Like to Work With Us) Tj ET
+BT /F1 11 Tf 72.00 138.44 Td (Subtitle: Reach out today and let's talk through your project - no pressure, just a straight answer) Tj ET
+BT /F1 11 Tf 72.00 123.92 Td (on how we can help.) Tj ET
+BT /F1 11 Tf 72.00 101.40 Td (Button Text: Call Us Now) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 1934 >>
+stream
+BT /F1 11 Tf 72.00 720.00 Td (Phone Number: +91 73010-05510) Tj ET
+BT /F2 13.5 Tf 72.00 685.48 Td (EXPLANATION \(HINGLISH\)) Tj ET
+BT /F1 11 Tf 72.00 657.66 Td (Small Label - "Let's Talk" already short aur friendly hai, isliye unchanged rakha - yeh directly is) Tj ET
+BT /F1 11 Tf 72.00 643.14 Td (section ke phone-call intent ko match karta hai.) Tj ET
+BT /F1 11 Tf 72.00 620.62 Td (Main Heading - Original "If You Like to Work With Us" grammatically thoda off tha - jaise koi) Tj ET
+BT /F1 11 Tf 72.00 606.10 Td (habit ya preference bata rahe ho. "If You'd Like to Work With Us" ek natural, invitation wala tone) Tj ET
+BT /F1 11 Tf 72.00 591.58 Td (deta hai, exactly waisa jaisa ek CTA heading mein chahiye.) Tj ET
+BT /F1 11 Tf 72.00 569.06 Td (Subtitle - "No pressure, just a straight answer" jaisi line isliye add ki gayi kyunki jo visitor form ki) Tj ET
+BT /F1 11 Tf 72.00 554.54 Td (jagah seedha call karne wala hai, woh usually salesy pitch nahi sunna chahta - woh bas ek) Tj ET
+BT /F1 11 Tf 72.00 540.02 Td (honest answer chahta hai.) Tj ET
+BT /F1 11 Tf 72.00 517.50 Td (Button and Phone Number - Dono as-is rakhe gaye hain, kyunki yeh already clear, direct, aur) Tj ET
+BT /F1 11 Tf 72.00 502.98 Td (action-oriented hain - is tarah ke high-intent CTA mein change karne ki zaroorat nahi thi.) Tj ET
+BT /F1 11 Tf 72.00 480.46 Td (Content Note \(Contrast\) - Subtitle line abhi plant image ke peeche halka dikh raha hai, isliye ise) Tj ET
+BT /F1 11 Tf 72.00 465.94 Td (flag kiya gaya hai - yeh ek design fix hai, content fix nahi, lekin phone-CTA section mein "why) Tj ET
+BT /F1 11 Tf 72.00 451.42 Td (call" wali line clearly padhna zaroori hai.) Tj ET
+BT /F2 13.5 Tf 72.00 416.90 Td (QUALITY CHECK) Tj ET
+BT /F1 11 Tf 72.00 389.08 Td (Human sounding, SEO optimized, Easy to read, Premium tone, Brand consistent, Conversion) Tj ET
+BT /F1 11 Tf 72.00 374.56 Td (focused, No keyword stuffing, Natural flow, Grammarly ready.) Tj ET
+endstream
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000218 00000 n 
+0000000320 00000 n 
+0000000456 00000 n 
+0000003962 00000 n 
+0000004098 00000 n 
+trailer
+<< /Size 9 /Root 1 0 R >>
+startxref
+6083
+%%EOF

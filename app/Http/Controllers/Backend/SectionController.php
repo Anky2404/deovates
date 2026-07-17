@@ -86,25 +86,15 @@ class SectionController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('sections', 'slug')->ignore($section?->id)],
             'form_id' => ['nullable', 'exists:forms,id'],
-            'content' => ['nullable', 'array'],
-            'settings' => ['nullable', 'string'],
             'type' => ['nullable', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
             'is_visible' => ['nullable', 'boolean'],
             'display_order' => ['nullable', 'integer', 'min:0'],
-            'views' => ['nullable', 'integer', 'min:0'],
         ]);
-
-        $data['content'] = $data['content'] ?? [];
-
-        // Decode safely, bad JSON must not crash save
-        $decodedSettings = json_decode($data['settings'] ?? '', true);
-        $data['settings'] = is_array($decodedSettings) ? $decodedSettings : [];
 
         $data['is_active'] = $request->boolean('is_active');
         $data['is_visible'] = $request->boolean('is_visible');
         $data['display_order'] = $data['display_order'] ?? 0;
-        $data['views'] = $data['views'] ?? 0;
 
         // Every section needs its own form so admins always get a proper
         // field-by-field editor here instead of raw JSON — auto-build one,
@@ -140,6 +130,8 @@ class SectionController extends Controller
 
             return redirect()->route('admin.sections.index')->with('success', 'Section saved successfully.');
         } catch (\Throwable $e) {
+
+        dd($e->getMessage());
             DB::rollBack();
             Log::error('Section saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');

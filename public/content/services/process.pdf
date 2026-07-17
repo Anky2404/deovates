@@ -1,0 +1,93 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 3602 >>
+stream
+BT /F2 20 Tf 72.00 720.00 Td (From Vision to Digital Success \(Services Page\)) Tj ET
+BT /F2 13.5 Tf 72.00 671.60 Td (SECTION ANALYSIS) Tj ET
+BT /F1 11 Tf 72.00 643.78 Td (Purpose: The same Our Development Process component seen on Home and About, now) Tj ET
+BT /F1 11 Tf 72.00 629.26 Td (reused a third time on the Services page - here its job is to reassure a visitor who is actively) Tj ET
+BT /F1 11 Tf 72.00 614.74 Td (comparing service offerings that picking a service does not mean stepping into an undefined) Tj ET
+BT /F1 11 Tf 72.00 600.22 Td (process.) Tj ET
+BT /F1 11 Tf 72.00 577.70 Td (Target Audience: Visitors actively browsing or comparing specific services, closer to a buying) Tj ET
+BT /F1 11 Tf 72.00 563.18 Td (decision than someone reading the About page narrative.) Tj ET
+BT /F1 11 Tf 72.00 540.66 Td (User Intent: "If I choose this service, what actually happens next?") Tj ET
+BT /F1 11 Tf 72.00 518.14 Td (Business Goal: Remove process uncertainty at the exact point a visitor is evaluating a specific) Tj ET
+BT /F1 11 Tf 72.00 503.62 Td (offering, not just the company in general.) Tj ET
+BT /F1 11 Tf 72.00 481.10 Td (SEO Opportunity: Same as the other two instances - strong candidate for a dedicated process) Tj ET
+BT /F1 11 Tf 72.00 466.58 Td (page with HowTo structured data, doubly so here since it sits closer to commercial intent) Tj ET
+BT /F1 11 Tf 72.00 452.06 Td (\(Services\) than the About page instance.) Tj ET
+BT /F1 11 Tf 72.00 429.54 Td (Recommended CTA: None needed - consistent with the other two instances of this component.) Tj ET
+BT /F1 11 Tf 72.00 407.02 Td (Positive finding: This is the third distinct subtitle for this shared component \(Home, About, and) Tj ET
+BT /F1 11 Tf 72.00 392.50 Td (now Services all read differently\), which confirms the subtitle is a genuinely page-specific) Tj ET
+BT /F1 11 Tf 72.00 377.98 Td (content field rather than something being copy-pasted and left unedited - the opposite of what) Tj ET
+BT /F1 11 Tf 72.00 363.46 Td (was found on the About page's CTA section. This particular subtitle is also already solid: no) Tj ET
+BT /F1 11 Tf 72.00 348.94 Td (cliche phrasing, no stacked-adjective pattern, and it reads clearly. It only needs a light touch, not) Tj ET
+BT /F1 11 Tf 72.00 334.42 Td (a rewrite.) Tj ET
+BT /F1 11 Tf 72.00 311.90 Td (Content Note: The browser mockup tab still reads "Test Project/process" - the thirteenth) Tj ET
+BT /F1 11 Tf 72.00 297.38 Td (appearance of this same placeholder across the site, tracing to the same config/constants.php) Tj ET
+BT /F1 11 Tf 72.00 282.86 Td (values already identified. No new information, just confirmation the same fix applies here.) Tj ET
+BT /F2 13.5 Tf 72.00 248.34 Td (CONTENT \(ENGLISH\)) Tj ET
+BT /F1 11 Tf 72.00 220.52 Td (Small Label: Our Development Process \(keep as-is\)) Tj ET
+BT /F1 11 Tf 72.00 198.00 Td (Main Heading: From Vision to Digital Success \(keep as-is\)) Tj ET
+BT /F1 11 Tf 72.00 175.48 Td (Subtitle \(light polish only\): A proven process that takes your idea from the first discovery call to) Tj ET
+BT /F1 11 Tf 72.00 160.96 Td (launch, and keeps going long after. \(Original was already solid - this is a minor tightening, not a) Tj ET
+BT /F1 11 Tf 72.00 146.44 Td (required fix.\)) Tj ET
+BT /F1 11 Tf 72.00 123.92 Td (Browser Mockup Tab Label: Deovate World - Our Process) Tj ET
+BT /F1 11 Tf 72.00 101.40 Td (Steps 1 through 4 \(titles, descriptions\): Reuse the same content already written for the Home) Tj ET
+BT /F1 11 Tf 72.00 86.88 Td (and About instances of this component - no changes needed, consistency across all three) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 1500 >>
+stream
+BT /F1 11 Tf 72.00 720.00 Td (pages is correct here.) Tj ET
+BT /F2 13.5 Tf 72.00 685.48 Td (EXPLANATION \(HINGLISH\)) Tj ET
+BT /F1 11 Tf 72.00 657.66 Td (Subtitle - Yeh section ka sabse achha news hai is review mein: teeno pages \(Home, About,) Tj ET
+BT /F1 11 Tf 72.00 643.14 Td (Services\) par alag-alag subtitle hai, jo confirm karta hai ki yeh field genuinely page-specific hai,) Tj ET
+BT /F1 11 Tf 72.00 628.62 Td (copy-paste nahi. Original subtitle already achha tha, isliye sirf halka sa tighten kiya gaya - "and) Tj ET
+BT /F1 11 Tf 72.00 614.10 Td (keeps going long after" jaisi ending add ki, jo baaki site ke "launch is a milestone, not a finish) Tj ET
+BT /F1 11 Tf 72.00 599.58 Td (line" wale theme se match karti hai.) Tj ET
+BT /F1 11 Tf 72.00 577.06 Td (Steps - In teeno instances mein same rakhe gaye hain \(Home, About, Services\), kyunki yeh) Tj ET
+BT /F1 11 Tf 72.00 562.54 Td (structured, repeatable data hai - jaise process kaise kaam karta hai, woh har page par same hi) Tj ET
+BT /F1 11 Tf 72.00 548.02 Td (hona chahiye.) Tj ET
+BT /F1 11 Tf 72.00 525.50 Td (Test Project Tab - Koi nayi jaankari nahi, sirf confirm karta hai ki config fix yahan bhi apply) Tj ET
+BT /F1 11 Tf 72.00 510.98 Td (hoga.) Tj ET
+BT /F2 13.5 Tf 72.00 476.46 Td (QUALITY CHECK) Tj ET
+BT /F1 11 Tf 72.00 448.64 Td (Human sounding, SEO optimized, Easy to read, Premium tone, Brand consistent, Conversion) Tj ET
+BT /F1 11 Tf 72.00 434.12 Td (focused, No keyword stuffing, Natural flow, Grammarly ready.) Tj ET
+endstream
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000218 00000 n 
+0000000320 00000 n 
+0000000456 00000 n 
+0000004109 00000 n 
+0000004245 00000 n 
+trailer
+<< /Size 9 /Root 1 0 R >>
+startxref
+5796
+%%EOF

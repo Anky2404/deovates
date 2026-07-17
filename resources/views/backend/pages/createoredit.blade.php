@@ -167,6 +167,35 @@
             <div class="small text-muted mt-2">
                 <i class="bx bx-info-circle"></i> Drag rows by the handle to control display order on the page.
             </div>
+
+            {{-- CONTENT PANELS (one per section, shown only while assigned above) --}}
+            @php
+                $assignedSectionIds = $page?->sections->pluck('id')->toArray() ?? [];
+            @endphp
+            <div id="sectionContentPanels">
+                @foreach ($sections as $section)
+                    <div class="section-content-panel mt-3 {{ in_array($section->id, $assignedSectionIds) ? '' : 'd-none' }}"
+                         data-section-content-id="{{ $section->id }}">
+                        <div class="card">
+                            <div class="card-header bg-label-info py-2">
+                                <strong>{{ $section->name }}</strong> <span class="text-muted">Content</span>
+                            </div>
+                            <div class="card-body">
+                                @if($section->form && $section->form->fields->isNotEmpty())
+                                    @include('backend.partials._dynamic_form_fields', [
+                                        'fields' => $section->form->fields,
+                                        'values' => $sectionContents[$section->id] ?? [],
+                                        'namePrefix' => 'sections_data['.$section->id.']',
+                                        'idPrefix' => 'sec'.$section->id,
+                                    ])
+                                @else
+                                    <p class="text-muted mb-0">This section has no fields defined yet.</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         </div>
 
         <!-- Footer -->
@@ -185,6 +214,9 @@
     </form>
 
 </div>
+
+{{-- CROP MODAL (powers the croppie-upload / gallery-cropper-upload fields inside section content) --}}
+@include('backend.partials.modal')
 
 @push('scripts')
 <script>
@@ -266,6 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
         disablePickerOption(id);
         picker.value = '';
         toggleEmptyMessage();
+        showSectionContentPanel(id);
     });
 
     list.addEventListener('click', function (event) {
@@ -281,10 +314,22 @@ document.addEventListener('DOMContentLoaded', function () {
         row.remove();
         enablePickerOption(id);
         toggleEmptyMessage();
+        hideSectionContentPanel(id);
     });
+
+    function showSectionContentPanel(id) {
+        const panel = document.querySelector(`.section-content-panel[data-section-content-id="${id}"]`);
+        if (panel) panel.classList.remove('d-none');
+    }
+
+    function hideSectionContentPanel(id) {
+        const panel = document.querySelector(`.section-content-panel[data-section-content-id="${id}"]`);
+        if (panel) panel.classList.add('d-none');
+    }
 
     toggleEmptyMessage();
 });
 </script>
+<script src="{{ asset('assets/js/dynamic-form-fields.js') }}"></script>
 @endpush
 @endsection

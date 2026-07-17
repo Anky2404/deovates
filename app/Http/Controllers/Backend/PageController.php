@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Page;
+use App\Models\PageSectionContent;
 use App\Models\Section;
+use App\Services\MediaUploader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +19,7 @@ class PageController extends Controller
     private $prefix = 'backend.';
     private $folder = 'pages.';
 
-    public function __construct()
+    public function __construct(private MediaUploader $mediaUploader)
     {
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
@@ -66,14 +68,19 @@ class PageController extends Controller
     public function createoredit(?string $uuid = null)
     {
         $page = null;
+        $sectionContents = [];
 
         if ($uuid) {
             $page = Page::with('sections')->where('uuid', $uuid)->firstOrFail();
+
+            $sectionContents = $page->sectionContents()
+                ->pluck('data', 'section_id')
+                ->toArray();
         }
 
-        $sections = Section::orderBy('name')->get();
+        $sections = Section::with('form.fields')->orderBy('name')->get();
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('page', 'sections'));
+        return view($this->prefix . $this->folder . 'createoredit', compact('page', 'sections', 'sectionContents'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -133,6 +140,10 @@ class PageController extends Controller
             }
 
             $page->sections()->sync($sectionSync);
+
+            foreach (array_keys($sectionSync) as $sectionId) {
+                $this->saveSectionContent($request, $page, (int) $sectionId);
+            }
 
             ActivityLog::log(
                 config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
@@ -223,5 +234,125 @@ class PageController extends Controller
         }
 
         return array_values(array_filter(array_map('trim', explode(',', $value)), fn ($item) => $item !== ''));
+    }
+
+    // Resolves this section's field values out of the submitted
+    // sections_data[{section}] payload (promoting any new file/gallery
+    // uploads) and upserts the page+section content row.
+    private function saveSectionContent(Request $request, Page $page, int $sectionId): void
+    {
+        $section = Section::with('form.fields')->find($sectionId);
+
+        if (! $section || ! $section->form) {
+            return;
+        }
+
+        $existing = PageSectionContent::where('page_id', $page->id)->where('section_id', $sectionId)->first();
+        $oldData = $existing?->data ?? [];
+
+        $data = $this->resolveSectionContentData($request, $section->form->fields, $sectionId, $oldData, $page->id);
+
+        PageSectionContent::updateOrCreate(
+            ['page_id' => $page->id, 'section_id' => $sectionId],
+            ['data' => $data]
+        );
+    }
+
+    private function resolveSectionContentData(Request $request, $fields, int $sectionId, array $oldData, int $pageId): array
+    {
+        $result = [];
+        $renderedGroups = [];
+        $fieldKeyFor = fn ($f) => $f->name ?: ($f->field_id ?: 'field_' . $f->id);
+
+        foreach ($fields as $field) {
+            if (! empty($field->group_key)) {
+                if (in_array($field->group_key, $renderedGroups, true)) {
+                    continue;
+                }
+                $renderedGroups[] = $field->group_key;
+
+                $groupKey = $field->group_key;
+                $groupFields = $fields->where('group_key', $groupKey)->values();
+                $rawInstances = $request->input("sections_data.{$sectionId}.group_data.{$groupKey}", []);
+                $oldInstances = $oldData['group_data'][$groupKey] ?? [];
+
+                $instances = [];
+                foreach ($rawInstances as $i => $rawInstance) {
+                    $instanceOld = $oldInstances[$i] ?? [];
+                    $instanceResult = [];
+
+                    foreach ($groupFields as $gField) {
+                        $fieldKey = $fieldKeyFor($gField);
+                        $instanceResult[$fieldKey] = $this->resolveFieldValue(
+                            $request,
+                            $gField,
+                            "sections_data.{$sectionId}.group_data.{$groupKey}.{$i}.{$fieldKey}",
+                            $instanceOld[$fieldKey] ?? null,
+                            "sections/{$pageId}/{$sectionId}/{$groupKey}/{$i}"
+                        );
+                    }
+
+                    $instances[] = $instanceResult;
+                }
+
+                $result['group_data'][$groupKey] = $instances;
+                continue;
+            }
+
+            $fieldKey = $fieldKeyFor($field);
+            $result[$fieldKey] = $this->resolveFieldValue(
+                $request,
+                $field,
+                "sections_data.{$sectionId}.{$fieldKey}",
+                $oldData[$fieldKey] ?? null,
+                "sections/{$pageId}/{$sectionId}"
+            );
+        }
+
+        return $result;
+    }
+
+    private function resolveFieldValue(Request $request, $field, string $dotPath, $oldValue, string $directory)
+    {
+        if ($field->type === 'file') {
+            $tempPath = $request->input($dotPath . '_temp');
+            $altText = $request->input($dotPath . '_alt');
+            $oldPath = is_string($oldValue) ? $oldValue : null;
+
+            if (! empty($tempPath)) {
+                return $this->mediaUploader->promoteTemp($tempPath, $directory, $oldPath, $altText) ?: $oldValue;
+            }
+
+            if ($request->hasFile($dotPath)) {
+                return $this->mediaUploader->uploadSingle($request->file($dotPath), $directory, $oldPath, [], $altText);
+            }
+
+            return $oldValue;
+        }
+
+        if ($field->type === 'gallery') {
+            $rawItems = $request->input($dotPath, []);
+            $items = [];
+
+            foreach ((array) $rawItems as $item) {
+                if (! empty($item['temp'])) {
+                    $promoted = $this->mediaUploader->promoteTemp($item['temp'], $directory);
+
+                    if ($promoted) {
+                        $items[] = ['path' => $promoted, 'title' => $item['title'] ?? null, 'alt' => $item['alt'] ?? null];
+                    }
+
+                    continue;
+                }
+
+                if (! empty($item['path'])) {
+                    $items[] = ['path' => $item['path'], 'title' => $item['title'] ?? null, 'alt' => $item['alt'] ?? null];
+                }
+            }
+
+            return $items;
+        }
+
+        return $request->input($dotPath, $oldValue);
     }
 }
