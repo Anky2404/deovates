@@ -64,7 +64,8 @@ public function index()
 
 
 
-        $casestudies = CaseStudy::where('is_active', 1)
+        $casestudies = CaseStudy::with('category')
+            ->where('is_active', 1)
             ->latest('id')
             ->take(8)
             ->get();

@@ -11873,6 +11873,33 @@ ul.styled-list.list-star li:before {
     color: #ffffff;
 }
 
+.phone-social-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #0b1220;
+    border-radius: 30px;
+    padding: 10px 16px;
+}
+
+.phone-social-bar a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: #cbd5e1;
+    font-size: 15px;
+    transition: all .25s ease;
+}
+
+.phone-social-bar a:hover {
+    background: #ff5f13;
+    color: #ffffff;
+}
+
 .phone-home-indicator {
     display: block;
     width: 100px;
@@ -11998,11 +12025,19 @@ ul.styled-list.list-star li:before {
 }
 
 .office-item {
+    display: block;
     background: #ffffff;
     border-radius: 18px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(11, 28, 57, 0.08);
     transition: transform .4s ease, box-shadow .4s ease;
+    color: inherit;
+    text-decoration: none;
+}
+
+.office-item:hover {
+    color: inherit;
+    text-decoration: none;
 }
 
 .office-item:hover {
@@ -14236,5 +14271,46 @@ h6 {
         bottom: -18px !important;
         max-width: calc(100% - 16px) !important;
     }
+}
+
+/* Team Section social row (#team-section) */
+.team-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    margin: 0 8px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    color: #696f78;
+    font-size: 18px;
+    background: #fff;
+    transition: all .25s ease;
+}
+
+.team-social-icon:hover {
+    color: #fff;
+    transform: translateY(-4px);
+}
+
+.team-social-whatsapp:hover {
+    background: #25D366;
+    border-color: #25D366;
+}
+
+.team-social-facebook:hover {
+    background: #1877F2;
+    border-color: #1877F2;
+}
+
+.team-social-linkedin:hover {
+    background: #0A66C2;
+    border-color: #0A66C2;
+}
+
+.team-social-instagram:hover {
+    background: #E1306C;
+    border-color: #E1306C;
 }
 

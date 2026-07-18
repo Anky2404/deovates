@@ -1119,14 +1119,14 @@
 
 
 
-    <!-- Start Industries Carousel Section -->
+    <!-- Start Team Section -->
     @php
-        $industriesCarouselSection = $homePage?->sections->firstWhere('slug', 'industries-carousel-section');
-        $industriesCarouselContent = $industriesCarouselSection
-            ? $sectionContents[$industriesCarouselSection->id] ?? []
-            : [];
+        $teamSection = $homePage?->sections->firstWhere('slug', 'team-section');
+        $teamContent = $teamSection ? $sectionContents[$teamSection->id] ?? [] : [];
+        $teamMembers = $teamContent['group_data']['team_members'] ?? [];
+
     @endphp
-    <section id="team-section">
+    <section id="team-section" class="py-5">
         <div class="container-fluid training overflow-hidden bg-light py-5">
             <div class="container py-5">
 
@@ -1134,16 +1134,8 @@
                     <div class="col-12">
                         <div class="section-title st-center">
                             @include('front.partials._section_heading', [
-                                'content' => $industriesCarouselContent,
-                                'defaultTitle' => \App\Helper::sectionTitle(
-                                    'home',
-                                    'industries_carousel',
-                                    'title',
-                                    'INDUSTRIES WE POWER'),
-                                'defaultSubtitle' => \App\Helper::sectionTitle(
-                                    'home',
-                                    'industries_carousel',
-                                    'subtitle'),
+                                'content' => $teamContent,
+                                'defaultTitle' => 'The People Behind The Work',
                             ])
                         </div>
                     </div>
@@ -1151,7 +1143,7 @@
 
                 <div class="phones-carousel owl-carousel wow fadeInUp" data-wow-delay="0.1s">
 
-                    @forelse ($industries as $industry)
+                    @forelse ($teamMembers as $member)
                         <div class="phone-mockup">
                             <div class="phone-frame">
                                 <div class="phone-notch"></div>
@@ -1161,19 +1153,35 @@
                                     </div>
                                     <div class="phone-slide">
                                         <div class="phone-slide-img">
-                                            <img src="{{ \App\Helper::img($industry->image) }}"
-                                                alt="{{ $industry->name }}">
+                                            <img src="{{ !empty($member['member_photo']) ? asset('storage/' . $member['member_photo']) : asset('assets/front/img/default-img.png') }}"
+                                                alt="{{ $member['member_name'] ?? '' }}">
                                             <div class="phone-slide-overlay">
-                                                <h4>{{ $industry->name }}</h4>
-                                                <span>Industry</span>
-                                                <p>{{ \Illuminate\Support\Str::limit(strip_tags($industry->description), 90) }}
+                                                <h4>{{ $member['member_name'] ?? '' }}</h4>
+                                                <span>{{ $member['member_department'] ?? '' }}</span>
+                                                <p>{{ \Illuminate\Support\Str::limit($member['member_description'] ?? '', 90) }}
                                                 </p>
                                             </div>
                                         </div>
                                         <div class="phone-slide-info">
-                                            <h6>{{ $industry->name }}</h6>
-                                            <a href="{{ route('front.industries.details', $industry->slug) }}"
-                                                class="phone-slide-btn">View Details</a>
+                                            <h6>{{ $member['member_name'] ?? '' }}</h6>
+                                            <div class="phone-social-bar">
+                                                <a href="{{ $member['member_facebook'] ?: '#' }}" target="_blank"
+                                                    rel="noopener" aria-label="Facebook">
+                                                    <i class="fab fa-facebook-f"></i>
+                                                </a>
+                                                <a href="{{ $member['member_instagram'] ?: '#' }}" target="_blank"
+                                                    rel="noopener" aria-label="Instagram">
+                                                    <i class="fab fa-instagram"></i>
+                                                </a>
+                                                <a href="{{ $member['member_youtube'] ?: '#' }}" target="_blank"
+                                                    rel="noopener" aria-label="YouTube">
+                                                    <i class="fab fa-youtube"></i>
+                                                </a>
+                                                <a href="{{ $member['member_linkedin'] ?: '#' }}" target="_blank"
+                                                    rel="noopener" aria-label="LinkedIn">
+                                                    <i class="fab fa-linkedin-in"></i>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1182,15 +1190,31 @@
                             <div class="phone-shadow"></div>
                         </div>
                     @empty
-                        <p class="text-center text-muted">Industries will be listed here shortly.</p>
+                        <p class="text-center text-muted">Team members will be listed here shortly.</p>
                     @endforelse
 
+                </div>
+
+                <div class="team-social-row text-center mt-5">
+                    <span class="d-block mb-3 fw-semibold">Connect With Us</span>
+                    <a href="#" class="team-social-icon team-social-whatsapp" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="#" class="team-social-icon team-social-facebook" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="team-social-icon team-social-linkedin" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="team-social-icon team-social-instagram" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
                 </div>
 
             </div>
         </div>
     </section>
-    <!-- End Industries Carousel Section -->
+    <!-- End Team Section -->
 
 
     <!-- Start Call Us Section -->
@@ -1228,41 +1252,10 @@
     </section>
     <!-- End Call Us Section -->
 
-    <!-- Start Industries We Serve Section -->
+    <!-- Start Case Studies Section -->
     @php
         $officeSection = $homePage?->sections->firstWhere('slug', 'industries-we-serve-section');
         $officeContent = $officeSection ? $sectionContents[$officeSection->id] ?? [] : [];
-        $officeItems = $officeContent['group_data']['office_items'] ?? [];
-
-        if (empty($officeItems)) {
-            $officeItems = [
-                [
-                    'office_icon' => 'fa fa-heartbeat',
-                    'office_title' => 'Healthcare',
-                    'office_description' =>
-                        'Hospital Management System, Telemedicine, Patient Portal and EMR Solutions.',
-                    '_fallback_img' => 'assets/front/img/office-2.jpg',
-                ],
-                [
-                    'office_icon' => 'fa fa-shopping-cart',
-                    'office_title' => 'E-Commerce',
-                    'office_description' => 'Online Stores, Multi Vendor Marketplace, Inventory & Payment Gateway.',
-                    '_fallback_img' => 'assets/front/img/office-1.jpg',
-                ],
-                [
-                    'office_icon' => 'fa fa-graduation-cap',
-                    'office_title' => 'Education',
-                    'office_description' => 'Learning Management Systems, Student Portals and Online Examination.',
-                    '_fallback_img' => 'assets/front/img/office-3.jpg',
-                ],
-                [
-                    'office_icon' => 'fa fa-building',
-                    'office_title' => 'Real Estate',
-                    'office_description' => 'Property Management, CRM and Real Estate Listing Platforms.',
-                    '_fallback_img' => 'assets/front/img/office-4.jpg',
-                ],
-            ];
-        }
     @endphp
     <section id="casestudies">
         <div class="container-fluid contact overflow-hidden pb-5">
@@ -1274,15 +1267,7 @@
                         <div class="section-title st-center">
                             @include('front.partials._section_heading', [
                                 'content' => $officeContent,
-                                'defaultTitle' => \App\Helper::sectionTitle(
-                                    'home',
-                                    'industries_we_serve',
-                                    'title',
-                                    'SOLUTIONS BY INDUSTRY'),
-                                'defaultSubtitle' => \App\Helper::sectionTitle(
-                                    'home',
-                                    'industries_we_serve',
-                                    'subtitle'),
+                                'defaultTitle' => 'Solutions By Industry',
                             ])
                         </div>
                     </div>
@@ -1290,27 +1275,29 @@
 
                 <!-- Owl Carousel -->
                 <div class="office-carousel owl-carousel owl-theme">
-                    @foreach ($officeItems as $item)
-                        <div class="office-item">
+                    @forelse ($casestudies as $caseStudy)
+                        <a href="{{ route('front.casestudies.details', $caseStudy->slug) }}" class="office-item">
                             <div class="office-img">
-                                <img src="{{ !empty($item['office_image']) ? asset('storage/' . $item['office_image']) : asset($item['_fallback_img'] ?? 'assets/front/img/office-1.jpg') }}"
-                                    class="img-fluid w-100" alt="{{ $item['office_title'] ?? '' }}">
+                                <img src="{{ !empty($caseStudy->featured_image) ? asset('storage/' . $caseStudy->featured_image) : asset('assets/front/img/default-img.png') }}"
+                                    class="img-fluid w-100" alt="{{ $caseStudy->featured_image_alt ?? $caseStudy->title }}">
                                 <span class="office-icon"><i
-                                        class="{{ $item['office_icon'] ?? 'fa fa-briefcase' }}"></i></span>
+                                        class="{{ $caseStudy->category->icon ?? 'fa fa-briefcase' }}"></i></span>
                             </div>
 
                             <div class="office-content">
-                                <h4>{{ $item['office_title'] ?? '' }}</h4>
-                                <p>{{ $item['office_description'] ?? '' }}</p>
+                                <h4>{{ $caseStudy->title }}</h4>
+                                <p>{{ \Illuminate\Support\Str::limit(strip_tags($caseStudy->overview ?? ''), 110) }}</p>
                             </div>
-                        </div>
-                    @endforeach
+                        </a>
+                    @empty
+                        <p class="text-center text-muted">Case studies will be listed here shortly.</p>
+                    @endforelse
                 </div>
 
             </div>
         </div>
     </section>
-    <!-- End Industries We Serve Section -->
+    <!-- End Case Studies Section -->
 
 
     <!-- Start Newsletter Subscribe Section -->
