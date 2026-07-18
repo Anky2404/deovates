@@ -338,7 +338,7 @@
                 <div class="col-md-12">
                     <div class="section-title st-center">
                         @include('front.partials._section_heading', [
-                            'content' => $servicesContent,
+                        'content' => $servicesContent,
                             'defaultTitle' => \App\Helper::sectionTitle(
                                 'home',
                                 'services',
@@ -353,8 +353,7 @@
                                 style="
                     visibility: visible;
                     animation-delay: 0.1s;
-                    animation-name: fadeInUp;
-                  ">
+                    animation-name: fadeInUp; ">
                                 <div class="service-item">
                                     <div class="service-inner">
                                         <div class="service-img">
@@ -1195,21 +1194,6 @@
 
                 </div>
 
-                <div class="team-social-row text-center mt-5">
-                    <span class="d-block mb-3 fw-semibold">Connect With Us</span>
-                    <a href="#" class="team-social-icon team-social-whatsapp" aria-label="WhatsApp">
-                        <i class="fab fa-whatsapp"></i>
-                    </a>
-                    <a href="#" class="team-social-icon team-social-facebook" aria-label="Facebook">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="team-social-icon team-social-linkedin" aria-label="LinkedIn">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="#" class="team-social-icon team-social-instagram" aria-label="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </div>
 
             </div>
         </div>
@@ -1279,7 +1263,8 @@
                         <a href="{{ route('front.casestudies.details', $caseStudy->slug) }}" class="office-item">
                             <div class="office-img">
                                 <img src="{{ !empty($caseStudy->featured_image) ? asset('storage/' . $caseStudy->featured_image) : asset('assets/front/img/default-img.png') }}"
-                                    class="img-fluid w-100" alt="{{ $caseStudy->featured_image_alt ?? $caseStudy->title }}">
+                                    class="img-fluid w-100"
+                                    alt="{{ $caseStudy->featured_image_alt ?? $caseStudy->title }}">
                                 <span class="office-icon"><i
                                         class="{{ $caseStudy->category->icon ?? 'fa fa-briefcase' }}"></i></span>
                             </div>
@@ -1350,8 +1335,8 @@
     <!-- End Newsletter Subscribe Section -->
 
     <!--=================================
-                        Latest Blog Section
-                ==================================-->
+                                Latest Blog Section
+                        ==================================-->
     <!-- Start Latest Blog Section -->
     @php
         $latestBlogSection = $homePage?->sections->firstWhere('slug', 'latest-blog-section');
@@ -1422,8 +1407,8 @@
     <!-- End Latest Blog Section -->
 
     <!--========================================
-                            Testimonials
-                =========================================-->
+                                    Testimonials
+                        =========================================-->
 
     <!-- Start Testimonials Section -->
     @php
@@ -1431,75 +1416,78 @@
         $testimonialsContent = $testimonialsSection ? $sectionContents[$testimonialsSection->id] ?? [] : [];
     @endphp
     @if ($testimonials->isNotEmpty())
-    <section class="testimonials">
+        <section class="testimonials">
 
-        <div class="container">
+            <div class="container">
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
-                            'content' => $testimonialsContent,
-                            'defaultTitle' => \App\Helper::sectionTitle(
-                                'home',
-                                'testimonials',
-                                'title',
-                                'WHAT OUR CLIENTS SAY'),
-                            'defaultSubtitle' => \App\Helper::sectionTitle('home', 'testimonials', 'subtitle'),
-                        ])
-                    </div>
-                </div>
-            </div>
-
-            <div class="testi-mockup wow fadeInUp" data-wow-delay="0.1s">
-                <div class="laptop-screen">
-                    <div class="laptop-browser-bar">
-                        <span class="dot dot-red"></span>
-                        <span class="dot dot-yellow"></span>
-                        <span class="dot dot-green"></span>
-                        <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/reviews</span>
-                    </div>
-                    <div class="laptop-screen-glass testi-glass">
-                        <div class="laptop-shine"></div>
-                        <div class="testimonials-carousel owl-carousel owl-theme">
-
-                            @foreach ($testimonials as $testimonial)
-                                <div class="testimonial">
-                                    <div class="testimonial-img">
-                                        <img src="{{ \App\Helper::img($testimonial->photo) }}"
-                                            alt="{{ $testimonial->name }}">
-                                    </div>
-                                    <blockquote>
-                                        <p>
-                                            {{ $testimonial->message }}
-                                        </p>
-                                        <footer>
-                                            <strong>{{ $testimonial->name }}</strong><br>
-                                            <cite>{{ $testimonial->designation }}{{ $testimonial->company ? ', ' . $testimonial->company : '' }}</cite>
-                                        </footer>
-                                    </blockquote>
-                                </div>
-                            @endforeach
-
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title st-center">
+                            @include('front.partials._section_heading', [
+                                'content' => $testimonialsContent,
+                                'defaultTitle' => \App\Helper::sectionTitle(
+                                    'home',
+                                    'testimonials',
+                                    'title',
+                                    'WHAT OUR CLIENTS SAY'),
+                                'defaultSubtitle' => \App\Helper::sectionTitle(
+                                    'home',
+                                    'testimonials',
+                                    'subtitle'),
+                            ])
                         </div>
                     </div>
                 </div>
-                <div class="laptop-base">
-                    <span class="laptop-notch"></span>
+
+                <div class="testi-mockup wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="laptop-screen">
+                        <div class="laptop-browser-bar">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                            <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/reviews</span>
+                        </div>
+                        <div class="laptop-screen-glass testi-glass">
+                            <div class="laptop-shine"></div>
+                            <div class="testimonials-carousel owl-carousel owl-theme">
+
+                                @foreach ($testimonials as $testimonial)
+                                    <div class="testimonial">
+                                        <div class="testimonial-img">
+                                            <img src="{{ \App\Helper::img($testimonial->photo) }}"
+                                                alt="{{ $testimonial->name }}">
+                                        </div>
+                                        <blockquote>
+                                            <p>
+                                                {{ $testimonial->message }}
+                                            </p>
+                                            <footer>
+                                                <strong>{{ $testimonial->name }}</strong><br>
+                                                <cite>{{ $testimonial->designation }}{{ $testimonial->company ? ', ' . $testimonial->company : '' }}</cite>
+                                            </footer>
+                                        </blockquote>
+                                    </div>
+                                @endforeach
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="laptop-base">
+                        <span class="laptop-notch"></span>
+                    </div>
+                    <div class="laptop-shadow"></div>
                 </div>
-                <div class="laptop-shadow"></div>
+
             </div>
 
-        </div>
-
-    </section>
+        </section>
     @endif
     <!-- End Testimonials Section -->
 
 
     <!--========================================
-                                FAQ SECTION
-                =========================================-->
+                                        FAQ SECTION
+                        =========================================-->
 
     <!-- Start FAQ and Contact Section -->
     @php

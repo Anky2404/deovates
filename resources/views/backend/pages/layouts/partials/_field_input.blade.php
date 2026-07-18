@@ -1,5 +1,9 @@
 @php
-    $required = $field->required ? 'required' : '';
+    // Section-content fields are always optional here: this system falls back
+    // to static/default content when a field is left blank, so enforcing
+    // HTML5 "required" would block saving any one section without filling in
+    // every field of every other section on the page.
+    $required = '';
     $disabled = $field->disabled ? 'disabled' : '';
     $class = $field->class ?? '';
     $value = $value ?? null;
