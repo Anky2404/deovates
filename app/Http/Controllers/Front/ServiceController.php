@@ -26,12 +26,13 @@ class ServiceController extends Controller
             ->get();
 
         $testimonials = Testimonial::active()
+            ->onPage('services')
             ->orderBy('display_order')
             ->latest('id')
             ->take(6)
             ->get();
 
-        $category = FaqCategory::with('faqs')
+        $category = FaqCategory::with('activeFaqs')
             ->active()
             ->where('page', 'services')
             ->latest('id')

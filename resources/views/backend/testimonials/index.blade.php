@@ -32,6 +32,7 @@
                     <th>Name</th>
                     <th>Company</th>
                     <th>Rating</th>
+                    <th>Page</th>
                     <th>Status</th>
                     <th>Featured</th>
                     <th class="text-center">Action</th>
@@ -76,6 +77,15 @@
                                 ⭐ {{ $testimonial->rating }}/5
                             @else
                                 <span class="text-muted">—</span>
+                            @endif
+                        </td>
+
+                        <!-- PAGE -->
+                        <td>
+                            @if($testimonial->location)
+                                <span class="badge bg-label-primary">{{ $pageNamesBySlug[$testimonial->location] ?? $testimonial->location }}</span>
+                            @else
+                                <span class="badge bg-label-secondary">All Pages</span>
                             @endif
                         </td>
 
@@ -124,7 +134,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="text-center text-muted py-4">
+                        <td colspan="9" class="text-center text-muted py-4">
                             No Testimonials found.
                         </td>
                     </tr>

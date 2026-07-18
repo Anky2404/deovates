@@ -29,11 +29,12 @@ class BlogController extends Controller
             ->get();
 
         $testimonials = Testimonial::active()
+            ->onPage('blog')
             ->ordered()
             ->take(6)
             ->get();
 
-        $category = FaqCategory::with('faqs')
+        $category = FaqCategory::with('activeFaqs')
             ->active()
             ->where('page', 'blog')
             ->latest('id')

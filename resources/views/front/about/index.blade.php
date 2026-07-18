@@ -653,7 +653,7 @@
 
             <div class="faq-contact-grid">
 
-                @if ($category && $category->faqs->isNotEmpty())
+                @if ($category && $category->activeFaqs->isNotEmpty())
                 <!-- LEFT: FAQ app tablet -->
                 <div class="faq-tablet-col wow fadeInLeft" data-wow-delay="0.1s">
                     <div class="app-tablet">
@@ -670,7 +670,7 @@
                                 </div>
 
                                 <div class="faq-wrapper app-faq-list">
-                                    @foreach ($category->faqs as $faq)
+                                    @foreach ($category->activeFaqs as $faq)
                                         <div class="faq-item @if ($loop->first) active @endif">
                                             <div class="faq-title">
                                                 <h5>{{ $faq->question }}</h5>

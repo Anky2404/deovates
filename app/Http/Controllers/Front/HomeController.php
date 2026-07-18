@@ -75,13 +75,14 @@ public function index()
             ->take(8)
             ->get();
 
-        $category = FaqCategory::with('faqs')
+        $category = FaqCategory::with('activeFaqs')
             ->active()
             ->where('page', 'home')
             ->latest('id')
             ->first();
 
         $testimonials = Testimonial::active()
+            ->onPage('home')
             ->ordered()
             ->take(6)
             ->get();

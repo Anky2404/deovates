@@ -50,35 +50,23 @@
                        class="form-control"
                        value="{{ old('company', $testimonial->company ?? '') }}">
             </div>
-            {{-- LOCATION / PAGE --}}
+            {{-- PAGE --}}
 <div class="col-md-3">
-    <label class="form-label">Select Location</label>
+    <label class="form-label">Show on Page</label>
     <select name="location"
             class="form-control @error('location') is-invalid @enderror">
 
-        <option value="">-- Select Page --</option>
+        <option value="">-- All Pages --</option>
 
-        @php
-            $pages = [
-                'home' => 'Home',
-                'about' => 'About',
-                'service' => 'Service',
-                'service_details' => 'Service Details',
-                'blog' => 'Blog',
-                'blog_details' => 'Blog Details',
-                'contact' => 'Contact',
-                'industries' => 'Industries',
-            ];
-        @endphp
-
-        @foreach($pages as $key => $label)
-            <option value="{{ $key }}"
-                {{ old('location', $testimonial->location ?? '') == $key ? 'selected' : '' }}>
-                {{ $label }}
+        @foreach($pages as $p)
+            <option value="{{ $p->slug }}"
+                {{ old('location', $testimonial->location ?? '') == $p->slug ? 'selected' : '' }}>
+                {{ $p->name }}
             </option>
         @endforeach
 
     </select>
+    <div class="form-text">Leave as "All Pages" to show this testimonial everywhere.</div>
 
     @error('location')
         <div class="invalid-feedback">{{ $message }}</div>

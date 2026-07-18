@@ -18,11 +18,12 @@ class AboutController extends Controller
         $data = Helper::readJSONData($this->folder . 'json');
 
         $testimonials = Testimonial::active()
+            ->onPage('about')
             ->orderBy('display_order')
             ->latest('id')
             ->get();
 
-        $category = FaqCategory::with('faqs')
+        $category = FaqCategory::with('activeFaqs')
             ->active()
             ->where('page', 'about')
             ->latest('id')

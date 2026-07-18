@@ -162,6 +162,7 @@
         $blogTestimonialsSection = $page?->sections->firstWhere('slug', 'testimonials-section');
         $blogTestimonialsContent = $blogTestimonialsSection ? $sectionContents[$blogTestimonialsSection->id] ?? [] : [];
     @endphp
+    @if ($testimonials->isNotEmpty())
     <section class="testimonials">
 
         <div class="container">
@@ -190,7 +191,7 @@
                         <div class="laptop-shine"></div>
                         <div class="testimonials-carousel owl-carousel owl-theme">
 
-                            @forelse ($testimonials as $testimonial)
+                            @foreach ($testimonials as $testimonial)
                                 <div class="testimonial">
                                     <div class="testimonial-img">
                                         <img src="{{ \App\Helper::img($testimonial->photo) }}" alt="{{ $testimonial->name }}">
@@ -205,9 +206,7 @@
                                         </footer>
                                     </blockquote>
                                 </div>
-                            @empty
-                                <p class="text-center text-muted">Client testimonials will be shown here shortly.</p>
-                            @endforelse
+                            @endforeach
 
                         </div>
                     </div>
@@ -221,6 +220,7 @@
         </div>
 
     </section>
+    @endif
     <!-- End Testimonials Section -->
 
 
@@ -308,7 +308,7 @@
 
                                 <div class="faq-wrapper app-faq-list">
 
-                                    @forelse ($category->faqs ?? [] as $faq)
+                                    @forelse ($category->activeFaqs ?? [] as $faq)
                                         <div class="faq-item @if ($loop->first) active @endif">
                                             <div class="faq-title">
                                                 <h5>{{ $faq->question }}</h5>

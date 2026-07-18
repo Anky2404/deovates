@@ -18,7 +18,7 @@ class TestimonialController extends Controller
             ->latest('id')
             ->get();
 
-        $category = FaqCategory::with('faqs')
+        $category = FaqCategory::with('activeFaqs')
             ->active()
             ->where('page', 'testimonials')
             ->latest('id')

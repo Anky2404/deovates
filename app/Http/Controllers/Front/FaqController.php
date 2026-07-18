@@ -15,13 +15,14 @@ class FaqController extends Controller
     public function index()
     {
         try {
-            $category = FaqCategory::with('faqs')
+            $category = FaqCategory::with('activeFaqs')
                 ->active()
                 ->where('page', 'faq')
                 ->latest('id')
                 ->first();
 
             $testimonials = Testimonial::active()
+                ->onPage('faq')
                 ->ordered()
                 ->take(6)
                 ->get();

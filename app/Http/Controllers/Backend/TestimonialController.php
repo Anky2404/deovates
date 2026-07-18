@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Page;
 use App\Models\Testimonial;
 use App\Services\MediaUploader;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -27,7 +28,8 @@ class TestimonialController extends Controller
     {
         $rows = Testimonial::latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Testimonial::orderBy('display_order')->orderBy('id')->get();
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+        $pageNamesBySlug = Page::pluck('name', 'slug');
+        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows', 'pageNamesBySlug'));
     }
 
     // Persist drag-drop reorder
@@ -71,7 +73,9 @@ class TestimonialController extends Controller
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('testimonial'));
+        $pages = Page::orderBy('display_order')->orderBy('id')->get(['slug', 'name']);
+
+        return view($this->prefix . $this->folder . 'createoredit', compact('testimonial', 'pages'));
     }
 
     // Form field "image" maps to column "photo"

@@ -60,4 +60,13 @@ class Testimonial extends Model
     {
         return $query->whereNotNull('video_url');
     }
+
+    // Testimonials with no page assigned show everywhere; otherwise
+    // restrict to whichever page slug the admin selected.
+    public function scopeOnPage(Builder $query, string $slug): Builder
+    {
+        return $query->where(function (Builder $q) use ($slug) {
+            $q->whereNull('location')->orWhere('location', '')->orWhere('location', $slug);
+        });
+    }
 }
