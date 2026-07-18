@@ -119,10 +119,29 @@
     </section>
 
     @php
-        $aboutSection = $homePage?->sections->firstWhere('slug', 'about-section');
-        $aboutContent = $aboutSection ? $sectionContents[$aboutSection->id] ?? [] : [];
-        $aboutListItems = $aboutContent['group_data']['section_lists'] ?? [];
-    @endphp
+    use Illuminate\Support\Str;
+
+    $replacePlaceholders = function ($content) {
+        if (empty($content)) {
+            return $content;
+        }
+
+        $replacements = [
+            '{{BRAND_NAME}}' => config('constants.BRAND_NAME'),
+            '{{BUSINESS_NAME}}' => config('constants.BUSINESS.name'),
+            '{{BUSINESS_EMAIL}}' => config('constants.BUSINESS.email'),
+            '{{BUSINESS_PHONE}}' => config('constants.BUSINESS.phone'),
+            '{{BUSINESS_WEBSITE}}' => config('constants.BUSINESS.website'),
+        ];
+
+        return Str::of($content)->replace(array_keys($replacements), array_values($replacements));
+    };
+
+    $sectionTitle = $replacePlaceholders($aboutContent['section_title'] ?? null);
+    $sectionSubtitle = $replacePlaceholders($aboutContent['section_subtitle'] ?? null);
+    $sectionParagraph = $replacePlaceholders($aboutContent['section_paragraph'] ?? null);
+    $buttonText = $replacePlaceholders($aboutContent['btn_text'] ?? null);
+@endphp
     <section class="about" id="about_section">
         <div class="container">
 
