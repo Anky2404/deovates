@@ -118,6 +118,7 @@
         </div>
     </section>
 
+
     @php
     use Illuminate\Support\Str;
 
@@ -142,6 +143,12 @@
     $sectionParagraph = $replacePlaceholders($aboutContent['section_paragraph'] ?? null);
     $buttonText = $replacePlaceholders($aboutContent['btn_text'] ?? null);
 @endphp
+
+    @php
+        $aboutSection = $homePage?->sections->firstWhere('slug', 'about-section');
+        $aboutContent = $aboutSection ? $sectionContents[$aboutSection->id] ?? [] : [];
+        $aboutListItems = $aboutContent['group_data']['section_lists'] ?? [];
+    @endphp
     <section class="about" id="about_section">
         <div class="container">
 
