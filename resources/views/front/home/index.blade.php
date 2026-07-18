@@ -132,8 +132,7 @@
                     <div class="section-title st-center">
 
                         @if (!empty($aboutContent['section_label']))
-                            <span class="sub-title d-block fw-semibold"
-                                style="color:#ff5f13;">{{ $aboutContent['section_label'] }}</span>
+                            <span class="sub-title">{{ $aboutContent['section_label'] }}</span>
                         @endif
 
                         <h3>{{ $aboutContent['section_title'] ?? \App\Helper::sectionTitle('home', 'about', 'title', 'WELCOME TO DEOVATE WORLD') }}
@@ -270,8 +269,7 @@
                         <div class="section-title st-center">
 
                             @if (!empty($counterContent['section_label']))
-                                <span class="sub-title d-block fw-semibold"
-                                    style="color:#ff5f13;">{{ $counterContent['section_label'] }}</span>
+                                <span class="sub-title">{{ $counterContent['section_label'] }}</span>
                             @endif
 
                             <h3>{{ $counterContent['section_title'] ?? \App\Helper::sectionTitle('home', 'achievements_counter', 'title', 'OUR ACHIEVEMENTS') }}

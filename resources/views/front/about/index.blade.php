@@ -102,7 +102,7 @@
                 <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
                     <div class="section-title st-start">
                         @if (!empty($whoWeAreContent['section_label']))
-                            <span class="sub-title d-block fw-semibold" style="color:#ff5f13;">{{ $whoWeAreContent['section_label'] }}</span>
+                            <span class="sub-title">{{ $whoWeAreContent['section_label'] }}</span>
                         @endif
                         <h3>{{ $whoWeAreContent['section_title'] ?? $data['who_we_are']['title'] }}</h3>
                         <p>{{ $whoWeAreContent['section_subtitle'] ?? $data['who_we_are']['subtitle'] }}</p>
@@ -143,7 +143,7 @@
         <div class="container py-5 position-relative">
             <div class="section-title st-center st-light">
                 @if (!empty($vmContent['section_label']))
-                    <span class="sub-title d-block fw-semibold" style="color:#ff8a3d;">{{ $vmContent['section_label'] }}</span>
+                    <span class="sub-title">{{ $vmContent['section_label'] }}</span>
                 @endif
                 <h3>{{ $vmContent['section_title'] ?? $data['vision_mission']['title'] }}</h3>
                 <p>{{ $vmContent['section_subtitle'] ?? $data['vision_mission']['subtitle']['subtitle'] }}</p>
@@ -381,7 +381,7 @@
         <div class="container py-5">
             <div class="section-title st-center">
                 @if (!empty($founderContent['section_label']))
-                    <span class="sub-title d-block fw-semibold" style="color:#ff5f13;">{{ $founderContent['section_label'] }}</span>
+                    <span class="sub-title">{{ $founderContent['section_label'] }}</span>
                 @endif
                 <h3>{{ $founderContent['section_title'] ?? $data['founder']['section_title'] }}</h3>
                 <p>{{ $founderContent['section_subtitle'] ?? $data['founder']['subtitle'] }}</p>
@@ -499,7 +499,7 @@
                         <div class="position-relative">
                             <div class="section-title st-start st-light mb-4">
                                 @if (!empty($officeAreaContent['section_label']))
-                                    <span class="sub-title d-block fw-semibold" style="color:#ff8a3d;">{{ $officeAreaContent['section_label'] }}</span>
+                                    <span class="sub-title">{{ $officeAreaContent['section_label'] }}</span>
                                 @endif
                                 <h3>{{ $officeAreaContent['section_title'] ?? $data['office_culture']['title'] }}</h3>
                                 <p>{{ $officeAreaContent['section_subtitle'] ?? $data['office_culture']['subtitle'] }}</p>

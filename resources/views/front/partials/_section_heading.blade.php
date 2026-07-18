@@ -17,7 +17,7 @@
 @endphp
 
 @if(!empty($content['section_label']))
-    <span class="sub-title d-block fw-semibold" style="color:#ff5f13;">{{ $content['section_label'] }}</span>
+    <span class="sub-title">{{ $content['section_label'] }}</span>
 @endif
 
 <{{ $tag }}>{{ $title }}</{{ $tag }}>

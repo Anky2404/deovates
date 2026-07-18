@@ -36,7 +36,7 @@ use App\Http\Controllers\Backend\MediaRelationController;
 use App\Http\Controllers\Backend\MigrationController;
 use App\Http\Controllers\Backend\NewsletterSubscriberController;
 use App\Http\Controllers\Backend\NotificationController;
-use App\Http\Controllers\backend\PageController;
+use App\Http\Controllers\Backend\PageController;
 use App\Http\Controllers\Backend\FormController;
 use App\Http\Controllers\Backend\PageSectionController;
 use App\Http\Controllers\Backend\PageTemplateController;
@@ -59,7 +59,7 @@ use App\Http\Controllers\Backend\SystemLogController;
 use App\Http\Controllers\Backend\TagController;
 use App\Http\Controllers\Backend\TechnologyCategoryController;
 use App\Http\Controllers\Backend\TechnologyController;
-use App\Http\Controllers\backend\TemplateController;
+use App\Http\Controllers\Backend\TemplateController;
 use App\Http\Controllers\Backend\TestimonialController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\UserPermissionController;
@@ -172,7 +172,7 @@ Route::middleware('admin.auth')->group(function () {
         });
 
 
-       
+
     });
 
     // Authors Routes
