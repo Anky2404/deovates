@@ -378,7 +378,6 @@
                 $pagesMenuOpen = Helper::isActive([
                     'admin.pages.*',
                     'admin.pages.forms.*',
-                    'admin.pages.contents.*',
                     'admin.sections.*',
                     // 'admin.templates.*',
                 ]);
@@ -404,13 +403,6 @@
                             <div>Forms</div>
                         </a>
                     </li>
-
-                    <li class="menu-item {{ Helper::isActive(['admin.pages.contents.*']) }}">
-                        <a href="{{ route('admin.pages.contents.index') }}" class="menu-link">
-                            <div>Contents</div>
-                        </a>
-                    </li>
-
 
                     <li class="menu-item {{ Helper::isActive(['admin.sections.*']) }}">
                         <a href="{{ route('admin.sections.index') }}" class="menu-link">

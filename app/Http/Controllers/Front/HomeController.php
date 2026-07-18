@@ -8,6 +8,7 @@ use App\Models\Blog;
 use App\Models\CaseStudy;
 use App\Models\FaqCategory;
 use App\Models\Industry;
+use App\Models\Page;
 use App\Models\Portfolio;
 use App\Models\PortfolioCategory;
 use App\Models\Service;
@@ -84,6 +85,15 @@ public function index()
             ->take(6)
             ->get();
 
+        $homePage = Page::published()
+            ->with(['sections' => fn ($q) => $q->wherePivot('is_active', true)->with('form.fields')])
+            ->where('slug', 'home')
+            ->first();
+
+        $sectionContents = $homePage
+            ? $homePage->sectionContents()->pluck('data', 'section_id')->toArray()
+            : [];
+
         return view($this->prefix . $this->folder . 'index', compact(
             'data',
             'category',
@@ -94,7 +104,9 @@ public function index()
             'casestudies',
             'portfolios',
             'portfolio_categories',
-            'testimonials'
+            'testimonials',
+            'homePage',
+            'sectionContents'
         ));
 
     } catch (\Throwable $e) {

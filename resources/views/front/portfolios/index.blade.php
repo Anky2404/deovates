@@ -33,8 +33,15 @@
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>{{ \App\Helper::sectionTitle('portfolios', 'listing', 'title', "Work We're Proud Of") }}</h3>
-                <p>{{ \App\Helper::sectionTitle('portfolios', 'listing', 'subtitle') }}</p>
+                @php
+                    $portfoliosListingSection = $page?->sections->firstWhere('slug', 'portfolios-page-listing-section');
+                    $portfoliosListingContent = $portfoliosListingSection ? $sectionContents[$portfoliosListingSection->id] ?? [] : [];
+                @endphp
+                @include('front.partials._section_heading', [
+                    'content' => $portfoliosListingContent,
+                    'defaultTitle' => \App\Helper::sectionTitle('portfolios', 'listing', 'title', "Work We're Proud Of"),
+                    'defaultSubtitle' => \App\Helper::sectionTitle('portfolios', 'listing', 'subtitle'),
+                ])
             </div>
 
             @if ($categories->isNotEmpty())

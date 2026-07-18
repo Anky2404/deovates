@@ -59,15 +59,20 @@
 
     <!-- Start Who We Are Section -->
     <!-- Who We Are -->
-    <section class="py-5">
+    @php
+        $whoWeAreSection = $aboutPage?->sections->firstWhere('slug', 'about-section-one');
+        $whoWeAreContent = $whoWeAreSection ? $sectionContents[$whoWeAreSection->id] ?? [] : [];
+        $whoWeAreStat = $data['growth_numbers']['items'][0] ?? null;
+    @endphp
+    <section class="py-5 about_section_one" id="about_section_one">
         <div class="container py-5">
             <div class="row g-5 align-items-center">
                 <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
                     <div class="position-relative" style="max-width:470px;">
-                        <img src="{{ asset('assets/front/img/about.png') }}" class="about-img" alt="Inside {{ config('constants.BUSINESS.name') }}">
+                        <img src="{{ !empty($whoWeAreContent['side_image']) ? asset('storage/' . $whoWeAreContent['side_image']) : asset('assets/front/img/about.png') }}"
+                            class="about-img" alt="Inside {{ config('constants.BUSINESS.name') }}">
 
-                        @php($stat = $data['growth_numbers']['items'][0] ?? null)
-                        @if ($stat)
+                        @if (!empty($whoWeAreContent['badge_count']))
                             <div class="d-flex align-items-center gap-3 p-3 rounded-4"
                                 style="position:absolute; left:-24px; bottom:-24px; background:#fff; box-shadow:0 18px 40px rgba(11,28,57,.18); max-width:260px;">
                                 <div class="simple-process-number flex-shrink-0"
@@ -75,8 +80,20 @@
                                     <i class="fas fa-trophy"></i>
                                 </div>
                                 <div>
-                                    <div class="h4 mb-0" style="color:#f85603;font-weight:700;">{{ $stat['count'] }}+</div>
-                                    <div class="small text-muted">{{ $stat['label'] }}</div>
+                                    <div class="h4 mb-0" style="color:#f85603;font-weight:700;">{{ $whoWeAreContent['badge_count'] }}+</div>
+                                    <div class="small text-muted">{{ $whoWeAreContent['badge_label'] ?? '' }}</div>
+                                </div>
+                            </div>
+                        @elseif ($whoWeAreStat)
+                            <div class="d-flex align-items-center gap-3 p-3 rounded-4"
+                                style="position:absolute; left:-24px; bottom:-24px; background:#fff; box-shadow:0 18px 40px rgba(11,28,57,.18); max-width:260px;">
+                                <div class="simple-process-number flex-shrink-0"
+                                    style="width:54px;height:54px;font-size:18px;margin:0;">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div>
+                                    <div class="h4 mb-0" style="color:#f85603;font-weight:700;">{{ $whoWeAreStat['count'] }}+</div>
+                                    <div class="small text-muted">{{ $whoWeAreStat['label'] }}</div>
                                 </div>
                             </div>
                         @endif
@@ -84,10 +101,19 @@
                 </div>
                 <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
                     <div class="section-title st-start">
-                        <h3>{{ $data['who_we_are']['title'] }}</h3>
-                        <p>{{ $data['who_we_are']['subtitle'] }}</p>
+                        @if (!empty($whoWeAreContent['section_label']))
+                            <span class="sub-title d-block fw-semibold" style="color:#ff5f13;">{{ $whoWeAreContent['section_label'] }}</span>
+                        @endif
+                        <h3>{{ $whoWeAreContent['section_title'] ?? $data['who_we_are']['title'] }}</h3>
+                        <p>{{ $whoWeAreContent['section_subtitle'] ?? $data['who_we_are']['subtitle'] }}</p>
                     </div>
-                    <div class="fs-6">{!! $data['who_we_are']['description'] !!}</div>
+                    <div class="fs-6">
+                        @if (!empty($whoWeAreContent['description']))
+                            {!! $whoWeAreContent['description'] !!}
+                        @else
+                            {!! $data['who_we_are']['description'] !!}
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,27 +122,46 @@
 
     <!-- Start Vision & Mission Section -->
     <!-- Vision & Mission -->
-    <section class="vm-area py-5" style="background-image:url('{{ asset('assets/front/img/funfact.png') }}');">
+    @php
+        $vmSection = $aboutPage?->sections->firstWhere('slug', 'vision-mission-section');
+        $vmContent = $vmSection ? $sectionContents[$vmSection->id] ?? [] : [];
+        $vmItems = $vmContent['group_data']['vm_items'] ?? [];
+
+        if (empty($vmItems)) {
+            $vmItems = collect(['vision', 'mission'])->map(fn ($key) => [
+                'item_icon' => $data['vision_mission'][$key]['icon'] ?? null,
+                'item_title' => $data['vision_mission'][$key]['title'] ?? '',
+                'item_text' => $data['vision_mission'][$key]['text'] ?? '',
+                'item_stat_number' => $data['vision_mission'][$key]['stat_number'] ?? '',
+                'item_stat_label' => $data['vision_mission'][$key]['stat_label'] ?? '',
+                '_uses_icon_map' => true,
+            ])->all();
+        }
+    @endphp
+    <section class="vm-area py-5" style="background-image:url('{{ asset('assets/front/img/funfact.png') }}');" id="vision_missin">
         <div class="vm-overlay"></div>
         <div class="container py-5 position-relative">
             <div class="section-title st-center st-light">
-                <h3>{{ $data['vision_mission']['title'] }}</h3>
-                <p>{{ $data['vision_mission']['subtitle']['subtitle'] }}</p>
+                @if (!empty($vmContent['section_label']))
+                    <span class="sub-title d-block fw-semibold" style="color:#ff8a3d;">{{ $vmContent['section_label'] }}</span>
+                @endif
+                <h3>{{ $vmContent['section_title'] ?? $data['vision_mission']['title'] }}</h3>
+                <p>{{ $vmContent['section_subtitle'] ?? $data['vision_mission']['subtitle']['subtitle'] }}</p>
             </div>
             <div class="row g-4 justify-content-center">
-                @foreach (['vision', 'mission'] as $key)
-                    @php($item = $data['vision_mission'][$key])
+                @foreach ($vmItems as $item)
                     <div class="col-md-6 col-lg-5 wow fadeInUp" data-wow-delay="{{ $loop->iteration * 0.15 }}s">
                         <div class="vm-glass-card h-100">
                             <div class="vm-glass-shine"></div>
                             <div class="text-center py-4 position-relative">
-                                <div class="simple-process-number mx-auto"><i class="{{ $icon($item['icon']) }}"></i>
+                                <div class="simple-process-number mx-auto">
+                                    <i class="{{ !empty($item['_uses_icon_map']) ? $icon($item['item_icon']) : ($item['item_icon'] ?: 'fas fa-star') }}"></i>
                                 </div>
-                                <h4>{{ $item['title'] }}</h4>
-                                <p>{{ $item['text'] }}</p>
+                                <h4>{{ $item['item_title'] ?? '' }}</h4>
+                                <p>{{ $item['item_text'] ?? '' }}</p>
                                 <div class="mt-3">
-                                    <span class="h3" style="color:#ff8a3d;font-weight:700;">{{ $item['stat_number'] }}</span>
-                                    <div class="small text-uppercase" style="color:rgba(255,255,255,.75);">{{ $item['stat_label'] }}</div>
+                                    <span class="h3" style="color:#ff8a3d;font-weight:700;">{{ $item['item_stat_number'] ?? '' }}</span>
+                                    <div class="small text-uppercase" style="color:rgba(255,255,255,.75);">{{ $item['item_stat_label'] ?? '' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -314,11 +359,32 @@
 
     <!-- Start Founder Section -->
     <!-- Founder -->
-    <section class="py-5" style="background:#f5f8fd;">
+    @php
+        $founderSection = $aboutPage?->sections->firstWhere('slug', 'founder-section');
+        $founderContent = $founderSection ? $sectionContents[$founderSection->id] ?? [] : [];
+        $founderSocial = $founderContent['group_data']['founder_social'] ?? [];
+        $founderExpertise = $founderContent['group_data']['founder_expertise'] ?? [];
+
+        if (empty($founderSocial)) {
+            $founderSocial = collect($data['founder']['social'] ?? [])->map(fn ($s) => [
+                'social_icon' => $s['icon'] ?? '', 'social_link' => $s['link'] ?? '#',
+            ])->all();
+        }
+
+        if (empty($founderExpertise)) {
+            $founderExpertise = collect($data['founder']['expertise'] ?? [])->map(fn ($s) => [
+                'skill_label' => $s['label'] ?? '', 'skill_percent' => $s['percent'] ?? 0,
+            ])->all();
+        }
+    @endphp
+    <section class="py-5 founder" style="background:#f5f8fd;">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>{{ $data['founder']['section_title'] }}</h3>
-                <p>{{ $data['founder']['subtitle'] }}</p>
+                @if (!empty($founderContent['section_label']))
+                    <span class="sub-title d-block fw-semibold" style="color:#ff5f13;">{{ $founderContent['section_label'] }}</span>
+                @endif
+                <h3>{{ $founderContent['section_title'] ?? $data['founder']['section_title'] }}</h3>
+                <p>{{ $founderContent['section_subtitle'] ?? $data['founder']['subtitle'] }}</p>
             </div>
             <div class="row g-5 align-items-center justify-content-center">
                 <div class="col-lg-3 wow fadeInLeft" data-wow-delay="0.1s">
@@ -330,17 +396,17 @@
                                     <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                 </div>
                                 <div class="founder-phone-photo">
-                                    <img src="{{ asset('assets/front/img/team-1.jpg') }}"
-                                        alt="{{ $data['founder']['name'] }}">
+                                    <img src="{{ !empty($founderContent['founder_photo']) ? asset('storage/' . $founderContent['founder_photo']) : asset('assets/front/img/team-1.jpg') }}"
+                                        alt="{{ $founderContent['founder_name'] ?? $data['founder']['name'] }}">
                                 </div>
                                 <div class="founder-phone-info">
-                                    <h4>{{ $data['founder']['name'] }}</h4>
-                                    <p>{{ $data['founder']['role'] }}</p>
+                                    <h4>{{ $founderContent['founder_name'] ?? $data['founder']['name'] }}</h4>
+                                    <p>{{ $founderContent['founder_role'] ?? $data['founder']['role'] }}</p>
                                     <div class="founder-phone-social">
-                                        @foreach ($data['founder']['social'] as $social)
-                                            <a href="{{ $social['link'] }}" target="_blank"
+                                        @foreach ($founderSocial as $social)
+                                            <a href="{{ $social['social_link'] ?? '#' }}" target="_blank"
                                                 rel="noopener noreferrer">
-                                                <i class="fab fa-{{ $social['icon'] }}"></i>
+                                                <i class="fab fa-{{ $social['social_icon'] ?? '' }}"></i>
                                             </a>
                                         @endforeach
                                     </div>
@@ -367,21 +433,23 @@
                                 </div>
 
                                 <div class="founder-tablet-body">
-                                     <p></p></p>
-                                    @foreach ($data['founder']['bio'] as $para)
-                                       <span>{{ $para }}</span>
-                                    @endforeach
-                                    </p>
+                                    @if (!empty($founderContent['founder_bio']))
+                                        {!! $founderContent['founder_bio'] !!}
+                                    @else
+                                        @foreach ($data['founder']['bio'] as $para)
+                                            <p>{{ $para }}</p>
+                                        @endforeach
+                                    @endif
 
-                                    @foreach ($data['founder']['expertise'] as $skill)
+                                    @foreach ($founderExpertise as $skill)
                                         <div class="mb-3">
                                             <div class="d-flex justify-content-between mb-1">
-                                                <span style="color:#073965;font-weight:600;">{{ $skill['label'] }}</span>
-                                                <span class="text-muted">{{ $skill['percent'] }}%</span>
+                                                <span style="color:#073965;font-weight:600;">{{ $skill['skill_label'] ?? '' }}</span>
+                                                <span class="text-muted">{{ $skill['skill_percent'] ?? 0 }}%</span>
                                             </div>
                                             <div class="rounded-pill overflow-hidden" style="background:#e3e8f0;height:8px;">
                                                 <div class="rounded-pill h-100"
-                                                    style="width:{{ $skill['percent'] }}%;background:linear-gradient(90deg,#073965,#f85603);">
+                                                    style="width:{{ $skill['skill_percent'] ?? 0 }}%;background:linear-gradient(90deg,#073965,#f85603);">
                                                 </div>
                                             </div>
                                         </div>
@@ -398,17 +466,30 @@
 
     <!-- Start Office & Culture Section -->
     <!-- Office & Culture -->
-    <section class="vm-area py-5" style="background-image:url('{{ asset('assets/front/img/funfact.png') }}');">
+    @php
+        $officeSection = $aboutPage?->sections->firstWhere('slug', 'office-area-section');
+        $officeAreaContent = $officeSection ? $sectionContents[$officeSection->id] ?? [] : [];
+        $officeCultureImages = $officeAreaContent['culture_images'] ?? [];
+
+        if (empty($officeCultureImages)) {
+            $officeCultureImages = collect(['why-2.png', 'why-4.png', 'why-3.png', 'why-1.png'])->map(fn ($img) => [
+                'path' => 'assets/front/img/' . $img, 'alt' => config('constants.BRAND_NAME') . ' culture', 'external' => true,
+            ])->all();
+        }
+    @endphp
+    <section class="vm-area py-5 office_area" id="office_area" style="background-image:url('{{ asset('assets/front/img/funfact.png') }}');">
         <div class="vm-overlay"></div>
         <div class="container py-5 position-relative">
             <div class="row g-5 align-items-center">
                 <div class="col-lg-5 wow fadeInLeft" data-wow-delay="0.1s">
                     <div class="office-culture-slide-frame mx-auto">
                         <div class="office-culture-slider owl-carousel">
-                            <div><img src="{{ asset('assets/front/img/why-2.png') }}" alt="{{ config('constants.BRAND_NAME') }} team culture"></div>
-                            <div><img src="{{ asset('assets/front/img/why-4.png') }}" alt="{{ config('constants.BRAND_NAME') }} office"></div>
-                            <div><img src="{{ asset('assets/front/img/why-3.png') }}" alt="{{ config('constants.BRAND_NAME') }} at work"></div>
-                            <div><img src="{{ asset('assets/front/img/why-1.png') }}" alt="{{ config('constants.BRAND_NAME') }} strategy"></div>
+                            @foreach ($officeCultureImages as $img)
+                                <div>
+                                    <img src="{{ !empty($img['external']) ? asset($img['path']) : asset('storage/' . ($img['path'] ?? '')) }}"
+                                        alt="{{ $img['alt'] ?? '' }}">
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -417,12 +498,19 @@
                         <div class="vm-glass-shine"></div>
                         <div class="position-relative">
                             <div class="section-title st-start st-light mb-4">
-                                <h3>{{ $data['office_culture']['title'] }}</h3>
-                                <p>{{ $data['office_culture']['subtitle'] }}</p>
+                                @if (!empty($officeAreaContent['section_label']))
+                                    <span class="sub-title d-block fw-semibold" style="color:#ff8a3d;">{{ $officeAreaContent['section_label'] }}</span>
+                                @endif
+                                <h3>{{ $officeAreaContent['section_title'] ?? $data['office_culture']['title'] }}</h3>
+                                <p>{{ $officeAreaContent['section_subtitle'] ?? $data['office_culture']['subtitle'] }}</p>
                             </div>
-                            @foreach ($data['office_culture']['content'] as $para)
-                                <p style="color:rgba(255,255,255,.78);">{{ $para }}</p>
-                            @endforeach
+                            @if (!empty($officeAreaContent['content']))
+                                <div style="color:rgba(255,255,255,.78);">{!! $officeAreaContent['content'] !!}</div>
+                            @else
+                                @foreach ($data['office_culture']['content'] as $para)
+                                    <p style="color:rgba(255,255,255,.78);">{{ $para }}</p>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -431,26 +519,7 @@
     </section>
     <!-- End Office & Culture Section -->
 
-    <!-- Process -->
-    {{-- <section class="py-5" style="background:#f5f8fd;">
-        <div class="container py-5">
-            <div class="section-title st-center">
-                <h3>{{ $data['process']['title'] }}</h3>
-                <p>{{ $data['process']['subtitle'] }}</p>
-            </div>
-            <div class="row g-4">
-                @foreach ($data['process']['steps'] as $step)
-                    <div class="col-md-6 col-lg-3 wow fadeInUp" data-wow-delay="{{ 0.1 * $loop->iteration }}s">
-                        <div class="simple-process-item">
-                            <div class="simple-process-number">{{ $step['step'] }}</div>
-                            <h4>{{ $step['title'] }}</h4>
-                            <p>{{ $step['description'] }}</p>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section> --}}
+
 
     <!-- Start Key Advantages Section -->
     <!-- Key Advantages -->

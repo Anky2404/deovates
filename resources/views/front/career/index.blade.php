@@ -5,6 +5,14 @@
 @section('meta_keywords', config('constants.PAGE_SEO.career.meta_keywords'))
 @section('content')
 
+    @php
+        $careerHeroSection = $page?->sections->firstWhere('slug', 'career-hero-section');
+        $careerHeroContent = $careerHeroSection ? $sectionContents[$careerHeroSection->id] ?? [] : [];
+
+        $careerListingSection = $page?->sections->firstWhere('slug', 'career-listing-section');
+        $careerListingContent = $careerListingSection ? $sectionContents[$careerListingSection->id] ?? [] : [];
+    @endphp
+
     <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
@@ -14,7 +22,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="hero-cap pt-100">
-                            <h2>Careers at {{ config('constants.BRAND_NAME') }}</h2>
+                            <h2>{{ $careerHeroContent['section_title'] ?? ('Careers at ' . config('constants.BRAND_NAME')) }}</h2>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ route('front.home.index') }}">Home</a></li>
@@ -33,8 +41,11 @@
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>{{ \App\Helper::sectionTitle('career', 'listing', 'title', 'Join Our Team') }}</h3>
-                <p>{{ \App\Helper::sectionTitle('career', 'listing', 'subtitle') }}</p>
+                @include('front.partials._section_heading', [
+                    'content' => $careerListingContent,
+                    'defaultTitle' => \App\Helper::sectionTitle('career', 'listing', 'title', 'Join Our Team'),
+                    'defaultSubtitle' => \App\Helper::sectionTitle('career', 'listing', 'subtitle'),
+                ])
             </div>
 
             @if ($careers->isEmpty())
@@ -214,11 +225,18 @@
 
     <!-- Start General Application Section -->
     <!-- General application section -->
+    @php
+        $generalAppSection = $page?->sections->firstWhere('slug', 'career-general-application-section');
+        $generalAppContent = $generalAppSection ? $sectionContents[$generalAppSection->id] ?? [] : [];
+    @endphp
     <section class="py-5" style="background:#f5f8fd;">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>{{ \App\Helper::sectionTitle('career', 'general_application', 'title', "Don't See Your Role?") }}</h3>
-                <p>{{ \App\Helper::sectionTitle('career', 'general_application', 'subtitle') }}</p>
+                @include('front.partials._section_heading', [
+                    'content' => $generalAppContent,
+                    'defaultTitle' => \App\Helper::sectionTitle('career', 'general_application', 'title', "Don't See Your Role?"),
+                    'defaultSubtitle' => \App\Helper::sectionTitle('career', 'general_application', 'subtitle'),
+                ])
             </div>
 
             <!-- Desktop: application form inside a browser/computer frame -->

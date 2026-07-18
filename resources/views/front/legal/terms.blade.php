@@ -31,13 +31,19 @@
 
     <!-- Start Terms & Conditions Content Section -->
     @php
-        $sections = [
-            ['id' => 'use', 'icon' => 'fas fa-globe', 'title' => 'Use of Our Website', 'body' => 'You agree to use our website only for lawful purposes and in a way that does not infringe the rights of, or restrict or inhibit the use of, this website by any third party.'],
-            ['id' => 'services', 'icon' => 'fas fa-briefcase', 'title' => 'Services & Engagements', 'body' => 'Specific scope, pricing, timelines, and deliverables for any project will be agreed separately in a proposal or contract before work begins.'],
-            ['id' => 'ip', 'icon' => 'fas fa-copyright', 'title' => 'Intellectual Property', 'body' => 'Unless otherwise agreed in writing, all content on this website — including text, graphics, logos, and images — is the property of ' . config('constants.BUSINESS.name') . ' and may not be used without permission.'],
-            ['id' => 'liability', 'icon' => 'fas fa-shield-alt', 'title' => 'Limitation of Liability', 'body' => config('constants.BUSINESS.name') . ' will not be liable for any indirect, incidental, or consequential damages arising from the use of our website or services.'],
-            ['id' => 'changes', 'icon' => 'fas fa-sync-alt', 'title' => 'Changes to These Terms', 'body' => 'We may update these terms from time to time. Continued use of our website after changes constitutes acceptance of the updated terms.'],
-        ];
+        $legalSection = $page?->sections->firstWhere('slug', 'legal-terms-content-section');
+        $legalContent = $legalSection ? $sectionContents[$legalSection->id] ?? [] : [];
+        $sections = $legalContent['group_data']['legal_items'] ?? [];
+
+        if (empty($sections)) {
+            $sections = collect([
+                ['id' => 'use', 'icon' => 'fas fa-globe', 'title' => 'Use of Our Website', 'body' => 'You agree to use our website only for lawful purposes and in a way that does not infringe the rights of, or restrict or inhibit the use of, this website by any third party.'],
+                ['id' => 'services', 'icon' => 'fas fa-briefcase', 'title' => 'Services & Engagements', 'body' => 'Specific scope, pricing, timelines, and deliverables for any project will be agreed separately in a proposal or contract before work begins.'],
+                ['id' => 'ip', 'icon' => 'fas fa-copyright', 'title' => 'Intellectual Property', 'body' => 'Unless otherwise agreed in writing, all content on this website — including text, graphics, logos, and images — is the property of ' . config('constants.BUSINESS.name') . ' and may not be used without permission.'],
+                ['id' => 'liability', 'icon' => 'fas fa-shield-alt', 'title' => 'Limitation of Liability', 'body' => config('constants.BUSINESS.name') . ' will not be liable for any indirect, incidental, or consequential damages arising from the use of our website or services.'],
+                ['id' => 'changes', 'icon' => 'fas fa-sync-alt', 'title' => 'Changes to These Terms', 'body' => 'We may update these terms from time to time. Continued use of our website after changes constitutes acceptance of the updated terms.'],
+            ])->map(fn ($s) => ['item_icon' => $s['icon'], 'item_title' => $s['title'], 'item_body' => $s['body']])->all();
+        }
     @endphp
 
     <section class="py-5">
@@ -50,8 +56,8 @@
 
                         <h5>On This Page</h5>
                         <ul class="legal-toc">
-                            @foreach ($sections as $section)
-                                <li><a href="#{{ $section['id'] }}"><i class="{{ $section['icon'] }}"></i>{{ $section['title'] }}</a></li>
+                            @foreach ($sections as $index => $section)
+                                <li><a href="#legal-item-{{ $index }}"><i class="{{ $section['item_icon'] ?? '' }}"></i>{{ $section['item_title'] ?? '' }}</a></li>
                             @endforeach
                             <li><a href="#contact"><i class="fas fa-envelope"></i>Contact Us</a></li>
                         </ul>
@@ -60,22 +66,28 @@
                     <div class="legal-help-card wow fadeInLeft" data-wow-delay="0.2s">
                         <i class="fas fa-question-circle"></i>
                         <h6>Have Questions?</h6>
-                        <p>{{ \App\Helper::sectionTitle('legal_terms', 'intro', 'subtitle', "We're happy to walk you through any part of these terms.") }}</p>
+                        <p>{{ $legalContent['help_card_subtitle'] ?? \App\Helper::sectionTitle('legal_terms', 'intro', 'subtitle', "We're happy to walk you through any part of these terms.") }}</p>
                         <a href="{{ route('front.contact.index') }}" class="btn btn-main w-100">Contact Us</a>
                     </div>
                 </div>
 
                 <div class="col-lg-8">
-                    <p class="legal-intro wow fadeInUp" data-wow-delay="0.1s">These Terms &amp; Conditions govern
-                        your use of the {{ config('constants.BUSINESS.name') }} website and services. By using our website or engaging our
-                        services, you agree to these terms.</p>
+                    <p class="legal-intro wow fadeInUp" data-wow-delay="0.1s">
+                        @if (!empty($legalContent['legal_intro']))
+                            {{ $legalContent['legal_intro'] }}
+                        @else
+                            These Terms &amp; Conditions govern
+                            your use of the {{ config('constants.BUSINESS.name') }} website and services. By using our website or engaging our
+                            services, you agree to these terms.
+                        @endif
+                    </p>
 
-                    @foreach ($sections as $section)
-                        <div id="{{ $section['id'] }}" class="legal-section wow fadeInUp" data-wow-delay="0.1s">
-                            <div class="legal-section-icon"><i class="{{ $section['icon'] }}"></i></div>
+                    @foreach ($sections as $index => $section)
+                        <div id="legal-item-{{ $index }}" class="legal-section wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="legal-section-icon"><i class="{{ $section['item_icon'] ?? '' }}"></i></div>
                             <div>
-                                <h4>{{ $section['title'] }}</h4>
-                                <p>{{ $section['body'] }}</p>
+                                <h4>{{ $section['item_title'] ?? '' }}</h4>
+                                <p>{{ $section['item_body'] ?? '' }}</p>
                             </div>
                         </div>
                     @endforeach
@@ -84,8 +96,14 @@
                         <div class="legal-section-icon"><i class="fas fa-envelope"></i></div>
                         <div>
                             <h4>Contact Us</h4>
-                            <p>If you have questions about these Terms &amp; Conditions, please
-                                <a href="{{ route('front.contact.index') }}">contact us</a>.</p>
+                            <p>
+                                @if (!empty($legalContent['contact_text']))
+                                    {{ $legalContent['contact_text'] }}
+                                @else
+                                    If you have questions about these Terms &amp; Conditions, please
+                                    <a href="{{ route('front.contact.index') }}">contact us</a>.
+                                @endif
+                            </p>
                         </div>
                     </div>
                 </div>

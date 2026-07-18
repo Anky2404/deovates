@@ -168,13 +168,23 @@
                 <i class="bx bx-info-circle"></i> Drag rows by the handle to control display order on the page.
             </div>
 
-            {{-- CONTENT PANELS (one per section, shown only while assigned above) --}}
+            {{-- CONTENT TABS + PANELS (one tab per assigned section; only the clicked section's form is shown) --}}
             @php
                 $assignedSectionIds = $page?->sections->pluck('id')->toArray() ?? [];
             @endphp
+
+            <div id="sectionContentTabs" class="d-flex flex-wrap gap-2 mb-3 {{ empty($assignedSectionIds) ? 'd-none' : '' }}">
+                @foreach ($page?->sections ?? [] as $section)
+                    <button type="button" class="btn btn-sm btn-outline-primary section-content-tab-btn"
+                        data-section-content-id="{{ $section->id }}">
+                        {{ $section->name }}
+                    </button>
+                @endforeach
+            </div>
+
             <div id="sectionContentPanels">
                 @foreach ($sections as $section)
-                    <div class="section-content-panel mt-3 {{ in_array($section->id, $assignedSectionIds) ? '' : 'd-none' }}"
+                    <div class="section-content-panel mt-3 d-none"
                          data-section-content-id="{{ $section->id }}">
                         <div class="card">
                             <div class="card-header bg-label-info py-2">
@@ -225,6 +235,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const picker = document.getElementById('sectionPicker');
     const addBtn = document.getElementById('addSectionBtn');
     const noSectionsMessage = document.getElementById('noSectionsMessage');
+    const tabsBar = document.getElementById('sectionContentTabs');
 
     if (!list || !picker || !addBtn) {
         return;
@@ -298,7 +309,8 @@ document.addEventListener('DOMContentLoaded', function () {
         disablePickerOption(id);
         picker.value = '';
         toggleEmptyMessage();
-        showSectionContentPanel(id);
+        addSectionTab(id, name);
+        activateSectionTab(id);
     });
 
     list.addEventListener('click', function (event) {
@@ -314,17 +326,72 @@ document.addEventListener('DOMContentLoaded', function () {
         row.remove();
         enablePickerOption(id);
         toggleEmptyMessage();
-        hideSectionContentPanel(id);
+        removeSectionTab(id);
     });
 
-    function showSectionContentPanel(id) {
-        const panel = document.querySelector(`.section-content-panel[data-section-content-id="${id}"]`);
-        if (panel) panel.classList.remove('d-none');
+    function hideAllSectionPanels() {
+        document.querySelectorAll('.section-content-panel').forEach(function (panel) {
+            panel.classList.add('d-none');
+        });
+        document.querySelectorAll('.section-content-tab-btn').forEach(function (btn) {
+            btn.classList.remove('btn-primary', 'active');
+            btn.classList.add('btn-outline-primary');
+        });
     }
 
-    function hideSectionContentPanel(id) {
+    function activateSectionTab(id) {
+        hideAllSectionPanels();
+
+        const panel = document.querySelector(`.section-content-panel[data-section-content-id="${id}"]`);
+        if (panel) panel.classList.remove('d-none');
+
+        const btn = tabsBar
+            ? tabsBar.querySelector(`.section-content-tab-btn[data-section-content-id="${id}"]`)
+            : null;
+        if (btn) {
+            btn.classList.remove('btn-outline-primary');
+            btn.classList.add('btn-primary', 'active');
+        }
+    }
+
+    function addSectionTab(id, name) {
+        if (!tabsBar) return;
+
+        if (tabsBar.querySelector(`.section-content-tab-btn[data-section-content-id="${id}"]`)) {
+            return;
+        }
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn btn-sm btn-outline-primary section-content-tab-btn';
+        btn.dataset.sectionContentId = id;
+        btn.textContent = name;
+
+        tabsBar.appendChild(btn);
+        tabsBar.classList.remove('d-none');
+    }
+
+    function removeSectionTab(id) {
+        if (!tabsBar) return;
+
+        const btn = tabsBar.querySelector(`.section-content-tab-btn[data-section-content-id="${id}"]`);
+        if (btn) btn.remove();
+
         const panel = document.querySelector(`.section-content-panel[data-section-content-id="${id}"]`);
         if (panel) panel.classList.add('d-none');
+
+        if (!tabsBar.children.length) {
+            tabsBar.classList.add('d-none');
+        }
+    }
+
+    if (tabsBar) {
+        tabsBar.addEventListener('click', function (event) {
+            const btn = event.target.closest('.section-content-tab-btn');
+            if (!btn) return;
+
+            activateSectionTab(btn.dataset.sectionContentId);
+        });
     }
 
     toggleEmptyMessage();

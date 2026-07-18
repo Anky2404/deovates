@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Page extends Model
@@ -65,14 +64,6 @@ class Page extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function forms(): BelongsToMany
-    {
-        return $this->belongsToMany(Form::class, 'page_sections', 'page_id', 'form_id')
-            ->withPivot('is_active')
-            ->withTimestamps()
-            ->with('fields');
-    }
-
     public function sections(): BelongsToMany
     {
         return $this->belongsToMany(Section::class, 'page_section_links')
@@ -80,11 +71,6 @@ class Page extends Model
             ->withTimestamps()
             ->orderByPivot('display_order');
     }
-
-    public function content(): HasOne
-{
-    return $this->hasOne(PageContent::class);
-}
 
     public function sectionContents(): HasMany
     {

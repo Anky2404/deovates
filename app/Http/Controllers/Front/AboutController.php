@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\FaqCategory;
+use App\Models\Page;
 use App\Models\Testimonial;
 
 class AboutController extends Controller
@@ -27,6 +28,15 @@ class AboutController extends Controller
             ->latest('id')
             ->first();
 
-        return view($this->prefix . $this->folder . 'index', compact('data', 'testimonials', 'category'));
+        $aboutPage = Page::published()
+            ->with(['sections' => fn ($q) => $q->wherePivot('is_active', true)->with('form.fields')])
+            ->where('slug', 'about')
+            ->first();
+
+        $sectionContents = $aboutPage
+            ? $aboutPage->sectionContents()->pluck('data', 'section_id')->toArray()
+            : [];
+
+        return view($this->prefix . $this->folder . 'index', compact('data', 'testimonials', 'category', 'aboutPage', 'sectionContents'));
     }
 }

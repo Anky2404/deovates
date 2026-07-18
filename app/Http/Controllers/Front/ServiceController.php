@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Front;
 
 use App\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Front\Concerns\LoadsPageSections;
 use App\Models\FaqCategory;
 use App\Models\Service;
 use App\Models\Testimonial;
 
 class ServiceController extends Controller
 {
+    use LoadsPageSections;
+
     private $prefix = 'front.';
     private $folder = 'services.';
 
@@ -34,7 +37,9 @@ class ServiceController extends Controller
             ->latest('id')
             ->first();
 
-        return view($this->prefix . $this->folder . 'index', compact('data', 'services', 'testimonials', 'category'));
+        [$page, $sectionContents] = $this->loadPageSections('services');
+
+        return view($this->prefix . $this->folder . 'index', compact('data', 'services', 'testimonials', 'category', 'page', 'sectionContents'));
     }
 
     public function details($slug)

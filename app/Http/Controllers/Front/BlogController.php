@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Front\Concerns\LoadsPageSections;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\FaqCategory;
@@ -10,6 +11,8 @@ use App\Models\Testimonial;
 
 class BlogController extends Controller
 {
+    use LoadsPageSections;
+
     private $prefix = 'front.';
     private $folder = 'blog.';
 
@@ -36,7 +39,9 @@ class BlogController extends Controller
             ->latest('id')
             ->first();
 
-        return view($this->prefix . $this->folder . 'index', compact('categories', 'blogs', 'testimonials', 'category'));
+        [$page, $sectionContents] = $this->loadPageSections('blog');
+
+        return view($this->prefix . $this->folder . 'index', compact('categories', 'blogs', 'testimonials', 'category', 'page', 'sectionContents'));
     }
 
     public function details($slug)

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Front\Concerns\LoadsPageSections;
 use App\Models\FaqCategory;
 use App\Models\Testimonial;
 
 class TestimonialController extends Controller
 {
+    use LoadsPageSections;
+
     public function index()
     {
         $testimonials = Testimonial::active()
@@ -21,6 +24,8 @@ class TestimonialController extends Controller
             ->latest('id')
             ->first();
 
-        return view('front.testimonials.index', compact('testimonials', 'category'));
+        [$page, $sectionContents] = $this->loadPageSections('testimonials');
+
+        return view('front.testimonials.index', compact('testimonials', 'category', 'page', 'sectionContents'));
     }
 }

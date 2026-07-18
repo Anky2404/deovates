@@ -33,8 +33,15 @@
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>{{ \App\Helper::sectionTitle('alliances', 'listing', 'title', 'Businesses We Work With') }}</h3>
-                <p>{{ \App\Helper::sectionTitle('alliances', 'listing', 'subtitle') }}</p>
+                @php
+                    $alliancesListingSection = $page?->sections->firstWhere('slug', 'alliances-page-listing-section');
+                    $alliancesListingContent = $alliancesListingSection ? $sectionContents[$alliancesListingSection->id] ?? [] : [];
+                @endphp
+                @include('front.partials._section_heading', [
+                    'content' => $alliancesListingContent,
+                    'defaultTitle' => \App\Helper::sectionTitle('alliances', 'listing', 'title', 'Businesses We Work With'),
+                    'defaultSubtitle' => \App\Helper::sectionTitle('alliances', 'listing', 'subtitle'),
+                ])
             </div>
 
             @if ($partners->isEmpty())

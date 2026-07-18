@@ -26,7 +26,7 @@ class PageController extends Controller
 
     public function index(Request $request)
     {
-        $rows = Page::latest('id')->paginate($this->pagerecords)->withQueryString();
+        $rows = Page::orderBy('display_order')->orderBy('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Page::orderBy('display_order')->orderBy('id')->get();
 
         return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
@@ -60,9 +60,13 @@ class PageController extends Controller
 
     public function details(string $uuid)
     {
-        $page = Page::with(['template', 'content', 'forms'])->where('uuid', $uuid)->firstOrFail();
+        $page = Page::with(['template', 'sections' => fn ($q) => $q->with('form.fields')])
+            ->where('uuid', $uuid)
+            ->firstOrFail();
 
-        return view($this->prefix . $this->folder . 'details', compact('page'));
+        $sectionContents = $page->sectionContents()->pluck('data', 'section_id');
+
+        return view($this->prefix . $this->folder . 'details', compact('page', 'sectionContents'));
     }
 
     public function createoredit(?string $uuid = null)
@@ -292,10 +296,14 @@ class PageController extends Controller
                         );
                     }
 
+                    if ($this->isBlankInstance($instanceResult)) {
+                        continue;
+                    }
+
                     $instances[] = $instanceResult;
                 }
 
-                $result['group_data'][$groupKey] = $instances;
+                $result['group_data'][$groupKey] = array_values($instances);
                 continue;
             }
 
@@ -310,6 +318,28 @@ class PageController extends Controller
         }
 
         return $result;
+    }
+
+    // Treats a repeat-group row as blank when every field in it is null, an
+    // empty string, or an empty array, so it never overrides a section's
+    // static fallback content with a phantom row from an unfilled repeater.
+    private function isBlankInstance(array $instance): bool
+    {
+        foreach ($instance as $value) {
+            if (is_array($value)) {
+                if (! empty($value)) {
+                    return false;
+                }
+
+                continue;
+            }
+
+            if ($value !== null && $value !== '') {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function resolveFieldValue(Request $request, $field, string $dotPath, $oldValue, string $directory)

@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Front\Concerns\LoadsPageSections;
 use App\Models\FaqCategory;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Log;
 
 class FaqController extends Controller
 {
+    use LoadsPageSections;
+
     public function index()
     {
         try {
@@ -23,7 +26,9 @@ class FaqController extends Controller
                 ->take(6)
                 ->get();
 
-            return view('front.faq.index', compact('category', 'testimonials'));
+            [$page, $sectionContents] = $this->loadPageSections('faq');
+
+            return view('front.faq.index', compact('category', 'testimonials', 'page', 'sectionContents'));
         } catch (\Throwable $e) {
             Log::error('FAQ Page Error', [
                 'message' => $e->getMessage(),

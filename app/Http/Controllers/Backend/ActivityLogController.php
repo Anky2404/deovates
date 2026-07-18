@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class ActivityLogController extends Controller
@@ -72,4 +74,36 @@ class ActivityLogController extends Controller
         )
     );
 }
+
+    public function view(Request $request, $uuid)
+    {
+        $row = ActivityLog::with('user')->where('uuid', $uuid)->firstOrFail();
+
+        return view($this->prefix . $this->folder . 'view', compact('row'));
+    }
+
+    // Manual delete only, read-only log
+    public function destroy(Request $request, $uuid)
+    {
+        try {
+            DB::beginTransaction();
+
+            $row = ActivityLog::where('uuid', $uuid)->firstOrFail();
+            $row->delete();
+
+            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.activitylog'), [
+                'subject_type' => ActivityLog::class,
+                'subject_id' => $row->id,
+                'description' => 'Deleted activity log #' . $row->id . ' (' . $row->action . ').',
+            ]);
+
+            DB::commit();
+
+            return back()->with('success', 'Activity log deleted successfully.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('ActivityLog destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
 }

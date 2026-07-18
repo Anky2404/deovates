@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Front\Concerns\LoadsPageSections;
 use App\Models\ActivityLog;
 use App\Models\Enquiry;
 use Illuminate\Http\Request;
@@ -12,6 +13,8 @@ use Illuminate\Support\Str;
 
 class ContactController extends Controller
 {
+    use LoadsPageSections;
+
     private $prefix = 'front.';
     private $folder = 'contact.';
 
@@ -19,7 +22,9 @@ class ContactController extends Controller
     {
         $data = Helper::readJSONData($this->folder . 'json');
 
-        return view($this->prefix . $this->folder . 'index', compact('data'));
+        [$page, $sectionContents] = $this->loadPageSections('contact');
+
+        return view($this->prefix . $this->folder . 'index', compact('data', 'page', 'sectionContents'));
     }
 
     public function store(Request $request)

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Front\Concerns\LoadsPageSections;
 use App\Models\CaseStudy;
 use App\Models\CaseStudyCategory;
 
 class CaseStudyController extends Controller
 {
+    use LoadsPageSections;
+
     private $prefix = 'front.';
     private $folder = 'casestudies.';
 
@@ -23,7 +26,9 @@ class CaseStudyController extends Controller
             ->latest('id')
             ->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('categories', 'casestudies'));
+        [$page, $sectionContents] = $this->loadPageSections('casestudies');
+
+        return view($this->prefix . $this->folder . 'index', compact('categories', 'casestudies', 'page', 'sectionContents'));
     }
 
     public function details($slug)

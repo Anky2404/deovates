@@ -18,7 +18,21 @@
     $idPrefix = $idPrefix ?? 'f';
     $renderedGroups = [];
     $fieldName = fn ($f) => $f->name ?: ($f->field_id ?: 'field_'.$f->id);
-    $wrapName = fn ($n) => $namePrefix === '' ? $n : $namePrefix.'['.$n.']';
+
+    // $n may be a plain key ("company_name") or an already-bracketed chain
+    // ("group_data[team_member][0][member_name]") — either way, splice it in
+    // as additional bracket segments after the prefix rather than wrapping
+    // the whole chain in one more pair of brackets (which PHP can't parse
+    // back into nested array keys).
+    $wrapName = function ($n) use ($namePrefix) {
+        if ($namePrefix === '') {
+            return $n;
+        }
+
+        preg_match('/^([^\[]+)(.*)$/', $n, $m);
+
+        return $namePrefix.'['.$m[1].']'.($m[2] ?? '');
+    };
 @endphp
 
 <div class="row g-3">

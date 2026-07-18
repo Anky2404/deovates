@@ -31,13 +31,20 @@
 
     <!-- Start Services Grid Section -->
     <!-- Services grid -->
+    @php
+        $servicesGridSection = $page?->sections->firstWhere('slug', 'services-grid-section');
+        $servicesGridContent = $servicesGridSection ? $sectionContents[$servicesGridSection->id] ?? [] : [];
+    @endphp
     <section class="services container-fluid service overflow-hidden py-5">
         <div class="container py-5">
             <div class="row">
                 <div class="col-md-12">
                     <div class="section-title st-center">
-                        <h3>{{ \App\Helper::sectionTitle('services', 'grid', 'title', 'What We Offer') }}</h3>
-                        <p>{{ \App\Helper::sectionTitle('services', 'grid', 'subtitle') }}</p>
+                        @include('front.partials._section_heading', [
+                            'content' => $servicesGridContent,
+                            'defaultTitle' => \App\Helper::sectionTitle('services', 'grid', 'title', 'What We Offer'),
+                            'defaultSubtitle' => \App\Helper::sectionTitle('services', 'grid', 'subtitle'),
+                        ])
                     </div>
 
                     @if ($services->isEmpty())
@@ -87,16 +94,30 @@
     <!-- End Services Grid Section -->
 
     <!-- Start Roadmap Section -->
+    @php
+        $roadmapSection = $page?->sections->firstWhere('slug', 'roadmap-section');
+        $roadmapContent = $roadmapSection ? $sectionContents[$roadmapSection->id] ?? [] : [];
+        $roadmapSteps = $roadmapContent['group_data']['roadmap_steps'] ?? [];
+
+        if (empty($roadmapSteps)) {
+            $roadmapSteps = [
+                ['step_icon' => 'fas fa-search', 'step_title' => 'Discovery', 'step_heading' => 'Project Discovery & Consultation', 'step_description' => 'We begin by understanding your business objectives, target audience, and project requirements. Through detailed consultation and market research, we create a clear strategy that aligns technology with your long-term business goals.'],
+                ['step_icon' => 'fas fa-paint-brush', 'step_title' => 'Planning', 'step_heading' => 'Planning & UI/UX Design', 'step_description' => 'Our designers and solution architects create intuitive user experiences, interactive prototypes, and scalable system architecture that provide the perfect foundation for successful digital products.'],
+                ['step_icon' => 'fas fa-code', 'step_title' => 'Development', 'step_heading' => 'Development & Quality Assurance', 'step_description' => 'Using modern technologies and clean coding standards, our developers build secure, responsive, and scalable solutions. Every feature is thoroughly tested to ensure performance, reliability, and security before launch.'],
+                ['step_icon' => 'fas fa-rocket', 'step_title' => 'Launch', 'step_heading' => 'Launch, Growth & Continuous Support', 'step_description' => 'After successful deployment, we continue supporting your business with maintenance, performance optimization, security updates, feature enhancements, and technical assistance to ensure sustainable digital growth.'],
+            ];
+        }
+    @endphp
     <section class="roadmap-area section-padding" id="roadmap">
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center">
                     <div class="heading">
-                        <h5>Our Development Process</h5>
+                        <h5>{{ $roadmapContent['section_label'] ?? 'Our Development Process' }}</h5>
                         <div class="space-10"></div>
-                        <h1>{{ \App\Helper::sectionTitle('services', 'roadmap', 'title', 'From Vision to Digital Success') }}</h1>
+                        <h1>{{ $roadmapContent['section_title'] ?? \App\Helper::sectionTitle('services', 'roadmap', 'title', 'From Vision to Digital Success') }}</h1>
                         <p class="mt-3">
-                            {{ \App\Helper::sectionTitle('services', 'roadmap', 'subtitle') }}
+                            {{ $roadmapContent['section_subtitle'] ?? \App\Helper::sectionTitle('services', 'roadmap', 'subtitle') }}
                         </p>
                     </div>
                     <div class="space-60 d-none d-sm-block"></div>
@@ -104,43 +125,16 @@
             </div>
 
             <div class="process-flow">
-
-                <!-- Step 1 -->
-                <div class="process-step wow fadeInLeft" data-wow-delay="0.1s" data-slide-target="0">
-                    <div class="process-chevron process-chevron--1">
-                        <span class="process-num">01</span>
-                        <span class="process-icon"><i class="fas fa-search"></i></span>
-                        <span class="process-title">Discovery</span>
+                @foreach ($roadmapSteps as $step)
+                    <div class="process-step wow fadeInLeft" data-wow-delay="{{ 0.1 + ($loop->index * 0.2) }}s"
+                        data-slide-target="{{ $loop->index }}">
+                        <div class="process-chevron process-chevron--{{ $loop->iteration }}">
+                            <span class="process-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                            <span class="process-icon"><i class="{{ $step['step_icon'] ?? 'fas fa-check' }}"></i></span>
+                            <span class="process-title">{{ $step['step_title'] ?? '' }}</span>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="process-step wow fadeInLeft" data-wow-delay="0.3s" data-slide-target="1">
-                    <div class="process-chevron process-chevron--2">
-                        <span class="process-num">02</span>
-                        <span class="process-icon"><i class="fas fa-paint-brush"></i></span>
-                        <span class="process-title">Planning</span>
-                    </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="process-step wow fadeInLeft" data-wow-delay="0.5s" data-slide-target="2">
-                    <div class="process-chevron process-chevron--3">
-                        <span class="process-num">03</span>
-                        <span class="process-icon"><i class="fas fa-code"></i></span>
-                        <span class="process-title">Development</span>
-                    </div>
-                </div>
-
-                <!-- Step 4 -->
-                <div class="process-step wow fadeInLeft" data-wow-delay="0.7s" data-slide-target="3">
-                    <div class="process-chevron process-chevron--4">
-                        <span class="process-num">04</span>
-                        <span class="process-icon"><i class="fas fa-rocket"></i></span>
-                        <span class="process-title">Launch</span>
-                    </div>
-                </div>
-
+                @endforeach
             </div>
 
             <!-- Laptop-frame slider showing each step's detail -->
@@ -155,52 +149,16 @@
                     <div class="laptop-screen-glass">
                         <div class="laptop-shine"></div>
                         <div class="laptop-slides owl-carousel">
-
-                            <div class="laptop-slide">
-                                <span class="process-num">01</span>
-                                <span class="process-icon"><i class="fas fa-search"></i></span>
-                                <h5>Project Discovery & Consultation</h5>
-                                <p>
-                                    We begin by understanding your business objectives, target audience, and project
-                                    requirements. Through detailed consultation and market research, we create a clear
-                                    strategy that aligns technology with your long-term business goals.
-                                </p>
-                            </div>
-
-                            <div class="laptop-slide">
-                                <span class="process-num">02</span>
-                                <span class="process-icon"><i class="fas fa-paint-brush"></i></span>
-                                <h5>Planning & UI/UX Design</h5>
-                                <p>
-                                    Our designers and solution architects create intuitive user experiences,
-                                    interactive prototypes, and scalable system architecture that provide
-                                    the perfect foundation for successful digital products.
-                                </p>
-                            </div>
-
-                            <div class="laptop-slide">
-                                <span class="process-num">03</span>
-                                <span class="process-icon"><i class="fas fa-code"></i></span>
-                                <h5>Development & Quality Assurance</h5>
-                                <p>
-                                    Using modern technologies and clean coding standards, our developers build
-                                    secure, responsive, and scalable solutions. Every feature is thoroughly tested
-                                    to ensure performance, reliability, and security before launch.
-                                </p>
-                            </div>
-
-                            <div class="laptop-slide">
-                                <span class="process-num">04</span>
-                                <span class="process-icon"><i class="fas fa-rocket"></i></span>
-                                <h5>Launch, Growth & Continuous Support</h5>
-                                <p>
-                                    After successful deployment, we continue supporting your business with
-                                    maintenance, performance optimization, security updates, feature
-                                    enhancements, and technical assistance to ensure sustainable digital
-                                    growth.
-                                </p>
-                            </div>
-
+                            @foreach ($roadmapSteps as $step)
+                                <div class="laptop-slide">
+                                    <span class="process-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                    <span class="process-icon"><i class="{{ $step['step_icon'] ?? 'fas fa-check' }}"></i></span>
+                                    <h5>{{ $step['step_heading'] ?? ($step['step_title'] ?? '') }}</h5>
+                                    <p>
+                                        {{ $step['step_description'] ?? '' }}
+                                    </p>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -215,6 +173,10 @@
 
     <!-- Start Testimonials Section -->
     <!-- Testimonials -->
+    @php
+        $servicesTestimonialsSection = $page?->sections->firstWhere('slug', 'testimonials-section');
+        $servicesTestimonialsContent = $servicesTestimonialsSection ? $sectionContents[$servicesTestimonialsSection->id] ?? [] : [];
+    @endphp
     @if ($testimonials->isNotEmpty())
         <section class="testimonials">
 
@@ -223,8 +185,11 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title st-center">
-                            <h3>{{ \App\Helper::sectionTitle('services', 'testimonials', 'title', 'What Our Clients Say') }}</h3>
-                            <p>{{ \App\Helper::sectionTitle('services', 'testimonials', 'subtitle') }}</p>
+                            @include('front.partials._section_heading', [
+                                'content' => $servicesTestimonialsContent,
+                                'defaultTitle' => \App\Helper::sectionTitle('services', 'testimonials', 'title', 'What Our Clients Say'),
+                                'defaultSubtitle' => \App\Helper::sectionTitle('services', 'testimonials', 'subtitle'),
+                            ])
                         </div>
                     </div>
                 </div>
@@ -272,30 +237,38 @@
 
     <!-- Start CTA Section -->
     <!-- CTA -->
+    @php
+        $servicesCtaSection = $page?->sections->firstWhere('slug', 'cta-section');
+        $servicesCtaContent = $servicesCtaSection ? $sectionContents[$servicesCtaSection->id] ?? [] : [];
+    @endphp
     <section class="call-2-acction" data-stellar-background-ratio="0.4">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
 
                     <div class="section-title st-center">
-                        <h3>{{ \App\Helper::sectionTitle('services', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL") }}</h3>
-
-                        <p>
-                            {{ \App\Helper::sectionTitle('services', 'cta', 'subtitle') }}
-                        </p>
+                        @include('front.partials._section_heading', [
+                            'content' => $servicesCtaContent,
+                            'defaultTitle' => \App\Helper::sectionTitle('services', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL"),
+                            'defaultSubtitle' => \App\Helper::sectionTitle('services', 'cta', 'subtitle'),
+                        ])
                     </div>
 
                     <div class="c2a">
 
                         <p>
-                            Whether you're launching a startup, modernizing your business, or scaling your digital presence,
-                            {{ config('constants.BUSINESS.name') }} delivers custom websites, business software, eCommerce platforms, and innovative
-                            technology solutions tailored to your goals. Partner with our experienced team to build secure,
-                            scalable, and high-performing digital products that create lasting business value.
+                            @if (!empty($servicesCtaContent['cta_paragraph']))
+                                {!! $servicesCtaContent['cta_paragraph'] !!}
+                            @else
+                                Whether you're launching a startup, modernizing your business, or scaling your digital presence,
+                                {{ config('constants.BUSINESS.name') }} delivers custom websites, business software, eCommerce platforms, and innovative
+                                technology solutions tailored to your goals. Partner with our experienced team to build secure,
+                                scalable, and high-performing digital products that create lasting business value.
+                            @endif
                         </p>
 
-                        <a href="{{ route('front.contact.index') }}" class="btn btn-main btn-lg">
-                            Start Your Project
+                        <a href="{{ $servicesCtaContent['btn_links'] ?? route('front.contact.index') }}" class="btn btn-main btn-lg">
+                            {{ $servicesCtaContent['btn_text'] ?? 'Start Your Project' }}
                         </a>
 
                     </div>
@@ -307,14 +280,21 @@
     <!-- End CTA Section -->
 
     <!-- Start FAQ & Contact Section -->
+    @php
+        $servicesFaqSection = $page?->sections->firstWhere('slug', 'faq-section');
+        $servicesFaqContent = $servicesFaqSection ? $sectionContents[$servicesFaqSection->id] ?? [] : [];
+    @endphp
     <section id="faq-section" class="faq-section">
         <div class="container">
 
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>{{ \App\Helper::sectionTitle('services', 'faq', 'title', 'Frequently Asked Questions') }}</h3>
-                        <p>{{ \App\Helper::sectionTitle('services', 'faq', 'subtitle') }}</p>
+                        @include('front.partials._section_heading', [
+                            'content' => $servicesFaqContent,
+                            'defaultTitle' => \App\Helper::sectionTitle('services', 'faq', 'title', 'Frequently Asked Questions'),
+                            'defaultSubtitle' => \App\Helper::sectionTitle('services', 'faq', 'subtitle'),
+                        ])
                     </div>
                 </div>
             </div>

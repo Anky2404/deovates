@@ -33,8 +33,15 @@
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>{{ \App\Helper::sectionTitle('techstack', 'listing', 'title', 'Tools & Technologies') }}</h3>
-                <p>{{ \App\Helper::sectionTitle('techstack', 'listing', 'subtitle') }}</p>
+                @php
+                    $techstackListingSection = $page?->sections->firstWhere('slug', 'techstack-page-listing-section');
+                    $techstackListingContent = $techstackListingSection ? $sectionContents[$techstackListingSection->id] ?? [] : [];
+                @endphp
+                @include('front.partials._section_heading', [
+                    'content' => $techstackListingContent,
+                    'defaultTitle' => \App\Helper::sectionTitle('techstack', 'listing', 'title', 'Tools & Technologies'),
+                    'defaultSubtitle' => \App\Helper::sectionTitle('techstack', 'listing', 'subtitle'),
+                ])
             </div>
 
             @forelse ($technologies as $categoryName => $items)

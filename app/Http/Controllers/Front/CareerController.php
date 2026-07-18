@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Front\Concerns\LoadsPageSections;
 use App\Models\ActivityLog;
 use App\Models\Career;
 use App\Models\CareerApplication;
@@ -14,6 +15,8 @@ use Illuminate\Support\Str;
 
 class CareerController extends Controller
 {
+    use LoadsPageSections;
+
     private $prefix = 'front.';
     private $folder = 'career.';
 
@@ -33,7 +36,9 @@ class CareerController extends Controller
 
         $careers = $careers->concat($placeholders);
 
-        return view($this->prefix . $this->folder . 'index', compact('careers'));
+        [$page, $sectionContents] = $this->loadPageSections('career');
+
+        return view($this->prefix . $this->folder . 'index', compact('careers', 'page', 'sectionContents'));
     }
 
     public function details($slug)

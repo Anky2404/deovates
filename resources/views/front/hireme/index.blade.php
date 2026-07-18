@@ -30,28 +30,37 @@
     <!-- End Hero Section -->
 
     <!-- Start Engagement Models Section -->
+    @php
+        $engagementSection = $page?->sections->firstWhere('slug', 'hireme-engagement-models-section');
+        $engagementContent = $engagementSection ? $sectionContents[$engagementSection->id] ?? [] : [];
+        $models = $engagementContent['group_data']['engagement_items'] ?? [];
+
+        if (empty($models)) {
+            $models = [
+                ['item_icon' => 'fas fa-users', 'item_title' => 'Dedicated Team', 'item_text' => 'A committed team of developers and designers working exclusively on your product, scaling up or down as you need.'],
+                ['item_icon' => 'fas fa-tasks', 'item_title' => 'Fixed Scope Project', 'item_text' => 'Clear requirements, a fixed timeline, and a fixed budget — ideal for well-defined projects with a set outcome.'],
+                ['item_icon' => 'fas fa-clock', 'item_title' => 'Hourly / Retainer', 'item_text' => 'Flexible support for ongoing maintenance, feature additions, or an extension of your existing team.'],
+            ];
+        }
+    @endphp
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>{{ \App\Helper::sectionTitle('hireme', 'engagement_models', 'title', 'Engagement Models Built Around You') }}</h3>
-                <p>{{ \App\Helper::sectionTitle('hireme', 'engagement_models', 'subtitle') }}</p>
+                @include('front.partials._section_heading', [
+                    'content' => $engagementContent,
+                    'defaultTitle' => \App\Helper::sectionTitle('hireme', 'engagement_models', 'title', 'Engagement Models Built Around You'),
+                    'defaultSubtitle' => \App\Helper::sectionTitle('hireme', 'engagement_models', 'subtitle'),
+                ])
             </div>
 
             <div class="row g-4">
-                @php
-                    $models = [
-                        ['icon' => 'fas fa-users', 'title' => 'Dedicated Team', 'text' => 'A committed team of developers and designers working exclusively on your product, scaling up or down as you need.'],
-                        ['icon' => 'fas fa-tasks', 'title' => 'Fixed Scope Project', 'text' => 'Clear requirements, a fixed timeline, and a fixed budget — ideal for well-defined projects with a set outcome.'],
-                        ['icon' => 'fas fa-clock', 'title' => 'Hourly / Retainer', 'text' => 'Flexible support for ongoing maintenance, feature additions, or an extension of your existing team.'],
-                    ];
-                @endphp
                 @foreach ($models as $model)
                     <div class="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="office-item icon-only h-100">
-                            <div class="office-img"><i class="{{ $model['icon'] }}"></i></div>
+                            <div class="office-img"><i class="{{ $model['item_icon'] ?? 'fas fa-star' }}"></i></div>
                             <div class="office-content text-center">
-                                <h4 style="color:inherit;">{{ $model['title'] }}</h4>
-                                <p>{{ $model['text'] }}</p>
+                                <h4 style="color:inherit;">{{ $model['item_title'] ?? '' }}</h4>
+                                <p>{{ $model['item_text'] ?? '' }}</p>
                             </div>
                         </div>
                     </div>
@@ -62,27 +71,36 @@
     <!-- End Engagement Models Section -->
 
     <!-- Start How It Works Section -->
+    @php
+        $howItWorksSection = $page?->sections->firstWhere('slug', 'hireme-how-it-works-section');
+        $howItWorksContent = $howItWorksSection ? $sectionContents[$howItWorksSection->id] ?? [] : [];
+        $steps = $howItWorksContent['group_data']['how_it_works_steps'] ?? [];
+
+        if (empty($steps)) {
+            $steps = [
+                ['step_number' => '01', 'step_title' => 'Share Your Needs', 'step_description' => 'Tell us about your project, timeline, and the skills you need.'],
+                ['step_number' => '02', 'step_title' => 'Meet the Team', 'step_description' => 'We match you with the right developers and designers for your goals.'],
+                ['step_number' => '03', 'step_title' => 'Align on Scope', 'step_description' => 'We agree on scope, timeline, and engagement model together.'],
+                ['step_number' => '04', 'step_title' => 'Start Building', 'step_description' => 'Work kicks off with clear milestones and regular communication.'],
+            ];
+        }
+    @endphp
     <section class="py-5" style="background:#f5f8fd;">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>{{ \App\Helper::sectionTitle('hireme', 'how_it_works', 'title', 'How It Works') }}</h3>
-                <p>{{ \App\Helper::sectionTitle('hireme', 'how_it_works', 'subtitle') }}</p>
+                @include('front.partials._section_heading', [
+                    'content' => $howItWorksContent,
+                    'defaultTitle' => \App\Helper::sectionTitle('hireme', 'how_it_works', 'title', 'How It Works'),
+                    'defaultSubtitle' => \App\Helper::sectionTitle('hireme', 'how_it_works', 'subtitle'),
+                ])
             </div>
             <div class="row g-4">
-                @php
-                    $steps = [
-                        ['step' => '01', 'title' => 'Share Your Needs', 'description' => 'Tell us about your project, timeline, and the skills you need.'],
-                        ['step' => '02', 'title' => 'Meet the Team', 'description' => 'We match you with the right developers and designers for your goals.'],
-                        ['step' => '03', 'title' => 'Align on Scope', 'description' => 'We agree on scope, timeline, and engagement model together.'],
-                        ['step' => '04', 'title' => 'Start Building', 'description' => 'Work kicks off with clear milestones and regular communication.'],
-                    ];
-                @endphp
                 @foreach ($steps as $step)
                     <div class="col-md-6 col-lg-3 wow fadeInUp" data-wow-delay="{{ 0.1 * $loop->iteration }}s">
                         <div class="simple-process-item">
-                            <div class="simple-process-number">{{ $step['step'] }}</div>
-                            <h4>{{ $step['title'] }}</h4>
-                            <p>{{ $step['description'] }}</p>
+                            <div class="simple-process-number">{{ $step['step_number'] ?? '' }}</div>
+                            <h4>{{ $step['step_title'] ?? '' }}</h4>
+                            <p>{{ $step['step_description'] ?? '' }}</p>
                         </div>
                     </div>
                 @endforeach
@@ -93,14 +111,18 @@
 
     <!-- Start CTA Section -->
     <!-- CTA -->
-    <section class="call-us" style="background-image:url('{{ asset('assets/front/img/funfact.png') }}');">
+    @php
+        $hireCtaSection = $page?->sections->firstWhere('slug', 'hireme-cta-section');
+        $hireCtaContent = $hireCtaSection ? $sectionContents[$hireCtaSection->id] ?? [] : [];
+    @endphp
+    <section class="call-us" style="background-image:url('{{ !empty($hireCtaContent['bg_image']) ? asset('storage/' . $hireCtaContent['bg_image']) : asset('assets/front/img/funfact.png') }}');">
         <div class="container">
             <div class="call-us-inner text-center">
-                <span class="kicker">Let's Get Started</span>
-                <h3>Ready to Build Something Great?</h3>
-                <p>Tell us what you're building — we'll help you find the right team and engagement model.</p>
+                <span class="kicker">{{ $hireCtaContent['section_label'] ?? "Let's Get Started" }}</span>
+                <h3>{{ $hireCtaContent['section_title'] ?? 'Ready to Build Something Great?' }}</h3>
+                <p>{{ $hireCtaContent['section_subtitle'] ?? "Tell us what you're building — we'll help you find the right team and engagement model." }}</p>
                 <div class="actions">
-                    <a href="{{ route('front.contact.index') }}" class="call-us-btn">Start a Conversation</a>
+                    <a href="{{ $hireCtaContent['btn_links'] ?? route('front.contact.index') }}" class="call-us-btn">{{ $hireCtaContent['btn_text'] ?? 'Start a Conversation' }}</a>
                 </div>
             </div>
         </div>

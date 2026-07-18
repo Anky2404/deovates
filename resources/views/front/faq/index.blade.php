@@ -31,6 +31,10 @@
 
     <!-- Start Client Testimonials Section -->
    <!-- Testimonials -->
+    @php
+        $faqTestimonialsSection = $page?->sections->firstWhere('slug', 'testimonials-section');
+        $faqTestimonialsContent = $faqTestimonialsSection ? $sectionContents[$faqTestimonialsSection->id] ?? [] : [];
+    @endphp
     <section class="testimonials">
 
         <div class="container">
@@ -38,8 +42,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>{{ \App\Helper::sectionTitle('faq', 'testimonials', 'title', 'What Our Clients Say') }}</h3>
-                        <p>{{ \App\Helper::sectionTitle('faq', 'testimonials', 'subtitle') }}</p>
+                        @include('front.partials._section_heading', [
+                            'content' => $faqTestimonialsContent,
+                            'defaultTitle' => \App\Helper::sectionTitle('faq', 'testimonials', 'title', 'What Our Clients Say'),
+                            'defaultSubtitle' => \App\Helper::sectionTitle('faq', 'testimonials', 'subtitle'),
+                        ])
                     </div>
                 </div>
             </div>
@@ -93,30 +100,38 @@
 
     <!-- Start CTA Section -->
     <!-- CTA -->
+    @php
+        $faqCtaSection = $page?->sections->firstWhere('slug', 'cta-section');
+        $faqCtaContent = $faqCtaSection ? $sectionContents[$faqCtaSection->id] ?? [] : [];
+    @endphp
     <section class="call-2-acction" data-stellar-background-ratio="0.4">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
 
                     <div class="section-title st-center">
-                        <h3>{{ \App\Helper::sectionTitle('faq', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL") }}</h3>
-
-                        <p>
-                            {{ \App\Helper::sectionTitle('faq', 'cta', 'subtitle') }}
-                        </p>
+                        @include('front.partials._section_heading', [
+                            'content' => $faqCtaContent,
+                            'defaultTitle' => \App\Helper::sectionTitle('faq', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL"),
+                            'defaultSubtitle' => \App\Helper::sectionTitle('faq', 'cta', 'subtitle'),
+                        ])
                     </div>
 
                     <div class="c2a">
 
                         <p>
-                            Whether you're launching a startup, modernizing your business, or scaling your digital presence,
-                            {{ config('constants.BUSINESS.name') }} delivers custom websites, business software, eCommerce platforms, and innovative
-                            technology solutions tailored to your goals. Partner with our experienced team to build secure,
-                            scalable, and high-performing digital products that create lasting business value.
+                            @if (!empty($faqCtaContent['cta_paragraph']))
+                                {!! $faqCtaContent['cta_paragraph'] !!}
+                            @else
+                                Whether you're launching a startup, modernizing your business, or scaling your digital presence,
+                                {{ config('constants.BUSINESS.name') }} delivers custom websites, business software, eCommerce platforms, and innovative
+                                technology solutions tailored to your goals. Partner with our experienced team to build secure,
+                                scalable, and high-performing digital products that create lasting business value.
+                            @endif
                         </p>
 
-                        <a href="{{ route('front.contact.index') }}" class="btn btn-main btn-lg">
-                            Start Your Project
+                        <a href="{{ $faqCtaContent['btn_links'] ?? route('front.contact.index') }}" class="btn btn-main btn-lg">
+                            {{ $faqCtaContent['btn_text'] ?? 'Start Your Project' }}
                         </a>
 
                     </div>
@@ -128,14 +143,21 @@
     <!-- End CTA Section -->
 
     <!-- Start FAQ Section -->
+    @php
+        $faqFaqSection = $page?->sections->firstWhere('slug', 'faq-section');
+        $faqFaqContent = $faqFaqSection ? $sectionContents[$faqFaqSection->id] ?? [] : [];
+    @endphp
     <section id="faq-section" class="faq-section">
         <div class="container">
 
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>{{ \App\Helper::sectionTitle('faq', 'faq', 'title', 'Frequently Asked Questions') }}</h3>
-                        <p>{{ \App\Helper::sectionTitle('faq', 'faq', 'subtitle') }}</p>
+                        @include('front.partials._section_heading', [
+                            'content' => $faqFaqContent,
+                            'defaultTitle' => \App\Helper::sectionTitle('faq', 'faq', 'title', 'Frequently Asked Questions'),
+                            'defaultSubtitle' => \App\Helper::sectionTitle('faq', 'faq', 'subtitle'),
+                        ])
                     </div>
                 </div>
             </div>

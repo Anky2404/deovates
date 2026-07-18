@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Front\Concerns\LoadsPageSections;
 use App\Models\Portfolio;
 use App\Models\PortfolioCategory;
 
 class PortfolioController extends Controller
 {
+    use LoadsPageSections;
+
     private $prefix = 'front.';
     private $folder = 'portfolios.';
 
@@ -23,7 +26,9 @@ class PortfolioController extends Controller
             ->latest('id')
             ->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('categories', 'portfolios'));
+        [$page, $sectionContents] = $this->loadPageSections('portfolios');
+
+        return view($this->prefix . $this->folder . 'index', compact('categories', 'portfolios', 'page', 'sectionContents'));
     }
 
     public function details($slug)

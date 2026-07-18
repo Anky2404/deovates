@@ -37,7 +37,7 @@ use App\Http\Controllers\Backend\MigrationController;
 use App\Http\Controllers\Backend\NewsletterSubscriberController;
 use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\backend\PageController;
-use App\Http\Controllers\Backend\PageLayoutController;
+use App\Http\Controllers\Backend\FormController;
 use App\Http\Controllers\Backend\PageSectionController;
 use App\Http\Controllers\Backend\PageTemplateController;
 use App\Http\Controllers\Backend\PermissionController;
@@ -63,7 +63,6 @@ use App\Http\Controllers\backend\TemplateController;
 use App\Http\Controllers\Backend\TestimonialController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\UserPermissionController;
-use App\Http\Controllers\Backend\PageContentController;
 use Illuminate\Support\Facades\Route;
 
 // Redirect Routes
@@ -684,24 +683,11 @@ Route::middleware('admin.auth')->group(function () {
         | Form Routes
         |--------------------------------------------------------------------------
         */
-        Route::prefix('forms')->name('forms.')->controller(PageLayoutController::class)->group(function () {
+        Route::prefix('forms')->name('forms.')->controller(FormController::class)->group(function () {
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
             Route::get('/', 'index')->name('index');
             Route::get('/details/{uuid}', 'details')->name('details');
-            Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
-            Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
-        });
-
-        /*
-        |--------------------------------------------------------------------------
-        | Contents Routes
-        |--------------------------------------------------------------------------
-        */
-        Route::prefix('contents')->name('contents.')->controller(PageContentController::class)->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
-            Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
         });

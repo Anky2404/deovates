@@ -103,6 +103,7 @@
                         <th>Method</th>
                         <th>Level</th>
                         <th>Date & Time</th>
+                        <th class="text-center">Actions</th>
                     </tr>
                 </thead>
 
@@ -165,10 +166,29 @@
                             <td>
                                 {{ $log->created_at?->format('d M Y h:i A') }}
                             </td>
+
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="{{ route('admin.activity-logs.view', $log->uuid) }}"
+                                        class="btn btn-sm btn-outline-info d-flex align-items-center gap-1">
+                                        <i class="bx bx-show"></i> View
+                                    </a>
+
+                                    <form action="{{ route('admin.activity-logs.destroy', $log->uuid) }}"
+                                        method="POST" class="js-delete">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1">
+                                            <i class="bx bx-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center text-muted py-4">
+                            <td colspan="11" class="text-center text-muted py-4">
                                 No activity logs found.
                             </td>
                         </tr>
