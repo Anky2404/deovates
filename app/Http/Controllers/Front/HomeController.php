@@ -93,7 +93,9 @@ public function index()
             ->first();
 
         $sectionContents = $homePage
-            ? $homePage->sectionContents()->pluck('data', 'section_id')->toArray()
+            ? $homePage->sectionContents()->pluck('data', 'section_id')
+                ->map(fn ($data) => Helper::replacePlaceholders($data))
+                ->toArray()
             : [];
 
         return view($this->prefix . $this->folder . 'index', compact(

@@ -113,6 +113,29 @@ class Helper
     }
 
     /**
+     * Expands merge tags like {{BRAND_NAME}} typed into a section's content
+     * fields in the admin, so the real value always shows on the front end
+     * even if the brand name changes later. Only applied when loading
+     * content for front-end display — the admin edit form reads the raw
+     * data directly, so the literal {{BRAND_NAME}} token stays editable
+     * there instead of being baked into a resolved value on every save.
+     */
+    public static function replacePlaceholders(array $data): array
+    {
+        $replacements = [
+            '{{BRAND_NAME}}' => config('constants.BRAND_NAME'),
+        ];
+
+        array_walk_recursive($data, function (&$value) use ($replacements) {
+            if (is_string($value)) {
+                $value = strtr($value, $replacements);
+            }
+        });
+
+        return $data;
+    }
+
+    /**
      * Resolve a per-page hero banner from public/assets/front/img/banners/.
      * Lets pages reference a not-yet-provided photo (e.g. a real {{ config('constants.BRAND_NAME') }}
      * office shot the client is generating separately) and fall back to

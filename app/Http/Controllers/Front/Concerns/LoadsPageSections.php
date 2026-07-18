@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front\Concerns;
 
+use App\Helper;
 use App\Models\Page;
 
 trait LoadsPageSections
@@ -22,7 +23,9 @@ trait LoadsPageSections
             ->first();
 
         $sectionContents = $page
-            ? $page->sectionContents()->pluck('data', 'section_id')->toArray()
+            ? $page->sectionContents()->pluck('data', 'section_id')
+                ->map(fn ($data) => Helper::replacePlaceholders($data))
+                ->toArray()
             : [];
 
         return [$page, $sectionContents];
