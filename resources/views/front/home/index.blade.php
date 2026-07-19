@@ -503,7 +503,7 @@
                                 'home',
                                 'clients_strip',
                                 'title',
-                                'TECHNOLOGIES WE WORK WITH'),
+                                "COMPANIES WE'VE WORKED WITH"),
                             'defaultSubtitle' => \App\Helper::sectionTitle('home', 'clients_strip', 'subtitle'),
                         ])
                     </div>

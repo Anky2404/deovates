@@ -174,23 +174,46 @@
 
     <!-- Start Growth Numbers Section -->
     <!-- Growth Numbers -->
+    @php
+        $growthSection = $aboutPage?->sections->firstWhere('slug', 'growth-numbers-section');
+        $growthContent = $growthSection ? $sectionContents[$growthSection->id] ?? [] : [];
+        $growthItems = $growthContent['group_data']['growth_items'] ?? [];
+
+        if (empty($growthItems)) {
+            $growthItems = collect($data['growth_numbers']['items'])->map(fn ($item) => [
+                'item_icon' => $item['icon'] ?? null,
+                'item_title' => $item['label'] ?? '',
+                'item_value' => $item['count'] ?? '',
+                'item_suffix' => '',
+                '_uses_icon_map' => true,
+            ])->all();
+        }
+    @endphp
     <section class="counter container-fluid service overflow-hidden py-5" id="counter">
         <div class="container-fluid counter-facts py-5">
             <div class="container py-1">
                 <div class="section-title st-center">
-                    <h3>{{ $data['growth_numbers']['title'] }}</h3>
-                    <p>{{ $data['growth_numbers']['subtitle'] }}</p>
+                    @if (!empty($growthContent['section_label']))
+                        <span class="sub-title">{{ $growthContent['section_label'] }}</span>
+                    @endif
+                    <h3>{{ $growthContent['section_title'] ?? $data['growth_numbers']['title'] }}</h3>
+                    <p>{{ $growthContent['section_subtitle'] ?? $data['growth_numbers']['subtitle'] }}</p>
                 </div>
                 <div class="row g-4">
-                    @foreach ($data['growth_numbers']['items'] as $item)
+                    @foreach ($growthItems as $item)
                         <div class="col-12 col-sm-6 col-md-6 col-xl-3 wow fadeInUp"
                             data-wow-delay="{{ 0.1 * $loop->iteration }}s">
                             <div class="counter">
-                                <div class="counter-icon"><i class="{{ $icon($item['icon']) }}"></i></div>
+                                <div class="counter-icon">
+                                    <i class="{{ !empty($item['_uses_icon_map']) ? $icon($item['item_icon']) : ($item['item_icon'] ?: 'fas fa-star') }}"></i>
+                                </div>
                                 <div class="counter-content">
-                                    <h3>{{ $item['label'] }}</h3>
+                                    <h3>{{ $item['item_title'] ?? '' }}</h3>
                                     <div class="d-flex align-items-center justify-content-center">
-                                        <span class="counter-value" data-toggle="counter-up">{{ $item['count'] }}</span>
+                                        <span class="counter-value" data-toggle="counter-up">{{ $item['item_value'] ?? 0 }}</span>
+                                        @if (!empty($item['item_suffix']))
+                                            <h4 class="text-secondary mb-0" style="font-weight:600;font-size:25px;">{{ $item['item_suffix'] }}</h4>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -204,20 +227,39 @@
 
     <!-- Start Core Values Section -->
     <!-- Core Values -->
-    <section class="py-5">
+    @php
+        $coreValuesSection = $aboutPage?->sections->firstWhere('slug', 'core-values-section');
+        $coreValuesContent = $coreValuesSection ? $sectionContents[$coreValuesSection->id] ?? [] : [];
+        $coreValuesItems = $coreValuesContent['group_data']['value_items'] ?? [];
+
+        if (empty($coreValuesItems)) {
+            $coreValuesItems = collect($data['core_values']['items'])->map(fn ($item) => [
+                'item_icon' => $item['icon'] ?? null,
+                'item_title' => $item['title'] ?? '',
+                'item_description' => $item['description'] ?? '',
+                '_uses_icon_map' => true,
+            ])->all();
+        }
+    @endphp
+    <section class="py-5 core-value">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>{{ $data['core_values']['title'] }}</h3>
-                <p>{{ $data['core_values']['subtitle'] }}</p>
+                @if (!empty($coreValuesContent['section_label']))
+                    <span class="sub-title">{{ $coreValuesContent['section_label'] }}</span>
+                @endif
+                <h3>{{ $coreValuesContent['section_title'] ?? $data['core_values']['title'] }}</h3>
+                <p>{{ $coreValuesContent['section_subtitle'] ?? $data['core_values']['subtitle'] }}</p>
             </div>
             <div class="row g-4">
-                @foreach ($data['core_values']['items'] as $item)
+                @foreach ($coreValuesItems as $item)
                     <div class="col-sm-6 col-lg-3 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="office-item icon-only h-100">
-                            <div class="office-img"><i class="{{ $icon($item['icon']) }}"></i></div>
+                            <div class="office-img">
+                                <i class="{{ !empty($item['_uses_icon_map']) ? $icon($item['item_icon']) : ($item['item_icon'] ?: 'fas fa-star') }}"></i>
+                            </div>
                             <div class="office-content text-center">
-                                <h4>{{ $item['title'] }}</h4>
-                                <p>{{ $item['description'] }}</p>
+                                <h4>{{ $item['item_title'] ?? '' }}</h4>
+                                <p>{{ $item['item_description'] ?? '' }}</p>
                             </div>
                         </div>
                     </div>
@@ -228,19 +270,54 @@
     <!-- End Core Values Section -->
 
     <!-- Start Roadmap Section -->
+    @php
+        $roadmapSection = $aboutPage?->sections->firstWhere('slug', 'roadmap-section');
+        $roadmapContent = $roadmapSection ? $sectionContents[$roadmapSection->id] ?? [] : [];
+        $roadmapSteps = $roadmapContent['group_data']['roadmap_steps'] ?? [];
+
+        if (empty($roadmapSteps)) {
+            $roadmapSteps = [
+                [
+                    'step_icon' => 'fas fa-search',
+                    'step_title' => 'Discovery',
+                    'step_heading' => 'Project Discovery & Consultation',
+                    'step_description' =>
+                        'We begin by understanding your business objectives, target audience, and project requirements. Through detailed consultation and market research, we create a clear strategy that aligns technology with your long-term business goals.',
+                ],
+                [
+                    'step_icon' => 'fas fa-paint-brush',
+                    'step_title' => 'Planning',
+                    'step_heading' => 'Planning & UI/UX Design',
+                    'step_description' =>
+                        'Our designers and solution architects create intuitive user experiences, interactive prototypes, and scalable system architecture that provide the perfect foundation for successful digital products.',
+                ],
+                [
+                    'step_icon' => 'fas fa-code',
+                    'step_title' => 'Development',
+                    'step_heading' => 'Development & Quality Assurance',
+                    'step_description' =>
+                        'Using modern technologies and clean coding standards, our developers build secure, responsive, and scalable solutions. Every feature is thoroughly tested to ensure performance, reliability, and security before launch.',
+                ],
+                [
+                    'step_icon' => 'fas fa-rocket',
+                    'step_title' => 'Launch',
+                    'step_heading' => 'Launch, Growth & Continuous Support',
+                    'step_description' =>
+                        'After successful deployment, we continue supporting your business with maintenance, performance optimization, security updates, feature enhancements, and technical assistance to ensure sustainable digital growth.',
+                ],
+            ];
+        }
+    @endphp
     <section class="roadmap-area section-padding" id="roadmap">
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
                 <div class="heading">
-                    <h5>Our Development Process</h5>
+                    <h5>{{ $roadmapContent['section_label'] ?? 'Our Development Process' }}</h5>
                     <div class="space-10"></div>
-                    <h1>From Vision to Digital Success</h1>
+                    <h1>{{ $roadmapContent['section_title'] ?? 'From Vision to Digital Success' }}</h1>
                     <p class="mt-3">
-                        At {{ config('constants.BUSINESS.name') }}, every successful project follows a proven development process.
-                        We combine strategic planning, creative design, modern technologies, and continuous
-                        support to deliver secure, scalable, and high-performing digital solutions that
-                        help businesses grow with confidence.
+                        {{ $roadmapContent['section_subtitle'] ?? ("At " . config('constants.BUSINESS.name') . ", every successful project follows a proven development process. We combine strategic planning, creative design, modern technologies, and continuous support to deliver secure, scalable, and high-performing digital solutions that help businesses grow with confidence.") }}
                     </p>
                 </div>
                 <div class="space-60 d-none d-sm-block"></div>
@@ -248,43 +325,16 @@
         </div>
 
         <div class="process-flow">
-
-            <!-- Step 1 -->
-            <div class="process-step wow fadeInLeft" data-wow-delay="0.1s" data-slide-target="0">
-                <div class="process-chevron process-chevron--1">
-                    <span class="process-num">01</span>
-                    <span class="process-icon"><i class="fas fa-search"></i></span>
-                    <span class="process-title">Discovery</span>
+            @foreach ($roadmapSteps as $step)
+                <div class="process-step wow fadeInLeft" data-wow-delay="{{ 0.1 + $loop->index * 0.2 }}s"
+                    data-slide-target="{{ $loop->index }}">
+                    <div class="process-chevron process-chevron--{{ $loop->iteration }}">
+                        <span class="process-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                        <span class="process-icon"><i class="{{ $step['step_icon'] ?? 'fas fa-check' }}"></i></span>
+                        <span class="process-title">{{ $step['step_title'] ?? '' }}</span>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="process-step wow fadeInLeft" data-wow-delay="0.3s" data-slide-target="1">
-                <div class="process-chevron process-chevron--2">
-                    <span class="process-num">02</span>
-                    <span class="process-icon"><i class="fas fa-paint-brush"></i></span>
-                    <span class="process-title">Planning</span>
-                </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="process-step wow fadeInLeft" data-wow-delay="0.5s" data-slide-target="2">
-                <div class="process-chevron process-chevron--3">
-                    <span class="process-num">03</span>
-                    <span class="process-icon"><i class="fas fa-code"></i></span>
-                    <span class="process-title">Development</span>
-                </div>
-            </div>
-
-            <!-- Step 4 -->
-            <div class="process-step wow fadeInLeft" data-wow-delay="0.7s" data-slide-target="3">
-                <div class="process-chevron process-chevron--4">
-                    <span class="process-num">04</span>
-                    <span class="process-icon"><i class="fas fa-rocket"></i></span>
-                    <span class="process-title">Launch</span>
-                </div>
-            </div>
-
+            @endforeach
         </div>
 
         <!-- Laptop-frame slider showing each step's detail -->
@@ -299,52 +349,16 @@
                 <div class="laptop-screen-glass">
                     <div class="laptop-shine"></div>
                     <div class="laptop-slides owl-carousel">
-
-                        <div class="laptop-slide">
-                            <span class="process-num">01</span>
-                            <span class="process-icon"><i class="fas fa-search"></i></span>
-                            <h5>Project Discovery & Consultation</h5>
-                            <p>
-                                We begin by understanding your business objectives, target audience, and project
-                                requirements. Through detailed consultation and market research, we create a clear
-                                strategy that aligns technology with your long-term business goals.
-                            </p>
-                        </div>
-
-                        <div class="laptop-slide">
-                            <span class="process-num">02</span>
-                            <span class="process-icon"><i class="fas fa-paint-brush"></i></span>
-                            <h5>Planning & UI/UX Design</h5>
-                            <p>
-                                Our designers and solution architects create intuitive user experiences,
-                                interactive prototypes, and scalable system architecture that provide
-                                the perfect foundation for successful digital products.
-                            </p>
-                        </div>
-
-                        <div class="laptop-slide">
-                            <span class="process-num">03</span>
-                            <span class="process-icon"><i class="fas fa-code"></i></span>
-                            <h5>Development & Quality Assurance</h5>
-                            <p>
-                                Using modern technologies and clean coding standards, our developers build
-                                secure, responsive, and scalable solutions. Every feature is thoroughly tested
-                                to ensure performance, reliability, and security before launch.
-                            </p>
-                        </div>
-
-                        <div class="laptop-slide">
-                            <span class="process-num">04</span>
-                            <span class="process-icon"><i class="fas fa-rocket"></i></span>
-                            <h5>Launch, Growth & Continuous Support</h5>
-                            <p>
-                                After successful deployment, we continue supporting your business with
-                                maintenance, performance optimization, security updates, feature
-                                enhancements, and technical assistance to ensure sustainable digital
-                                growth.
-                            </p>
-                        </div>
-
+                        @foreach ($roadmapSteps as $step)
+                            <div class="laptop-slide">
+                                <span class="process-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                <span class="process-icon"><i class="{{ $step['step_icon'] ?? 'fas fa-check' }}"></i></span>
+                                <h5>{{ $step['step_heading'] ?? ($step['step_title'] ?? '') }}</h5>
+                                <p>
+                                    {{ $step['step_description'] ?? '' }}
+                                </p>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -523,20 +537,39 @@
 
     <!-- Start Key Advantages Section -->
     <!-- Key Advantages -->
-    <section class="py-5">
+    @php
+        $advantagesSection = $aboutPage?->sections->firstWhere('slug', 'key-advantages-section');
+        $advantagesContent = $advantagesSection ? $sectionContents[$advantagesSection->id] ?? [] : [];
+        $advantageItems = $advantagesContent['group_data']['advantage_items'] ?? [];
+
+        if (empty($advantageItems)) {
+            $advantageItems = collect($data['advantages']['items'])->map(fn ($item) => [
+                'item_icon' => $item['icon'] ?? null,
+                'item_title' => $item['title'] ?? '',
+                'item_description' => $item['description'] ?? '',
+                '_uses_icon_map' => true,
+            ])->all();
+        }
+    @endphp
+    <section class="py-5 key-advantages">
         <div class="container py-5">
             <div class="section-title st-center">
-                <h3>{{ $data['advantages']['title'] }}</h3>
-                <p>{{ $data['advantages']['subtitle'] }}</p>
+                @if (!empty($advantagesContent['section_label']))
+                    <span class="sub-title">{{ $advantagesContent['section_label'] }}</span>
+                @endif
+                <h3>{{ $advantagesContent['section_title'] ?? $data['advantages']['title'] }}</h3>
+                <p>{{ $advantagesContent['section_subtitle'] ?? $data['advantages']['subtitle'] }}</p>
             </div>
             <div class="row g-4">
-                @foreach ($data['advantages']['items'] as $item)
+                @foreach ($advantageItems as $item)
                     <div class="col-sm-6 col-lg-3 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="office-item icon-only h-100">
-                            <div class="office-img"><i class="{{ $icon($item['icon']) }}"></i></div>
+                            <div class="office-img">
+                                <i class="{{ !empty($item['_uses_icon_map']) ? $icon($item['item_icon']) : ($item['item_icon'] ?: 'fas fa-star') }}"></i>
+                            </div>
                             <div class="office-content text-center">
-                                <h4>{{ $item['title'] }}</h4>
-                                <p>{{ $item['description'] }}</p>
+                                <h4>{{ $item['item_title'] ?? '' }}</h4>
+                                <p>{{ $item['item_description'] ?? '' }}</p>
                             </div>
                         </div>
                     </div>
@@ -548,6 +581,10 @@
 
     <!-- Start Testimonials Section -->
     <!-- Testimonials -->
+    @php
+        $aboutTestimonialsSection = $aboutPage?->sections->firstWhere('slug', 'testimonials-section');
+        $aboutTestimonialsContent = $aboutTestimonialsSection ? $sectionContents[$aboutTestimonialsSection->id] ?? [] : [];
+    @endphp
     @if ($testimonials->isNotEmpty())
         <section class="testimonials">
 
@@ -556,8 +593,11 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title st-center">
-                            <h3>What Our Clients Say</h3>
-                            <p>Trusted by businesses we've helped grow</p>
+                            @include('front.partials._section_heading', [
+                                'content' => $aboutTestimonialsContent,
+                                'defaultTitle' => "What Our Clients Say",
+                                'defaultSubtitle' => "Trusted by businesses we've helped grow",
+                            ])
                         </div>
                     </div>
                 </div>
@@ -604,30 +644,38 @@
 
     <!-- Start CTA Section -->
     <!-- CTA -->
+    @php
+        $aboutCtaSection = $aboutPage?->sections->firstWhere('slug', 'cta-section');
+        $aboutCtaContent = $aboutCtaSection ? $sectionContents[$aboutCtaSection->id] ?? [] : [];
+    @endphp
     <section class="call-2-acction" data-stellar-background-ratio="0.4">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
 
                     <div class="section-title st-center">
-                        <h3>LET'S BUILD SOMETHING EXCEPTIONAL</h3>
-
-                        <p>
-                            Transform Your Vision into Powerful Digital Solutions
-                        </p>
+                        @include('front.partials._section_heading', [
+                            'content' => $aboutCtaContent,
+                            'defaultTitle' => "LET'S BUILD SOMETHING EXCEPTIONAL",
+                            'defaultSubtitle' => "Transform Your Vision into Powerful Digital Solutions",
+                        ])
                     </div>
 
                     <div class="c2a">
 
                         <p>
-                            Whether you're launching a startup, modernizing your business, or scaling your digital presence,
-                            {{ config('constants.BUSINESS.name') }} delivers custom websites, business software, eCommerce platforms, and innovative
-                            technology solutions tailored to your goals. Partner with our experienced team to build secure,
-                            scalable, and high-performing digital products that create lasting business value.
+                            @if (!empty($aboutCtaContent['cta_paragraph']))
+                                {!! $aboutCtaContent['cta_paragraph'] !!}
+                            @else
+                                Whether you're launching a startup, modernizing your business, or scaling your digital presence,
+                                {{ config('constants.BUSINESS.name') }} delivers custom websites, business software, eCommerce platforms, and innovative
+                                technology solutions tailored to your goals. Partner with our experienced team to build secure,
+                                scalable, and high-performing digital products that create lasting business value.
+                            @endif
                         </p>
 
-                        <a href="{{ route('front.contact.index') }}" class="btn btn-main btn-lg">
-                            Start Your Project
+                        <a href="{{ $aboutCtaContent['btn_links'] ?? route('front.contact.index') }}" class="btn btn-main btn-lg">
+                            {{ $aboutCtaContent['btn_text'] ?? 'Start Your Project' }}
                         </a>
 
                     </div>
@@ -639,14 +687,21 @@
     <!-- End CTA Section -->
 
  <!-- Start FAQ Section -->
+ @php
+     $aboutFaqSection = $aboutPage?->sections->firstWhere('slug', 'faq-section');
+     $aboutFaqContent = $aboutFaqSection ? $sectionContents[$aboutFaqSection->id] ?? [] : [];
+ @endphp
  <section id="faq-section" class="faq-section">
         <div class="container">
 
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        <h3>Frequently Asked Questions</h3>
-                        <p>Quick answers to common questions</p>
+                        @include('front.partials._section_heading', [
+                            'content' => $aboutFaqContent,
+                            'defaultTitle' => 'Frequently Asked Questions',
+                            'defaultSubtitle' => 'Quick answers to common questions',
+                        ])
                     </div>
                 </div>
             </div>
