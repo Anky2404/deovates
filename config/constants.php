@@ -3,7 +3,7 @@ return [
     'ADMIN_PAGE_RECORDS' => 15,
     'FRONT_PAGE_RECORDS' => 50,
     'RATING_PAGE_RECORDS' => 10,
-    'BRAND_NAME' => 'Test Project',
+    'BRAND_NAME' => 'Deovate World',
 
     'META_STATUSES' => [
         3 =>  'Completed',
