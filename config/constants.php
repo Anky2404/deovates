@@ -195,7 +195,7 @@ return [
     ],
 
 
-    
+
 
     'TESTIMONIAL_RATINGS' => [
         1 => 1,
@@ -225,7 +225,8 @@ return [
         'phones' => [
             [
                 'label'  => 'Primary',
-                'number' => '73010-05510',
+                // 'number' => '73010-05510',
+                'number' => '99141-56467',
             ],
             [
                 'label'  => 'Support',
@@ -233,8 +234,10 @@ return [
             ],
         ],
         'whatsapp' => [
-            'number' => '+917301005510',
-            'link'   => 'https://wa.me/917301005510?text=Hi%20Deovate%20World,%20I%20would%20like%20to%20know%20more%20about%20your%20services.',
+            // 'number' => '+917301005510',
+            'number' => '+919914156467',
+            // 'link'   => 'https://wa.me/917301005510?text=Hi%20Deovate%20World,%20I%20would%20like%20to%20know%20more%20about%20your%20services.',
+            'link'   => "https://wa.me/919914156467?text=Hi!%20%F0%9F%91%8B%20Thanks%20for%20reaching%20out%20to%20Deovate%20World.%0A%0ATell%20us%20a%20little%20about%20what%20you're%20looking%20to%20build%20-%20a%20website%2C%20an%20app%2C%20custom%20software%2C%20whatever%20it%20is%20-%20and%20we'll%20get%20back%20to%20you%20personally%2C%20not%20a%20template%20reply.%0A%0AWe%20usually%20respond%20within%20a%20few%20hours%20on%20working%20days.%0A%0ATalk%20soon!%0A-%20Team%20Deovate%20World.",
         ],
         'emails' => [
             [

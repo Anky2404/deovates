@@ -113,17 +113,18 @@ class Helper
     }
 
     /**
-     * Expands merge tags like {{BRAND_NAME}} typed into a section's content
-     * fields in the admin, so the real value always shows on the front end
-     * even if the brand name changes later. Only applied when loading
-     * content for front-end display — the admin edit form reads the raw
-     * data directly, so the literal {{BRAND_NAME}} token stays editable
+     * Expands merge tags like {{BRAND_NAME}} and #whatsapp_url typed into a
+     * section's content fields in the admin, so the real value always shows
+     * on the front end even if the underlying config changes later. Only
+     * applied when loading content for front-end display — the admin edit
+     * form reads the raw data directly, so the literal token stays editable
      * there instead of being baked into a resolved value on every save.
      */
     public static function replacePlaceholders(array $data): array
     {
         $replacements = [
             '{{BRAND_NAME}}' => config('constants.BRAND_NAME'),
+            '#whatsapp_url' => config('constants.CONTACT.whatsapp.link'),
         ];
 
         array_walk_recursive($data, function (&$value) use ($replacements) {
