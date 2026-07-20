@@ -11710,7 +11710,7 @@ ul.styled-list.list-star li:before {
 }
 
 .phone-mockup {
-    max-width: 280px;
+    max-width: 100%;
     margin: 0 auto;
     position: relative;
 }
@@ -12475,10 +12475,30 @@ ul.styled-list.list-star li:before {
     80% { transform: translateX(3px); }
 }
 
+/* ===========================
+   Contact Form Layout
+=========================== */
+
+.app-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
 .app-form-group {
+    width: calc(50% - 10px);
     margin-bottom: 16px;
     text-align: left;
+    box-sizing: border-box;
 }
+
+.app-form-group.full-width {
+    width: 100%;
+}
+
+/* ===========================
+   Labels
+=========================== */
 
 .app-form-group label {
     display: block;
@@ -12488,6 +12508,10 @@ ul.styled-list.list-star li:before {
     color: #14213d;
     margin-bottom: 6px;
 }
+
+/* ===========================
+   Inputs & Textarea
+=========================== */
 
 .app-form-group input,
 .app-form-group textarea {
@@ -12500,7 +12524,12 @@ ul.styled-list.list-star li:before {
     color: #14213d;
     outline: none;
     resize: none;
+    box-sizing: border-box;
     transition: border-color .25s ease, background .25s ease;
+}
+
+.app-form-group textarea {
+    min-height: 140px;
 }
 
 .app-form-group input:focus,
@@ -12508,6 +12537,10 @@ ul.styled-list.list-star li:before {
     border-color: #0b3c8a;
     background: #ffffff;
 }
+
+/* ===========================
+   Validation
+=========================== */
 
 .app-form-group.is-valid input,
 .app-form-group.is-valid textarea {
@@ -12533,9 +12566,20 @@ ul.styled-list.list-star li:before {
 }
 
 @keyframes appFieldErrorIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
+
+/* ===========================
+   Submit Button
+=========================== */
 
 .app-form-submit {
     position: relative;
@@ -12545,7 +12589,7 @@ ul.styled-list.list-star li:before {
     font-size: 14px;
     font-weight: 600;
     letter-spacing: .3px;
-    padding: 13px 20px;
+    padding: 13px 28px;
     border-radius: 24px;
     cursor: pointer;
     margin-top: 6px;
@@ -12561,19 +12605,24 @@ ul.styled-list.list-star li:before {
     transform: scale(.97);
 }
 
+.app-form-submit:disabled {
+    cursor: default;
+    opacity: .85;
+}
+
+/* ===========================
+   Button Loader
+=========================== */
+
 .app-form-submit-loader {
     display: none;
     width: 16px;
     height: 16px;
     margin: 0 auto;
-    border: 2px solid rgba(255, 255, 255, 0.4);
+    border: 2px solid rgba(255, 255, 255, .4);
     border-top-color: #ffffff;
     border-radius: 50%;
     animation: appSpin .7s linear infinite;
-}
-
-@keyframes appSpin {
-    to { transform: rotate(360deg); }
 }
 
 .app-form-submit.is-loading .app-form-submit-text {
@@ -12584,20 +12633,25 @@ ul.styled-list.list-star li:before {
     display: block;
 }
 
-.app-form-submit:disabled {
-    cursor: default;
-    opacity: .85;
+@keyframes appSpin {
+    to {
+        transform: rotate(360deg);
+    }
 }
+
+/* ===========================
+   Success Message
+=========================== */
 
 .app-form-success {
     display: none;
     position: absolute;
     inset: 0;
+    background: #ffffff;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: #ffffff;
     padding: 0 30px;
 }
 
@@ -12606,12 +12660,6 @@ ul.styled-list.list-star li:before {
     color: #22c07a;
     margin-bottom: 14px;
     animation: appSuccessPop .5s ease;
-}
-
-@keyframes appSuccessPop {
-    0% { transform: scale(0); opacity: 0; }
-    60% { transform: scale(1.15); opacity: 1; }
-    100% { transform: scale(1); }
 }
 
 .app-form-success p {
@@ -12626,14 +12674,49 @@ ul.styled-list.list-star li:before {
     animation: appFadeIn .3s ease;
 }
 
-@keyframes appFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+@keyframes appSuccessPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
+@keyframes appFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
 @media (max-width: 991px) {
+
     .faq-contact-grid {
         gap: 60px;
+    }
+
+    .app-form-row {
+        gap: 16px;
+    }
+
+    .app-form-group,
+    .app-form-group.full-width {
+        width: 100%;
     }
 }
 
@@ -13304,7 +13387,7 @@ h6 {
     align-items: flex-start;
     gap: 8px;
     color: #6b7280;
-    font-size: 12px;
+    font-size: 15px;
     line-height: 20px;
     margin-bottom: 8px;
 }

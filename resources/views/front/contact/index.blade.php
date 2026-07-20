@@ -90,9 +90,10 @@
                 </div>
 
                 <div class="col-lg-4">
-                    <div class="section-title st-start">
-                        <h3>{{ $formDetailsContent['details_title'] ?? $data['contact_details']['title'] }}</h3>
-                    </div>
+                   <div class="section-title st-start">
+    <h3>{{ $formDetailsContent['details_title'] ?? $data['contact_details']['title'] }}</h3>
+    <p>{{ $formDetailsContent['details_subtitle'] ?? $data['contact_details']['subtitle'] }}</p>
+</div>
 
                     <!-- Contact details styled as a mobile app -->
                     <div class="phone-mockup contact-info-phone wow fadeInRight" data-wow-delay="0.15s">
