@@ -47,7 +47,7 @@ class ServiceController extends Controller
     {
         $service = Service::active()
             ->where('slug', $slug)
-            ->with(['faqs', 'features', 'challenges', 'technologies', 'children', 'problems', 'solutions'])
+            ->with(['faqs', 'features', 'challenges', 'technologies', 'problems', 'solutions'])
             ->first();
 
         if (! $service) {
@@ -62,33 +62,6 @@ class ServiceController extends Controller
             ->latest('id')
             ->take(3)
             ->get();
-
-        // Placeholder children until populated
-        $children = $service->children->isNotEmpty()
-            ? $service->children
-            : collect([
-                (object) [
-                    'slug' => null,
-                    'icon' => 'fas fa-lightbulb',
-                    'featured_image' => 'assets/front/img/why-1.png',
-                    'title' => 'Strategy & Planning',
-                    'description' => 'We start by understanding your goals and mapping out a clear roadmap tailored to your business needs.',
-                ],
-                (object) [
-                    'slug' => null,
-                    'icon' => 'fas fa-code',
-                    'featured_image' => 'assets/front/img/why-2.png',
-                    'title' => 'Design & Development',
-                    'description' => 'Our team designs and builds a scalable, secure solution using modern technologies and best practices.',
-                ],
-                (object) [
-                    'slug' => null,
-                    'icon' => 'fas fa-rocket',
-                    'featured_image' => 'assets/front/img/why-3.png',
-                    'title' => 'Testing & Launch',
-                    'description' => 'Every solution is thoroughly tested before a smooth, confident launch — followed by ongoing support.',
-                ],
-            ]);
 
         // Placeholder problems until populated
         $problems = $service->problems->isNotEmpty()
@@ -131,6 +104,6 @@ class ServiceController extends Controller
                 ],
             ]);
 
-        return view($this->prefix . $this->folder . 'details', compact('service', 'related', 'children', 'problems', 'solutions'));
+        return view($this->prefix . $this->folder . 'details', compact('service', 'related', 'problems', 'solutions'));
     }
 }

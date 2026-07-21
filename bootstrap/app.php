@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.guest' => \App\Http\Middleware\Admin\RedirectIfAuthenticated::class,
             'user.auth'   => \App\Http\Middleware\User\Authenticate::class,
             'user.guest'  => \App\Http\Middleware\User\RedirectIfAuthenticated::class,
+            'track.visit' => \App\Http\Middleware\TrackSiteVisit::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

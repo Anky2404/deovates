@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<title>@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO, Digital Marketing & Branding Agency')</title>
+{{-- <title>@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO, Digital Marketing & Branding Agency')</title> --}}
 <meta name="title" content="@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO, Digital Marketing & Branding Agency')">
 <meta name="description" content="@yield('meta_description', config('constants.BUSINESS.name') . ' designs and builds websites, runs SEO campaigns, and manages digital marketing for growing businesses. See how our web design, development, and branding work helps clients get found online and win more customers.')">
 <meta name="keywords" content="@yield('meta_keywords', 'web design agency, website development, SEO services, digital marketing agency, branding agency, custom software development, mobile app development, ecommerce website development')">

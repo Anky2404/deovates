@@ -10,15 +10,15 @@
 
     @include('front.partials.preloader')
 
-    @include('front.partials.header')
+    {{-- @include('front.partials.header') --}}
 
     <main>
         @yield('content')
     </main>
-
+ @include('front.partials.foot')
     @include('front.partials.footer')
 
-    @include('front.partials.foot')
+   
 
 </body>
 

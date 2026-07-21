@@ -25,6 +25,22 @@
                             </div>
 
                         </div>
+                         @php
+                                $googleRatingFooter = \App\Models\SiteSetting::get('google_reviews_average_rating');
+                                $googleTotalFooter = \App\Models\SiteSetting::get('google_reviews_total_count');
+                            @endphp
+
+                            @if ($googleRatingFooter && $googleTotalFooter)
+                                <a href="{{ route('front.testimonials.index') }}" class="site-visitor-counter google-rating-counter">
+                                    <span class="site-visitor-counter-icon google-rating-counter-icon">
+                                        <i class="bx bxs-star"></i>
+                                    </span>
+                                    <span class="site-visitor-counter-text">
+                                        <strong class="site-visitor-counter-number">{{ number_format($googleRatingFooter, 1) }}</strong>
+                                        <span class="site-visitor-counter-label">{{ number_format($googleTotalFooter) }} Google Reviews</span>
+                                    </span>
+                                </a>
+                            @endif
                     </div>
 
                     <div class="col-lg-2 col-md-4 col-sm-5">
@@ -128,6 +144,18 @@
                                 <img src="{{ asset('assets/front/img/gallery/map-footer.png') }}" alt="Map">
                             </div>
 
+                            <div class="site-visitor-counter" data-count="{{ \App\Models\SiteVisit::count() }}">
+                                <span class="site-visitor-counter-icon">
+                                    <i class="bx bx-group"></i>
+                                </span>
+                                <span class="site-visitor-counter-text">
+                                    <strong class="site-visitor-counter-number">0</strong>
+                                    <span class="site-visitor-counter-label">Total Visitors</span>
+                                </span>
+                            </div>
+
+                           
+
                         </div>
                     </div>
 
@@ -150,6 +178,7 @@
 
                 </div>
 
+              
             </div>
         </div>
     </div>

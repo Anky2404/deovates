@@ -41,7 +41,7 @@ Route::prefix('admin')->middleware('admin.guest')->group(function () {
 });
 
 
-Route::name('front.')->group(function () {
+Route::name('front.')->middleware('track.visit')->group(function () {
     /* ================= HOME ================= */
     Route::get('/', [HomeController::class, 'index'])->name('home.index');
 

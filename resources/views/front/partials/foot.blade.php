@@ -47,5 +47,61 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+ @once
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var $counters = document.querySelectorAll('.site-visitor-counter[data-count]');
+
+            $counters.forEach(function(el) {
+                var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+                var numberEl = el.querySelector('.site-visitor-counter-number');
+                var animated = false;
+
+                function animateCount() {
+                    if (animated) return;
+                    animated = true;
+
+                    var start = 0;
+                    var duration = 1200;
+                    var startTime = null;
+
+                    function step(timestamp) {
+                        if (!startTime) startTime = timestamp;
+                        var progress = Math.min((timestamp - startTime) / duration, 1);
+                        var value = Math.floor(progress * (target - start) + start);
+                        numberEl.textContent = value.toLocaleString();
+
+                        if (progress < 1) {
+                            window.requestAnimationFrame(step);
+                        } else {
+                            numberEl.textContent = target.toLocaleString();
+                        }
+                    }
+
+                    window.requestAnimationFrame(step);
+                }
+
+                if ('IntersectionObserver' in window) {
+                    var observer = new IntersectionObserver(function(entries) {
+                        entries.forEach(function(entry) {
+                            if (entry.isIntersecting) {
+                                animateCount();
+                                observer.disconnect();
+                            }
+                        });
+                    }, {
+                        threshold: 0.3
+                    });
+
+                    observer.observe(el);
+                } else {
+                    animateCount();
+                }
+            });
+        });
+    </script>
+@endonce
+
 @stack('scripts')
 <!-- End Foot Scripts Section -->

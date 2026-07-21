@@ -670,6 +670,14 @@
                     <div>Testimonials</div>
                 </a>
             </li>
+
+            {{-- ================= Google Reviews Menu ================= --}}
+            <li class="menu-item {{ Helper::isActive(['admin.google-reviews.index']) }}">
+                <a href="{{ route('admin.google-reviews.index') }}" class="menu-link">
+                    <i class='menu-icon bx bxl-google'></i>
+                    <div>Google Reviews</div>
+                </a>
+            </li>
             {{-- ================= CASE STUDIES ================= --}}
             @php
                 $casestudyMenuOpen = Helper::isActive(['admin.casestudies.*', 'admin.casestudies.categories.*']);

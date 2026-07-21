@@ -96,7 +96,169 @@
     @endif
     <!-- End Client Testimonials Section -->
 
+    @if ($googleReviews->isNotEmpty())
+    <!-- Start Google Reviews Section -->
+    <section class="google-reviews-section py-5">
+        <div class="container">
 
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title st-center">
+                        <span class="sub-title">Verified on Google</span>
+                        <h3>What People Say on Google</h3>
+
+                        @if ($googleRating)
+                            <div class="google-reviews-summary">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" class="google-reviews-glogo">
+                                <span class="google-reviews-score">{{ number_format($googleRating, 1) }}</span>
+                                <span class="google-reviews-stars">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <i class="bx {{ $i <= round($googleRating) ? 'bxs-star' : 'bx-star' }}"></i>
+                                    @endfor
+                                </span>
+                                @if ($googleTotalCount)
+                                    <span class="google-reviews-count">Based on {{ number_format($googleTotalCount) }} Google reviews</span>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                @foreach ($googleReviews as $review)
+                    <div class="col-md-6 col-lg-4">
+                        <div class="google-review-card">
+                            <div class="google-review-head">
+                                <img src="{{ $review->author_photo_url ?: asset('assets/front/img/default-img.png') }}"
+                                     alt="{{ $review->author_name }}" class="google-review-avatar">
+                                <div>
+                                    <strong>{{ $review->author_name }}</strong>
+                                    <div class="google-review-stars">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <i class="bx {{ $i <= $review->rating ? 'bxs-star' : 'bx-star' }}"></i>
+                                        @endfor
+                                    </div>
+                                </div>
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                                     alt="Google" class="google-review-badge">
+                            </div>
+
+                            @if ($review->review_text)
+                                <p class="google-review-text">{{ \Illuminate\Support\Str::limit($review->review_text, 220) }}</p>
+                            @endif
+
+                            <div class="google-review-time">{{ $review->relative_time_description }}</div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+        </div>
+    </section>
+    <!-- End Google Reviews Section -->
+
+    @once
+    <style>
+        .google-reviews-summary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .google-reviews-glogo {
+            width: 22px;
+            height: 22px;
+        }
+
+        .google-reviews-score {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0B3C8A;
+        }
+
+        .google-reviews-stars i {
+            color: #f5b400;
+            font-size: 16px;
+        }
+
+        .google-reviews-stars i.bx-star {
+            color: #d8dce3;
+        }
+
+        .google-reviews-count {
+            font-size: 13px;
+            color: #6c7688;
+        }
+
+        .google-review-card {
+            height: 100%;
+            padding: 22px;
+            border-radius: 14px;
+            background: #fff;
+            border: 1px solid #eef0f4;
+            box-shadow: 0 8px 24px rgba(11, 60, 138, 0.06);
+        }
+
+        .google-review-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .google-review-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .google-review-badge {
+            width: 18px;
+            height: 18px;
+            margin-left: auto;
+            align-self: flex-start;
+            opacity: .8;
+        }
+
+        .google-review-stars i {
+            color: #f5b400;
+            font-size: 13px;
+        }
+
+        .google-review-stars i.bx-star {
+            color: #d8dce3;
+        }
+
+        .google-review-text {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .google-review-time {
+            font-size: 12px;
+            color: #9aa4b4;
+            margin-top: 10px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .google-review-card {
+                background: rgba(255, 255, 255, 0.03);
+                border-color: rgba(255, 255, 255, 0.08);
+            }
+
+            .google-review-text {
+                color: #c3cad6;
+            }
+        }
+    </style>
+    @endonce
+    @endif
 
     <!-- Start CTA Section -->
     <!-- CTA -->
@@ -222,47 +384,7 @@
                                     <h4>Get In Touch</h4>
                                     <p>We'd love to hear about your project</p>
                                 </div>
-
-                                <form id="homeContactForm" class="app-contact-form" novalidate>
-
-                                    <div class="app-form-group">
-                                        <label for="hc-name">Full Name</label>
-                                        <input type="text" id="hc-name" name="name" required
-                                            placeholder="John Doe">
-                                        <span class="app-form-error">Please enter your name.</span>
-                                    </div>
-
-                                    <div class="app-form-group">
-                                        <label for="hc-email">Email Address</label>
-                                        <input type="email" id="hc-email" name="email" required
-                                            placeholder="john@example.com">
-                                        <span class="app-form-error">Please enter a valid email.</span>
-                                    </div>
-
-                                    <div class="app-form-group">
-                                        <label for="hc-phone">Phone Number</label>
-                                        <input type="tel" id="hc-phone" name="phone"
-                                            placeholder="+91 12345 67890">
-                                        <span class="app-form-error">Please enter a valid phone number.</span>
-                                    </div>
-
-                                    <div class="app-form-group">
-                                        <label for="hc-message">Message</label>
-                                        <textarea id="hc-message" name="message" rows="4" required placeholder="Tell us about your project..."></textarea>
-                                        <span class="app-form-error">Please enter a message.</span>
-                                    </div>
-
-                                    <button type="submit" class="app-form-submit">
-                                        <span class="app-form-submit-text">Send Message</span>
-                                        <span class="app-form-submit-loader"></span>
-                                    </button>
-
-                                    <div class="app-form-success">
-                                        <i class="fa fa-check-circle"></i>
-                                        <p>Thanks! Your message has been noted.</p>
-                                    </div>
-
-                                </form>
+ @include('front.common.contact-form')
                             </div>
                             <div class="tablet-home-btn"></div>
                         </div>

@@ -26,6 +26,7 @@ use App\Http\Controllers\Backend\ErrorReportController;
 use App\Http\Controllers\Backend\FailedJobController;
 use App\Http\Controllers\Backend\FaqCategoryController;
 use App\Http\Controllers\Backend\FaqController;
+use App\Http\Controllers\Backend\GoogleReviewController;
 use App\Http\Controllers\Backend\JobBatchController;
 use App\Http\Controllers\Backend\JobController;
 use App\Http\Controllers\Backend\MarketingIndustryCategoryController;
@@ -466,6 +467,13 @@ Route::middleware('admin.auth')->group(function () {
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
         Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
+    });
+
+    Route::prefix('google-reviews')->name('google-reviews.')->controller(GoogleReviewController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/sync', 'sync')->name('sync');
+        Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
+        Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
     });
 
 

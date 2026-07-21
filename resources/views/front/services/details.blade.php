@@ -67,28 +67,6 @@
                         {!! $service->description ?: $service->short_description !!}
                     </div>
 
-                    @if ($service->features->isNotEmpty())
-                        <div class="row g-4 mt-3">
-                            @foreach ($service->features as $feature)
-                                <div class="col-md-6 wow fadeInUp" data-wow-delay="{{ 0.1 * (($loop->index % 4) + 1) }}s">
-                                    <div class="simple-process-item text-start d-flex align-items-start gap-3">
-                                        <div class="simple-process-number flex-shrink-0"
-                                            style="width:52px;height:52px;font-size:18px;margin:0;">
-                                            <i class="{{ $feature->icon ?: 'fas fa-check' }}"></i>
-                                        </div>
-                                        <div>
-                                            <h4 class="mb-2">{{ $feature->title }}</h4>
-                                            <p>{{ $feature->short_description }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
-
-
-
-
                 </div>
 
                 <div class="col-lg-4">
@@ -141,13 +119,13 @@
     </section>
     <!-- End Service Details Section -->
 
-    <!-- Start Services Included Section -->
+    <!-- Start Service Features Section -->
     <section class="services_included container-fluid service overflow-hidden py-5 bg-grey">
-        @if ($children->isNotEmpty())
+        @if ($service->features->isNotEmpty())
                 <div class="section-title st-center mt-5">
-                    <h3>What's Included</h3>
-                    <p>A closer look at everything bundled under {{ $service->title }} — explore each part of the
-                        service in detail.</p>
+                    <h3>Service Features</h3>
+                    <p>A closer look at everything included with {{ $service->title }} — explore each capability in
+                        detail.</p>
                 </div>
 
                 <div class="child-service-mockup wow fadeInUp" data-wow-delay="0.1s">
@@ -156,24 +134,26 @@
                             <span class="dot dot-red"></span>
                             <span class="dot dot-yellow"></span>
                             <span class="dot dot-green"></span>
-                            <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/services/{{ $service->slug }}#included</span>
+                            <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/services/{{ $service->slug }}#features</span>
                         </div>
                         <div class="laptop-screen-glass" style="min-height:0;">
                             <div class="laptop-shine"></div>
                             <div class="child-services-carousel owl-carousel">
-                                @foreach ($children as $child)
+                                @foreach ($service->features as $feature)
                                     <div class="child-service-slide">
                                         <div class="child-service-slide-img">
-                                            <img src="{{ !empty($child->slug) ? \App\Helper::img($child->featured_image) : asset($child->featured_image) }}"
-                                                alt="{{ $child->title }}">
+                                            <img src="{{ \App\Helper::img($feature->image) }}"
+                                                alt="{{ $feature->image_alt ?: $feature->title }}">
                                         </div>
                                         <div class="child-service-slide-body">
                                             <span class="child-service-icon"><i
-                                                    class="{{ $child->icon ?: 'fas fa-cog' }}"></i></span>
-                                            <h4>{{ $child->title }}</h4>
-                                            <p>{!! $child->description ?: ($child->short_description ?? '') !!}</p>
-                                            <a href="{{ !empty($child->slug) ? route('front.services.details', $child->slug) : route('front.services.index') }}"
-                                                class="btn btn-main">{{ !empty($child->slug) ? 'View Details' : 'Explore Services' }}</a>
+                                                    class="{{ $feature->icon ?: 'fas fa-check' }}"></i></span>
+                                            <h4>{{ $feature->title }}
+                                                @if ($feature->is_highlighted)
+                                                    <span class="badge bg-warning text-dark ms-1">Popular</span>
+                                                @endif
+                                            </h4>
+                                            <p>{{ $feature->short_description }}</p>
                                         </div>
                                     </div>
                                 @endforeach
@@ -187,7 +167,7 @@
                 </div>
             @endif
     </section>
-    <!-- End Services Included Section -->
+    <!-- End Service Features Section -->
 
     <!-- Start Problem & Solution Section -->
     <section class="problem-solution-area container-fluid service overflow-hidden py-5">
@@ -215,7 +195,7 @@
                                     @foreach ($problems as $problem)
                                         <div class="ps-slide">
                                             <div class="ps-slide-img">
-                                                <img src="{{ asset($problem->image) }}" alt="{{ $problem->title }}">
+                                                <img src="{{ \App\Helper::img($problem->image) }}" alt="{{ $problem->title }}">
                                             </div>
                                             <div class="ps-slide-body">
                                                 <h5>{{ $problem->title }}</h5>
@@ -694,46 +674,7 @@
                                     <p>We'd love to hear about your project</p>
                                 </div>
 
-                                <form id="homeContactForm" class="app-contact-form" novalidate>
-
-                                    <div class="app-form-group">
-                                        <label for="hc-name">Full Name</label>
-                                        <input type="text" id="hc-name" name="name" required
-                                            placeholder="John Doe">
-                                        <span class="app-form-error">Please enter your name.</span>
-                                    </div>
-
-                                    <div class="app-form-group">
-                                        <label for="hc-email">Email Address</label>
-                                        <input type="email" id="hc-email" name="email" required
-                                            placeholder="john@example.com">
-                                        <span class="app-form-error">Please enter a valid email.</span>
-                                    </div>
-
-                                    <div class="app-form-group">
-                                        <label for="hc-phone">Phone Number</label>
-                                        <input type="tel" id="hc-phone" name="phone"
-                                            placeholder="+91 12345 67890">
-                                        <span class="app-form-error">Please enter a valid phone number.</span>
-                                    </div>
-
-                                    <div class="app-form-group">
-                                        <label for="hc-message">Message</label>
-                                        <textarea id="hc-message" name="message" rows="4" required placeholder="Tell us about your project..."></textarea>
-                                        <span class="app-form-error">Please enter a message.</span>
-                                    </div>
-
-                                    <button type="submit" class="app-form-submit">
-                                        <span class="app-form-submit-text">Send Message</span>
-                                        <span class="app-form-submit-loader"></span>
-                                    </button>
-
-                                    <div class="app-form-success">
-                                        <i class="fa fa-check-circle"></i>
-                                        <p>Thanks! Your message has been noted.</p>
-                                    </div>
-
-                                </form>
+                                 @include('front.common.contact-form')
                             </div>
                             <div class="tablet-home-btn"></div>
                         </div>

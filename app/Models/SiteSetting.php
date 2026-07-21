@@ -59,12 +59,22 @@ class SiteSetting extends Model
 
     public static function set(string $key, $value): bool
     {
-        $setting = static::updateOrCreate(
-            ['key' => $key],
-            ['value' => $value]
-        );
+        $setting = static::withTrashed()->where('key', $key)->first();
+
+        if ($setting) {
+            if ($setting->trashed()) {
+                $setting->restore();
+            }
+
+            $changed = $setting->value !== $value;
+            $setting->update(['value' => $value]);
+        } else {
+            static::create(['key' => $key, 'value' => $value]);
+            $changed = true;
+        }
+
         Cache::forget("setting.{$key}");
-        return $setting->wasRecentlyCreated || $setting->wasChanged();
+        return $changed;
     }
 
     public function getTypedValueAttribute()

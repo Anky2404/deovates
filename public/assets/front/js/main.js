@@ -712,6 +712,20 @@ $(document).ready(function () {
             var $btn = $form.find('.app-form-submit');
             $btn.addClass('is-loading').prop('disabled', true);
 
+            // Forms without a real action (e.g. the career "general
+            // application" widgets, which post different fields and
+            // aren't wired to a backend yet) keep the old harmless
+            // simulated submit instead of AJAX-posting nowhere useful.
+            if (!$form.attr('action')) {
+                setTimeout(function () {
+                    $btn.removeClass('is-loading').prop('disabled', false);
+                    showFormMessage($form, true, 'Thanks! Your message has been noted.');
+                    $form.find('input, textarea').val('');
+                    $form.find('.app-form-group').removeClass('is-valid has-error');
+                }, 900);
+                return;
+            }
+
             $.ajax({
                 url: $form.attr('action'),
                 method: 'POST',

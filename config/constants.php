@@ -120,6 +120,7 @@ return [
         'faqcategory'          => 'FaqCategory',
         'form'                 => 'Form',
         'formfield'            => 'FormField',
+        'googlereview'         => 'GoogleReview',
         'industry'             => 'Industry',
         'industrycategory'     => 'IndustryCategory',
         'media'                => 'Media',
@@ -251,7 +252,7 @@ return [
     'EMAIL' => [
         'from' => 'abhiii2404@gmail.com',
         'contact' => 'sales@deovateworld.com',
-        'send' => ['abhiii2404@gmail.com', 'ankysinghhumraj1@gmail.com'],
+        'send' => ['abhiii2404@gmail.com', 'ankysinghhumraj1@gmail.com','info@deovateworld.in'],
         // 'send' => 'support@thecanadafoods.com',
     ],
 
@@ -302,13 +303,13 @@ return [
             'keywords'       => 'Deovate World, Web Design, Website Development, SEO Services, Digital Marketing Agency, Branding Agency, Laravel Development, eCommerce Website Development, Mobile App Development, Graphic Design, UI UX Design, Software Development, Website Maintenance, WordPress Development, Shopify Development, Social Media Marketing, Search Engine Optimization, PPC Advertising, Logo Design, Corporate Branding, Website Redesign, Web Application Development',
         ],
         'logo' => [
-            'header' => 'assets/front/img/logo/header-logo.png',
-            'big' => 'assets/front/img/logo/logo.png',
-            'small' => 'assets/front/img/logo/loder-logo.png',
-            'loader_logo' => 'assets/front/img/logo/loder-logo.png',
-            'favicon' => 'assets/front/img/logo/favicon.ico',
+            'header' => 'assets/front/img/logo/header-logo.png1',
+            'big' => 'assets/front/img/logo/logo.png1',
+            'small' => 'assets/front/img/logo/loder-logo.png1',
+            'loader_logo' => 'assets/front/img/logo/loder-logo.png1',
+            'favicon' => 'assets/front/img/logo/favicon.ico1',
         ],
-        'dark_logo' => 'assets/front/img/logo/header-logo.png',
+        'dark_logo' => 'assets/front/img/logo/header-logo.png1',
         'alt' => config('constants.BUSINESS.name', 'Deovate World'),
         'footer_info' => 'Deovate Technologies delivers secure, scalable, and high-performance digital solutions including web development, mobile applications, UI/UX design, and digital marketing for clients worldwide. ',
 
