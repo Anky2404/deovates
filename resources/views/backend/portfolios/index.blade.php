@@ -43,9 +43,7 @@
                         <!-- Featured Image -->
                         <td>
                             @php
-                                $image = $portfolio->featured_image
-                                    ? asset('storage/' . $portfolio->featured_image)
-                                    : asset('assets/backend/img/placeholder.png');
+                                $image = \App\Helper::img($portfolio->featured_image);
                             @endphp
                             <img src="{{ $image }}" alt="{{ $portfolio->title }}" class="table-thumb rounded">
                         </td>

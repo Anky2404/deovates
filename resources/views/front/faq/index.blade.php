@@ -9,7 +9,7 @@
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
-            data-background="{{ \App\Helper::heroBanner('faq.png', 'assets/front/img/hero/h2_hero.avif') }}">
+            data-background="{{ \App\Helper::heroBanner('faq.avif', 'assets/front/img/hero/h2_hero.avif') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">

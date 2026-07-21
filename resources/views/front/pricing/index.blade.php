@@ -38,7 +38,7 @@
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
-            data-background="{{ \App\Helper::heroBanner('pricing.png', 'assets/front/img/hero/h1_hero.avif') }}">
+            data-background="{{ \App\Helper::heroBanner('pricing.avif', 'assets/front/img/hero/h1_hero.avif') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">

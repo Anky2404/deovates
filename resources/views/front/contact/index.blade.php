@@ -21,7 +21,7 @@
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
-            data-background="{{ !empty($heroContent['hero_image']) ? asset('storage/' . $heroContent['hero_image']) : \App\Helper::heroBanner('contact.png', 'assets/front/img/banner/contact_bg.avif') }}">
+            data-background="{{ !empty($heroContent['hero_image']) ? asset('storage/' . $heroContent['hero_image']) : \App\Helper::heroBanner('contact.avif', 'assets/front/img/hero/h2_hero.avif') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
