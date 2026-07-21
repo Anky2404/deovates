@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-{{-- <title>@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO, Digital Marketing & Branding Agency')</title> --}}
+<title>@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO, Digital Marketing & Branding Agency')</title>
 <meta name="title" content="@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO, Digital Marketing & Branding Agency')">
 <meta name="description" content="@yield('meta_description', config('constants.BUSINESS.name') . ' designs and builds websites, runs SEO campaigns, and manages digital marketing for growing businesses. See how our web design, development, and branding work helps clients get found online and win more customers.')">
 <meta name="keywords" content="@yield('meta_keywords', 'web design agency, website development, SEO services, digital marketing agency, branding agency, custom software development, mobile app development, ecommerce website development')">
@@ -15,9 +15,11 @@
 
 <link rel="canonical" href="{{ url()->current() }}">
 
+   <link rel="icon" type="image/svg+xml" href="{{ asset('assets/front/favicons/favicon.svg') }}">
 <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('assets/front/favicons/favicon-96x96.png') }}">
-<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/front/favicons/favicon-180x180.png') }}">
-<link rel="manifest" href="{{ asset('site.webmanifest') }}">
+<link rel="shortcut icon" href="{{ asset('assets/front/favicons/favicon.ico') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/front/favicons/apple-touch-icon.png') }}">
+<link rel="manifest" href="{{ asset('assets/front/favicons/site.webmanifest') }}">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO & Digital Marketing Agency')">
@@ -35,7 +37,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://unpkg.com">
 
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@500;600;700;800&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -51,6 +53,16 @@
 <link rel="stylesheet" href="{{ asset('assets/front/fonts/icomoon/style.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+{{--
+    Neither of these is needed for first paint (no icons from either appear
+    in the header/hero — only further down the page, e.g. the footer), so
+    they're loaded async via the preload+swap trick instead of blocking
+    render like a normal <link rel="stylesheet">. The devicon library that
+    used to load here was never referenced anywhere and has been dropped.
+--}}
+<link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" as="style" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+</noscript>

@@ -631,7 +631,7 @@ hr {
     height: 50px;
     width: 50px;
     right: 31px;
-    bottom: 40px;
+    bottom: 170px;
     color: #fff;
     font-size: 20px;
     text-align: center;
@@ -4291,7 +4291,7 @@ hr {
 .testimonial-area::after {
     position: absolute;
     content: "";
-    background-image: url(../img/gallery/arrow_testimonial.png);
+    background-image: url(../img/gallery/arrow_testimonial.avif);
     left: 0;
     right: 0;
     bottom: 0;
@@ -4502,7 +4502,7 @@ hr {
 .footer-area::after {
     position: absolute;
     content: "";
-    background-image: url(../img/gallery/arrow_testimonial.png);
+    background-image: url(../img/gallery/arrow_testimonial.avif);
     left: 0;
     right: 0;
     top: 0;
@@ -7232,7 +7232,7 @@ del {
 }
 
 .primary-checkbox input:checked+label {
-    background: url(../img/elements/primary-check.png) no-repeat center center/cover;
+    background: url(../img/elements/primary-check.avif) no-repeat center center/cover;
     border: none
 }
 
@@ -7270,7 +7270,7 @@ del {
 }
 
 .confirm-checkbox input:checked+label {
-    background: url(../img/elements/success-check.png) no-repeat center center/cover;
+    background: url(../img/elements/success-check.avif) no-repeat center center/cover;
     border: none
 }
 
@@ -7313,7 +7313,7 @@ del {
 }
 
 .disabled-checkbox input:checked+label {
-    background: url(../img/elements/disabled-check.png) no-repeat center center/cover;
+    background: url(../img/elements/disabled-check.avif) no-repeat center center/cover;
     border: none
 }
 
@@ -7351,7 +7351,7 @@ del {
 }
 
 .primary-radio input:checked+label {
-    background: url(../img/elements/primary-radio.png) no-repeat center center/cover;
+    background: url(../img/elements/primary-radio.avif) no-repeat center center/cover;
     border: none
 }
 
@@ -7389,7 +7389,7 @@ del {
 }
 
 .confirm-radio input:checked+label {
-    background: url(../img/elements/success-radio.png) no-repeat center center/cover;
+    background: url(../img/elements/success-radio.avif) no-repeat center center/cover;
     border: none
 }
 
@@ -7432,7 +7432,7 @@ del {
 }
 
 .disabled-radio input:checked+label {
-    background: url(../img/elements/disabled-radio.png) no-repeat center center/cover;
+    background: url(../img/elements/disabled-radio.avif) no-repeat center center/cover;
     border: none
 }
 
@@ -7589,7 +7589,7 @@ del {
     display: block;
     width: 150px;
     height: 51px;
-    background-image: url(../img/title-top.png);
+    background-image: url(../img/title-top.avif);
     background-repeat: no-repeat;
 }
 
@@ -7883,7 +7883,7 @@ del {
 
 
 .funfacts {
-    background-image: url(../img/funfact4.png);
+    background-image: url(../img/funfact4.avif);
     background-color: #191a33;
     background-position: center center;
     background-attachment: fixed;
@@ -8074,7 +8074,7 @@ del {
 
 /*** Counter Facts Start ***/
 .counter-facts {
-    background: linear-gradient(rgba(255, 255, 255, .9), rgba(255, 255, 255, 0.8)), url(../img/breadcrumb.png);
+    background: linear-gradient(rgba(255, 255, 255, .9), rgba(255, 255, 255, 0.8)), url(../img/breadcrumb.avif);
     background-size: cover;
     background-attachment: fixed;
     background-position: center center;
@@ -8186,14 +8186,14 @@ del {
 
 .call-2-acction {
     padding: 100px 0;
-    background-image: url(../img/c2a.png);
+    background-image: url(../img/c2a.avif);
     background-attachment: fixed;
     background-color: #000;
 }
 
 .call-2-acction {
     position: relative;
-    background: url('../img/c2a.png') center center/cover no-repeat;
+    background: url('../img/c2a.avif') center center/cover no-repeat;
     padding: 100px 0;
     overflow: hidden;
 }
@@ -8986,7 +8986,7 @@ roadmap area css
     overflow:hidden;
     text-align:center;
 
-    background:url("../img/call-us.png") center center/cover no-repeat fixed;
+    background:url("../img/call-us.avif") center center/cover no-repeat fixed;
 }
 
 /* Overlay */
@@ -9728,7 +9728,7 @@ roadmap area css
 
 .subscribe {
   padding: 120px 0;
-  background-image: url(../img/subscribe2.png);
+  background-image: url(../img/subscribe2.avif);
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -10375,7 +10375,7 @@ footer.site-footer a:hover {
 
 .testimonials {
   padding: 100px 0;
-  background-image: url(../img/testimonials.png);
+  background-image: url(../img/testimonials.avif);
   background-size: cover;
   background-attachment: fixed;
   background-color: #000;

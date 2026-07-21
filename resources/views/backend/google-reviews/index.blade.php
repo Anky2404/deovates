@@ -66,7 +66,7 @@
 
                         <td>
                             <div class="d-flex align-items-center gap-2">
-                                <img src="{{ $row->author_photo_url ?: asset('assets/front/img/default-img.png') }}"
+                                <img src="{{ $row->author_photo_url ?: asset('assets/front/img/default-img.avif') }}"
                                      alt="{{ $row->author_name }}"
                                      style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
                                 <strong>{{ $row->author_name }}</strong>

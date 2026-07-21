@@ -9,7 +9,7 @@
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
-            data-background="{{ \App\Helper::heroBanner('hire-me.png', 'assets/front/img/hero/h3_hero.png') }}">
+            data-background="{{ \App\Helper::heroBanner('hire-me.png', 'assets/front/img/hero/h3_hero.avif') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
@@ -115,7 +115,7 @@
         $hireCtaSection = $page?->sections->firstWhere('slug', 'hireme-cta-section');
         $hireCtaContent = $hireCtaSection ? $sectionContents[$hireCtaSection->id] ?? [] : [];
     @endphp
-    <section class="call-us" style="background-image:url('{{ !empty($hireCtaContent['bg_image']) ? asset('storage/' . $hireCtaContent['bg_image']) : asset('assets/front/img/funfact.png') }}');">
+    <section class="call-us" style="background-image:url('{{ !empty($hireCtaContent['bg_image']) ? asset('storage/' . $hireCtaContent['bg_image']) : asset('assets/front/img/funfact.avif') }}');">
         <div class="container">
             <div class="call-us-inner text-center">
                 <span class="kicker">{{ $hireCtaContent['section_label'] ?? "Let's Get Started" }}</span>

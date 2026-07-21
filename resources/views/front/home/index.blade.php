@@ -11,7 +11,7 @@
 
                 <!-- Slider 1 -->
                 <div class="single-slider hero-overly slider-height d-flex align-items-center"
-                    data-background="{{ asset('assets/front/img/hero/h1_hero.png') }}">
+                    data-background="{{ asset('assets/front/img/hero/h1_hero.avif') }}">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-11">
@@ -47,7 +47,7 @@
 
                 <!-- Slider 2 -->
                 <div class="single-slider hero-overly slider-height d-flex align-items-center"
-                    data-background="{{ asset('assets/front/img/hero/h2_hero.png') }}">
+                    data-background="{{ asset('assets/front/img/hero/h2_hero.avif') }}">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-11">
@@ -81,7 +81,7 @@
                 </div>
                 <!-- Slider 2 -->
                 <div class="single-slider hero-overly slider-height d-flex align-items-center"
-                    data-background="{{ asset('assets/front/img/hero/h3_hero.png') }}">
+                    data-background="{{ asset('assets/front/img/hero/h3_hero.avif') }}">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-11">
@@ -120,29 +120,29 @@
 
 
     @php
-    use Illuminate\Support\Str;
+        use Illuminate\Support\Str;
 
-    $replacePlaceholders = function ($content) {
-        if (empty($content)) {
-            return $content;
-        }
+        $replacePlaceholders = function ($content) {
+            if (empty($content)) {
+                return $content;
+            }
 
-        $replacements = [
-            '{{BRAND_NAME}}' => config('constants.BRAND_NAME'),
-            '{{BUSINESS_NAME}}' => config('constants.BUSINESS.name'),
-            '{{BUSINESS_EMAIL}}' => config('constants.BUSINESS.email'),
-            '{{BUSINESS_PHONE}}' => config('constants.BUSINESS.phone'),
-            '{{BUSINESS_WEBSITE}}' => config('constants.BUSINESS.website'),
-        ];
+            $replacements = [
+                '{{ BRAND_NAME }}' => config('constants.BRAND_NAME'),
+                '{{ BUSINESS_NAME }}' => config('constants.BUSINESS.name'),
+                '{{ BUSINESS_EMAIL }}' => config('constants.BUSINESS.email'),
+                '{{ BUSINESS_PHONE }}' => config('constants.BUSINESS.phone'),
+                '{{ BUSINESS_WEBSITE }}' => config('constants.BUSINESS.website'),
+            ];
 
-        return Str::of($content)->replace(array_keys($replacements), array_values($replacements));
-    };
+            return Str::of($content)->replace(array_keys($replacements), array_values($replacements));
+        };
 
-    $sectionTitle = $replacePlaceholders($aboutContent['section_title'] ?? null);
-    $sectionSubtitle = $replacePlaceholders($aboutContent['section_subtitle'] ?? null);
-    $sectionParagraph = $replacePlaceholders($aboutContent['section_paragraph'] ?? null);
-    $buttonText = $replacePlaceholders($aboutContent['btn_text'] ?? null);
-@endphp
+        $sectionTitle = $replacePlaceholders($aboutContent['section_title'] ?? null);
+        $sectionSubtitle = $replacePlaceholders($aboutContent['section_subtitle'] ?? null);
+        $sectionParagraph = $replacePlaceholders($aboutContent['section_paragraph'] ?? null);
+        $buttonText = $replacePlaceholders($aboutContent['btn_text'] ?? null);
+    @endphp
 
     @php
         $aboutSection = $homePage?->sections->firstWhere('slug', 'about-section');
@@ -236,7 +236,7 @@
 
                         <div class="col-lg-6 col-md-6 text-center">
 
-                            <img src="{{ !empty($aboutContent['right_image']) ? asset('storage/' . $aboutContent['right_image']) : asset('assets/front/img/about.png') }}"
+                            <img src="{{ !empty($aboutContent['right_image']) ? asset('storage/' . $aboutContent['right_image']) : asset('assets/front/img/about.avif') }}"
                                 alt="{{ $aboutContent['section_title'] ?? 'Professional Web Development Company' }}"
                                 class="img-responsive about-img">
 
@@ -364,7 +364,7 @@
                 <div class="col-md-12">
                     <div class="section-title st-center">
                         @include('front.partials._section_heading', [
-                        'content' => $servicesContent,
+                            'content' => $servicesContent,
                             'defaultTitle' => \App\Helper::sectionTitle(
                                 'home',
                                 'services',
@@ -383,7 +383,7 @@
                                 <div class="service-item">
                                     <div class="service-inner">
                                         <div class="service-img">
-                                            <img src="{{ !empty($service['featured_image']) ? asset('storage/' . $service['featured_image']) : asset('assets/frontend/images/1768234677_web-application.webp') }}"
+                                            <img src="{{ !empty($service['featured_image']) ? asset('storage/' . $service['featured_image']) : asset('assets/front/img/default-img.avif') }}"
                                                 class="img-fluid w-100 rounded" alt="Image">
                                         </div>
                                         <div class="service-title">
@@ -423,55 +423,12 @@
     <!-- End Services Section -->
     <!-- about section end -->
     <!-- Start Call to Action Section -->
-    @php
-        $ctaSection = $homePage?->sections->firstWhere('slug', 'cta-section');
-        $ctaContent = $ctaSection ? $sectionContents[$ctaSection->id] ?? [] : [];
-    @endphp
-    <section class="call-2-acction" data-stellar-background-ratio="0.4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-
-                    <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
-                            'content' => $ctaContent,
-                            'defaultTitle' => \App\Helper::sectionTitle(
-                                'home',
-                                'cta',
-                                'title',
-                                "LET'S BUILD SOMETHING EXCEPTIONAL"),
-                            'defaultSubtitle' => \App\Helper::sectionTitle('home', 'cta', 'subtitle'),
-                        ])
-                    </div>
-
-                    <div class="c2a">
-
-                        <p>
-                            @if (!empty($ctaContent['cta_paragraph']))
-                                {!! $ctaContent['cta_paragraph'] !!}
-                            @else
-                                Whether you're launching a startup, modernizing your business, or scaling your digital
-                                presence,
-                                {{ config('constants.BUSINESS.name') }} delivers custom websites, business software,
-                                eCommerce
-                                platforms, and innovative
-                                technology solutions tailored to your goals. Partner with our experienced team to build
-                                secure,
-                                scalable, and high-performing digital products that create lasting business value.
-                            @endif
-                        </p>
-
-                        <a href="{{ $ctaContent['btn_links'] ?? route('front.contact.index') }}"
-                            class="btn btn-main btn-lg">
-                            {{ $ctaContent['btn_text'] ?? 'Start Your Project' }}
-                        </a>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
+    @include('front.partials._cta_section', [
+        'page' => $homePage,
+        'sectionContents' => $sectionContents,
+        'defaultTitle' => \App\Helper::sectionTitle('home', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL"),
+        'defaultSubtitle' => \App\Helper::sectionTitle('home', 'cta', 'subtitle'),
+    ])
     <!-- End Call to Action Section -->
 
     <!-- Start Clients Logos Section -->
@@ -484,7 +441,7 @@
             $clientLogos = collect(range(1, 9))
                 ->map(
                     fn($i) => [
-                        'path' => 'assets/front/img/client' . ($i === 1 ? '' : $i) . '.png',
+                        'path' => 'assets/front/img/client' . ($i === 1 ? '' : $i) . '.avif',
                         'alt' => 'Client ' . $i,
                         'external' => true,
                     ],
@@ -537,7 +494,7 @@
                         'Every successful project starts with understanding your business goals. We create customized digital strategies backed by market research, customer insights, and modern technologies to deliver solutions that improve engagement, increase conversions, and support long-term business growth.',
                     'btn_text' => 'Start Your Project',
                     'btn_links' => null,
-                    '_fallback_img' => 'assets/front/img/why-1.png',
+                    '_fallback_img' => 'assets/front/img/why-1.avif',
                 ],
                 [
                     'item_image' => null,
@@ -546,7 +503,7 @@
                         'Our experienced developers, designers, and technology specialists work together to build secure, scalable, and high-performing digital products. Every solution is developed using modern frameworks, clean coding standards, and industry best practices to ensure outstanding performance.',
                     'btn_text' => 'Talk to Our Experts',
                     'btn_links' => null,
-                    '_fallback_img' => 'assets/front/img/why-2.png',
+                    '_fallback_img' => 'assets/front/img/why-2.avif',
                 ],
                 [
                     'item_image' => null,
@@ -555,7 +512,7 @@
                         'We help startups, growing businesses, and enterprises build reliable websites, business software, eCommerce platforms, and digital solutions tailored to their industry needs. Our practical experience enables us to solve real business challenges through innovative technology.',
                     'btn_text' => 'Explore Our Expertise',
                     'btn_links' => null,
-                    '_fallback_img' => 'assets/front/img/why-3.png',
+                    '_fallback_img' => 'assets/front/img/why-3.avif',
                 ],
                 [
                     'item_image' => null,
@@ -564,7 +521,7 @@
                         'We believe in building long-term relationships with our clients. From regular maintenance and security updates to performance optimization and technical support, we ensure your digital solutions continue to perform efficiently as your business evolves.',
                     'btn_text' => "Let's Build Together",
                     'btn_links' => null,
-                    '_fallback_img' => 'assets/front/img/why-4.png',
+                    '_fallback_img' => 'assets/front/img/why-4.avif',
                 ],
             ];
         }
@@ -601,7 +558,7 @@
                                 <div class="service-img p-5 wow {{ $loop->even ? 'fadeInLeft' : 'fadeInRight' }}"
                                     data-wow-delay="0.2s">
                                     <img class="img-fluid rounded-circle"
-                                        src="{{ !empty($item['item_image']) ? asset('storage/' . $item['item_image']) : asset($item['_fallback_img'] ?? 'assets/front/img/why-1.png') }}"
+                                        src="{{ !empty($item['item_image']) ? asset('storage/' . $item['item_image']) : asset($item['_fallback_img'] ?? 'assets/front/img/why-1.avif') }}"
                                         alt="{{ $item['item_title'] ?? '' }}">
                                 </div>
                             </div>
@@ -638,111 +595,13 @@
 
 
     <!-- Start Roadmap Section -->
-    @php
-        $roadmapSection = $homePage?->sections->firstWhere('slug', 'roadmap-section');
-        $roadmapContent = $roadmapSection ? $sectionContents[$roadmapSection->id] ?? [] : [];
-        $roadmapSteps = $roadmapContent['group_data']['roadmap_steps'] ?? [];
-
-        if (empty($roadmapSteps)) {
-            $roadmapSteps = [
-                [
-                    'step_icon' => 'fas fa-search',
-                    'step_title' => 'Discovery',
-                    'step_heading' => 'Project Discovery & Consultation',
-                    'step_description' =>
-                        'We begin by understanding your business objectives, target audience, and project requirements. Through detailed consultation and market research, we create a clear strategy that aligns technology with your long-term business goals.',
-                ],
-                [
-                    'step_icon' => 'fas fa-paint-brush',
-                    'step_title' => 'Planning',
-                    'step_heading' => 'Planning & UI/UX Design',
-                    'step_description' =>
-                        'Our designers and solution architects create intuitive user experiences, interactive prototypes, and scalable system architecture that provide the perfect foundation for successful digital products.',
-                ],
-                [
-                    'step_icon' => 'fas fa-code',
-                    'step_title' => 'Development',
-                    'step_heading' => 'Development & Quality Assurance',
-                    'step_description' =>
-                        'Using modern technologies and clean coding standards, our developers build secure, responsive, and scalable solutions. Every feature is thoroughly tested to ensure performance, reliability, and security before launch.',
-                ],
-                [
-                    'step_icon' => 'fas fa-rocket',
-                    'step_title' => 'Launch',
-                    'step_heading' => 'Launch, Growth & Continuous Support',
-                    'step_description' =>
-                        'After successful deployment, we continue supporting your business with maintenance, performance optimization, security updates, feature enhancements, and technical assistance to ensure sustainable digital growth.',
-                ],
-            ];
-        }
-    @endphp
-    <section class="roadmap-area section-padding" id="roadmap">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <div class="heading">
-                        @if (!empty($roadmapContent['section_label']))
-                            <h5>{{ $roadmapContent['section_label'] }}</h5>
-                        @else
-                            <h5>Our Development Process</h5>
-                        @endif
-                        <div class="space-10"></div>
-                        <h1>{{ $roadmapContent['section_title'] ?? \App\Helper::sectionTitle('home', 'roadmap', 'title', 'From Vision to Digital Success') }}
-                        </h1>
-                        <p class="mt-3">
-                            {{ $roadmapContent['section_subtitle'] ?? \App\Helper::sectionTitle('home', 'roadmap', 'subtitle') }}
-                        </p>
-                    </div>
-                    <div class="space-60 d-none d-sm-block"></div>
-                </div>
-            </div>
-
-            <div class="process-flow">
-                @foreach ($roadmapSteps as $step)
-                    <div class="process-step wow fadeInLeft" data-wow-delay="{{ 0.1 + $loop->index * 0.2 }}s"
-                        data-slide-target="{{ $loop->index }}">
-                        <div class="process-chevron process-chevron--{{ $loop->iteration }}">
-                            <span class="process-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                            <span class="process-icon"><i class="{{ $step['step_icon'] ?? 'fas fa-check' }}"></i></span>
-                            <span class="process-title">{{ $step['step_title'] ?? '' }}</span>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-
-            <!-- Laptop-frame slider showing each step's detail -->
-            <div class="laptop-mockup wow fadeInUp" data-wow-delay="0.2s">
-                <div class="laptop-screen">
-                    <div class="laptop-browser-bar">
-                        <span class="dot dot-red"></span>
-                        <span class="dot dot-yellow"></span>
-                        <span class="dot dot-green"></span>
-                        <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/process</span>
-                    </div>
-                    <div class="laptop-screen-glass">
-                        <div class="laptop-shine"></div>
-                        <div class="laptop-slides owl-carousel">
-                            @foreach ($roadmapSteps as $step)
-                                <div class="laptop-slide">
-                                    <span class="process-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                                    <span class="process-icon"><i
-                                            class="{{ $step['step_icon'] ?? 'fas fa-check' }}"></i></span>
-                                    <h5>{{ $step['step_heading'] ?? ($step['step_title'] ?? '') }}</h5>
-                                    <p>
-                                        {{ $step['step_description'] ?? '' }}
-                                    </p>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-                <div class="laptop-base">
-                    <span class="laptop-notch"></span>
-                </div>
-                <div class="laptop-shadow"></div>
-            </div>
-        </div>
-    </section>
+    @include('front.partials._roadmap_section', [
+        'page' => $homePage,
+        'sectionContents' => $sectionContents,
+        'defaultLabel' => 'Our Development Process',
+        'defaultTitle' => \App\Helper::sectionTitle('home', 'roadmap', 'title', 'From Vision to Digital Success'),
+        'defaultSubtitle' => \App\Helper::sectionTitle('home', 'roadmap', 'subtitle'),
+    ])
     <!-- End Roadmap Section -->
 
 
@@ -790,7 +649,7 @@
                         @foreach ($portfolios as $portfolio)
                             <figure class="portfolio-item"
                                 data-groups='["{{ $portfolio->category->slug ?? 'uncategorized' }}"]'>
-                                <img src="{{ !empty($portfolio['featured_image']) ? asset('storage/' . $portfolio['featured_image']) : asset('assets/front/img/default-img.png') }}"
+                                <img src="{{ !empty($portfolio['featured_image']) ? asset('storage/' . $portfolio['featured_image']) : asset('assets/front/img/default-img.avif') }}"
                                     alt="">
                                 <figcaption>
                                     <h2>{{ $portfolio->title }}
@@ -858,7 +717,7 @@
                                     @elseif(!empty($technology->icon))
                                         <i class="{{ $technology->icon }} fa-4x text-primary"></i>
                                     @else
-                                        <img src="{{ asset('assets/front/img/default-img.png') }}"
+                                        <img src="{{ asset('assets/front/img/default-img.avif') }}"
                                             alt="{{ $technology->name }}"
                                             class="img-fluid rounded-circle industry-image">
                                     @endif
@@ -972,7 +831,7 @@
 
                                 <div class="training-inner">
 
-                                    <img src="{{ !empty($industry->image) ? asset('storage/' . $industry->image) : asset('assets/front/img/default-img.png') }}"
+                                    <img src="{{ !empty($industry->image) ? asset('storage/' . $industry->image) : asset('assets/front/img/default-img.avif') }}"
                                         class="img-fluid w-100 rounded" alt="{{ $industry->name }}">
 
                                     <div class="training-title-name">
@@ -1178,7 +1037,7 @@
                                     </div>
                                     <div class="phone-slide">
                                         <div class="phone-slide-img">
-                                            <img src="{{ !empty($member['member_photo']) ? asset('storage/' . $member['member_photo']) : asset('assets/front/img/default-img.png') }}"
+                                            <img src="{{ !empty($member['member_photo']) ? asset('storage/' . $member['member_photo']) : asset('assets/front/img/default-img.avif') }}"
                                                 alt="{{ $member['member_name'] ?? '' }}">
                                             <div class="phone-slide-overlay">
                                                 <h4>{{ $member['member_name'] ?? '' }}</h4>
@@ -1288,7 +1147,7 @@
                     @forelse ($casestudies as $caseStudy)
                         <a href="{{ route('front.casestudies.details', $caseStudy->slug) }}" class="office-item">
                             <div class="office-img">
-                                <img src="{{ !empty($caseStudy->featured_image) ? asset('storage/' . $caseStudy->featured_image) : asset('assets/front/img/default-img.png') }}"
+                                <img src="{{ !empty($caseStudy->featured_image) ? asset('storage/' . $caseStudy->featured_image) : asset('assets/front/img/default-img.avif') }}"
                                     class="img-fluid w-100"
                                     alt="{{ $caseStudy->featured_image_alt ?? $caseStudy->title }}">
                                 <span class="office-icon"><i
@@ -1361,8 +1220,8 @@
     <!-- End Newsletter Subscribe Section -->
 
     <!--=================================
-                                Latest Blog Section
-                        ==================================-->
+                                    Latest Blog Section
+                            ==================================-->
     <!-- Start Latest Blog Section -->
     @php
         $latestBlogSection = $homePage?->sections->firstWhere('slug', 'latest-blog-section');
@@ -1433,198 +1292,29 @@
     <!-- End Latest Blog Section -->
 
     <!--========================================
-                                    Testimonials
-                        =========================================-->
+                                        Testimonials
+                            =========================================-->
 
     <!-- Start Testimonials Section -->
-    @php
-        $testimonialsSection = $homePage?->sections->firstWhere('slug', 'testimonials-section');
-        $testimonialsContent = $testimonialsSection ? $sectionContents[$testimonialsSection->id] ?? [] : [];
-    @endphp
-    @if ($testimonials->isNotEmpty())
-        <section class="testimonials">
-
-            <div class="container">
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title st-center">
-                            @include('front.partials._section_heading', [
-                                'content' => $testimonialsContent,
-                                'defaultTitle' => \App\Helper::sectionTitle(
-                                    'home',
-                                    'testimonials',
-                                    'title',
-                                    'WHAT OUR CLIENTS SAY'),
-                                'defaultSubtitle' => \App\Helper::sectionTitle(
-                                    'home',
-                                    'testimonials',
-                                    'subtitle'),
-                            ])
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testi-mockup wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="laptop-screen">
-                        <div class="laptop-browser-bar">
-                            <span class="dot dot-red"></span>
-                            <span class="dot dot-yellow"></span>
-                            <span class="dot dot-green"></span>
-                            <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/reviews</span>
-                        </div>
-                        <div class="laptop-screen-glass testi-glass">
-                            <div class="laptop-shine"></div>
-                            <div class="testimonials-carousel owl-carousel owl-theme">
-
-                                @foreach ($testimonials as $testimonial)
-                                    <div class="testimonial">
-                                        <div class="testimonial-img">
-                                            <img src="{{ \App\Helper::img($testimonial->photo) }}"
-                                                alt="{{ $testimonial->name }}">
-                                        </div>
-                                        <blockquote>
-                                            <p>
-                                                {{ $testimonial->message }}
-                                            </p>
-                                            <footer>
-                                                <strong>{{ $testimonial->name }}</strong><br>
-                                                <cite>{{ $testimonial->designation }}{{ $testimonial->company ? ', ' . $testimonial->company : '' }}</cite>
-                                            </footer>
-                                        </blockquote>
-                                    </div>
-                                @endforeach
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="laptop-base">
-                        <span class="laptop-notch"></span>
-                    </div>
-                    <div class="laptop-shadow"></div>
-                </div>
-
-            </div>
-
-        </section>
-    @endif
+    @include('front.partials._testimonials_section', [
+        'page' => $homePage,
+        'sectionContents' => $sectionContents,
+        'testimonials' => $testimonials,
+        'defaultTitle' => \App\Helper::sectionTitle('home', 'testimonials', 'title', 'WHAT OUR CLIENTS SAY'),
+        'defaultSubtitle' => \App\Helper::sectionTitle('home', 'testimonials', 'subtitle'),
+    ])
     <!-- End Testimonials Section -->
 
 
     <!--======================================== FAQ SECTION =========================================-->
 
     <!-- Start FAQ and Contact Section -->
-    @php
-        $faqSection = $homePage?->sections->firstWhere('slug', 'faq-section');
-        $faqSectionContent = $faqSection ? $sectionContents[$faqSection->id] ?? [] : [];
-    @endphp
-    <section id="faq-section" class="faq-section">
-        <div class="container">
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
-                            'content' => $faqSectionContent,
-                            'defaultTitle' => \App\Helper::sectionTitle(
-                                'home',
-                                'faq',
-                                'title',
-                                'Frequently Asked Questions'),
-                            'defaultSubtitle' => \App\Helper::sectionTitle('home', 'faq', 'subtitle'),
-                        ])
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-contact-grid">
-
-                <!-- LEFT: FAQ app tablet -->
-                <div class="faq-tablet-col wow fadeInLeft" data-wow-delay="0.1s">
-                    <div class="app-tablet">
-                        <div class="tablet-frame app-tablet-frame">
-                            <div class="tablet-cam"></div>
-                            <div class="tablet-screen app-tablet-screen">
-                                <div class="tablet-statusbar">
-                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
-                                </div>
-
-                                <div class="app-screen-header">
-                                    <h4>FAQs</h4>
-                                    <p>Quick answers to common questions</p>
-                                </div>
-
-                                <div class="faq-wrapper app-faq-list">
-
-                                    @forelse ($category->activeFaqs ?? [] as $faq)
-                                        <div class="faq-item @if ($loop->first) active @endif">
-                                            <div class="faq-title">
-                                                <h5>{{ $faq->question }}</h5>
-                                                <span class="faq-icon">
-                                                    <i class="fa fa-{{ $loop->first ? 'minus' : 'plus' }}"></i>
-                                                </span>
-                                            </div>
-
-                                            <div class="faq-content"
-                                                @if ($loop->first) style="display:block;" @endif>
-                                                <p>
-                                                    {{ $faq->answer }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    @empty
-                                        <div class="faq-item active">
-                                            <div class="faq-title">
-                                                <h5>What services does your company provide?</h5>
-                                                <span class="faq-icon">
-                                                    <i class="fa fa-minus"></i>
-                                                </span>
-                                            </div>
-
-                                            <div class="faq-content" style="display:block;">
-                                                <p>
-                                                    We provide website development, custom software development,
-                                                    eCommerce solutions, mobile applications, UI/UX design,
-                                                    cloud solutions, API integration, ERP/CRM systems, and
-                                                    ongoing maintenance & support.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    @endforelse
-
-                                </div>
-                            </div>
-                            <div class="tablet-home-btn"></div>
-                        </div>
-                        <div class="tablet-shadow"></div>
-                    </div>
-                </div>
-
-                <!-- RIGHT: Contact form tablet -->
-                <div class="contact-tablet-col wow fadeInRight" data-wow-delay="0.2s">
-                    <div class="app-tablet">
-                        <div class="tablet-frame app-tablet-frame">
-                            <div class="tablet-cam"></div>
-                            <div class="tablet-screen app-tablet-screen">
-                                <div class="tablet-statusbar">
-                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
-                                </div>
-
-                                <div class="app-screen-header">
-                                    <h4>Get In Touch</h4>
-                                    <p>We'd love to hear about your project</p>
-                                </div>
-                                @include('front.common.contact-form')
-                            </div>
-                            <div class="tablet-home-btn"></div>
-                        </div>
-                        <div class="tablet-shadow"></div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
+    @include('front.partials._faq_section', [
+        'page' => $homePage,
+        'sectionContents' => $sectionContents,
+        'category' => $category,
+        'defaultTitle' => \App\Helper::sectionTitle('home', 'faq', 'title', 'Frequently Asked Questions'),
+        'defaultSubtitle' => \App\Helper::sectionTitle('home', 'faq', 'subtitle'),
+    ])
     <!-- End FAQ and Contact Section -->
 @endsection

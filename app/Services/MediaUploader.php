@@ -322,7 +322,7 @@ class MediaUploader
      * size. Falls back to the original if the size wasn't generated (or
      * doesn't exist), then to a placeholder if nothing exists at all.
      */
-    public function url(?string $path, ?string $size = null, string $fallback = 'assets/front/img/default-img.png'): string
+    public function url(?string $path, ?string $size = null, string $fallback = 'assets/front/img/default-img.avif'): string
     {
         if (empty($path)) {
             return asset($fallback);

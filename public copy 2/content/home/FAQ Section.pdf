@@ -1,0 +1,172 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 3795 >>
+stream
+BT /F2 20 Tf 72.00 720.00 Td (Frequently Asked Questions & Contact) Tj ET
+BT /F2 13.5 Tf 72.00 671.60 Td (SECTION ANALYSIS) Tj ET
+BT /F1 11 Tf 72.00 643.78 Td (Purpose: A paired objection-handling and lead-capture section - the FAQ answers last-minute) Tj ET
+BT /F1 11 Tf 72.00 629.26 Td (doubts and the contact form sits right beside it so the visitor can act while those doubts are still) Tj ET
+BT /F1 11 Tf 72.00 614.74 Td (fresh.) Tj ET
+BT /F1 11 Tf 72.00 592.22 Td (Target Audience: Visitors who are close to converting but have one or two lingering questions -) Tj ET
+BT /F1 11 Tf 72.00 577.70 Td (usually about cost or timeline - before they are willing to fill out a form.) Tj ET
+BT /F1 11 Tf 72.00 555.18 Td (User Intent: "Let me quickly check a couple of things before I commit to filling this out.") Tj ET
+BT /F1 11 Tf 72.00 532.66 Td (Business Goal: Increase form completion rate by resolving hesitation in the same eye span as) Tj ET
+BT /F1 11 Tf 72.00 518.14 Td (the form, instead of making the visitor go hunt for answers elsewhere on the site.) Tj ET
+BT /F1 11 Tf 72.00 495.62 Td (SEO Opportunity: This is significant and currently underused. FAQ content is prime material for) Tj ET
+BT /F1 11 Tf 72.00 481.10 Td (FAQPage structured data and can capture People Also Ask placements for queries like "how) Tj ET
+BT /F1 11 Tf 72.00 466.58 Td (much does a website cost" or "how long does software development take." Right now only one) Tj ET
+BT /F1 11 Tf 72.00 452.06 Td (question is live, which is not enough to earn that visibility.) Tj ET
+BT /F1 11 Tf 72.00 429.54 Td (Recommended CTA: Send Message, kept as the single, clear action on the form side - no) Tj ET
+BT /F1 11 Tf 72.00 415.02 Td (changes needed there.) Tj ET
+BT /F1 11 Tf 72.00 392.50 Td (Design Psychology: Presenting both panels inside tablet-style device frames makes the FAQ) Tj ET
+BT /F1 11 Tf 72.00 377.98 Td (and form feel like a real product interface rather than a marketing page, which quietly reinforces) Tj ET
+BT /F1 11 Tf 72.00 363.46 Td (credibility. Pairing objection-handling directly next to the conversion action is a deliberate and) Tj ET
+BT /F1 11 Tf 72.00 348.94 Td (effective sequencing choice - keep it.) Tj ET
+BT /F1 11 Tf 72.00 326.42 Td (Content Note 1 \(Critical, site-wide\): Both device frames show the label "TEST PROJECT" in) Tj ET
+BT /F1 11 Tf 72.00 311.90 Td (their header bar. This is now the fifth and sixth appearance of the same placeholder text across) Tj ET
+BT /F1 11 Tf 72.00 297.38 Td (the site - it previously showed up in the homepage CTA, the Our Development Process mockup,) Tj ET
+BT /F1 11 Tf 72.00 282.86 Td (and the testimonials mockup. Appearing identically across five unrelated sections strongly) Tj ET
+BT /F1 11 Tf 72.00 268.34 Td (suggests this is a single global setting \(a default "site name" or "project name" field\) rather than) Tj ET
+BT /F1 11 Tf 72.00 253.82 Td (five separate typos, and fixing it in one place should resolve all of them at once.) Tj ET
+BT /F1 11 Tf 72.00 231.30 Td (Content Note 2: Only one FAQ is currently populated. A real FAQ section needs more ground) Tj ET
+BT /F1 11 Tf 72.00 216.78 Td (covered - process, pricing, and timeline are all promised in the subtitle but only "what services) Tj ET
+BT /F1 11 Tf 72.00 202.26 Td (do you provide" is actually answered. Ten sample questions are provided below to fill this out) Tj ET
+BT /F1 11 Tf 72.00 187.74 Td (properly.) Tj ET
+BT /F2 13.5 Tf 72.00 153.22 Td (CONTENT \(ENGLISH\) - FAQ PANEL) Tj ET
+BT /F1 11 Tf 72.00 125.40 Td (Small Label / Main Heading: Frequently Asked Questions \(keep as-is\)) Tj ET
+BT /F1 11 Tf 72.00 102.88 Td (Subtitle: Answers to the questions we hear most often about our process, pricing, and services.) Tj ET
+BT /F1 11 Tf 72.00 88.36 Td (\(keep as-is\)) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 3427 >>
+stream
+BT /F1 11 Tf 72.00 720.00 Td (Panel Title: FAQs) Tj ET
+BT /F1 11 Tf 72.00 697.48 Td (Panel Subtitle: Quick answers to common questions) Tj ET
+BT /F1 11 Tf 72.00 666.96 Td (1. What services does your company provide?) Tj ET
+BT /F1 11 Tf 72.00 648.44 Td (We provide website development, custom software development, eCommerce solutions, mobile) Tj ET
+BT /F1 11 Tf 72.00 633.92 Td (applications, UI/UX design, cloud solutions, API integration, ERP/CRM systems, and ongoing) Tj ET
+BT /F1 11 Tf 72.00 619.40 Td (maintenance and support.) Tj ET
+BT /F1 11 Tf 72.00 592.88 Td (2. How much does a typical project cost?) Tj ET
+BT /F1 11 Tf 72.00 574.36 Td (It depends on scope - a marketing website and a custom ERP system are very different builds.) Tj ET
+BT /F1 11 Tf 72.00 559.84 Td (We give a clear, itemized quote after understanding your requirements during the discovery call,) Tj ET
+BT /F1 11 Tf 72.00 545.32 Td (so you know the cost before any work starts, not after.) Tj ET
+BT /F1 11 Tf 72.00 518.80 Td (3. How long does a project usually take?) Tj ET
+BT /F1 11 Tf 72.00 500.28 Td (A standard business website typically takes a few weeks, while custom software or eCommerce) Tj ET
+BT /F1 11 Tf 72.00 485.76 Td (platforms can take a couple of months depending on complexity. We share a realistic timeline) Tj ET
+BT /F1 11 Tf 72.00 471.24 Td (during planning, before any commitment is made.) Tj ET
+BT /F1 11 Tf 72.00 444.72 Td (4. Do you work with startups, or only established businesses?) Tj ET
+BT /F1 11 Tf 72.00 426.20 Td (Both. We work with early-stage founders building their first product as well as established) Tj ET
+BT /F1 11 Tf 72.00 411.68 Td (companies modernizing existing systems - the process adjusts to where you're starting from.) Tj ET
+BT /F1 11 Tf 72.00 385.16 Td (5. What does your development process look like?) Tj ET
+BT /F1 11 Tf 72.00 366.64 Td (We move through four stages: discovery and consultation, design and planning, development) Tj ET
+BT /F1 11 Tf 72.00 352.12 Td (and engineering, and launch and beyond. You get visibility at every stage, not just a final reveal) Tj ET
+BT /F1 11 Tf 72.00 337.60 Td (at the end.) Tj ET
+BT /F1 11 Tf 72.00 311.08 Td (6. Do you provide support after the project launches?) Tj ET
+BT /F1 11 Tf 72.00 292.56 Td (Yes. Launch is not where we stop - we offer ongoing maintenance, security updates, and) Tj ET
+BT /F1 11 Tf 72.00 278.04 Td (feature support so your product keeps working as your business grows.) Tj ET
+BT /F1 11 Tf 72.00 251.52 Td (7. Can you work with our existing team or systems?) Tj ET
+BT /F1 11 Tf 72.00 233.00 Td (Yes, we regularly integrate with in-house teams, existing codebases, and third-party tools rather) Tj ET
+BT /F1 11 Tf 72.00 218.48 Td (than insisting on starting from zero. We will tell you honestly if a full rebuild is the better option,) Tj ET
+BT /F1 11 Tf 72.00 203.96 Td (but we don't default to it.) Tj ET
+BT /F1 11 Tf 72.00 177.44 Td (8. What technologies do you use?) Tj ET
+BT /F1 11 Tf 72.00 158.92 Td (We choose the right stack for the project rather than forcing every client into the same tools.) Tj ET
+BT /F1 11 Tf 72.00 144.40 Td (This typically means modern frameworks for web and mobile, cloud platforms for hosting and) Tj ET
+BT /F1 11 Tf 72.00 129.88 Td (scaling, and proven, well-supported technology over anything experimental.) Tj ET
+BT /F1 11 Tf 72.00 103.36 Td (9. What's the first step to getting started?) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 3539 >>
+stream
+BT /F1 11 Tf 72.00 720.00 Td (A short discovery call. We ask about your goals, your users, and your constraints, then follow up) Tj ET
+BT /F1 11 Tf 72.00 705.48 Td (with a clear proposal and timeline - no obligation to move forward until you are ready.) Tj ET
+BT /F1 11 Tf 72.00 678.96 Td (10. Do you sign NDAs or handle confidential projects?) Tj ET
+BT /F1 11 Tf 72.00 660.44 Td (Yes. We're comfortable signing an NDA before any detailed discussion, and confidentiality is) Tj ET
+BT /F1 11 Tf 72.00 645.92 Td (standard practice for client information and project details on our end.) Tj ET
+BT /F2 13.5 Tf 72.00 613.40 Td (CONTENT \(ENGLISH\) - CONTACT FORM PANEL) Tj ET
+BT /F1 11 Tf 72.00 585.58 Td (Panel Title: Get In Touch) Tj ET
+BT /F1 11 Tf 72.00 563.06 Td (Panel Subtitle: Tell us what you're building - we'll get back to you with a clear next step, not a) Tj ET
+BT /F1 11 Tf 72.00 548.54 Td (sales pitch.) Tj ET
+BT /F1 11 Tf 72.00 526.02 Td (Field Label 1: Full Name | Placeholder: John Doe \(keep - standard, unambiguous placeholder) Tj ET
+BT /F1 11 Tf 72.00 511.50 Td (pattern\)) Tj ET
+BT /F1 11 Tf 72.00 488.98 Td (Field Label 2: Email Address | Placeholder: john@example.com \(keep\)) Tj ET
+BT /F1 11 Tf 72.00 466.46 Td (Field Label 3: Phone Number | Placeholder: +91 12345 67890 \(keep\)) Tj ET
+BT /F1 11 Tf 72.00 443.94 Td (Field Label 4: Message | Placeholder: Tell us about your project... \(keep\)) Tj ET
+BT /F1 11 Tf 72.00 421.42 Td (Validation Message \(empty message field\): Tell us a little about what you need - even a few) Tj ET
+BT /F1 11 Tf 72.00 406.90 Td (lines helps.) Tj ET
+BT /F1 11 Tf 72.00 384.38 Td (Button Text: Send Message \(keep as-is\)) Tj ET
+BT /F2 13.5 Tf 72.00 349.86 Td (EXPLANATION \(HINGLISH\)) Tj ET
+BT /F1 11 Tf 72.00 322.04 Td (FAQ Heading aur Subtitle - Dono already clear the aur exactly wahi promise dete hain jo user) Tj ET
+BT /F1 11 Tf 72.00 307.52 Td (chahta hai \(process, pricing, services\), isliye unchanged rakhe gaye.) Tj ET
+BT /F1 11 Tf 72.00 285.00 Td (Naye 9 FAQs isliye add kiye gaye kyunki subtitle mein "pricing" aur "process" ka explicit) Tj ET
+BT /F1 11 Tf 72.00 270.48 Td (promise tha, lekin sirf ek hi question live tha - "services" wala. Pricing wala jawab jaanbujh kar) Tj ET
+BT /F1 11 Tf 72.00 255.96 Td (exact number nahi deta, balki honest explanation deta hai ki cost scope par depend karta hai -) Tj ET
+BT /F1 11 Tf 72.00 241.44 Td (yeh Deovate ke "Honest" brand value ke saath match karta hai.) Tj ET
+BT /F1 11 Tf 72.00 218.92 Td ("Launch is not where we stop" jaisi line Our Development Process section ki "launch day is a) Tj ET
+BT /F1 11 Tf 72.00 204.40 Td (milestone, not a finish line" wali line se consistent hai - isse poori site ek hi brand promise) Tj ET
+BT /F1 11 Tf 72.00 189.88 Td (repeat karti hai, alag-alag jagah alag baat nahi karti.) Tj ET
+BT /F1 11 Tf 72.00 167.36 Td (Contact Form Subtitle - "We'd love to hear about your project" ko thoda specific banaya: "we'll) Tj ET
+BT /F1 11 Tf 72.00 152.84 Td (get back to you with a clear next step, not a sales pitch" - yeh directly us doubt ko address karta) Tj ET
+BT /F1 11 Tf 72.00 138.32 Td (hai jo form fill karne se pehle hota hai ki koi salesperson call karega.) Tj ET
+BT /F1 11 Tf 72.00 115.80 Td (Validation Message - "Please enter a message" functional to tha, lekin thoda cold tha. Naya) Tj ET
+BT /F1 11 Tf 72.00 101.28 Td (version thoda encouraging hai, user ko feel hota hai ki chhoti si detail bhi kaafi hai, lamba) Tj ET
+BT /F1 11 Tf 72.00 86.76 Td (message likhna zaroori nahi.) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 722 >>
+stream
+BT /F1 11 Tf 72.00 720.00 Td (Content Note \("TEST PROJECT"\) - Yeh label ab paanch alag jagah dikh chuka hai \(homepage) Tj ET
+BT /F1 11 Tf 72.00 705.48 Td (CTA, process mockup, testimonials mockup, aur ab FAQ + contact dono mockups\). Itni) Tj ET
+BT /F1 11 Tf 72.00 690.96 Td (consistency batati hai ki yeh ek hi global setting hai, isliye ek hi jagah fix karne se sab) Tj ET
+BT /F1 11 Tf 72.00 676.44 Td (automatically theek ho jayega.) Tj ET
+BT /F2 13.5 Tf 72.00 641.92 Td (QUALITY CHECK) Tj ET
+BT /F1 11 Tf 72.00 614.10 Td (Human sounding, SEO optimized, Easy to read, Premium tone, Brand consistent, Conversion) Tj ET
+BT /F1 11 Tf 72.00 599.58 Td (focused, No keyword stuffing, Natural flow, Grammarly ready.) Tj ET
+endstream
+endobj
+xref
+0 13
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000134 00000 n 
+0000000231 00000 n 
+0000000333 00000 n 
+0000000469 00000 n 
+0000004315 00000 n 
+0000004451 00000 n 
+0000007929 00000 n 
+0000008066 00000 n 
+0000011657 00000 n 
+0000011795 00000 n 
+trailer
+<< /Size 13 /Root 1 0 R >>
+startxref
+12568
+%%EOF

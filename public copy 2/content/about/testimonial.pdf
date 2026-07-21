@@ -1,0 +1,111 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 4186 >>
+stream
+BT /F2 20 Tf 72.00 720.00 Td (What Our Clients Say \(About Page\)) Tj ET
+BT /F2 13.5 Tf 72.00 671.60 Td (SECTION ANALYSIS) Tj ET
+BT /F1 11 Tf 72.00 643.78 Td (Purpose: The same client-proof carousel already reviewed on the homepage, placed here to) Tj ET
+BT /F1 11 Tf 72.00 629.26 Td (close out the About page narrative on external validation right after Vision, Mission, Numbers,) Tj ET
+BT /F1 11 Tf 72.00 614.74 Td (Process, Founder, and Office & Culture, and right before the visitor reaches Contact.) Tj ET
+BT /F1 11 Tf 72.00 592.22 Td (Target Audience: The same late-stage evaluators reading the rest of the About page, now) Tj ET
+BT /F1 11 Tf 72.00 577.70 Td (checking whether the culture and team just described actually translate into satisfied clients.) Tj ET
+BT /F1 11 Tf 72.00 555.18 Td (User Intent: "Does everything I just read about this company and its team hold up when a real) Tj ET
+BT /F1 11 Tf 72.00 540.66 Td (client describes working with them?") Tj ET
+BT /F1 11 Tf 72.00 518.14 Td (Business Goal: End the About page on independent validation, immediately before the visitor is) Tj ET
+BT /F1 11 Tf 72.00 503.62 Td (likely to reach out.) Tj ET
+BT /F1 11 Tf 72.00 481.10 Td (SEO Opportunity: Same as the homepage instance - genuine testimonials support) Tj ET
+BT /F1 11 Tf 72.00 466.58 Td (Review/Testimonial structured data and E-E-A-T. Reusing the same real testimonial pool across) Tj ET
+BT /F1 11 Tf 72.00 452.06 Td (Home and About \(rather than inventing a second, different set\) also avoids the odd impression) Tj ET
+BT /F1 11 Tf 72.00 437.54 Td (of two different review sets for the same company.) Tj ET
+BT /F1 11 Tf 72.00 415.02 Td (Recommended CTA: None needed - same reasoning as the homepage version, this section's) Tj ET
+BT /F1 11 Tf 72.00 400.50 Td (job is to remove doubt, not to convert directly.) Tj ET
+BT /F1 11 Tf 72.00 377.98 Td (Design Psychology: Identical browser-mockup carousel component to the homepage version,) Tj ET
+BT /F1 11 Tf 72.00 363.46 Td (which is the right call for a repeatable UI pattern - consistency here is intentional, similar to the) Tj ET
+BT /F1 11 Tf 72.00 348.94 Td (shared Our Development Process component.) Tj ET
+BT /F1 11 Tf 72.00 326.42 Td (Content Note 1 \(Two separate bugs, easy to conflate\): The mockup tab reads "Test) Tj ET
+BT /F1 11 Tf 72.00 311.90 Td (Project/reviews," the same placeholder already traced in an earlier section to) Tj ET
+BT /F1 11 Tf 72.00 297.38 Td (config/constants.php's BRAND_NAME and BUSINESS.name values. That fix will resolve the) Tj ET
+BT /F1 11 Tf 72.00 282.86 Td (tab label. It will not, however, fix the testimonial quote itself - "asdasdasdfafsd," attributed to) Tj ET
+BT /F1 11 Tf 72.00 268.34 Td ("Anky Singh Humraj, Web Developer, Creative Room Inc." - which appears to be a separate,) Tj ET
+BT /F1 11 Tf 72.00 253.82 Td (seeded test row sitting in the testimonials database table \(likely managed through the) Tj ET
+BT /F1 11 Tf 72.00 239.30 Td (Testimonial module referenced in the app's module list\). That row needs to be deleted or) Tj ET
+BT /F1 11 Tf 72.00 224.78 Td (replaced directly through the admin panel; the config fix will not touch it.) Tj ET
+BT /F1 11 Tf 72.00 202.26 Td (Content Note 2: This is very likely the same underlying testimonials data source used on the) Tj ET
+BT /F1 11 Tf 72.00 187.74 Td (homepage - the identical placeholder row appearing in both places is strong evidence of one) Tj ET
+BT /F1 11 Tf 72.00 173.22 Td (shared table rather than two separately seeded ones. That means the 30 sample testimonials) Tj ET
+BT /F1 11 Tf 72.00 158.70 Td (already written for the homepage version of this section should be reused here rather than a) Tj ET
+BT /F1 11 Tf 72.00 144.18 Td (new, different set being written - a second, different batch of fictional testimonials would risk) Tj ET
+BT /F1 11 Tf 72.00 129.66 Td (looking inconsistent if a visitor compared the two pages.) Tj ET
+BT /F1 11 Tf 72.00 107.14 Td (Content Note 3 \(Positive\): Unlike the homepage version, the heading here is identical \("What) Tj ET
+BT /F1 11 Tf 72.00 92.62 Td (Our Clients Say"\) but the subtitle is already different from the homepage's longer line - this is) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 3343 >>
+stream
+BT /F1 11 Tf 72.00 720.00 Td (the right instinct and avoids the near-duplicate-subtitle issue flagged on other repeated sections) Tj ET
+BT /F1 11 Tf 72.00 705.48 Td (earlier in this review.) Tj ET
+BT /F2 13.5 Tf 72.00 670.96 Td (CONTENT \(ENGLISH\)) Tj ET
+BT /F1 11 Tf 72.00 643.14 Td (Main Heading: What Our Clients Say \(keep as-is - intentional match with the homepage) Tj ET
+BT /F1 11 Tf 72.00 628.62 Td (component\)) Tj ET
+BT /F1 11 Tf 72.00 606.10 Td (Subtitle: Businesses we've helped grow, in their own words.) Tj ET
+BT /F1 11 Tf 72.00 583.58 Td (Browser Mockup Tab Label: Deovate World - Client Reviews) Tj ET
+BT /F1 11 Tf 72.00 561.06 Td (Testimonials: Reuse the same 30 sample testimonials already produced for the homepage) Tj ET
+BT /F1 11 Tf 72.00 546.54 Td (version of this section \(see public/content/home/what-our-clients-say.pdf\) rather than authoring) Tj ET
+BT /F1 11 Tf 72.00 532.02 Td (a second set. The same disclaimer applies here without modification: these are realistic) Tj ET
+BT /F1 11 Tf 72.00 517.50 Td (placeholder testimonials for layout and tone testing only, not real client quotes, and must be) Tj ET
+BT /F1 11 Tf 72.00 502.98 Td (replaced with genuine, permission-cleared client feedback before either page is published.) Tj ET
+BT /F2 13.5 Tf 72.00 468.46 Td (EXPLANATION \(HINGLISH\)) Tj ET
+BT /F1 11 Tf 72.00 440.64 Td (Main Heading - Home page ke saath match karta hai, jo sahi hai kyunki yeh ek shared) Tj ET
+BT /F1 11 Tf 72.00 426.12 Td (component hai, alag-alag heading likhne ki zaroorat nahi.) Tj ET
+BT /F1 11 Tf 72.00 403.60 Td (Subtitle - Yeh already home page ke subtitle se alag hai \("Trusted by businesses we've helped) Tj ET
+BT /F1 11 Tf 72.00 389.08 Td (grow" jaisa tha\), naya version "in their own words" add karta hai jo specifically testimonial format) Tj ET
+BT /F1 11 Tf 72.00 374.56 Td (ko point karta hai - yeh accha instinct tha, duplicate-subtitle issue yahan nahi hai.) Tj ET
+BT /F1 11 Tf 72.00 352.04 Td (Content Note \(Do Alag Bugs\) - Yeh important hai samajhna: "Test Project/reviews" tab wala bug) Tj ET
+BT /F1 11 Tf 72.00 337.52 Td (config file se fix hoga, lekin "asdasdasdfafsd" wala fake testimonial ek alag jagah se aa raha hai) Tj ET
+BT /F1 11 Tf 72.00 323.00 Td (- database mein ek seeded test row se. Dono alag jagah fix karne padenge, sirf config change) Tj ET
+BT /F1 11 Tf 72.00 308.48 Td (karne se testimonial khud nahi badlega.) Tj ET
+BT /F1 11 Tf 72.00 285.96 Td (Testimonials Reuse - Kyunki dono pages \(Home aur About\) same fake test row dikha rahe hain,) Tj ET
+BT /F1 11 Tf 72.00 271.44 Td (yeh strong sign hai ki dono ek hi database table use kar rahe hain. Isliye naye 30 testimonials) Tj ET
+BT /F1 11 Tf 72.00 256.92 Td (likhne ke bajaye, pehle se likhe gaye homepage wale hi yahan reuse karne ka suggestion diya) Tj ET
+BT /F1 11 Tf 72.00 242.40 Td (gaya - warna do alag review sets ek hi company ke liye ajeeb lag sakte hain.) Tj ET
+BT /F2 13.5 Tf 72.00 207.88 Td (QUALITY CHECK) Tj ET
+BT /F1 11 Tf 72.00 180.06 Td (Human sounding, SEO optimized, Easy to read, Premium tone, Brand consistent, Conversion) Tj ET
+BT /F1 11 Tf 72.00 165.54 Td (focused, No keyword stuffing, Natural flow, Grammarly ready. Note: testimonial authenticity) Tj ET
+BT /F1 11 Tf 72.00 151.02 Td (requirement carries over unchanged from the homepage version of this section.) Tj ET
+endstream
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000218 00000 n 
+0000000320 00000 n 
+0000000456 00000 n 
+0000004693 00000 n 
+0000004829 00000 n 
+trailer
+<< /Size 9 /Root 1 0 R >>
+startxref
+8223
+%%EOF

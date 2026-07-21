@@ -8,14 +8,14 @@
         $blogImage =
             !empty($blog->featured_image) && \Illuminate\Support\Facades\Storage::disk('public')->exists($blog->featured_image)
                 ? asset('storage/' . $blog->featured_image)
-                : asset('assets/front/img/default-img.png');
+                : asset('assets/front/img/default-img.avif');
     @endphp
 
     <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
-            data-background="{{ $blogImage !== asset('assets/front/img/default-img.png') ? $blogImage : asset('assets/front/img/hero/h2_hero.png') }}">
+            data-background="{{ $blogImage !== asset('assets/front/img/default-img.avif') ? $blogImage : asset('assets/front/img/hero/h2_hero.avif') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
@@ -51,7 +51,7 @@
                     <div class="blog-meta-row wow fadeInUp" data-wow-delay="0.15s">
                         @if ($blog->author)
                             <div class="blog-meta-author">
-                                <img src="{{ !empty($blog->author->profile_image) ? asset('storage/' . $blog->author->profile_image) : asset('assets/front/img/default-img.png') }}"
+                                <img src="{{ !empty($blog->author->profile_image) ? asset('storage/' . $blog->author->profile_image) : asset('assets/front/img/default-img.avif') }}"
                                     alt="{{ $blog->author->name }}">
                                 <span>{{ $blog->author->name }}</span>
                             </div>
@@ -80,7 +80,7 @@
                         <div class="p-4 rounded-4 mb-4" style="background:#f5f8fd;">
                             <h5 class="mb-2" style="color:#073965;">Written by</h5>
                             <div class="d-flex align-items-center gap-3">
-                                <img src="{{ !empty($blog->author->profile_image) ? asset('storage/' . $blog->author->profile_image) : asset('assets/front/img/default-img.png') }}"
+                                <img src="{{ !empty($blog->author->profile_image) ? asset('storage/' . $blog->author->profile_image) : asset('assets/front/img/default-img.avif') }}"
                                     alt="{{ $blog->author->name }}"
                                     style="width:56px;height:56px;border-radius:50%;object-fit:cover;">
                                 <div>
@@ -111,7 +111,7 @@
                         <div class="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="office-item h-100">
                                 <div class="office-img">
-                                    <img src="{{ !empty($item->featured_image) && \Illuminate\Support\Facades\Storage::disk('public')->exists($item->featured_image) ? asset('storage/' . $item->featured_image) : asset('assets/front/img/default-img.png') }}"
+                                    <img src="{{ !empty($item->featured_image) && \Illuminate\Support\Facades\Storage::disk('public')->exists($item->featured_image) ? asset('storage/' . $item->featured_image) : asset('assets/front/img/default-img.avif') }}"
                                         alt="{{ $item->title }}">
                                     <div class="office-icon"><i class="fas fa-pen-nib"></i></div>
                                 </div>
@@ -290,7 +290,7 @@
                             <!-- Testimonial 1 -->
                             <div class="testimonial">
                                 <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.png') }}"
+                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.avif') }}"
                                         alt="John Anderson">
                                 </div>
                                 <blockquote>
@@ -309,7 +309,7 @@
                             <!-- Testimonial 2 -->
                             <div class="testimonial">
                                 <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/1.png') }}" alt="Sarah Williams">
+                                    <img src="{{ asset('assets/front/img/testimonial/1.avif') }}" alt="Sarah Williams">
                                 </div>
                                 <blockquote>
                                     <p>
@@ -327,7 +327,7 @@
                             <!-- Testimonial 3 -->
                             <div class="testimonial">
                                 <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.png') }}"
+                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.avif') }}"
                                         alt="Michael Brown">
                                 </div>
                                 <blockquote>

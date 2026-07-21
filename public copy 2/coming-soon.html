@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coming Soon | Deovate World</title>
+<meta name="description" content="Deovate World is getting a new look. We're putting the finishing touches on something great — check back soon.">
+<link rel="icon" href="assets/front/img/logo/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Oswald:wght@400;500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#073965;
+    --orange:#fff;
+    --orange-soft:#ffb37a;
+    --cream:#ffd27a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{
+    height:100%;
+    overflow:hidden;
+    font-family:'Barlow', sans-serif;
+    background:#0a0e17;
+  }
+  body{
+    position:relative;
+    width:100vw;
+    height:100vh;
+  }
+
+  /* ================= HEADER ================= */
+  .site-header{
+    position:absolute;
+    top:0; left:0; right:0;
+    z-index:30;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:22px 24px;
+    animation: fadeDown 1s ease both;
+  }
+  .site-header img{
+    height:42px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+  }
+
+  /* ================= SKY / SCENE ================= */
+  .sky{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg,
+      #0b1026 0%,
+      #2a1245 22%,
+      #7a2f5c 42%,
+      #d9552f 62%,
+      #f4a13e 78%,
+      #ffd27a 100%);
+    overflow:hidden;
+  }
+  .sun{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:180px;
+    height:180px;
+    margin-left:-90px;
+    margin-top:-90px;
+    border-radius:50%;
+    background:radial-gradient(circle at 50% 50%, #fff3c4, var(--orange-soft) 55%, var(--orange) 100%);
+    box-shadow:0 0 90px 30px rgba(255,95,19,0.45);
+    animation: sunPulse 4s ease-in-out infinite;
+  }
+  @keyframes sunPulse{ 0%,100%{transform:scale(1);} 50%{transform:scale(1.04);} }
+
+  .stars{
+    position:absolute;
+    inset:0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 10% 15%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 25% 8%, #fff, transparent),
+      radial-gradient(1px 1px at 40% 20%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 60% 10%, #fff, transparent),
+      radial-gradient(1px 1px at 75% 18%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 90% 6%, #fff, transparent),
+      radial-gradient(1px 1px at 15% 30%, #fff, transparent),
+      radial-gradient(1px 1px at 85% 28%, #fff, transparent);
+    opacity:0.8;
+    animation: twinkle 3s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle{ from{opacity:.35;} to{opacity:.9;} }
+
+  .mountains{
+    position:absolute;
+    bottom:14vh;
+    left:0;
+    width:200%;
+    height:26vh;
+    background:#150c26;
+    clip-path: polygon(0% 100%, 0% 60%, 8% 35%, 16% 55%, 24% 20%, 33% 50%, 42% 30%, 50% 58%, 60% 25%, 70% 52%, 80% 15%, 88% 48%, 96% 28%, 100% 50%, 100% 100%);
+    opacity:0.75;
+    animation: driftMountains 40s linear infinite;
+  }
+  @keyframes driftMountains{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  .clouds{ position:absolute; inset:0; }
+  .cloud{
+    position:absolute;
+    background:rgba(255,255,255,0.18);
+    border-radius:50px;
+    filter:blur(1px);
+    animation: cloudMove linear infinite;
+  }
+  .cloud::before, .cloud::after{
+    content:"";
+    position:absolute;
+    background:rgba(255,255,255,0.18);
+    border-radius:50%;
+  }
+  .c1{ width:140px; height:34px; top:12%; left:-20%; animation-duration:38s; }
+  .c1::before{ width:60px; height:60px; top:-28px; left:20px; }
+  .c1::after{ width:44px; height:44px; top:-18px; left:70px; }
+  .c2{ width:100px; height:26px; top:22%; left:-25%; animation-duration:52s; animation-delay:6s;}
+  .c2::before{ width:44px; height:44px; top:-20px; left:14px; }
+  .c2::after{ width:34px; height:34px; top:-12px; left:52px; }
+  .c3{ width:80px; height:22px; top:8%; left:-30%; animation-duration:60s; animation-delay:14s;}
+  .c3::before{ width:34px; height:34px; top:-16px; left:10px; }
+  .c3::after{ width:26px; height:26px; top:-10px; left:40px; }
+  @keyframes cloudMove{ from{ transform:translateX(0); } to{ transform:translateX(140vw); } }
+
+  /* ================= ROAD ================= */
+  .road-wrap{ position:absolute; left:0; right:0; bottom:0; height:22vh; overflow:hidden; }
+  .ground{ position:absolute; inset:0; background:linear-gradient(180deg, #1a1f27 0%, #0c0f14 100%); }
+  .road{
+    position:absolute; left:0; right:0; top:35%; height:65%;
+    background:linear-gradient(180deg,#3a3f47,#1f2226);
+    box-shadow: inset 0 6px 10px rgba(0,0,0,0.5);
+  }
+  .road::before{ content:""; position:absolute; top:0; left:0; right:0; height:4px; background:rgba(255,255,255,0.08); }
+  .lane{
+    position:absolute; top:50%; left:0; width:200%; height:6px; margin-top:-3px;
+    background-image: repeating-linear-gradient(90deg, var(--cream) 0 60px, transparent 60px 120px);
+    animation: laneMove 0.9s linear infinite;
+    opacity:0.85;
+  }
+  @keyframes laneMove{ from{ transform:translateX(0); } to{ transform:translateX(-120px); } }
+  .pebbles{
+    position:absolute; left:0; width:200%; bottom:6px; height:10px;
+    background-image: radial-gradient(2px 2px at 5% 50%, rgba(255,255,255,0.15), transparent),
+                       radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.1), transparent),
+                       radial-gradient(1.5px 1.5px at 40% 60%, rgba(255,255,255,0.12), transparent),
+                       radial-gradient(2px 2px at 65% 40%, rgba(255,255,255,0.1), transparent),
+                       radial-gradient(1.5px 1.5px at 85% 55%, rgba(255,255,255,0.12), transparent);
+    animation: laneMove 0.6s linear infinite;
+  }
+
+  /* ================= BIKE ================= */
+  .bike-track{ position:absolute; left:0; right:0; bottom:9.5vh; height:14vh; }
+  .bike{
+    position:absolute; bottom:0; left:-320px; width:280px; height:auto;
+    animation: rideAcross 8s linear infinite;
+    filter: drop-shadow(0 10px 8px rgba(0,0,0,0.55));
+  }
+  @keyframes rideAcross{
+    0%{ left:-320px; transform:translateY(0) rotate(0deg); }
+    48%{ transform:translateY(-2px) rotate(0.5deg); }
+    50%{ left:52%; transform:translateY(0) rotate(0deg); }
+    52%{ transform:translateY(-2px) rotate(-0.5deg); }
+    100%{ left:118%; transform:translateY(0) rotate(0deg); }
+  }
+  .wheel{ animation: spin 0.4s linear infinite; transform-origin:center; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .dust{ position:absolute; bottom:0; left:-320px; animation: rideAcross 8s linear infinite; }
+  .dust span{
+    position:absolute; bottom:2px; width:10px;height:6px;
+    background:rgba(230,220,200,0.55); border-radius:50%; filter:blur(1px);
+    animation: dustPuff 0.5s ease-out infinite;
+  }
+  .dust span:nth-child(1){left:20px; animation-delay:0s;}
+  .dust span:nth-child(2){left:34px; animation-delay:0.15s;}
+  .dust span:nth-child(3){left:8px; animation-delay:0.3s;}
+  @keyframes dustPuff{
+    0%{ opacity:0.6; transform:scale(0.6) translateY(0); }
+    100%{ opacity:0; transform:scale(1.6) translateY(6px) translateX(-14px); }
+  }
+
+  .smoke{
+    position:absolute; bottom:0; left:0; pointer-events:none; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, rgba(255,255,255,0.9), rgba(200,200,205,0.35) 60%, transparent 75%);
+    animation-name: smokeRise; animation-timing-function: ease-out; animation-fill-mode: forwards;
+  }
+  @keyframes smokeRise{
+    0%{ opacity:0.75; transform:translate(0,0) scale(0.4); }
+    100%{ opacity:0; transform:translate(var(--dx), var(--dy)) scale(var(--sc)); }
+  }
+
+  /* ================= TEXT OVERLAY ================= */
+  .overlay{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding-top:4vh;
+    text-align:center;
+    pointer-events:none;
+    opacity:0;
+    animation: sceneReveal 1s ease 0.15s forwards;
+  }
+  @keyframes sceneReveal{ to{ opacity:1; } }
+
+  .badge{
+    font-family:'Oswald', sans-serif;
+    letter-spacing:4px;
+    font-size:13px;
+    color:var(--cream);
+    text-transform:uppercase;
+    opacity:0.9;
+    margin-bottom:14px;
+  }
+
+  h1.coming{
+    font-family:'Playfair Display', serif;
+    font-size:clamp(40px, 8.5vw, 100px);
+    font-weight:800;
+    color:#fff;
+    text-shadow:
+      0 0 10px rgba(255,95,19,0.8),
+      0 0 30px rgba(255,95,19,0.55),
+      0 0 60px rgba(255,95,19,0.35);
+    letter-spacing:1px;
+    animation: glow 2.4s ease-in-out infinite alternate;
+  }
+  @keyframes glow{
+    from{ text-shadow:0 0 10px rgba(255,120,60,0.7), 0 0 30px rgba(255,90,40,0.5), 0 0 55px rgba(255,60,30,0.35); }
+    to{   text-shadow:0 0 18px rgba(255,150,90,0.95), 0 0 46px rgba(255,110,50,0.75), 0 0 90px rgba(255,70,30,0.55); }
+  }
+
+  .subtitle{
+    margin-top:10px;
+    font-size:clamp(14px,2.2vw,19px);
+    color:#ffe9c9;
+    opacity:0.9;
+    letter-spacing:0.3px;
+    max-width:560px;
+    padding:0 20px;
+  }
+
+  .model-name{
+    margin-top:22px;
+    font-family:'Oswald', sans-serif;
+    font-size:clamp(18px,3.2vw,28px);
+    font-weight:600;
+    color:var(--orange);
+    text-transform:uppercase;
+    letter-spacing:5px;
+    border-top:1px solid rgba(255,255,255,0.25);
+    border-bottom:1px solid rgba(255,255,255,0.25);
+    padding:8px 22px;
+  }
+
+  .cta-row{
+    margin-top:26px;
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    justify-content:center;
+    pointer-events:auto;
+  }
+  .cta-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 26px;
+    border-radius:50px;
+    font-family:'Oswald', sans-serif;
+    font-size:14px;
+    font-weight:500;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    text-decoration:none;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .cta-btn.primary{
+    background:var(--orange);
+    color:#fff;
+    box-shadow:0 10px 26px rgba(255,95,19,0.45);
+  }
+  .cta-btn.ghost{
+    background:rgba(255,255,255,0.08);
+    color:#fff;
+    border:1px solid rgba(255,255,255,0.4);
+    backdrop-filter: blur(4px);
+  }
+  .cta-btn:hover{ transform:translateY(-2px); }
+
+  .footer-line{
+    position:absolute;
+    bottom:2.2vh;
+    left:0; right:0;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    color:#fff;
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    opacity:0.75;
+    z-index:5;
+  }
+
+  /* ================= ENVELOPE INTRO ================= */
+  .envelope-screen{
+    position:fixed; inset:0; z-index:100;
+    background:radial-gradient(circle at 50% 40%, #12203a 0%, #060a14 70%);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition: opacity .7s ease, visibility .7s ease;
+  }
+  .envelope-screen.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+
+  .envelope-hint{
+    position:absolute;
+    bottom:8vh;
+    font-family:'Oswald', sans-serif;
+    color:#ffe9c9;
+    letter-spacing:3px;
+    font-size:12px;
+    text-transform:uppercase;
+    opacity:0.7;
+    animation: pulseHint 1.8s ease-in-out infinite;
+  }
+  @keyframes pulseHint{ 0%,100%{opacity:.4;} 50%{opacity:.85;} }
+
+  .envelope{
+    position:relative;
+    width:min(78vw, 320px);
+    aspect-ratio: 3 / 2;
+    perspective:1200px;
+  }
+  .env-body{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, #fff7ea, #ffe6c2);
+    border-radius:8px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.5);
+    overflow:hidden;
+  }
+  .env-body::after{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(135deg, transparent 49.3%, rgba(0,0,0,0.06) 49.6%, transparent 50%),
+      linear-gradient(45deg, transparent 49.3%, rgba(0,0,0,0.06) 49.6%, transparent 50%);
+  }
+  .env-flap{
+    position:absolute;
+    top:0; left:0; right:0;
+    height:60%;
+    background:linear-gradient(180deg, var(--orange), #d9430a);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transform-style:preserve-3d;
+    transition: transform 1s cubic-bezier(.6,-0.28,.4,1.3);
+    z-index:6;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  }
+  .envelope.open .env-flap{ transform: rotateX(180deg); }
+
+  .env-seal{
+    position:absolute;
+    top:26%; left:50%;
+    width:46px; height:46px;
+    margin:-23px 0 0 -23px;
+    background:radial-gradient(circle at 35% 30%, #ffd27a, var(--orange) 70%);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 10px rgba(0,0,0,0.35);
+    z-index:7;
+    font-family:'Playfair Display', serif;
+    font-weight:800;
+    color:#fff;
+    font-size:16px;
+    transition: opacity .3s ease .4s, transform .3s ease .4s;
+  }
+  .envelope.open .env-seal{ opacity:0; transform:scale(0.4); }
+
+  .env-letter{
+    position:absolute;
+    left:8%;
+    right:8%;
+    bottom:6%;
+    height:82%;
+    background:#fffdf8;
+    border-radius:6px;
+    box-shadow:0 -6px 18px rgba(0,0,0,0.15);
+    z-index:4;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    text-align:center;
+    transition: transform 1s cubic-bezier(.2,.8,.2,1) .25s;
+  }
+  .envelope.open .env-letter{ transform: translateY(-72%); }
+  .env-letter img{ height:26px; margin-bottom:10px; opacity:0.9; }
+  .env-letter b{
+    font-family:'Playfair Display', serif;
+    color:var(--navy);
+    font-size:15px;
+    letter-spacing:0.5px;
+  }
+  .env-letter span{
+    display:block;
+    margin-top:4px;
+    font-family:'Oswald', sans-serif;
+    color:var(--orange);
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+  }
+
+  @keyframes fadeDown{ from{ opacity:0; transform:translateY(-24px); } to{ opacity:1; transform:translateY(0); } }
+
+  @media (max-width:560px){
+    .bike{ width:190px; }
+    .overlay{ padding-top:2vh; }
+    .cta-row{ flex-direction:column; align-items:center; }
+    .footer-line{ flex-wrap:wrap; padding:0 10px; text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ ENVELOPE INTRO ============ -->
+  <div class="envelope-screen" id="envelopeScreen">
+    <div class="envelope" id="envelope">
+      <div class="env-letter">
+        <img src="assets/front/img/logo/header-logo.png" alt="Deovate World">
+        <b>Something great is on its way</b>
+        <span>Deovate World</span>
+      </div>
+      <div class="env-body"></div>
+      <div class="env-seal">D</div>
+      <div class="env-flap"></div>
+    </div>
+    <div class="envelope-hint">Tap to open</div>
+  </div>
+
+  <!-- ============ MAIN SCENE ============ -->
+  <header class="site-header">
+    <img src="assets/front/img/logo/header-logo.png" alt="Deovate World">
+  </header>
+
+  <div class="sky">
+    <div class="stars"></div>
+    <div class="sun"></div>
+    <div class="mountains"></div>
+    <div class="clouds">
+      <div class="cloud c1"></div>
+      <div class="cloud c2"></div>
+      <div class="cloud c3"></div>
+    </div>
+  </div>
+
+  <div class="road-wrap">
+    <div class="ground"></div>
+    <div class="road">
+      <div class="pebbles"></div>
+      <div class="lane"></div>
+    </div>
+  </div>
+
+  <div class="bike-track">
+    <div class="dust"><span></span><span></span><span></span></div>
+
+    <svg class="bike" id="bikeSvg" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+      <g class="wheel" transform="translate(68,120)">
+        <circle r="26" fill="#111" stroke="#333" stroke-width="3"/>
+        <circle r="8" fill="#666"/>
+        <g stroke="#555" stroke-width="2">
+          <line x1="0" y1="-24" x2="0" y2="24"/>
+          <line x1="-24" y1="0" x2="24" y2="0"/>
+          <line x1="-17" y1="-17" x2="17" y2="17"/>
+          <line x1="-17" y1="17" x2="17" y2="-17"/>
+        </g>
+      </g>
+      <g class="wheel" transform="translate(224,120)">
+        <circle r="26" fill="#111" stroke="#333" stroke-width="3"/>
+        <circle r="8" fill="#666"/>
+        <g stroke="#555" stroke-width="2">
+          <line x1="0" y1="-24" x2="0" y2="24"/>
+          <line x1="-24" y1="0" x2="24" y2="0"/>
+          <line x1="-17" y1="-17" x2="17" y2="17"/>
+          <line x1="-17" y1="17" x2="17" y2="-17"/>
+        </g>
+      </g>
+
+      <g>
+        <path d="M95,118 L45,128 Q35,130 35,122 L38,112 Q40,106 50,106 L100,104 Z" fill="#cfcfcf" stroke="#8a8a8a" stroke-width="1.5"/>
+        <circle cx="38" cy="118" r="5" fill="#444"/>
+
+        <path d="M92,118 L138,74 L150,74 L160,118" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+        <path d="M224,120 L206,70" stroke="#2b2b2b" stroke-width="7" stroke-linecap="round"/>
+
+        <rect x="120" y="88" width="46" height="34" rx="6" fill="#3d3d3d" stroke="#1c1c1c" stroke-width="2"/>
+        <rect x="128" y="78" width="26" height="16" rx="4" fill="#555"/>
+        <circle cx="141" cy="105" r="4" fill="#222"/>
+
+        <!-- fuel tank in brand orange -->
+        <path d="M118,80 Q112,55 150,52 Q188,50 196,66 Q200,76 188,80 L120,84 Z" fill="#ff5f13" stroke="#a53a0c" stroke-width="2"/>
+        <path d="M120,58 Q150,50 190,64" fill="none" stroke="#ffd27a" stroke-width="3" opacity="0.85"/>
+
+        <path d="M95,72 Q90,66 100,64 L150,58 L150,68 L100,74 Z" fill="#161616"/>
+
+        <circle cx="206" cy="68" r="11" fill="#ffe9a8" stroke="#8a6d1c" stroke-width="2"/>
+        <circle cx="206" cy="68" r="5" fill="#fff6d5"/>
+        <path d="M196,96 Q224,90 236,100 Q224,104 198,104 Z" fill="#2b2b2b"/>
+
+        <path d="M206,58 L196,44" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round"/>
+        <path d="M180,44 L212,40" stroke="#1c1c1c" stroke-width="5" stroke-linecap="round"/>
+
+        <g>
+          <ellipse cx="150" cy="24" rx="10" ry="11" fill="#111"/>
+          <path d="M140,34 Q136,40 138,52 L165,56 Q170,40 162,32 Q150,24 140,34 Z" fill="#1a1a1a"/>
+          <path d="M138,50 Q120,58 108,66" stroke="#1a1a1a" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <path d="M160,50 Q120,66 96,116" stroke="#151515" stroke-width="8" stroke-linecap="round" fill="none"/>
+        </g>
+
+        <path d="M60,104 Q52,84 78,78 L96,84 Q84,92 82,104 Z" fill="#b5b5b5"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="overlay">
+    <div class="badge">Deovate World &bull; Reimagined</div>
+    <h1 class="coming">Coming Soon</h1>
+    <p class="subtitle">We're building a faster, sharper experience for Deovate World. The road's almost done — a great-looking site is on its way.</p>
+    <div class="model-name">Deovate&nbsp;World</div>
+    <div class="cta-row">
+      <a class="cta-btn primary" href="https://wa.me/919914156467?text=Hi!%20I%27d%20like%20to%20know%20more%20about%20Deovate%20World.">Talk to Us</a>
+      <a class="cta-btn ghost" href="mailto:info@deovateworld.com">Email Us</a>
+    </div>
+  </div>
+
+  <div class="footer-line">
+    <span>+91 99141-56467</span>
+    <span>&bull;</span>
+    <span>info@deovateworld.com</span>
+  </div>
+
+<script>
+  // ---- Envelope intro: loops every 5s — closed envelope appears, opens,
+  // reveals the Coming Soon scene, then resets and repeats ----
+  const envelopeScreen = document.getElementById('envelopeScreen');
+  const envelope = document.getElementById('envelope');
+  const CYCLE_MS = 5000;
+  const OPEN_DELAY_MS = 900;
+
+  function resetEnvelope(){
+    envelopeScreen.classList.remove('hide');
+    envelope.classList.remove('open');
+  }
+
+  function openEnvelope(){
+    envelope.classList.add('open');
+    setTimeout(() => envelopeScreen.classList.add('hide'), 900);
+  }
+
+  function playCycle(){
+    resetEnvelope();
+    setTimeout(openEnvelope, OPEN_DELAY_MS);
+  }
+
+  envelopeScreen.addEventListener('click', openEnvelope);
+
+  playCycle();
+  setInterval(playCycle, CYCLE_MS);
+
+  // ---- Exhaust smoke, synced with the bike's ride animation ----
+  const smokeLayer = document.querySelector('.bike-track');
+  const bike = document.getElementById('bikeSvg');
+
+  function spawnSmoke(){
+    const rect = bike.getBoundingClientRect();
+    const trackRect = smokeLayer.getBoundingClientRect();
+
+    const exhaustX = rect.left - trackRect.left + rect.width * (38/300);
+    const exhaustY = rect.top - trackRect.top + rect.height * (118/160);
+
+    if (rect.right < trackRect.left - 20 || rect.left > trackRect.right + 20) return;
+
+    const puff = document.createElement('div');
+    puff.className = 'smoke';
+    const size = 10 + Math.random()*14;
+    puff.style.width = size + 'px';
+    puff.style.height = size + 'px';
+    puff.style.left = exhaustX + 'px';
+    puff.style.top = exhaustY + 'px';
+
+    const dx = -(20 + Math.random()*40);
+    const dy = -(30 + Math.random()*40);
+    const sc = 2 + Math.random()*1.5;
+    const dur = 0.9 + Math.random()*0.6;
+
+    puff.style.setProperty('--dx', dx + 'px');
+    puff.style.setProperty('--dy', dy + 'px');
+    puff.style.setProperty('--sc', sc);
+    puff.style.animationDuration = dur + 's';
+
+    smokeLayer.appendChild(puff);
+    setTimeout(()=> puff.remove(), dur*1000 + 50);
+  }
+
+  setInterval(spawnSmoke, 70);
+</script>
+
+</body>
+</html>

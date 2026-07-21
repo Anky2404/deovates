@@ -1,40 +1,46 @@
 <!-- Start Foot Scripts Section -->
-<script src="{{ asset('assets/front/js/vendor/modernizr-3.5.0.min.js') }}"></script>
+{{--
+    defer lets the browser fetch all of these in parallel as soon as the
+    HTML is parsed instead of one-at-a-time; execution still happens in
+    this exact order, right before DOMContentLoaded, so nothing below that
+    depends on load order (jQuery before its plugins, etc.) is affected.
+--}}
+<script src="{{ asset('assets/front/js/vendor/modernizr-3.5.0.min.js') }}" defer></script>
 
-<script src="{{ asset('assets/front/js/vendor/jquery-1.12.4.min.js') }}"></script>
-<script src="{{ asset('assets/front/js/popper.min.js') }}"></script>
-<script src="{{ asset('assets/front/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/vendor/jquery-1.12.4.min.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/popper.min.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/bootstrap.min.js') }}" defer></script>
 
-<script src="{{ asset('assets/front/js/jquery.slicknav.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/jquery.slicknav.min.js') }}" defer></script>
 
-<script src="{{ asset('assets/front/js/owl.carousel.min.js') }}"></script>
-<script src="{{ asset('assets/front/js/slick.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/owl.carousel.min.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/slick.min.js') }}" defer></script>
 
-<script src="{{ asset('assets/front/js/gijgo.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/gijgo.min.js') }}" defer></script>
 
-<script src="{{ asset('assets/front/js/wow.min.js') }}"></script>
-<script src="{{ asset('assets/front/js/animated.headline.js') }}"></script>
-<script src="{{ asset('assets/front/js/jquery.magnific-popup.js') }}"></script>
+<script src="{{ asset('assets/front/js/wow.min.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/animated.headline.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/jquery.magnific-popup.js') }}" defer></script>
 
-<script src="{{ asset('assets/front/js/jquery.scrollUp.min.js') }}"></script>
-<script src="{{ asset('assets/front/js/jquery.nice-select.min.js') }}"></script>
-<script src="{{ asset('assets/front/js/jquery.sticky.js') }}"></script>
+<script src="{{ asset('assets/front/js/jquery.scrollUp.min.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/jquery.nice-select.min.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/jquery.sticky.js') }}" defer></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js" defer></script>
 
-<script src="{{ asset('assets/front/js/contact.js') }}"></script>
-<script src="{{ asset('assets/front/js/jquery.form.js') }}"></script>
-<script src="{{ asset('assets/front/js/jquery.validate.min.js') }}"></script>
-<script src="{{ asset('assets/front/js/mail-script.js') }}"></script>
-<script src="{{ asset('assets/front/js/jquery.ajaxchimp.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/contact.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/jquery.form.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/jquery.validate.min.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/mail-script.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/jquery.ajaxchimp.min.js') }}" defer></script>
 
-<script src="{{ asset('assets/front/js/plugins.js') }}"></script>
-<script src="{{ asset('assets/front/js/main.js') }}"></script>
-<script src="{{ asset('assets/front/js/isotope.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/plugins.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/main.js') }}" defer></script>
+<script src="{{ asset('assets/front/js/isotope.min.js') }}" defer></script>
 
 {{-- ================= ALERT TOASTS ================= --}}
-<script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/js/toast.js') }}"></script>
+<script src="{{ asset('assets/js/sweetalert2.all.min.js') }}" defer></script>
+<script src="{{ asset('assets/js/toast.js') }}" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     @if(session('success'))

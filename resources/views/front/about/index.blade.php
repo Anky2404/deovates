@@ -37,7 +37,7 @@
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
-            data-background="{{ \App\Helper::heroBanner('about.png', 'assets/front/img/hero/about.jpg') }}">
+            data-background="{{ \App\Helper::heroBanner('about.png', 'assets/front/img/hero/about.avif') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
@@ -69,7 +69,7 @@
             <div class="row g-5 align-items-center">
                 <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
                     <div class="position-relative" style="max-width:470px;">
-                        <img src="{{ !empty($whoWeAreContent['side_image']) ? asset('storage/' . $whoWeAreContent['side_image']) : asset('assets/front/img/about.png') }}"
+                        <img src="{{ !empty($whoWeAreContent['side_image']) ? asset('storage/' . $whoWeAreContent['side_image']) : asset('assets/front/img/about.avif') }}"
                             class="about-img" alt="Inside {{ config('constants.BUSINESS.name') }}">
 
                         @if (!empty($whoWeAreContent['badge_count']))
@@ -138,7 +138,7 @@
             ])->all();
         }
     @endphp
-    <section class="vm-area py-5" style="background-image:url('{{ asset('assets/front/img/funfact.png') }}');" id="vision_missin">
+    <section class="vm-area py-5" style="background-image:url('{{ asset('assets/front/img/funfact.avif') }}');" id="vision_missin">
         <div class="vm-overlay"></div>
         <div class="container py-5 position-relative">
             <div class="section-title st-center st-light">
@@ -270,105 +270,13 @@
     <!-- End Core Values Section -->
 
     <!-- Start Roadmap Section -->
-    @php
-        $roadmapSection = $aboutPage?->sections->firstWhere('slug', 'roadmap-section');
-        $roadmapContent = $roadmapSection ? $sectionContents[$roadmapSection->id] ?? [] : [];
-        $roadmapSteps = $roadmapContent['group_data']['roadmap_steps'] ?? [];
-
-        if (empty($roadmapSteps)) {
-            $roadmapSteps = [
-                [
-                    'step_icon' => 'fas fa-search',
-                    'step_title' => 'Discovery',
-                    'step_heading' => 'Project Discovery & Consultation',
-                    'step_description' =>
-                        'We begin by understanding your business objectives, target audience, and project requirements. Through detailed consultation and market research, we create a clear strategy that aligns technology with your long-term business goals.',
-                ],
-                [
-                    'step_icon' => 'fas fa-paint-brush',
-                    'step_title' => 'Planning',
-                    'step_heading' => 'Planning & UI/UX Design',
-                    'step_description' =>
-                        'Our designers and solution architects create intuitive user experiences, interactive prototypes, and scalable system architecture that provide the perfect foundation for successful digital products.',
-                ],
-                [
-                    'step_icon' => 'fas fa-code',
-                    'step_title' => 'Development',
-                    'step_heading' => 'Development & Quality Assurance',
-                    'step_description' =>
-                        'Using modern technologies and clean coding standards, our developers build secure, responsive, and scalable solutions. Every feature is thoroughly tested to ensure performance, reliability, and security before launch.',
-                ],
-                [
-                    'step_icon' => 'fas fa-rocket',
-                    'step_title' => 'Launch',
-                    'step_heading' => 'Launch, Growth & Continuous Support',
-                    'step_description' =>
-                        'After successful deployment, we continue supporting your business with maintenance, performance optimization, security updates, feature enhancements, and technical assistance to ensure sustainable digital growth.',
-                ],
-            ];
-        }
-    @endphp
-    <section class="roadmap-area section-padding" id="roadmap">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <div class="heading">
-                    <h5>{{ $roadmapContent['section_label'] ?? 'Our Development Process' }}</h5>
-                    <div class="space-10"></div>
-                    <h1>{{ $roadmapContent['section_title'] ?? 'From Vision to Digital Success' }}</h1>
-                    <p class="mt-3">
-                        {{ $roadmapContent['section_subtitle'] ?? ("At " . config('constants.BUSINESS.name') . ", every successful project follows a proven development process. We combine strategic planning, creative design, modern technologies, and continuous support to deliver secure, scalable, and high-performing digital solutions that help businesses grow with confidence.") }}
-                    </p>
-                </div>
-                <div class="space-60 d-none d-sm-block"></div>
-            </div>
-        </div>
-
-        <div class="process-flow">
-            @foreach ($roadmapSteps as $step)
-                <div class="process-step wow fadeInLeft" data-wow-delay="{{ 0.1 + $loop->index * 0.2 }}s"
-                    data-slide-target="{{ $loop->index }}">
-                    <div class="process-chevron process-chevron--{{ $loop->iteration }}">
-                        <span class="process-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                        <span class="process-icon"><i class="{{ $step['step_icon'] ?? 'fas fa-check' }}"></i></span>
-                        <span class="process-title">{{ $step['step_title'] ?? '' }}</span>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Laptop-frame slider showing each step's detail -->
-        <div class="laptop-mockup wow fadeInUp" data-wow-delay="0.2s">
-            <div class="laptop-screen">
-                <div class="laptop-browser-bar">
-                    <span class="dot dot-red"></span>
-                    <span class="dot dot-yellow"></span>
-                    <span class="dot dot-green"></span>
-                    <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/process</span>
-                </div>
-                <div class="laptop-screen-glass">
-                    <div class="laptop-shine"></div>
-                    <div class="laptop-slides owl-carousel">
-                        @foreach ($roadmapSteps as $step)
-                            <div class="laptop-slide">
-                                <span class="process-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                                <span class="process-icon"><i class="{{ $step['step_icon'] ?? 'fas fa-check' }}"></i></span>
-                                <h5>{{ $step['step_heading'] ?? ($step['step_title'] ?? '') }}</h5>
-                                <p>
-                                    {{ $step['step_description'] ?? '' }}
-                                </p>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-            <div class="laptop-base">
-                <span class="laptop-notch"></span>
-            </div>
-            <div class="laptop-shadow"></div>
-        </div>
-    </div>
-</section>
+    @include('front.partials._roadmap_section', [
+        'page' => $aboutPage,
+        'sectionContents' => $sectionContents,
+        'defaultLabel' => 'Our Development Process',
+        'defaultTitle' => 'From Vision to Digital Success',
+        'defaultSubtitle' => 'At ' . config('constants.BUSINESS.name') . ', every successful project follows a proven development process. We combine strategic planning, creative design, modern technologies, and continuous support to deliver secure, scalable, and high-performing digital solutions that help businesses grow with confidence.',
+    ])
     <!-- End Roadmap Section -->
 
     <!-- Start Founder Section -->
@@ -410,7 +318,7 @@
                                     <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
                                 </div>
                                 <div class="founder-phone-photo">
-                                    <img src="{{ !empty($founderContent['founder_photo']) ? asset('storage/' . $founderContent['founder_photo']) : asset('assets/front/img/team-1.jpg') }}"
+                                    <img src="{{ !empty($founderContent['founder_photo']) ? asset('storage/' . $founderContent['founder_photo']) : asset('assets/front/img/team-1.avif') }}"
                                         alt="{{ $founderContent['founder_name'] ?? $data['founder']['name'] }}">
                                 </div>
                                 <div class="founder-phone-info">
@@ -486,12 +394,12 @@
         $officeCultureImages = $officeAreaContent['culture_images'] ?? [];
 
         if (empty($officeCultureImages)) {
-            $officeCultureImages = collect(['why-2.png', 'why-4.png', 'why-3.png', 'why-1.png'])->map(fn ($img) => [
+            $officeCultureImages = collect(['why-2.avif', 'why-4.avif', 'why-3.avif', 'why-1.avif'])->map(fn ($img) => [
                 'path' => 'assets/front/img/' . $img, 'alt' => config('constants.BRAND_NAME') . ' culture', 'external' => true,
             ])->all();
         }
     @endphp
-    <section class="vm-area py-5 office_area" id="office_area" style="background-image:url('{{ asset('assets/front/img/funfact.png') }}');">
+    <section class="vm-area py-5 office_area" id="office_area" style="background-image:url('{{ asset('assets/front/img/funfact.avif') }}');">
         <div class="vm-overlay"></div>
         <div class="container py-5 position-relative">
             <div class="row g-5 align-items-center">
@@ -581,200 +489,33 @@
 
     <!-- Start Testimonials Section -->
     <!-- Testimonials -->
-    @php
-        $aboutTestimonialsSection = $aboutPage?->sections->firstWhere('slug', 'testimonials-section');
-        $aboutTestimonialsContent = $aboutTestimonialsSection ? $sectionContents[$aboutTestimonialsSection->id] ?? [] : [];
-    @endphp
-    @if ($testimonials->isNotEmpty())
-        <section class="testimonials">
-
-            <div class="container">
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title st-center">
-                            @include('front.partials._section_heading', [
-                                'content' => $aboutTestimonialsContent,
-                                'defaultTitle' => "What Our Clients Say",
-                                'defaultSubtitle' => "Trusted by businesses we've helped grow",
-                            ])
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testi-mockup wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="laptop-screen">
-                        <div class="laptop-browser-bar">
-                            <span class="dot dot-red"></span>
-                            <span class="dot dot-yellow"></span>
-                            <span class="dot dot-green"></span>
-                            <span class="laptop-url">{{ config('constants.BRAND_NAME') }}/reviews</span>
-                        </div>
-                        <div class="laptop-screen-glass testi-glass">
-                            <div class="laptop-shine"></div>
-                            <div class="testimonials-carousel owl-carousel owl-theme">
-                                @foreach ($testimonials as $testimonial)
-                                    <div class="testimonial">
-                                        <div class="testimonial-img">
-                                            <img src="{{ \App\Helper::img($testimonial->photo) }}" alt="{{ $testimonial->name }}">
-                                        </div>
-                                        <blockquote>
-                                            <p>{{ $testimonial->message }}</p>
-                                            <footer>
-                                                <strong>{{ $testimonial->name }}</strong><br>
-                                                <cite>{{ $testimonial->designation }}{{ $testimonial->company ? ', ' . $testimonial->company : '' }}</cite>
-                                            </footer>
-                                        </blockquote>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                    <div class="laptop-base">
-                        <span class="laptop-notch"></span>
-                    </div>
-                    <div class="laptop-shadow"></div>
-                </div>
-
-            </div>
-
-        </section>
-    @endif
+    @include('front.partials._testimonials_section', [
+        'page' => $aboutPage,
+        'sectionContents' => $sectionContents,
+        'testimonials' => $testimonials,
+        'defaultTitle' => 'What Our Clients Say',
+        'defaultSubtitle' => "Trusted by businesses we've helped grow",
+    ])
     <!-- End Testimonials Section -->
 
     <!-- Start CTA Section -->
     <!-- CTA -->
-    @php
-        $aboutCtaSection = $aboutPage?->sections->firstWhere('slug', 'cta-section');
-        $aboutCtaContent = $aboutCtaSection ? $sectionContents[$aboutCtaSection->id] ?? [] : [];
-    @endphp
-    <section class="call-2-acction" data-stellar-background-ratio="0.4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-
-                    <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
-                            'content' => $aboutCtaContent,
-                            'defaultTitle' => "LET'S BUILD SOMETHING EXCEPTIONAL",
-                            'defaultSubtitle' => "Transform Your Vision into Powerful Digital Solutions",
-                        ])
-                    </div>
-
-                    <div class="c2a">
-
-                        <p>
-                            @if (!empty($aboutCtaContent['cta_paragraph']))
-                                {!! $aboutCtaContent['cta_paragraph'] !!}
-                            @else
-                                Whether you're launching a startup, modernizing your business, or scaling your digital presence,
-                                {{ config('constants.BUSINESS.name') }} delivers custom websites, business software, eCommerce platforms, and innovative
-                                technology solutions tailored to your goals. Partner with our experienced team to build secure,
-                                scalable, and high-performing digital products that create lasting business value.
-                            @endif
-                        </p>
-
-                        <a href="{{ $aboutCtaContent['btn_links'] ?? route('front.contact.index') }}" class="btn btn-main btn-lg">
-                            {{ $aboutCtaContent['btn_text'] ?? 'Start Your Project' }}
-                        </a>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
+    @include('front.partials._cta_section', [
+        'page' => $aboutPage,
+        'sectionContents' => $sectionContents,
+        'defaultTitle' => "LET'S BUILD SOMETHING EXCEPTIONAL",
+        'defaultSubtitle' => 'Transform Your Vision into Powerful Digital Solutions',
+    ])
     <!-- End CTA Section -->
 
  <!-- Start FAQ Section -->
- @php
-     $aboutFaqSection = $aboutPage?->sections->firstWhere('slug', 'faq-section');
-     $aboutFaqContent = $aboutFaqSection ? $sectionContents[$aboutFaqSection->id] ?? [] : [];
- @endphp
- <section id="faq-section" class="faq-section">
-        <div class="container">
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
-                            'content' => $aboutFaqContent,
-                            'defaultTitle' => 'Frequently Asked Questions',
-                            'defaultSubtitle' => 'Quick answers to common questions',
-                        ])
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-contact-grid">
-
-                @if ($category && $category->activeFaqs->isNotEmpty())
-                <!-- LEFT: FAQ app tablet -->
-                <div class="faq-tablet-col wow fadeInLeft" data-wow-delay="0.1s">
-                    <div class="app-tablet">
-                        <div class="tablet-frame app-tablet-frame">
-                            <div class="tablet-cam"></div>
-                            <div class="tablet-screen app-tablet-screen">
-                                <div class="tablet-statusbar">
-                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
-                                </div>
-
-                                <div class="app-screen-header">
-                                    <h4>FAQs</h4>
-                                    <p>Quick answers to common questions</p>
-                                </div>
-
-                                <div class="faq-wrapper app-faq-list">
-                                    @foreach ($category->activeFaqs as $faq)
-                                        <div class="faq-item @if ($loop->first) active @endif">
-                                            <div class="faq-title">
-                                                <h5>{{ $faq->question }}</h5>
-                                                <span class="faq-icon">
-                                                    <i class="fa {{ $loop->first ? 'fa-minus' : 'fa-plus' }}"></i>
-                                                </span>
-                                            </div>
-
-                                            <div class="faq-content" @if ($loop->first) style="display:block;" @endif>
-                                                <p>{{ $faq->answer }}</p>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <div class="tablet-home-btn"></div>
-                        </div>
-                        <div class="tablet-shadow"></div>
-                    </div>
-                </div>
-                @endif
-
-                <!-- RIGHT: Contact form tablet -->
-                <div class="contact-tablet-col wow fadeInRight" data-wow-delay="0.2s">
-                    <div class="app-tablet">
-                        <div class="tablet-frame app-tablet-frame">
-                            <div class="tablet-cam"></div>
-                            <div class="tablet-screen app-tablet-screen">
-                                <div class="tablet-statusbar">
-                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
-                                </div>
-
-                                <div class="app-screen-header">
-                                    <h4>Get In Touch</h4>
-                                    <p>We'd love to hear about your project</p>
-                                </div>
-
-                                 @include('front.common.contact-form')
-                            </div>
-                            <div class="tablet-home-btn"></div>
-                        </div>
-                        <div class="tablet-shadow"></div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
+ @include('front.partials._faq_section', [
+     'page' => $aboutPage,
+     'sectionContents' => $sectionContents,
+     'category' => $category,
+     'defaultTitle' => 'Frequently Asked Questions',
+     'defaultSubtitle' => 'Quick answers to common questions',
+ ])
     <!-- End FAQ Section -->
 
 

@@ -2,12 +2,20 @@
   { "use strict"
   
 /* 1. Proloder */
-    $(window).on('load', function () {
-      $('#preloader-active').delay(450).fadeOut('slow');
-      $('body').delay(450).css({
+    // Was gated on window 'load', which waits for every image, font and
+    // external resource on the page — on an image-heavy page that made the
+    // preloader sit on screen far longer than the page actually took to
+    // become usable. DOM-ready is enough (layout + CSS are already in by
+    // then); the timeout is just a safety net in case 'ready' is somehow
+    // never reached.
+    var hidePreloader = function () {
+      $('#preloader-active').stop(true, true).fadeOut(250);
+      $('body').css({
         'overflow': 'visible'
       });
-    });
+    };
+    $(hidePreloader);
+    setTimeout(hidePreloader, 2000);
 
 
 /* 2. slick Nav */

@@ -56,6 +56,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Deploy Token
+    |--------------------------------------------------------------------------
+    |
+    | Authorizes the /deploy/optimize-clear and /deploy/storage-link routes
+    | (see routes/web.php) so caches can be cleared / the storage symlink
+    | (re)created over HTTP without shell access.
+    |
+    */
+
+    'deploy_token' => env('DEPLOY_TOKEN'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

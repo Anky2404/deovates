@@ -141,7 +141,7 @@
                             </div>
 
                             <div class="map-footer">
-                                <img src="{{ asset('assets/front/img/gallery/map-footer.png') }}" alt="Map">
+                                <img src="{{ asset('assets/front/img/gallery/map-footer.avif') }}" alt="Map">
                             </div>
 
                             <div class="site-visitor-counter" data-count="{{ \App\Models\SiteVisit::count() }}">

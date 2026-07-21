@@ -8,7 +8,7 @@
     <!-- Start Hero Section -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
-            data-background="{{ \App\Helper::img($service->banner_image, 'assets/front/img/hero/h2_hero.png') }}">
+            data-background="{{ \App\Helper::img($service->banner_image, 'assets/front/img/hero/h2_hero.avif') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
@@ -412,7 +412,7 @@
                             <!-- Testimonial 1 -->
                             <div class="testimonial">
                                 <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.png') }}"
+                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.avif') }}"
                                         alt="John Anderson">
                                 </div>
                                 <blockquote>
@@ -431,7 +431,7 @@
                             <!-- Testimonial 2 -->
                             <div class="testimonial">
                                 <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/1.png') }}" alt="Sarah Williams">
+                                    <img src="{{ asset('assets/front/img/testimonial/1.avif') }}" alt="Sarah Williams">
                                 </div>
                                 <blockquote>
                                     <p>
@@ -449,7 +449,7 @@
                             <!-- Testimonial 3 -->
                             <div class="testimonial">
                                 <div class="testimonial-img">
-                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.png') }}"
+                                    <img src="{{ asset('assets/front/img/testimonial/Homepage_testi.avif') }}"
                                         alt="Michael Brown">
                                 </div>
                                 <blockquote>

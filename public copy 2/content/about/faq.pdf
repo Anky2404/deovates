@@ -1,0 +1,91 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 3820 >>
+stream
+BT /F2 20 Tf 72.00 720.00 Td (Frequently Asked Questions & Contact \(About Page\)) Tj ET
+BT /F2 13.5 Tf 72.00 671.60 Td (SECTION ANALYSIS) Tj ET
+BT /F1 11 Tf 72.00 643.78 Td (Purpose: The exact same FAQ-plus-contact-form pairing already reviewed on the homepage,) Tj ET
+BT /F1 11 Tf 72.00 629.26 Td (reused here as the About page's own objection-handling and lead-capture close.) Tj ET
+BT /F1 11 Tf 72.00 606.74 Td (Finding: Unlike every other reused section reviewed so far \(Development Process, CTA,) Tj ET
+BT /F1 11 Tf 72.00 592.22 Td (Testimonials\), which each had at least one page-specific difference - a different subtitle, or an) Tj ET
+BT /F1 11 Tf 72.00 577.70 Td (intentionally identical structure with only the FAQ list needing to be shared - this instance shows) Tj ET
+BT /F1 11 Tf 72.00 563.18 Td (zero differences from the homepage version. Heading, subtitle, the single populated FAQ, and) Tj ET
+BT /F1 11 Tf 72.00 548.66 Td (the entire contact form are word-for-word identical.) Tj ET
+BT /F1 11 Tf 72.00 526.14 Td (Is that a problem? Partly, and partly not. FAQ and contact form content is reference material,) Tj ET
+BT /F1 11 Tf 72.00 511.62 Td (not page-specific marketing copy, so identical FAQ answers and form fields on two pages is) Tj ET
+BT /F1 11 Tf 72.00 497.10 Td (normal and expected - a visitor does not need a different explanation of "what services do you) Tj ET
+BT /F1 11 Tf 72.00 482.58 Td (provide" depending on which page they're on. The heading and subtitle are a softer case: a) Tj ET
+BT /F1 11 Tf 72.00 468.06 Td (visitor who reads both the Home and About pages back to back will notice the exact same) Tj ET
+BT /F1 11 Tf 72.00 453.54 Td (sentence twice, which reads as unedited rather than deliberate. That is a smaller issue than the) Tj ET
+BT /F1 11 Tf 72.00 439.02 Td (full-paragraph duplication found on the CTA section, but worth a quick pass.) Tj ET
+BT /F1 11 Tf 72.00 416.50 Td (Content Note \(Same root cause, now at eleven and twelve instances\): Both device frames again) Tj ET
+BT /F1 11 Tf 72.00 401.98 Td (show "TEST PROJECT" in their header bar - the same config/constants.php BRAND_NAME) Tj ET
+BT /F1 11 Tf 72.00 387.46 Td (and BUSINESS.name issue traced earlier in this review. No new information here, just) Tj ET
+BT /F1 11 Tf 72.00 372.94 Td (confirmation that the fix applies here too.) Tj ET
+BT /F1 11 Tf 72.00 350.42 Td (Recommendation: Reuse the same 10 FAQ questions and answers already written for the) Tj ET
+BT /F1 11 Tf 72.00 335.90 Td (homepage version of this section \(public/content/home/home_faq.pdf\) rather than writing a) Tj ET
+BT /F1 11 Tf 72.00 321.38 Td (different set - consistency is correct here. The one small change worth making is a slightly) Tj ET
+BT /F1 11 Tf 72.00 306.86 Td (different subtitle line for this page, purely so it does not read as an exact repeat to anyone) Tj ET
+BT /F1 11 Tf 72.00 292.34 Td (comparing pages.) Tj ET
+BT /F2 13.5 Tf 72.00 257.82 Td (CONTENT \(ENGLISH\)) Tj ET
+BT /F1 11 Tf 72.00 230.00 Td (Main Heading: Frequently Asked Questions \(keep as-is - shared with homepage\)) Tj ET
+BT /F1 11 Tf 72.00 207.48 Td (Subtitle \(About page variant\): Still have a question after reading about our team and process?) Tj ET
+BT /F1 11 Tf 72.00 192.96 Td (Here are the ones people ask most.) Tj ET
+BT /F1 11 Tf 72.00 170.44 Td (FAQ Panel Content: Reuse the same 10 questions and answers already written for the) Tj ET
+BT /F1 11 Tf 72.00 155.92 Td (homepage FAQ panel - no changes needed there.) Tj ET
+BT /F1 11 Tf 72.00 133.40 Td (Contact Form Panel: Reuse the same field labels, placeholders, subtitle, validation message,) Tj ET
+BT /F1 11 Tf 72.00 118.88 Td (and button text already written for the homepage version - all of that content is page-agnostic) Tj ET
+BT /F1 11 Tf 72.00 104.36 Td (and correct as-is.) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 1276 >>
+stream
+BT /F2 13.5 Tf 72.00 720.00 Td (EXPLANATION \(HINGLISH\)) Tj ET
+BT /F1 11 Tf 72.00 692.18 Td (FAQ aur Contact Form Content - Yeh dono reference-type content hain \(jaise ek company-wide) Tj ET
+BT /F1 11 Tf 72.00 677.66 Td (FAQ list\), isliye Home aur About page par same hona normal hai, alag likhne ki zaroorat nahi.) Tj ET
+BT /F1 11 Tf 72.00 663.14 Td (Yeh Testimonials jaisa case nahi hai, jahan same fake review do jagah dikhna ajeeb lagta.) Tj ET
+BT /F1 11 Tf 72.00 640.62 Td (Subtitle - Sirf yehi ek chhota change suggest kiya gaya hai, kyunki agar koi visitor Home aur) Tj ET
+BT /F1 11 Tf 72.00 626.10 Td (About dono page padhe, to exact same sentence dobara dikhna thoda "unedited" feel de sakta) Tj ET
+BT /F1 11 Tf 72.00 611.58 Td (hai. Baaki sab kuch as-is theek hai.) Tj ET
+BT /F1 11 Tf 72.00 589.06 Td (TEST PROJECT Bug - Koi nayi jaankari nahi, sirf confirm hota hai ki yahan bhi wahi config-level) Tj ET
+BT /F1 11 Tf 72.00 574.54 Td (fix apply hoga jo pehle trace kiya gaya tha.) Tj ET
+BT /F2 13.5 Tf 72.00 540.02 Td (QUALITY CHECK) Tj ET
+BT /F1 11 Tf 72.00 512.20 Td (Human sounding, SEO optimized, Easy to read, Premium tone, Brand consistent, Conversion) Tj ET
+BT /F1 11 Tf 72.00 497.68 Td (focused, No keyword stuffing, Natural flow, Grammarly ready.) Tj ET
+endstream
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000218 00000 n 
+0000000320 00000 n 
+0000000456 00000 n 
+0000004327 00000 n 
+0000004463 00000 n 
+trailer
+<< /Size 9 /Root 1 0 R >>
+startxref
+5790
+%%EOF

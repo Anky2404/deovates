@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Storage;
 
 class Helper
 {
+    /**
+     * Front-end query cache lifetime, in seconds (30 minutes). Kept short
+     * so admin content edits surface on their own within a bounded window;
+     * hit /deploy/optimize-clear for an immediate refresh after an edit.
+     */
+    const CACHE_TTL = 1800;
 
     /**
      * Check if current route is active
@@ -142,13 +148,23 @@ class Helper
      * office shot the client is generating separately) and fall back to
      * an existing placeholder until that file actually shows up.
      */
-    public static function heroBanner(string $filename, string $fallback = 'assets/front/img/hero/h2_hero.png'): string
+    public static function heroBanner(string $filename, string $fallback = 'assets/front/img/hero/h2_hero.avif'): string
     {
-        $path = public_path('assets/front/img/banners/' . ltrim($filename, '/'));
+        $filename = ltrim($filename, '/');
 
-        return file_exists($path)
-            ? asset('assets/front/img/banners/' . ltrim($filename, '/'))
-            : asset($fallback);
+        // Banner originals were converted to AVIF; callers still pass the
+        // pre-conversion .png/.jpg name, so check the .avif variant first.
+        $avifFilename = preg_replace('/\.(png|jpe?g|gif|webp)$/i', '.avif', $filename);
+
+        if (file_exists(public_path('assets/front/img/banners/' . $avifFilename))) {
+            return asset('assets/front/img/banners/' . $avifFilename);
+        }
+
+        if (file_exists(public_path('assets/front/img/banners/' . $filename))) {
+            return asset('assets/front/img/banners/' . $filename);
+        }
+
+        return asset($fallback);
     }
 
     /**
@@ -157,7 +173,7 @@ class Helper
      * actually uploaded (several seeded tables reference paths that don't
      * exist on disk).
      */
-    public static function img(?string $path, string $fallback = 'assets/front/img/default-img.png'): string
+    public static function img(?string $path, string $fallback = 'assets/front/img/default-img.avif'): string
     {
         if (!empty($path) && Storage::disk('public')->exists($path)) {
             return asset('storage/' . $path);

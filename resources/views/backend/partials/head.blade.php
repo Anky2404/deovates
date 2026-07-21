@@ -11,13 +11,11 @@
 
 
       <!-- ================= FAVICONS ================= -->
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/apple-touch-icon.png') }}">
-
-<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicon-32x32.png') }}">
-
-<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicon-16x16.png') }}">
-
-<link rel="manifest" href="{{ asset('assets/site.webmanifest') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/front/favicons/favicon.svg') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('assets/front/favicons/favicon-96x96.png') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/front/favicons/favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/front/favicons/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ asset('assets/front/favicons/site.webmanifest') }}">
 
     <!-- Google Fonts (Preconnect + Load) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

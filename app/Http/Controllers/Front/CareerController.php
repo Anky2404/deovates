@@ -8,8 +8,10 @@ use App\Models\ActivityLog;
 use App\Models\Career;
 use App\Models\CareerApplication;
 use App\Models\Resume;
+use App\Helper;
 use App\Services\MediaUploader;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -22,19 +24,21 @@ class CareerController extends Controller
 
     public function index()
     {
-        $careers = Career::with('department')
-            ->active()
-            ->latest('id')
-            ->get();
+        $careers = Cache::remember('front.career.index', Helper::CACHE_TTL, function () {
+            $careers = Career::with('department')
+                ->active()
+                ->latest('id')
+                ->get();
 
-        // Pad grid with placeholder roles
-        $placeholders = collect([
-            (object) ['slug' => null, 'title' => 'Frontend Developer', 'department' => (object) ['name' => 'Engineering'], 'location' => 'ludhiana', 'is_remote' => true, 'employment_type' => 'full-time'],
-            (object) ['slug' => null, 'title' => 'Backend Developer', 'department' => (object) ['name' => 'Engineering'], 'location' => 'ludhiana', 'is_remote' => true, 'employment_type' => 'full-time'],
-            (object) ['slug' => null, 'title' => 'UI/UX Designer', 'department' => (object) ['name' => 'Design'], 'location' => 'ludhiana', 'is_remote' => false, 'employment_type' => 'full-time'],
-        ])->take(max(0, 4 - $careers->count()));
+            // Pad grid with placeholder roles
+            $placeholders = collect([
+                (object) ['slug' => null, 'title' => 'Frontend Developer', 'department' => (object) ['name' => 'Engineering'], 'location' => 'ludhiana', 'is_remote' => true, 'employment_type' => 'full-time'],
+                (object) ['slug' => null, 'title' => 'Backend Developer', 'department' => (object) ['name' => 'Engineering'], 'location' => 'ludhiana', 'is_remote' => true, 'employment_type' => 'full-time'],
+                (object) ['slug' => null, 'title' => 'UI/UX Designer', 'department' => (object) ['name' => 'Design'], 'location' => 'ludhiana', 'is_remote' => false, 'employment_type' => 'full-time'],
+            ])->take(max(0, 4 - $careers->count()));
 
-        $careers = $careers->concat($placeholders);
+            return $careers->concat($placeholders);
+        });
 
         [$page, $sectionContents] = $this->loadPageSections('career');
 
@@ -43,20 +47,24 @@ class CareerController extends Controller
 
     public function details($slug)
     {
-        $career = Career::with('department')
-            ->active()
-            ->where('slug', $slug)
-            ->first();
+        $career = Cache::remember("front.career.details.{$slug}", Helper::CACHE_TTL, function () use ($slug) {
+            return Career::with('department')
+                ->active()
+                ->where('slug', $slug)
+                ->first();
+        });
 
         if (! $career) {
             abort(404);
         }
 
-        $related = Career::active()
-            ->where('id', '!=', $career->id)
-            ->latest('id')
-            ->take(3)
-            ->get();
+        $related = Cache::remember("front.career.related.{$career->id}", Helper::CACHE_TTL, function () use ($career) {
+            return Career::active()
+                ->where('id', '!=', $career->id)
+                ->latest('id')
+                ->take(3)
+                ->get();
+        });
 
         return view($this->prefix . $this->folder . 'details', compact('career', 'related'));
     }

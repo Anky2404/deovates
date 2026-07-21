@@ -18,9 +18,43 @@ use App\Http\Controllers\Front\PricingController;
 use App\Http\Controllers\Front\ServiceController;
 use App\Http\Controllers\Front\TechStackController;
 use App\Http\Controllers\Front\TestimonialController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 
+
+/*
+|--------------------------------------------------------------------------
+| DEPLOY / MAINTENANCE ROUTES
+|--------------------------------------------------------------------------
+| For use right after pushing to production when shell/SSH access isn't
+| handy — hit these once, with the DEPLOY_TOKEN from .env, to clear caches
+| or (re)create the storage symlink.
+*/
+
+Route::prefix('deploy')->group(function () {
+    Route::get('/optimize-clear', function () {
+        if (request()->query('token') !== config('app.deploy_token') || empty(config('app.deploy_token'))) {
+            abort(404);
+        }
+
+        Artisan::call('optimize:clear');
+
+        return response('OK: caches cleared (config, route, view, event, application).' . "\n\n" . Artisan::output(), 200)
+            ->header('Content-Type', 'text/plain');
+    });
+
+    Route::get('/storage-link', function () {
+        if (request()->query('token') !== config('app.deploy_token') || empty(config('app.deploy_token'))) {
+            abort(404);
+        }
+
+        Artisan::call('storage:link');
+
+        return response('OK: storage link created/verified.' . "\n\n" . Artisan::output(), 200)
+            ->header('Content-Type', 'text/plain');
+    });
+});
 
 /*
 |--------------------------------------------------------------------------

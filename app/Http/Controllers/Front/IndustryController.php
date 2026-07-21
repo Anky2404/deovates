@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\Concerns\LoadsPageSections;
+use App\Helper;
 use App\Models\Industry;
+use Illuminate\Support\Facades\Cache;
 
 class IndustryController extends Controller
 {
@@ -15,10 +17,12 @@ class IndustryController extends Controller
 
     public function index()
     {
-        $industries = Industry::active()
-            ->ordered()
-            ->latest('id')
-            ->get();
+        $industries = Cache::remember('front.industries.index', Helper::CACHE_TTL, function () {
+            return Industry::active()
+                ->ordered()
+                ->latest('id')
+                ->get();
+        });
 
         [$page, $sectionContents] = $this->loadPageSections('industries');
 
@@ -27,9 +31,11 @@ class IndustryController extends Controller
 
     public function details($slug)
     {
-        $industry = Industry::active()
-            ->where('slug', $slug)
-            ->first();
+        $industry = Cache::remember("front.industries.details.{$slug}", Helper::CACHE_TTL, function () use ($slug) {
+            return Industry::active()
+                ->where('slug', $slug)
+                ->first();
+        });
 
         if (! $industry) {
             abort(404);
@@ -37,12 +43,14 @@ class IndustryController extends Controller
 
         $industry->increment('views');
 
-        $related = Industry::active()
-            ->where('id', '!=', $industry->id)
-            ->ordered()
-            ->latest('id')
-            ->take(4)
-            ->get();
+        $related = Cache::remember("front.industries.related.{$industry->id}", Helper::CACHE_TTL, function () use ($industry) {
+            return Industry::active()
+                ->where('id', '!=', $industry->id)
+                ->ordered()
+                ->latest('id')
+                ->take(4)
+                ->get();
+        });
 
         return view($this->prefix . $this->folder . 'details', compact('industry', 'related'));
     }

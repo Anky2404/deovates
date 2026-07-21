@@ -9,7 +9,7 @@
     <!-- Hero -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
-            data-background="{{ \App\Helper::heroBanner('testimonials.png', 'assets/front/img/hero/h2_hero.png') }}">
+            data-background="{{ \App\Helper::heroBanner('testimonials.png', 'assets/front/img/hero/h2_hero.avif') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
@@ -130,7 +130,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="google-review-card">
                             <div class="google-review-head">
-                                <img src="{{ $review->author_photo_url ?: asset('assets/front/img/default-img.png') }}"
+                                <img src="{{ $review->author_photo_url ?: asset('assets/front/img/default-img.avif') }}"
                                      alt="{{ $review->author_name }}" class="google-review-avatar">
                                 <div>
                                     <strong>{{ $review->author_name }}</strong>
@@ -262,140 +262,22 @@
 
     <!-- Start CTA Section -->
     <!-- CTA -->
-    @php
-        $testiCtaSection = $page?->sections->firstWhere('slug', 'cta-section');
-        $testiCtaContent = $testiCtaSection ? $sectionContents[$testiCtaSection->id] ?? [] : [];
-    @endphp
-    <section class="call-2-acction" data-stellar-background-ratio="0.4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-
-                    <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
-                            'content' => $testiCtaContent,
-                            'defaultTitle' => \App\Helper::sectionTitle('testimonials', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL"),
-                            'defaultSubtitle' => \App\Helper::sectionTitle('testimonials', 'cta', 'subtitle'),
-                        ])
-                    </div>
-
-                    <div class="c2a">
-
-                        <p>
-                            @if (!empty($testiCtaContent['cta_paragraph']))
-                                {!! $testiCtaContent['cta_paragraph'] !!}
-                            @else
-                                Whether you're launching a startup, modernizing your business, or scaling your digital presence,
-                                {{ config('constants.BUSINESS.name') }} delivers custom websites, business software, eCommerce platforms, and innovative
-                                technology solutions tailored to your goals. Partner with our experienced team to build secure,
-                                scalable, and high-performing digital products that create lasting business value.
-                            @endif
-                        </p>
-
-                        <a href="{{ $testiCtaContent['btn_links'] ?? route('front.contact.index') }}" class="btn btn-main btn-lg">
-                            {{ $testiCtaContent['btn_text'] ?? 'Start Your Project' }}
-                        </a>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
+    @include('front.partials._cta_section', [
+        'page' => $page,
+        'sectionContents' => $sectionContents,
+        'defaultTitle' => \App\Helper::sectionTitle('testimonials', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL"),
+        'defaultSubtitle' => \App\Helper::sectionTitle('testimonials', 'cta', 'subtitle'),
+    ])
     <!-- End CTA Section -->
 
     <!-- Start FAQ Section -->
-    @php
-        $testiFaqSection = $page?->sections->firstWhere('slug', 'faq-section');
-        $testiFaqContent = $testiFaqSection ? $sectionContents[$testiFaqSection->id] ?? [] : [];
-    @endphp
-    <section id="faq-section" class="faq-section">
-        <div class="container">
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
-                            'content' => $testiFaqContent,
-                            'defaultTitle' => \App\Helper::sectionTitle('testimonials', 'faq', 'title', 'Frequently Asked Questions'),
-                            'defaultSubtitle' => \App\Helper::sectionTitle('testimonials', 'faq', 'subtitle'),
-                        ])
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-contact-grid">
-
-                <!-- LEFT: FAQ app tablet -->
-                <div class="faq-tablet-col wow fadeInLeft" data-wow-delay="0.1s">
-                    <div class="app-tablet">
-                        <div class="tablet-frame app-tablet-frame">
-                            <div class="tablet-cam"></div>
-                            <div class="tablet-screen app-tablet-screen">
-                                <div class="tablet-statusbar">
-                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
-                                </div>
-
-                                <div class="app-screen-header">
-                                    <h4>FAQs</h4>
-                                    <p>Quick answers to common questions</p>
-                                </div>
-
-                                <div class="faq-wrapper app-faq-list">
-
-                                    @forelse ($category->activeFaqs ?? [] as $faq)
-                                        <div class="faq-item @if ($loop->first) active @endif">
-                                            <div class="faq-title">
-                                                <h5>{{ $faq->question }}</h5>
-                                                <span class="faq-icon">
-                                                    <i class="fa fa-{{ $loop->first ? 'minus' : 'plus' }}"></i>
-                                                </span>
-                                            </div>
-
-                                            <div class="faq-content" @if ($loop->first) style="display:block;" @endif>
-                                                <p>
-                                                    {{ $faq->answer }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    @empty
-                                        <p class="text-center text-muted">FAQs will be listed here shortly.</p>
-                                    @endforelse
-
-                                </div>
-                            </div>
-                            <div class="tablet-home-btn"></div>
-                        </div>
-                        <div class="tablet-shadow"></div>
-                    </div>
-                </div>
-
-                <!-- RIGHT: Contact form tablet -->
-                <div class="contact-tablet-col wow fadeInRight" data-wow-delay="0.2s">
-                    <div class="app-tablet">
-                        <div class="tablet-frame app-tablet-frame">
-                            <div class="tablet-cam"></div>
-                            <div class="tablet-screen app-tablet-screen">
-                                <div class="tablet-statusbar">
-                                    <span class="phone-brand">{{ config('constants.BRAND_NAME') }}</span>
-                                </div>
-
-                                <div class="app-screen-header">
-                                    <h4>Get In Touch</h4>
-                                    <p>We'd love to hear about your project</p>
-                                </div>
- @include('front.common.contact-form')
-                            </div>
-                            <div class="tablet-home-btn"></div>
-                        </div>
-                        <div class="tablet-shadow"></div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
+    @include('front.partials._faq_section', [
+        'page' => $page,
+        'sectionContents' => $sectionContents,
+        'category' => $category,
+        'defaultTitle' => \App\Helper::sectionTitle('testimonials', 'faq', 'title', 'Frequently Asked Questions'),
+        'defaultSubtitle' => \App\Helper::sectionTitle('testimonials', 'faq', 'subtitle'),
+    ])
     <!-- End FAQ Section -->
 
 

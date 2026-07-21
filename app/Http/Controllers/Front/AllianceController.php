@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Helper;
 use App\Http\Controllers\Front\Concerns\LoadsPageSections;
 use App\Models\Partner;
+use Illuminate\Support\Facades\Cache;
 
 class AllianceController extends Controller
 {
@@ -12,10 +14,12 @@ class AllianceController extends Controller
 
     public function index()
     {
-        $partners = Partner::active()
-            ->ordered()
-            ->latest('id')
-            ->get();
+        $partners = Cache::remember('front.alliances.index', Helper::CACHE_TTL, function () {
+            return Partner::active()
+                ->ordered()
+                ->latest('id')
+                ->get();
+        });
 
         [$page, $sectionContents] = $this->loadPageSections('alliances');
 

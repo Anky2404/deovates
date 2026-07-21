@@ -8,7 +8,7 @@
     <!-- Start Hero Section -->
     <div class="slider-area">
         <div class="single-slider hero-overly slider-height2 d-flex align-items-center"
-            data-background="{{ asset('assets/front/img/hero/h1_hero.png') }}">
+            data-background="{{ asset('assets/front/img/hero/h1_hero.avif') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
