@@ -3,7 +3,7 @@ return [
     'ADMIN_PAGE_RECORDS' => 15,
     'FRONT_PAGE_RECORDS' => 50,
     'RATING_PAGE_RECORDS' => 10,
-    'BRAND_NAME' => 'Deovate World',
+    'BRAND_NAME' => 'Deovate',
 
     // Fill these in from your Tawk.to dashboard: Administration > Chat Widget
     // > the embed snippet has s1.src = 'https://embed.tawk.to/{PROPERTY_ID}/{WIDGET_ID}'.
