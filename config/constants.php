@@ -252,15 +252,15 @@ return [
         'emails' => [
             [
                 'label'   => 'General',
-                'address' => 'info@deovateworld.com',
+                'address' => 'info@deovateworld.in',
             ],
         ],
     ],
 
     // this array is for sending emails
     'EMAIL' => [
-        'from' => 'abhiii2404@gmail.com',
-        'contact' => 'sales@deovateworld.com',
+        'from' => 'info@deovateworld.in',
+        'contact' => 'hr@deovateworld.in',
         'send' => ['abhiii2404@gmail.com', 'ankysinghhumraj1@gmail.com','info@deovateworld.in'],
         // 'send' => 'support@thecanadafoods.com',
     ],
