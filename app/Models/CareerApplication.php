@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Services\EmailSenderService;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 class CareerApplication extends Model
 {
@@ -106,5 +108,53 @@ class CareerApplication extends Model
             'changed_by'   => $changedBy,
             'remarks'      => $remarks,
         ]);
+
+        if ($oldStatus !== $status) {
+            $this->sendStatusUpdateEmail($oldStatus, $status, $remarks);
+        }
+    }
+
+    /**
+     * Notifies the applicant on every status change, using the same
+     * database-template pattern as the password-reset email — the
+     * template auto-creates itself from the fallback view on first use
+     * and is fully editable afterward from Admin > Emails > Templates.
+     */
+    private function sendStatusUpdateEmail(?string $oldStatus, string $newStatus, ?string $remarks): void
+    {
+        try {
+            app(EmailSenderService::class)->sendTemplated(
+                toEmail: $this->email,
+                toName: $this->full_name,
+                templateSlug: 'career-application-status-update',
+                templateDefaults: [
+                    'name' => 'Career Application — Status Update',
+                    'subject' => 'Your application for {{career_title}} — {{new_status}}',
+                    'body' => view('emails.notification', [
+                        'intro' => 'There\'s an update on your application for <strong>{{career_title}}</strong>.',
+                        'fields' => [
+                            'Previous Status' => '{{old_status}}',
+                            'New Status' => '{{new_status}}',
+                        ],
+                        'quote' => '{{remarks}}',
+                        'outro' => 'Thank you for your interest in joining {{app_name}}. We\'ll keep you posted as things progress.',
+                        'signoff' => 'Best regards,<br>{{app_name}} Hiring Team',
+                    ])->render(),
+                    'variables' => ['name', 'career_title', 'old_status', 'new_status', 'remarks', 'app_name'],
+                    'module' => 'careers',
+                ],
+                variables: [
+                    'name' => e($this->full_name),
+                    'career_title' => e($this->career?->title ?? 'the role'),
+                    'old_status' => $oldStatus ? ucfirst($oldStatus) : '—',
+                    'new_status' => ucfirst($newStatus),
+                    'remarks' => $remarks ? nl2br(e($remarks)) : '',
+                    'app_name' => config('constants.BUSINESS.name'),
+                ],
+                source: 'career-application-status',
+            );
+        } catch (\Throwable $e) {
+            Log::error('Career application status email failed: ' . $e->getMessage(), ['exception' => $e]);
+        }
     }
 }

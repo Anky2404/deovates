@@ -34,6 +34,7 @@ class ContactController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:30'],
+            'subject' => ['nullable', 'string', 'max:255'],
             'message' => ['required', 'string'],
         ]);
 
@@ -44,6 +45,7 @@ class ContactController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'phone' => $data['phone'] ?? null,
+                'subject' => $data['subject'] ?? null,
                 'message' => $data['message'],
                 'source' => 'website',
                 'status' => 'new',
@@ -87,6 +89,8 @@ class ContactController extends Controller
         $appName = config('constants.BUSINESS.name');
         $sender = app(EmailSenderService::class);
 
+        $subjectLine = $enquiry->subject ?: 'your enquiry';
+
         try {
             $sender->sendTemplated(
                 toEmail: $enquiry->email,
@@ -94,22 +98,29 @@ class ContactController extends Controller
                 templateSlug: 'contact-user-confirmation',
                 templateDefaults: [
                     'name' => 'Contact — User Confirmation',
-                    'subject' => 'Thanks for contacting {{app_name}}',
-                    'body' => view('emails.contact-user-confirmation-fallback')->render(),
-                    'variables' => ['name', 'message', 'app_name'],
+                    'subject' => 'Thanks for contacting {{app_name}} — {{subject}}',
+                    'body' => view('emails.notification', [
+                        'intro' => 'Thanks for reaching out to {{app_name}} regarding <strong>{{subject}}</strong>. We\'ve received your message and our team will get back to you shortly.',
+                        'quote' => '{{message}}',
+                        'outro' => 'We usually respond within a few hours on working days.',
+                    ])->render(),
+                    'variables' => ['name', 'subject', 'message', 'app_name'],
                     'module' => 'contact',
                 ],
                 variables: [
                     'name' => e($enquiry->name),
+                    'subject' => e($subjectLine),
                     'message' => nl2br(e($enquiry->message)),
                     'app_name' => $appName,
                 ],
                 source: 'contact-enquiry',
             );
         } catch (\Throwable $e) {
-
-        dd($e->getMessage());
             Log::error('Contact confirmation email failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if (app()->environment('local')) {
+                dd($e);
+            }
         }
 
         foreach ($this->adminNotificationEmails() as $adminEmail) {
@@ -120,23 +131,39 @@ class ContactController extends Controller
                     templateSlug: 'contact-admin-notification',
                     templateDefaults: [
                         'name' => 'Contact — Admin Notification',
-                        'subject' => 'New contact enquiry from {{name}}',
-                        'body' => view('emails.contact-admin-notification-fallback')->render(),
-                        'variables' => ['name', 'email', 'phone', 'message', 'app_name'],
+                        'subject' => 'New contact enquiry from {{name}} — {{subject}}',
+                        'body' => view('emails.notification', [
+                            'greeting' => 'New Contact Enquiry',
+                            'intro' => 'A new enquiry was submitted on {{app_name}}.',
+                            'fields' => [
+                                'Name' => '{{name}}',
+                                'Email' => '{{email}}',
+                                'Phone' => '{{phone}}',
+                                'Subject' => '{{subject}}',
+                            ],
+                            'quote' => '{{message}}',
+                            'outro' => 'View and manage this enquiry from the admin panel.',
+                            'signoff' => '',
+                        ])->render(),
+                        'variables' => ['name', 'email', 'phone', 'subject', 'message', 'app_name'],
                         'module' => 'contact',
                     ],
                     variables: [
                         'name' => e($enquiry->name),
                         'email' => e($enquiry->email),
                         'phone' => e($enquiry->phone ?? '—'),
+                        'subject' => e($subjectLine),
                         'message' => nl2br(e($enquiry->message)),
                         'app_name' => $appName,
                     ],
                     source: 'contact-enquiry',
                 );
             } catch (\Throwable $e) {
-                dd($e->getMessage());
                 Log::error('Contact admin notification email failed: ' . $e->getMessage(), ['exception' => $e]);
+
+                if (app()->environment('local')) {
+                    dd($e);
+                }
             }
         }
     }

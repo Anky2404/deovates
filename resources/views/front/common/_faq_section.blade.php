@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="section-title st-center">
-                    @include('front.partials._section_heading', [
+                    @include('front.common._section_heading', [
                         'content' => $__faqContent,
                         'defaultTitle' => $defaultTitle,
                         'defaultSubtitle' => $defaultSubtitle ?? null,

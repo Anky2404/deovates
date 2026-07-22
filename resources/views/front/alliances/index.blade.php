@@ -37,7 +37,7 @@
                     $alliancesListingSection = $page?->sections->firstWhere('slug', 'alliances-page-listing-section');
                     $alliancesListingContent = $alliancesListingSection ? $sectionContents[$alliancesListingSection->id] ?? [] : [];
                 @endphp
-                @include('front.partials._section_heading', [
+                @include('front.common._section_heading', [
                     'content' => $alliancesListingContent,
                     'defaultTitle' => \App\Helper::sectionTitle('alliances', 'listing', 'title', 'Businesses We Work With'),
                     'defaultSubtitle' => \App\Helper::sectionTitle('alliances', 'listing', 'subtitle'),

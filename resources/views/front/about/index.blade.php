@@ -270,7 +270,7 @@
     <!-- End Core Values Section -->
 
     <!-- Start Roadmap Section -->
-    @include('front.partials._roadmap_section', [
+    @include('front.common._roadmap_section', [
         'page' => $aboutPage,
         'sectionContents' => $sectionContents,
         'defaultLabel' => 'Our Development Process',
@@ -489,7 +489,7 @@
 
     <!-- Start Testimonials Section -->
     <!-- Testimonials -->
-    @include('front.partials._testimonials_section', [
+    @include('front.common._testimonials_section', [
         'page' => $aboutPage,
         'sectionContents' => $sectionContents,
         'testimonials' => $testimonials,
@@ -500,7 +500,7 @@
 
     <!-- Start CTA Section -->
     <!-- CTA -->
-    @include('front.partials._cta_section', [
+    @include('front.common._cta_section', [
         'page' => $aboutPage,
         'sectionContents' => $sectionContents,
         'defaultTitle' => "LET'S BUILD SOMETHING EXCEPTIONAL",
@@ -509,7 +509,7 @@
     <!-- End CTA Section -->
 
  <!-- Start FAQ Section -->
- @include('front.partials._faq_section', [
+ @include('front.common._faq_section', [
      'page' => $aboutPage,
      'sectionContents' => $sectionContents,
      'category' => $category,

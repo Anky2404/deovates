@@ -130,7 +130,12 @@ class User extends Authenticatable
             templateDefaults: [
                 'name' => 'Password Reset',
                 'subject' => 'Reset Your {{app_name}} Password',
-                'body' => view('emails.password-reset-fallback')->render(),
+                'body' => view('emails.notification', [
+                    'greeting' => 'Hello {{name}},',
+                    'intro' => 'You are receiving this email because we received a password reset request for your account.',
+                    'button' => ['url' => '{{reset_url}}', 'text' => 'Reset Password'],
+                    'outro' => 'This password reset link will expire in 60 minutes.<br><br>If you did not request a password reset, no further action is required.',
+                ])->render(),
                 'variables' => ['name', 'reset_url', 'app_name'],
                 'module' => 'auth',
             ],

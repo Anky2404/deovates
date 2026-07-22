@@ -41,7 +41,7 @@
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                @include('front.partials._section_heading', [
+                @include('front.common._section_heading', [
                     'content' => $careerListingContent,
                     'defaultTitle' => \App\Helper::sectionTitle('career', 'listing', 'title', 'Join Our Team'),
                     'defaultSubtitle' => \App\Helper::sectionTitle('career', 'listing', 'subtitle'),
@@ -232,7 +232,7 @@
     <section class="py-5" style="background:#f5f8fd;">
         <div class="container py-5">
             <div class="section-title st-center">
-                @include('front.partials._section_heading', [
+                @include('front.common._section_heading', [
                     'content' => $generalAppContent,
                     'defaultTitle' => \App\Helper::sectionTitle('career', 'general_application', 'title', "Don't See Your Role?"),
                     'defaultSubtitle' => \App\Helper::sectionTitle('career', 'general_application', 'subtitle'),

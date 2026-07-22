@@ -37,7 +37,7 @@
                     $industriesListingSection = $page?->sections->firstWhere('slug', 'industries-page-listing-section');
                     $industriesListingContent = $industriesListingSection ? $sectionContents[$industriesListingSection->id] ?? [] : [];
                 @endphp
-                @include('front.partials._section_heading', [
+                @include('front.common._section_heading', [
                     'content' => $industriesListingContent,
                     'defaultTitle' => \App\Helper::sectionTitle('industries', 'listing', 'title', 'Solutions Built For Your Industry'),
                     'defaultSubtitle' => \App\Helper::sectionTitle('industries', 'listing', 'subtitle'),

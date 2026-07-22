@@ -20,6 +20,12 @@
     </div>
 
     <div class="app-form-group w-100">
+        <label for="hc-subject">Subject</label>
+        <input type="text" id="hc-subject" name="subject" required placeholder="Project Inquiry">
+        <span class="app-form-error">Please enter a subject.</span>
+    </div>
+
+    <div class="app-form-group w-100">
         <label for="hc-message">Message</label>
         <textarea id="hc-message" name="message" rows="4" required placeholder="Tell us about your project..."></textarea>
         <span class="app-form-error">Please enter a message.</span>

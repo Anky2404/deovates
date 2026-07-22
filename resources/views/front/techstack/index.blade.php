@@ -37,7 +37,7 @@
                     $techstackListingSection = $page?->sections->firstWhere('slug', 'techstack-page-listing-section');
                     $techstackListingContent = $techstackListingSection ? $sectionContents[$techstackListingSection->id] ?? [] : [];
                 @endphp
-                @include('front.partials._section_heading', [
+                @include('front.common._section_heading', [
                     'content' => $techstackListingContent,
                     'defaultTitle' => \App\Helper::sectionTitle('techstack', 'listing', 'title', 'Tools & Technologies'),
                     'defaultSubtitle' => \App\Helper::sectionTitle('techstack', 'listing', 'subtitle'),

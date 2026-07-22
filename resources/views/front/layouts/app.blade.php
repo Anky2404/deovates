@@ -17,7 +17,7 @@
     </main>
  @include('front.partials.foot')
     @include('front.partials.footer')
-    @include('front.partials.floating-widgets')
+    @include('front.common.floating-widgets')
 
    
 

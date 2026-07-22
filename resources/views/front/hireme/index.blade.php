@@ -46,7 +46,7 @@
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                @include('front.partials._section_heading', [
+                @include('front.common._section_heading', [
                     'content' => $engagementContent,
                     'defaultTitle' => \App\Helper::sectionTitle('hireme', 'engagement_models', 'title', 'Engagement Models Built Around You'),
                     'defaultSubtitle' => \App\Helper::sectionTitle('hireme', 'engagement_models', 'subtitle'),
@@ -88,7 +88,7 @@
     <section class="py-5" style="background:#f5f8fd;">
         <div class="container py-5">
             <div class="section-title st-center">
-                @include('front.partials._section_heading', [
+                @include('front.common._section_heading', [
                     'content' => $howItWorksContent,
                     'defaultTitle' => \App\Helper::sectionTitle('hireme', 'how_it_works', 'title', 'How It Works'),
                     'defaultSubtitle' => \App\Helper::sectionTitle('hireme', 'how_it_works', 'subtitle'),

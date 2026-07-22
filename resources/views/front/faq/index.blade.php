@@ -31,7 +31,7 @@
 
     <!-- Start Client Testimonials Section -->
    <!-- Testimonials -->
-    @include('front.partials._testimonials_section', [
+    @include('front.common._testimonials_section', [
         'page' => $page,
         'sectionContents' => $sectionContents,
         'testimonials' => $testimonials,
@@ -44,7 +44,7 @@
 
     <!-- Start CTA Section -->
     <!-- CTA -->
-    @include('front.partials._cta_section', [
+    @include('front.common._cta_section', [
         'page' => $page,
         'sectionContents' => $sectionContents,
         'defaultTitle' => \App\Helper::sectionTitle('faq', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL"),
@@ -53,7 +53,7 @@
     <!-- End CTA Section -->
 
     <!-- Start FAQ Section -->
-    @include('front.partials._faq_section', [
+    @include('front.common._faq_section', [
         'page' => $page,
         'sectionContents' => $sectionContents,
         'category' => $category,

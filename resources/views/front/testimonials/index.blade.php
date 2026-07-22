@@ -43,7 +43,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
+                        @include('front.common._section_heading', [
                             'content' => $testimonialsListingContent,
                             'defaultTitle' => \App\Helper::sectionTitle('testimonials', 'listing', 'title', 'What Our Clients Say'),
                             'defaultSubtitle' => \App\Helper::sectionTitle('testimonials', 'listing', 'subtitle'),
@@ -262,7 +262,7 @@
 
     <!-- Start CTA Section -->
     <!-- CTA -->
-    @include('front.partials._cta_section', [
+    @include('front.common._cta_section', [
         'page' => $page,
         'sectionContents' => $sectionContents,
         'defaultTitle' => \App\Helper::sectionTitle('testimonials', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL"),
@@ -271,7 +271,7 @@
     <!-- End CTA Section -->
 
     <!-- Start FAQ Section -->
-    @include('front.partials._faq_section', [
+    @include('front.common._faq_section', [
         'page' => $page,
         'sectionContents' => $sectionContents,
         'category' => $category,

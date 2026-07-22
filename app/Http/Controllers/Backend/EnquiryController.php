@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Enquiry;
 use App\Models\EnquiryStatusLog;
 use App\Models\User;
+use App\Services\EmailSenderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -120,11 +121,56 @@ class EnquiryController extends Controller
 
             DB::commit();
 
+            if ($oldStatus !== $enquiry->status) {
+                $this->sendStatusUpdateEmail($enquiry, $oldStatus, $data['admin_notes'] ?? null);
+            }
+
             return redirect()->route('admin.enquiries.details', $enquiry->uuid)->with('success', 'Enquiry updated successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error('Enquiry updatestatus failed: ' . $e->getMessage(), ['exception' => $e]);
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
+    /**
+     * Emails the enquirer whenever an admin changes their enquiry's
+     * status — same database-template pattern as the password-reset
+     * and contact-form emails.
+     */
+    private function sendStatusUpdateEmail(Enquiry $enquiry, ?string $oldStatus, ?string $adminNotes): void
+    {
+        try {
+            app(EmailSenderService::class)->sendTemplated(
+                toEmail: $enquiry->email,
+                toName: $enquiry->name,
+                templateSlug: 'enquiry-status-update',
+                templateDefaults: [
+                    'name' => 'Enquiry — Status Update',
+                    'subject' => 'Update on your enquiry to {{app_name}}',
+                    'body' => view('emails.notification', [
+                        'intro' => 'There\'s an update on the enquiry you submitted to {{app_name}}.',
+                        'fields' => [
+                            'Previous Status' => '{{old_status}}',
+                            'New Status' => '{{new_status}}',
+                        ],
+                        'quote' => '{{admin_notes}}',
+                        'outro' => 'Thanks for reaching out to {{app_name}} — we\'ll follow up if anything further is needed.',
+                    ])->render(),
+                    'variables' => ['name', 'old_status', 'new_status', 'admin_notes', 'app_name'],
+                    'module' => 'enquiries',
+                ],
+                variables: [
+                    'name' => e($enquiry->name),
+                    'old_status' => $oldStatus ? ucfirst(str_replace('_', ' ', $oldStatus)) : '—',
+                    'new_status' => ucfirst(str_replace('_', ' ', $enquiry->status)),
+                    'admin_notes' => $adminNotes ? nl2br(e($adminNotes)) : '',
+                    'app_name' => config('constants.BUSINESS.name'),
+                ],
+                source: 'enquiry-status',
+            );
+        } catch (\Throwable $e) {
+            Log::error('Enquiry status update email failed: ' . $e->getMessage(), ['exception' => $e]);
         }
     }
 

@@ -363,7 +363,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
+                        @include('front.common._section_heading', [
                             'content' => $servicesContent,
                             'defaultTitle' => \App\Helper::sectionTitle(
                                 'home',
@@ -423,7 +423,7 @@
     <!-- End Services Section -->
     <!-- about section end -->
     <!-- Start Call to Action Section -->
-    @include('front.partials._cta_section', [
+    @include('front.common._cta_section', [
         'page' => $homePage,
         'sectionContents' => $sectionContents,
         'defaultTitle' => \App\Helper::sectionTitle('home', 'cta', 'title', "LET'S BUILD SOMETHING EXCEPTIONAL"),
@@ -454,7 +454,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
+                        @include('front.common._section_heading', [
                             'content' => $clientsContent,
                             'defaultTitle' => \App\Helper::sectionTitle(
                                 'home',
@@ -534,7 +534,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title st-center">
-                            @include('front.partials._section_heading', [
+                            @include('front.common._section_heading', [
                                 'content' => $whyContent,
                                 'defaultTitle' => \App\Helper::sectionTitle(
                                     'home',
@@ -595,7 +595,7 @@
 
 
     <!-- Start Roadmap Section -->
-    @include('front.partials._roadmap_section', [
+    @include('front.common._roadmap_section', [
         'page' => $homePage,
         'sectionContents' => $sectionContents,
         'defaultLabel' => 'Our Development Process',
@@ -616,7 +616,7 @@
             <div class="row">
                 <div class="col-md-12 no-padding">
                     <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
+                        @include('front.common._section_heading', [
                             'content' => $portfolioSectionContent,
                             'defaultTitle' => \App\Helper::sectionTitle(
                                 'home',
@@ -685,7 +685,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title st-center">
-                            @include('front.partials._section_heading', [
+                            @include('front.common._section_heading', [
                                 'content' => $technologiesSectionContent,
                                 'defaultTitle' => \App\Helper::sectionTitle(
                                     'home',
@@ -808,7 +808,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title st-center">
-                            @include('front.partials._section_heading', [
+                            @include('front.common._section_heading', [
                                 'content' => $industriesSectionContent,
                                 'defaultTitle' => \App\Helper::sectionTitle(
                                     'home',
@@ -953,7 +953,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
+                        @include('front.common._section_heading', [
                             'content' => $funfactsContent,
                             'defaultTitle' => \App\Helper::sectionTitle(
                                 'home',
@@ -1017,7 +1017,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title st-center">
-                            @include('front.partials._section_heading', [
+                            @include('front.common._section_heading', [
                                 'content' => $teamContent,
                                 'defaultTitle' => 'The People Behind The Work',
                             ])
@@ -1134,7 +1134,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title st-center">
-                            @include('front.partials._section_heading', [
+                            @include('front.common._section_heading', [
                                 'content' => $officeContent,
                                 'defaultTitle' => 'Solutions By Industry',
                             ])
@@ -1180,7 +1180,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
+                        @include('front.common._section_heading', [
                             'content' => $newsletterContent,
                             'defaultTitle' => \App\Helper::sectionTitle(
                                 'home',
@@ -1234,7 +1234,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title st-center">
-                        @include('front.partials._section_heading', [
+                        @include('front.common._section_heading', [
                             'content' => $latestBlogContent,
                             'defaultTitle' => \App\Helper::sectionTitle(
                                 'home',
@@ -1296,7 +1296,7 @@
                             =========================================-->
 
     <!-- Start Testimonials Section -->
-    @include('front.partials._testimonials_section', [
+    @include('front.common._testimonials_section', [
         'page' => $homePage,
         'sectionContents' => $sectionContents,
         'testimonials' => $testimonials,
@@ -1309,7 +1309,7 @@
     <!--======================================== FAQ SECTION =========================================-->
 
     <!-- Start FAQ and Contact Section -->
-    @include('front.partials._faq_section', [
+    @include('front.common._faq_section', [
         'page' => $homePage,
         'sectionContents' => $sectionContents,
         'category' => $category,

@@ -37,7 +37,7 @@
                     $portfoliosListingSection = $page?->sections->firstWhere('slug', 'portfolios-page-listing-section');
                     $portfoliosListingContent = $portfoliosListingSection ? $sectionContents[$portfoliosListingSection->id] ?? [] : [];
                 @endphp
-                @include('front.partials._section_heading', [
+                @include('front.common._section_heading', [
                     'content' => $portfoliosListingContent,
                     'defaultTitle' => \App\Helper::sectionTitle('portfolios', 'listing', 'title', "Work We're Proud Of"),
                     'defaultSubtitle' => \App\Helper::sectionTitle('portfolios', 'listing', 'subtitle'),

@@ -62,7 +62,7 @@
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                @include('front.partials._section_heading', [
+                @include('front.common._section_heading', [
                     'content' => $pricingContent,
                     'defaultTitle' => \App\Helper::sectionTitle('pricing', 'listing', 'title', 'Plans That Scale With You'),
                     'defaultSubtitle' => \App\Helper::sectionTitle('pricing', 'listing', 'subtitle'),

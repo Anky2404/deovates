@@ -37,7 +37,7 @@
     <section class="py-5">
         <div class="container py-5">
             <div class="section-title st-center">
-                @include('front.partials._section_heading', [
+                @include('front.common._section_heading', [
                     'content' => $blogListingContent,
                     'defaultTitle' => \App\Helper::sectionTitle('blog', 'listing', 'title', 'Insights & Ideas'),
                     'defaultSubtitle' => \App\Helper::sectionTitle('blog', 'listing', 'subtitle'),
@@ -79,7 +79,7 @@
     <!-- End Insights & Ideas Section -->
 
 <!-- Start Our Development Process Section -->
-@include('front.partials._roadmap_section', [
+@include('front.common._roadmap_section', [
     'page' => $page,
     'sectionContents' => $sectionContents,
     'defaultLabel' => 'Our Development Process',
@@ -90,7 +90,7 @@
 
     <!-- Start Testimonials Section -->
     <!-- Testimonials -->
-    @include('front.partials._testimonials_section', [
+    @include('front.common._testimonials_section', [
         'page' => $page,
         'sectionContents' => $sectionContents,
         'testimonials' => $testimonials,
@@ -103,7 +103,7 @@
 
     <!-- Start CTA Section -->
     <!-- CTA -->
-    @include('front.partials._cta_section', [
+    @include('front.common._cta_section', [
         'page' => $page,
         'sectionContents' => $sectionContents,
         'defaultTitle' => "LET'S BUILD SOMETHING EXCEPTIONAL",
@@ -112,7 +112,7 @@
     <!-- End CTA Section -->
 
     <!-- Start FAQ Section -->
-    @include('front.partials._faq_section', [
+    @include('front.common._faq_section', [
         'page' => $page,
         'sectionContents' => $sectionContents,
         'category' => $category,

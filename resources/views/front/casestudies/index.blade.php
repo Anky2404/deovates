@@ -37,7 +37,7 @@
                     $casestudiesListingSection = $page?->sections->firstWhere('slug', 'casestudies-page-listing-section');
                     $casestudiesListingContent = $casestudiesListingSection ? $sectionContents[$casestudiesListingSection->id] ?? [] : [];
                 @endphp
-                @include('front.partials._section_heading', [
+                @include('front.common._section_heading', [
                     'content' => $casestudiesListingContent,
                     'defaultTitle' => \App\Helper::sectionTitle('casestudies', 'listing', 'title', 'Real Results, Real Businesses'),
                     'defaultSubtitle' => \App\Helper::sectionTitle('casestudies', 'listing', 'subtitle'),
