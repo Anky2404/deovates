@@ -29,6 +29,13 @@ class EmailSenderService
         } catch (\Throwable $e) {
             Log::error('Email send failed: ' . $e->getMessage(), ['exception' => $e]);
 
+            // Local-only: dump the real SMTP exception instead of the
+            // generic message, so a failed send is debuggable immediately
+            // rather than only visible in storage/logs/laravel.log.
+            if (app()->environment('local')) {
+                dd($e);
+            }
+
             return [
                 'status' => 'failed',
                 'error' => $e->getMessage(),
