@@ -135,6 +135,7 @@ class ContactController extends Controller
                     source: 'contact-enquiry',
                 );
             } catch (\Throwable $e) {
+                dd($e->getMessage());
                 Log::error('Contact admin notification email failed: ' . $e->getMessage(), ['exception' => $e]);
             }
         }
