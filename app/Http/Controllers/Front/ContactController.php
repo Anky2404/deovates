@@ -107,6 +107,8 @@ class ContactController extends Controller
                 source: 'contact-enquiry',
             );
         } catch (\Throwable $e) {
+
+        dd($e->getMessage());
             Log::error('Contact confirmation email failed: ' . $e->getMessage(), ['exception' => $e]);
         }
 
