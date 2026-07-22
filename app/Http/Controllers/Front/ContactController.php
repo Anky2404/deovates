@@ -37,6 +37,7 @@ class ContactController extends Controller
             'subject' => ['nullable', 'string', 'max:255'],
             'message' => ['required', 'string'],
         ]);
+        
 
         try {
             $enquiry = Enquiry::create([
@@ -52,6 +53,8 @@ class ContactController extends Controller
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
             ]);
+            
+            
 
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.create'), config('constants.MODULES.enquiry'), [
                 'subject_type' => Enquiry::class,
@@ -59,8 +62,10 @@ class ContactController extends Controller
                 'is_system' => true,
                 'description' => $enquiry->name . ' submitted a contact enquiry.',
             ]);
+            
+           
 
-            $this->sendEnquiryEmails($enquiry);
+            $result=$this->sendEnquiryEmails($enquiry);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => true, 'message' => 'Thanks! Your message has been noted.']);
@@ -68,6 +73,8 @@ class ContactController extends Controller
 
             return back()->with('success', 'Thanks! Your message has been noted.');
         } catch (\Throwable $e) {
+            
+            
             Log::error('Contact enquiry submit failed: ' . $e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
