@@ -1,15 +1,4 @@
-{{--
-    Single shared email body builder — every notification email in the app
-    (password reset, contact, career applications, enquiry status,
-    newsletter) renders through this one view instead of a separate
-    "-fallback" blade file per email type. The structure (which sections
-    appear) is decided here, once, when a template's default row is first
-    seeded into the database; the @{{placeholder}} tokens left in the
-    output are substituted with real values later, on every send, by
-    EmailTemplate::render(). After that, admins edit the stored HTML
-    directly from Admin > Emails > Templates — this view is never touched
-    again for that template.
---}}
+
 <h2 style="margin:0 0 16px; color:#0B3C8A;">{!! $greeting ?? 'Hi @{{name}},' !!}</h2>
 
 @if (!empty($intro))
