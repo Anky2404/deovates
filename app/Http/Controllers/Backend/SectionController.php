@@ -130,8 +130,6 @@ class SectionController extends Controller
 
             return redirect()->route('admin.sections.index')->with('success', 'Section saved successfully.');
         } catch (\Throwable $e) {
-
-        dd($e->getMessage());
             DB::rollBack();
             Log::error('Section saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');

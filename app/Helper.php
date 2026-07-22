@@ -235,7 +235,7 @@ class Helper
 
             return $storedPath;
         } catch (\Exception $e) {
-            dd("UPLOAD ERROR: " . $e->getMessage());
+            Log::error('uploadImage failed: ' . $e->getMessage(), ['exception' => $e]);
             return null;
         }
     }

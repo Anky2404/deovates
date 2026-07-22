@@ -29,12 +29,6 @@ class EmailSenderService
         } catch (\Throwable $e) {
             Log::error('Email send failed: ' . $e->getMessage(), ['exception' => $e]);
 
-            // TEMP DEBUG: dump the real SMTP exception for every failed
-            // send (even on live) so the failure reason is visible
-            // immediately instead of only in storage/logs/laravel.log.
-            // Remove this dd() once the live mail issue is diagnosed.
-            dd($e);
-
             return [
                 'status' => 'failed',
                 'error' => $e->getMessage(),

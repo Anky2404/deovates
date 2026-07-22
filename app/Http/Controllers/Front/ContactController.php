@@ -30,8 +30,6 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
-
-    dd($request->all());
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
@@ -120,10 +118,6 @@ class ContactController extends Controller
             );
         } catch (\Throwable $e) {
             Log::error('Contact confirmation email failed: ' . $e->getMessage(), ['exception' => $e]);
-
-            if (app()->environment('local')) {
-                dd($e);
-            }
         }
 
         foreach ($this->adminNotificationEmails() as $adminEmail) {
@@ -164,10 +158,6 @@ class ContactController extends Controller
                 );
             } catch (\Throwable $e) {
                 Log::error('Contact admin notification email failed: ' . $e->getMessage(), ['exception' => $e]);
-
-                if (app()->environment('local')) {
-                    dd($e);
-                }
             }
         }
     }
