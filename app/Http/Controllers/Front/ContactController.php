@@ -114,6 +114,7 @@ class ContactController extends Controller
                     'app_name' => $appName,
                 ],
                 source: 'contact-enquiry',
+                mailableClass: \App\Mail\ContactUserConfirmationMail::class,
             );
         } catch (\Throwable $e) {
             Log::error('Contact confirmation email failed: ' . $e->getMessage(), ['exception' => $e]);
@@ -157,6 +158,7 @@ class ContactController extends Controller
                         'app_name' => $appName,
                     ],
                     source: 'contact-enquiry',
+                    mailableClass: \App\Mail\ContactAdminNotificationMail::class,
                 );
             } catch (\Throwable $e) {
                 Log::error('Contact admin notification email failed: ' . $e->getMessage(), ['exception' => $e]);

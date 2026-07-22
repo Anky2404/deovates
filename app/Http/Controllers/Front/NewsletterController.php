@@ -92,6 +92,7 @@ class NewsletterController extends Controller
                     'app_name' => config('constants.BUSINESS.name'),
                 ],
                 source: 'newsletter-subscription',
+                mailableClass: \App\Mail\NewsletterSubscriptionConfirmationMail::class,
             );
         } catch (\Throwable $e) {
             Log::error('Newsletter confirmation email failed: ' . $e->getMessage(), ['exception' => $e]);
@@ -137,6 +138,7 @@ class NewsletterController extends Controller
                         'app_name' => $appName,
                     ],
                     source: 'newsletter-subscription',
+                    mailableClass: \App\Mail\NewsletterSubscriptionAdminNotificationMail::class,
                 );
             } catch (\Throwable $e) {
                 Log::error('Newsletter admin notification email failed: ' . $e->getMessage(), ['exception' => $e]);

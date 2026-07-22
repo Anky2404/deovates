@@ -16,10 +16,10 @@ class EmailSenderService
      *
      * @return array{status: string, error: ?string, message_id: ?string}
      */
-    public function send(string $toEmail, string $subject, string $body): array
+    public function send(string $toEmail, string $subject, string $body, string $mailableClass = GenericTemplateMail::class): array
     {
         try {
-            Mail::to($toEmail)->send(new GenericTemplateMail($subject, $body));
+            Mail::to($toEmail)->send(new $mailableClass($subject, $body));
 
             return [
                 'status' => 'sent',
@@ -63,6 +63,7 @@ class EmailSenderService
         array $templateDefaults,
         array $variables = [],
         string $source = 'system',
+        string $mailableClass = GenericTemplateMail::class,
     ): array {
         $template = EmailTemplate::firstOrCreate(
             ['slug' => $templateSlug],
@@ -81,7 +82,7 @@ class EmailSenderService
         $subject = $template->renderSubject($variables);
         $body = $template->render($variables);
 
-        $result = $this->send($toEmail, $subject, $body);
+        $result = $this->send($toEmail, $subject, $body, $mailableClass);
 
         $fromEmail = config('mail.from.address');
         $fromName = config('mail.from.name');

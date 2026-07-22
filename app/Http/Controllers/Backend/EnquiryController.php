@@ -168,6 +168,7 @@ class EnquiryController extends Controller
                     'app_name' => config('constants.BUSINESS.name'),
                 ],
                 source: 'enquiry-status',
+                mailableClass: \App\Mail\EnquiryStatusUpdateMail::class,
             );
         } catch (\Throwable $e) {
             Log::error('Enquiry status update email failed: ' . $e->getMessage(), ['exception' => $e]);

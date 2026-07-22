@@ -180,6 +180,7 @@ class CareerController extends Controller
                     'app_name' => config('constants.BUSINESS.name'),
                 ],
                 source: 'career-application',
+                mailableClass: \App\Mail\CareerApplicationConfirmationMail::class,
             );
         } catch (\Throwable $e) {
             Log::error('Career application confirmation email failed: ' . $e->getMessage(), ['exception' => $e]);
@@ -230,6 +231,7 @@ class CareerController extends Controller
                         'app_name' => $appName,
                     ],
                     source: 'career-application',
+                    mailableClass: \App\Mail\CareerApplicationAdminNotificationMail::class,
                 );
             } catch (\Throwable $e) {
                 Log::error('Career application admin notification failed: ' . $e->getMessage(), ['exception' => $e]);

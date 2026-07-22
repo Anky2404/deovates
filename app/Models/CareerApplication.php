@@ -152,6 +152,7 @@ class CareerApplication extends Model
                     'app_name' => config('constants.BUSINESS.name'),
                 ],
                 source: 'career-application-status',
+                mailableClass: \App\Mail\CareerApplicationStatusUpdateMail::class,
             );
         } catch (\Throwable $e) {
             Log::error('Career application status email failed: ' . $e->getMessage(), ['exception' => $e]);

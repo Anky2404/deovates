@@ -145,6 +145,7 @@ class User extends Authenticatable
                 'app_name' => config('constants.BUSINESS.name'),
             ],
             source: 'password-reset',
+            mailableClass: \App\Mail\PasswordResetMail::class,
         );
     }
 }
