@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
@@ -40,6 +41,7 @@ class MediaUploader
         $extension = $file->getClientOriginalExtension() ?: 'jpg';
         $filename = $this->resolveFilename($desiredName, $extension, $directory);
         $path = $file->storeAs($directory, $filename, $this->disk);
+        $this->mirrorToPublic($path);
 
         $this->generateSizes($path, $sizes);
 
@@ -62,6 +64,7 @@ class MediaUploader
         $extension = $file->getClientOriginalExtension() ?: 'jpg';
         $filename = Str::uuid() . '.' . $extension;
         $path = $file->storeAs('temp', $filename, $this->disk);
+        $this->mirrorToPublic($path);
 
         return [
             'path' => $path,
@@ -89,6 +92,8 @@ class MediaUploader
 
         Storage::disk($this->disk)->copy($tempPath, $path);
         Storage::disk($this->disk)->delete($tempPath);
+        $this->mirrorToPublic($path);
+        $this->removeMirroredPublic($tempPath);
 
         if ($oldPath) {
             $this->deleteSingle($oldPath);
@@ -118,6 +123,8 @@ class MediaUploader
 
         Storage::disk($this->disk)->copy($tempPath, $path);
         Storage::disk($this->disk)->delete($tempPath);
+        $this->mirrorToPublic($path);
+        $this->removeMirroredPublic($tempPath);
 
         [$width, $height] = $this->dimensions($path);
         $userId = Auth::guard('admin')->id() ?? Auth::guard('web')->id();
@@ -186,6 +193,52 @@ class MediaUploader
     }
 
     /**
+     * Some hosts (certain Hostinger plans among them) don't allow creating
+     * the "public/storage" symlink at all, which otherwise silently breaks
+     * every uploaded image (the file exists on disk but nothing serves it).
+     * As a fallback, physically copy every stored file into public/storage
+     * too, so uploads work even without a working symlink.
+     *
+     * Skipped entirely when "public/storage" IS a working symlink (the
+     * normal case) — copying a file there would just copy it onto itself
+     * through the link, which risks corrupting it for no benefit.
+     */
+    protected function mirrorToPublic(string $relativePath): void
+    {
+        if (empty($relativePath) || is_link(public_path('storage'))) {
+            return;
+        }
+
+        $source = Storage::disk($this->disk)->path($relativePath);
+
+        if (! File::exists($source)) {
+            return;
+        }
+
+        $destination = public_path('storage/' . $relativePath);
+        File::ensureDirectoryExists(dirname($destination));
+        File::copy($source, $destination);
+    }
+
+    /**
+     * Counterpart to mirrorToPublic() — removes the mirrored copy (if any)
+     * so deleted/replaced files don't linger as orphaned duplicates under
+     * public/storage. No-ops when a real symlink is in play, same as above.
+     */
+    protected function removeMirroredPublic(string $relativePath): void
+    {
+        if (empty($relativePath) || is_link(public_path('storage'))) {
+            return;
+        }
+
+        $destination = public_path('storage/' . $relativePath);
+
+        if (File::exists($destination)) {
+            File::delete($destination);
+        }
+    }
+
+    /**
      * When the admin supplied a name (typically the image's alt text),
      * slugify it into the stored filename instead of a random UUID —
      * falling back to a UUID when no name was given, or when the slugified
@@ -223,6 +276,7 @@ class MediaUploader
         }
 
         Storage::disk($this->disk)->delete($path);
+        $this->removeMirroredPublic($path);
 
         $directory = pathinfo($path, PATHINFO_DIRNAME);
         $basename = pathinfo($path, PATHINFO_FILENAME);
@@ -230,6 +284,7 @@ class MediaUploader
         foreach (Storage::disk($this->disk)->files($directory === '.' ? '' : $directory) as $file) {
             if (Str::startsWith(pathinfo($file, PATHINFO_FILENAME), $basename . '_')) {
                 Storage::disk($this->disk)->delete($file);
+                $this->removeMirroredPublic($file);
             }
         }
     }
@@ -269,6 +324,7 @@ class MediaUploader
             $extension = $file->getClientOriginalExtension() ?: 'jpg';
             $filename = Str::uuid() . '.' . $extension;
             $path = $file->storeAs($directory, $filename, $this->disk);
+            $this->mirrorToPublic($path);
 
             $conversions = $this->generateSizes($path, $sizes);
             [$width, $height] = $this->dimensions($path);
@@ -364,6 +420,7 @@ class MediaUploader
                 $sizedFullPath = Storage::disk($this->disk)->path($sizedPath);
 
                 (clone $image)->cover($width, $height)->save($sizedFullPath);
+                $this->mirrorToPublic($sizedPath);
 
                 $conversions[$key] = $sizedPath;
             }
