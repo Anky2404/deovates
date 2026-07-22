@@ -72,6 +72,8 @@
                             <i class="fas fa-quote-left text-muted me-2"></i>{{ $casestudy->testimonial }}
                         </blockquote>
                     @endif
+
+                    @include('front.partials._gallery_section', ['galleryMedia' => $casestudy->galleryMedia])
                 </div>
 
                 <div class="col-lg-4">

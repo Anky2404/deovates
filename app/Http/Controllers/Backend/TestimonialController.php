@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Page;
@@ -15,6 +16,8 @@ use Illuminate\Support\Str;
 
 class TestimonialController extends Controller
 {
+    use HandlesImageUploads;
+
     private $pagerecords;
     private $prefix = 'backend.';
     private $folder = 'testimonials.';
@@ -93,10 +96,10 @@ class TestimonialController extends Controller
             'display_order' => 'nullable|integer|min:0',
             'is_featured' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
-            'image' => 'nullable|image|max:4096',
+            'photo' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
         ]);
 
-        unset($data['image']);
+        unset($data['photo']);
 
         $data['display_order'] = $data['display_order'] ?? 0;
         $data['is_featured'] = $request->boolean('is_featured');
@@ -112,16 +115,7 @@ class TestimonialController extends Controller
 
             $uuidForUpload = $testimonial?->uuid ?? $newUuid;
 
-            if ($request->hasFile('image')) {
-                $data['photo'] = $this->mediaUploader->uploadSingle(
-                    $request->file('image'),
-                    'testimonials',
-                    $testimonial->photo ?? null,
-                    [],
-                    null,
-                    $uuidForUpload
-                );
-            }
+            $this->applyImage($request, $data, 'photo', 'testimonials', $testimonial, $uuidForUpload);
 
             if ($testimonial) {
                 $testimonial->update($data);

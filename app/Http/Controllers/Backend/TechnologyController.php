@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Technology;
@@ -15,6 +16,8 @@ use Illuminate\Validation\Rule;
 
 class TechnologyController extends Controller
 {
+    use HandlesImageUploads;
+
     private $pagerecords;
     private $prefix = 'backend.';
     private $folder = 'technologies.';
@@ -84,7 +87,7 @@ class TechnologyController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('technologies', 'slug')->ignore($technology?->id)],
             'icon' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:4096'],
             'website_url' => ['nullable', 'url', 'max:255'],
             'version' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -112,16 +115,7 @@ class TechnologyController extends Controller
 
             $uuidForUpload = $technology?->uuid ?? $newUuid;
 
-            if ($request->hasFile('image')) {
-                $data['image'] = $this->mediaUploader->uploadSingle(
-                    $request->file('image'),
-                    'technologies',
-                    $technology?->image,
-                    [],
-                    null,
-                    $uuidForUpload
-                );
-            }
+            $this->applyImage($request, $data, 'image', 'technologies', $technology, $uuidForUpload);
 
             $isNew = ! $technology;
 

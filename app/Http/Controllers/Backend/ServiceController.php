@@ -98,9 +98,9 @@ class ServiceController extends Controller
             'description' => 'nullable|string',
             'icon' => 'nullable|string|max:255',
             // No-JS fallback only, temp field is normal path
-            'featured_image' => 'nullable|image|max:4096',
+            'featured_image' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
             'featured_image_alt' => 'nullable|string|max:255',
-            'banner_image' => 'nullable|image|max:4096',
+            'banner_image' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
             'banner_image_alt' => 'nullable|string|max:255',
             'gallery_items' => 'nullable|array',
             'gallery_items.*.id' => 'nullable|string',

@@ -81,6 +81,8 @@
                             @endforeach
                         </div>
                     @endif
+
+                    @include('front.partials._gallery_section', ['galleryMedia' => $portfolio->galleryMedia])
                 </div>
                 <!-- End Project Content Section -->
 

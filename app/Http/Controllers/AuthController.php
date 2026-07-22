@@ -239,7 +239,7 @@ class AuthController extends Controller
             'phone'       => 'nullable|string|max:20',
             'designation' => 'nullable|string|max:255',
             'bio'         => 'nullable|string',
-            'avatar'      => 'nullable|image|max:4096',
+            'avatar'      => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
             'avatar_alt'  => 'nullable|string|max:255',
         ]);
 

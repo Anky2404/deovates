@@ -73,6 +73,8 @@
                             @endforeach
                         </div>
                     @endif
+
+                    @include('front.partials._gallery_section', ['galleryMedia' => $blog->galleryMedia])
                 </div>
 
                 <div class="col-lg-4">

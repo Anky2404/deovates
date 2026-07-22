@@ -34,7 +34,6 @@
 </div>
 
 {{-- CROP MODAL (powers the croppie-upload / gallery-cropper-upload fields above) --}}
-@include('backend.partials.modal')
 @endsection
 
 @push('scripts')

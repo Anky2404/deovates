@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\CaseStudyCategory;
@@ -14,6 +15,8 @@ use Illuminate\Validation\Rule;
 
 class CaseStudyCategoryController extends Controller
 {
+    use HandlesImageUploads;
+
     private $pagerecords;
     private $prefix = 'backend.';
     private $folder = 'casestudies.categories.';
@@ -79,7 +82,7 @@ class CaseStudyCategoryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('case_study_categories', 'slug')->ignore($category?->id)],
             'icon' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:4096'],
             'description' => ['nullable', 'string'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
@@ -104,16 +107,7 @@ class CaseStudyCategoryController extends Controller
 
             $uuidForUpload = $category?->uuid ?? $newUuid;
 
-            if ($request->hasFile('image')) {
-                $data['image'] = $this->mediaUploader->uploadSingle(
-                    $request->file('image'),
-                    'case-study-categories',
-                    $category?->image,
-                    [],
-                    null,
-                    $uuidForUpload
-                );
-            }
+            $this->applyImage($request, $data, 'image', 'case-study-categories', $category, $uuidForUpload);
 
             $isNew = ! $category;
 

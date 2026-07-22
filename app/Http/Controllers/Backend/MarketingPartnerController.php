@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Partner;
@@ -15,6 +16,8 @@ use Illuminate\Validation\Rule;
 
 class MarketingPartnerController extends Controller
 {
+    use HandlesImageUploads;
+
     private $pagerecords;
     private $prefix = 'backend.';
     private $folder = 'partners.';
@@ -82,7 +85,7 @@ class MarketingPartnerController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => ['required', 'string', 'max:255', Rule::unique('partners', 'slug')->ignore($partner?->id)],
-            'logo' => 'nullable|image|max:4096',
+            'logo' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
             'website_url' => 'nullable|url|max:255',
             'type' => 'nullable|string|max:255',
             'industry' => 'nullable|string|max:255',
@@ -110,16 +113,7 @@ class MarketingPartnerController extends Controller
 
             $uuidForUpload = $partner?->uuid ?? $newUuid;
 
-            if ($request->hasFile('logo')) {
-                $data['logo'] = $this->mediaUploader->uploadSingle(
-                    $request->file('logo'),
-                    'partners',
-                    $partner->logo ?? null,
-                    [],
-                    null,
-                    $uuidForUpload
-                );
-            }
+            $this->applyImage($request, $data, 'logo', 'partners', $partner, $uuidForUpload);
 
             if ($partner) {
                 $partner->update($data);

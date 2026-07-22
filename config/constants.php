@@ -5,6 +5,12 @@ return [
     'RATING_PAGE_RECORDS' => 10,
     'BRAND_NAME' => 'Deovate',
 
+    // Every image-upload form (single or gallery) validates against this list
+    // instead of Laravel's built-in "image" rule, which is missing "avif" —
+    // this site converts everything to AVIF, so admins need to be able to
+    // upload it too. Kept image-only on purpose: no pdf/mp3/etc. allowed here.
+    'IMAGE_MIMES' => 'jpg,jpeg,png,gif,bmp,webp,avif,svg',
+
     // Fill these in from your Tawk.to dashboard: Administration > Chat Widget
     // > the embed snippet has s1.src = 'https://embed.tawk.to/{PROPERTY_ID}/{WIDGET_ID}'.
     // The widget stays off until both are set — no broken script tag in the

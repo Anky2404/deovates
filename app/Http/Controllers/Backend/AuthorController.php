@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Author;
@@ -15,6 +16,8 @@ use Illuminate\Validation\Rule;
 
 class AuthorController extends Controller
 {
+    use HandlesImageUploads;
+
     private $pagerecords;
     private $prefix = 'backend.';
     private $folder = 'authors.';
@@ -94,8 +97,8 @@ class AuthorController extends Controller
             'total_blogs' => 'nullable|integer|min:0',
             'is_featured' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
-            'profile_image' => 'nullable|image|max:4096',
-            'cover_image' => 'nullable|image|max:4096',
+            'profile_image' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
+            'cover_image' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
         ]);
 
         // guards against bad JSON
@@ -116,27 +119,8 @@ class AuthorController extends Controller
 
             $uuidForUpload = $author?->uuid ?? $newUuid;
 
-            if ($request->hasFile('profile_image')) {
-                $data['profile_image'] = $this->mediaUploader->uploadSingle(
-                    $request->file('profile_image'),
-                    'authors',
-                    $author->profile_image ?? null,
-                    [],
-                    null,
-                    $uuidForUpload
-                );
-            }
-
-            if ($request->hasFile('cover_image')) {
-                $data['cover_image'] = $this->mediaUploader->uploadSingle(
-                    $request->file('cover_image'),
-                    'authors',
-                    $author->cover_image ?? null,
-                    [],
-                    null,
-                    $uuidForUpload
-                );
-            }
+            $this->applyImage($request, $data, 'profile_image', 'authors', $author, $uuidForUpload);
+            $this->applyImage($request, $data, 'cover_image', 'authors', $author, $uuidForUpload);
 
             if ($author) {
                 $author->update($data);

@@ -17,7 +17,7 @@ class MediaTempController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|max:8192',
+            'image' => 'required|mimes:' . config('constants.IMAGE_MIMES') . '|max:8192',
         ]);
 
         try {

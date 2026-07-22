@@ -70,6 +70,12 @@
     <!-- Dynamic page scripts -->
     @stack('scripts')
 
+    {{-- Shared crop-and-upload modal (see public/assets/js/image-cropper.js) —
+         included once here so every admin page that adds the "croppie-upload"
+         or "gallery-cropper-upload" class to a file input just works, without
+         each form needing to remember to include it itself. --}}
+    @include('backend.partials.modal')
+
     <!-- Footer JS -->
     @include('backend.partials.foot')
 

@@ -67,6 +67,7 @@
                         {!! $service->description ?: $service->short_description !!}
                     </div>
 
+                    @include('front.partials._gallery_section', ['galleryMedia' => $service->galleryMedia])
                 </div>
 
                 <div class="col-lg-4">

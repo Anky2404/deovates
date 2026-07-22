@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\BlogCategory;
@@ -14,6 +15,8 @@ use Illuminate\Validation\Rule;
 
 class BlogCategoryController extends Controller
 {
+    use HandlesImageUploads;
+
     private $pagerecords;
     private $prefix = 'backend.';
     private $folder = 'blogs.categories.';
@@ -75,7 +78,7 @@ class BlogCategoryController extends Controller
             'description' => ['nullable', 'string'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
-            'image' => ['nullable', 'image', 'max:2048'],
+            'image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:2048'],
         ]);
 
         try {
@@ -106,15 +109,11 @@ class BlogCategoryController extends Controller
                 $category->uuid = $newUuid;
             }
 
-            if ($request->hasFile('image')) {
-                $category->image = $this->mediaUploader->uploadSingle(
-                    $request->file('image'),
-                    'blog-categories',
-                    $category->image ?: null,
-                    [],
-                    null,
-                    $uuidForUpload
-                );
+            $imageData = [];
+            $this->applyImage($request, $imageData, 'image', 'blog-categories', $category, $uuidForUpload);
+
+            if (isset($imageData['image'])) {
+                $category->image = $imageData['image'];
             }
 
             $category->save();

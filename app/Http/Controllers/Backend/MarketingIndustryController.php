@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Concerns\HandlesImageUploads;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Industry;
@@ -16,6 +17,8 @@ use Illuminate\Validation\Rule;
 
 class MarketingIndustryController extends Controller
 {
+    use HandlesImageUploads;
+
     private $pagerecords;
     private $prefix = 'backend.';
     private $folder = 'industries.';
@@ -87,7 +90,7 @@ class MarketingIndustryController extends Controller
             'name' => 'required|string|max:255',
             'slug' => ['required', 'string', 'max:255', Rule::unique('industries', 'slug')->ignore($industry?->id)],
             'icon' => 'nullable|string|max:255',
-            'image' => 'nullable|image|max:4096',
+            'image' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
             'description' => 'nullable|string',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
@@ -112,16 +115,7 @@ class MarketingIndustryController extends Controller
 
             $uuidForUpload = $industry?->uuid ?? $newUuid;
 
-            if ($request->hasFile('image')) {
-                $data['image'] = $this->mediaUploader->uploadSingle(
-                    $request->file('image'),
-                    'industries',
-                    $industry->image ?? null,
-                    [],
-                    null,
-                    $uuidForUpload
-                );
-            }
+            $this->applyImage($request, $data, 'image', 'industries', $industry, $uuidForUpload);
 
             if ($industry) {
                 $industry->update($data);

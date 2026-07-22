@@ -77,15 +77,15 @@
             <div class="col-md-3">
                 <label class="form-label">Client Image</label>
                 <input type="file"
-                       name="image"
-                       class="form-control image-preview-input @error('image') is-invalid @enderror"
+                       name="photo"
+                       class="form-control image-preview-input @error('photo') is-invalid @enderror"
                        data-preview="#testimonialImagePreview">
-                @error('image')
+                @error('photo')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
 
                 <img id="testimonialImagePreview"
-                     src="{{ isset($testimonial) && $testimonial->image ? asset('storage/' . $testimonial->image) : 'https://placehold.co/130x130' }}"
+                     src="{{ isset($testimonial) && $testimonial->photo ? asset('storage/' . $testimonial->photo) : 'https://placehold.co/130x130' }}"
                      class="mt-2 rounded border img-thumbnail" height="130" width="130">
             </div>
 

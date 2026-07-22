@@ -658,7 +658,6 @@
     </div>
 
     {{-- CROPIE MODAL --}}
-    @include('backend.partials.modal')
 
 @endsection
 

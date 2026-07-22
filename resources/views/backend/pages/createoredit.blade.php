@@ -226,7 +226,6 @@
 </div>
 
 {{-- CROP MODAL (powers the croppie-upload / gallery-cropper-upload fields inside section content) --}}
-@include('backend.partials.modal')
 
 @push('scripts')
 <script>
