@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\EmailTemplate;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 /**
  * Pre-populates every system email template so they're all visible and
@@ -20,6 +21,7 @@ class EmailTemplateSeeder extends Seeder
             EmailTemplate::firstOrCreate(
                 ['slug' => $template['slug']],
                 array_merge($template, [
+                    'uuid' => (string) Str::uuid(),
                     'is_active' => true,
                     'is_default' => true,
                 ])
