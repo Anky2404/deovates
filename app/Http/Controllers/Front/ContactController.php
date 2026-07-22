@@ -30,6 +30,8 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
+
+    dd($request->all());
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
