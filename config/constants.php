@@ -21,6 +21,11 @@ return [
         'widget_id' => env('TAWK_TO_WIDGET_ID'),
     ],
 
+    // Free embeddable Google Reviews widget (elfsight.com) — pulls real
+    // Google reviews via Elfsight's own backend, so no Google Cloud
+    // billing/API key needed on our side. Stays hidden until set.
+    'ELFSIGHT_WIDGET_ID' => env('ELFSIGHT_WIDGET_ID'),
+
     'META_STATUSES' => [
         3 => 'Completed',
         2 => 'Partial',

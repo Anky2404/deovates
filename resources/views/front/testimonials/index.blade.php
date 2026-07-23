@@ -157,6 +157,25 @@
         </div>
     </section>
     <!-- End Google Reviews Section -->
+    @endif
+
+    @if (config('constants.ELFSIGHT_WIDGET_ID'))
+    <!-- Start Elfsight Google Reviews Widget -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title st-center mb-4">
+                        <span class="sub-title">Verified on Google</span>
+                        <h3>What People Say on Google</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="elfsight-app-{{ config('constants.ELFSIGHT_WIDGET_ID') }}" data-elfsight-app-lazy></div>
+        </div>
+    </section>
+    <!-- End Elfsight Google Reviews Widget -->
 
     @once
     <style>

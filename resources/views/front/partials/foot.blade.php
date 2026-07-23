@@ -41,6 +41,14 @@
 {{-- ================= ALERT TOASTS ================= --}}
 <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}" defer></script>
 <script src="{{ asset('assets/js/toast.js') }}" defer></script>
+
+@if (config('constants.ELFSIGHT_WIDGET_ID'))
+    {{-- Google Reviews widget (elfsight.com) platform script — loads
+         site-wide but does nothing unless a page actually has the widget
+         div (only resources/views/front/testimonials/index.blade.php
+         right now), and is lazy/async so it doesn't block rendering. --}}
+    <script src="https://elfsightcdn.com/platform.js" async></script>
+@endif
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     @if(session('success'))
