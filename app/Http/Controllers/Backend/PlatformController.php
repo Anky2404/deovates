@@ -14,7 +14,9 @@ use Illuminate\Validation\Rule;
 class PlatformController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'platforms.';
 
     public function __construct()
@@ -26,7 +28,8 @@ class PlatformController extends Controller
     {
         $rows = Platform::latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Platform::orderBy('display_order')->orderBy('id')->get();
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Persist drag-drop reorder
@@ -50,7 +53,8 @@ class PlatformController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Platform reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Platform reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -65,12 +69,13 @@ class PlatformController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Platform createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Platform createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.platforms.index')->with('error', 'Unable to load the requested platform.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('platform'));
+        return view($this->prefix.$this->folder.'createoredit', compact('platform'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -97,11 +102,11 @@ class PlatformController extends Controller
             if ($platform) {
                 $platform->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated platform ' . $platform->name;
+                $description = 'Updated platform '.$platform->name;
             } else {
                 $platform = Platform::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created platform ' . $platform->name;
+                $description = 'Created platform '.$platform->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.platform'), [
@@ -116,7 +121,8 @@ class PlatformController extends Controller
             return redirect()->route('admin.platforms.index')->with('success', 'Platform saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Platform saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Platform saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -130,12 +136,13 @@ class PlatformController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.platform'), [
                 'subject_type' => Platform::class,
                 'subject_id' => $platform->id,
-                'description' => 'Deleted platform ' . $platform->name,
+                'description' => 'Deleted platform '.$platform->name,
             ]);
 
             return back()->with('success', 'Platform deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Platform destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Platform destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -153,7 +160,7 @@ class PlatformController extends Controller
                 [
                     'subject_type' => Platform::class,
                     'subject_id' => $platform->id,
-                    'description' => ($platform->is_active ? 'Activated' : 'Deactivated') . ' platform ' . $platform->name,
+                    'description' => ($platform->is_active ? 'Activated' : 'Deactivated').' platform '.$platform->name,
                 ]
             );
 
@@ -163,7 +170,7 @@ class PlatformController extends Controller
 
             return back()->with('success', 'Platform status updated.');
         } catch (\Throwable $e) {
-            Log::error('Platform togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Platform togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -186,7 +193,7 @@ class PlatformController extends Controller
                 [
                     'subject_type' => Platform::class,
                     'subject_id' => $platform->id,
-                    'description' => ($platform->is_featured ? 'Marked featured' : 'Unmarked featured') . ' platform ' . $platform->name,
+                    'description' => ($platform->is_featured ? 'Marked featured' : 'Unmarked featured').' platform '.$platform->name,
                 ]
             );
 
@@ -196,7 +203,7 @@ class PlatformController extends Controller
 
             return back()->with('success', 'Platform featured status updated.');
         } catch (\Throwable $e) {
-            Log::error('Platform togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Platform togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

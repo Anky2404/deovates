@@ -7,17 +7,19 @@ use App\Models\ActivityLog;
 use App\Models\Form;
 use App\Models\FormField;
 use App\Models\Section;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class SectionController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'sections.';
 
     public function __construct()
@@ -29,7 +31,8 @@ class SectionController extends Controller
     {
         $rows = Section::with('form')->latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Section::orderBy('display_order')->orderBy('id')->get();
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Persist drag-drop reorder
@@ -53,7 +56,8 @@ class SectionController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Section reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Section reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -68,14 +72,15 @@ class SectionController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Section createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Section createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.sections.index')->with('error', 'Unable to load the requested section.');
             }
         }
 
         $forms = Form::active()->orderBy('name')->pluck('name', 'id');
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('section', 'forms'));
+        return view($this->prefix.$this->folder.'createoredit', compact('section', 'forms'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -112,11 +117,11 @@ class SectionController extends Controller
             if ($section) {
                 $section->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated section ' . $section->name;
+                $description = 'Updated section '.$section->name;
             } else {
                 $section = Section::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created section ' . $section->name;
+                $description = 'Created section '.$section->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.section'), [
@@ -131,7 +136,8 @@ class SectionController extends Controller
             return redirect()->route('admin.sections.index')->with('success', 'Section saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Section saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Section saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -145,12 +151,13 @@ class SectionController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.section'), [
                 'subject_type' => Section::class,
                 'subject_id' => $section->id,
-                'description' => 'Deleted section ' . $section->name,
+                'description' => 'Deleted section '.$section->name,
             ]);
 
             return back()->with('success', 'Section deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Section destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Section destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -168,7 +175,7 @@ class SectionController extends Controller
                 [
                     'subject_type' => Section::class,
                     'subject_id' => $section->id,
-                    'description' => ($section->is_active ? 'Activated' : 'Deactivated') . ' section ' . $section->name,
+                    'description' => ($section->is_active ? 'Activated' : 'Deactivated').' section '.$section->name,
                 ]
             );
 
@@ -178,7 +185,7 @@ class SectionController extends Controller
 
             return back()->with('success', 'Section status updated.');
         } catch (\Throwable $e) {
-            Log::error('Section togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Section togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -195,10 +202,10 @@ class SectionController extends Controller
     private function createDefaultSectionForm(string $sectionName): Form
     {
         $baseSlug = Str::slug($sectionName) ?: 'section';
-        $slug = $baseSlug . '-form';
+        $slug = $baseSlug.'-form';
 
         for ($attempt = 0; Form::where('slug', $slug)->exists(); $attempt++) {
-            $slug = $baseSlug . '-form-' . Str::random(5);
+            $slug = $baseSlug.'-form-'.Str::random(5);
 
             if ($attempt > 5) {
                 break;
@@ -206,7 +213,7 @@ class SectionController extends Controller
         }
 
         $form = Form::create([
-            'name' => $sectionName . ' Section Form',
+            'name' => $sectionName.' Section Form',
             'slug' => $slug,
             'action' => 'admin.sections.saveorupdate',
             'form_type' => 'edit',

@@ -15,12 +15,13 @@ class ServiceController extends Controller
     use LoadsPageSections;
 
     private $prefix = 'front.';
+
     private $folder = 'services.';
 
     public function index()
     {
         $viewData = Cache::remember('front.services.index', Helper::CACHE_TTL, function () {
-            $data = Helper::readJSONData($this->folder . 'json');
+            $data = Helper::readJSONData($this->folder.'json');
 
             $services = Service::active()
                 ->ordered()
@@ -45,7 +46,7 @@ class ServiceController extends Controller
 
         [$page, $sectionContents] = $this->loadPageSections('services');
 
-        return view($this->prefix . $this->folder . 'index', $viewData + compact('page', 'sectionContents'));
+        return view($this->prefix.$this->folder.'index', $viewData + compact('page', 'sectionContents'));
     }
 
     public function details($slug)
@@ -113,6 +114,6 @@ class ServiceController extends Controller
                 ],
             ]);
 
-        return view($this->prefix . $this->folder . 'details', compact('service', 'related', 'problems', 'solutions'));
+        return view($this->prefix.$this->folder.'details', compact('service', 'related', 'problems', 'solutions'));
     }
 }

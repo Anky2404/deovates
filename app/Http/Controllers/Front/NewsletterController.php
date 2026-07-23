@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewsletterSubscriptionAdminNotificationMail;
+use App\Mail\NewsletterSubscriptionConfirmationMail;
 use App\Models\ActivityLog;
 use App\Models\NewsletterSubscriber;
 use App\Services\EmailSenderService;
@@ -43,7 +45,7 @@ class NewsletterController extends Controller
                 'subject_type' => NewsletterSubscriber::class,
                 'subject_id' => $subscriber->id,
                 'is_system' => true,
-                'description' => ($wasNew ? 'New newsletter subscription: ' : 'Newsletter re-subscription: ') . $subscriber->email,
+                'description' => ($wasNew ? 'New newsletter subscription: ' : 'Newsletter re-subscription: ').$subscriber->email,
             ]);
 
             $this->sendSubscriptionConfirmation($subscriber);
@@ -55,7 +57,7 @@ class NewsletterController extends Controller
 
             return back()->with('success', 'Thanks for subscribing to our newsletter!');
         } catch (\Throwable $e) {
-            Log::error('Newsletter subscribe failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Newsletter subscribe failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong. Please try again.'], 500);
@@ -92,10 +94,10 @@ class NewsletterController extends Controller
                     'app_name' => config('constants.BUSINESS.name'),
                 ],
                 source: 'newsletter-subscription',
-                mailableClass: \App\Mail\NewsletterSubscriptionConfirmationMail::class,
+                mailableClass: NewsletterSubscriptionConfirmationMail::class,
             );
         } catch (\Throwable $e) {
-            Log::error('Newsletter confirmation email failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Newsletter confirmation email failed: '.$e->getMessage(), ['exception' => $e]);
         }
     }
 
@@ -138,10 +140,10 @@ class NewsletterController extends Controller
                         'app_name' => $appName,
                     ],
                     source: 'newsletter-subscription',
-                    mailableClass: \App\Mail\NewsletterSubscriptionAdminNotificationMail::class,
+                    mailableClass: NewsletterSubscriptionAdminNotificationMail::class,
                 );
             } catch (\Throwable $e) {
-                Log::error('Newsletter admin notification email failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Newsletter admin notification email failed: '.$e->getMessage(), ['exception' => $e]);
             }
         }
     }

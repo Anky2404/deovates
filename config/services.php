@@ -40,4 +40,11 @@ return [
         'place_id' => env('GOOGLE_PLACE_ID'),
     ],
 
+    // Free — PageSpeed Insights API only needs a key (no billing account
+    // required, unlike Places), 25,000 requests/day. Get one at
+    // https://developers.google.com/speed/docs/insights/v5/get-started
+    'google_pagespeed' => [
+        'api_key' => env('GOOGLE_PAGESPEED_API_KEY'),
+    ],
+
 ];

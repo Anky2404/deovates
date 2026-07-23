@@ -1,0 +1,10 @@
+{
+    "preset": "laravel",
+    "exclude": [
+        "assets",
+        "public/assets",
+        "storage",
+        "vendor",
+        "node_modules"
+    ]
+}

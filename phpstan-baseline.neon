@@ -1,0 +1,787 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Helper.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>username" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Helper.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$is_active\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: '#^Property App\\Models\\AuthLog\:\:\$is_success \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/AuthLogController.php
+
+		-
+			message: '#^Property App\\Models\\Author\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/AuthorController.php
+
+		-
+			message: '#^Property App\\Models\\Author\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/AuthorController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>uuid" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Backend/AuthorController.php
+
+		-
+			message: '#^Property App\\Models\\BlogCategory\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/BlogCategoryController.php
+
+		-
+			message: '#^Property App\\Models\\Comment\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 2
+			path: app/Http/Controllers/Backend/BlogCommentController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/BlogController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/BlogController.php
+
+		-
+			message: '#^Property App\\Models\\Blog\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/BlogController.php
+
+		-
+			message: '#^Property App\\Models\\Blog\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/BlogController.php
+
+		-
+			message: '#^Property App\\Http\\Controllers\\Backend\\CacheController\:\:\$pagerecords is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Backend/CacheController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$resume_file\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/CareerApplicationController.php
+
+		-
+			message: '#^Property App\\Models\\CaseStudyCategory\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/CaseStudyCategoryController.php
+
+		-
+			message: '#^Property App\\Models\\CaseStudyCategory\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/CaseStudyCategoryController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>uuid" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Backend/CaseStudyCategoryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/CaseStudyController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/CaseStudyController.php
+
+		-
+			message: '#^Property App\\Models\\CaseStudy\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/CaseStudyController.php
+
+		-
+			message: '#^Property App\\Models\\CaseStudy\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/CaseStudyController.php
+
+		-
+			message: '#^Property App\\Models\\Department\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/DepartmentController.php
+
+		-
+			message: '#^Property App\\Models\\EmailTemplate\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/EmailTemplateController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/FaqCategoryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$question\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/FaqCategoryController.php
+
+		-
+			message: '#^Property App\\Models\\FaqCategory\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/FaqCategoryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/FaqController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$question\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/FaqController.php
+
+		-
+			message: '#^Property App\\Models\\Faq\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/FaqController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/FormController.php
+
+		-
+			message: '#^Property App\\Models\\Form\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/FormController.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed~\(0\|0\.0\|''''\|''0''\|array\{\}\|false\|null\) and ''0'' will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 5
+			path: app/Http/Controllers/Backend/FormController.php
+
+		-
+			message: '#^Property App\\Models\\IndustryCategory\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/MarketingIndustryCategoryController.php
+
+		-
+			message: '#^Property App\\Models\\Industry\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/MarketingIndustryController.php
+
+		-
+			message: '#^Property App\\Models\\Industry\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/MarketingIndustryController.php
+
+		-
+			message: '#^Relation ''category'' is not found in App\\Models\\Industry model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Backend/MarketingIndustryController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>uuid" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Backend/MarketingIndustryController.php
+
+		-
+			message: '#^Property App\\Models\\Partner\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/MarketingPartnerController.php
+
+		-
+			message: '#^Property App\\Models\\Partner\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/MarketingPartnerController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>uuid" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Backend/MarketingPartnerController.php
+
+		-
+			message: '#^Property App\\Models\\Media\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/MediaLibraryController.php
+
+		-
+			message: '#^Property App\\Models\\Media\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/MediaLibraryController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>uuid" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Backend/MediaLibraryController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\MediaRelation\:\:\$label\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/MediaRelationController.php
+
+		-
+			message: '#^Property App\\Models\\MediaRelation\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/MediaRelationController.php
+
+		-
+			message: '#^Property App\\Models\\MediaRelation\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/MediaRelationController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$fields\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/PageController.php
+
+		-
+			message: '#^Property App\\Models\\Page\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/PageController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>data" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Backend/PageController.php
+
+		-
+			message: '#^Property App\\Models\\Form\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/PageLayoutController.php
+
+		-
+			message: '#^Property App\\Models\\PageSection\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/PageSectionController.php
+
+		-
+			message: '#^Property App\\Models\\Template\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/PageTemplateController.php
+
+		-
+			message: '#^Property App\\Models\\Permission\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/PermissionController.php
+
+		-
+			message: '#^Property App\\Models\\Platform\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/PlatformController.php
+
+		-
+			message: '#^Property App\\Models\\Platform\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/PlatformController.php
+
+		-
+			message: '#^Property App\\Models\\PortfolioCategory\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/PortfolioCategoryController.php
+
+		-
+			message: '#^Property App\\Models\\PortfolioCategory\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/PortfolioCategoryController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>uuid" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Backend/PortfolioCategoryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/PortfolioController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/PortfolioController.php
+
+		-
+			message: '#^Property App\\Models\\Portfolio\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/PortfolioController.php
+
+		-
+			message: '#^Property App\\Models\\Portfolio\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/PortfolioController.php
+
+		-
+			message: '#^Property App\\Models\\Role\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/RoleController.php
+
+		-
+			message: '#^Property App\\Models\\RolePermission\:\:\$is_allowed \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/RolePermissionController.php
+
+		-
+			message: '#^Property App\\Models\\SMTPSetting\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/SMTPSettingController.php
+
+		-
+			message: '#^Property App\\Models\\Section\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/SectionController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Backend/ServiceController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$image\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Backend/ServiceController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$image\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Backend/ServiceController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/ServiceController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/ServiceController.php
+
+		-
+			message: '#^Property App\\Models\\Service\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/ServiceController.php
+
+		-
+			message: '#^Property App\\Models\\Service\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/ServiceController.php
+
+		-
+			message: '#^Property App\\Models\\ServiceFaq\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/ServiceFaqController.php
+
+		-
+			message: '#^Property App\\Models\\ServiceFaq\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/ServiceFaqController.php
+
+		-
+			message: '#^Property App\\Http\\Controllers\\Backend\\SiteSettingController\:\:\$pagerecords is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Backend/SiteSettingController.php
+
+		-
+			message: '#^Property App\\Models\\Skill\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/SkillController.php
+
+		-
+			message: '#^Property App\\Models\\Skill\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/SkillController.php
+
+		-
+			message: '#^Property App\\Models\\Tag\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/TagController.php
+
+		-
+			message: '#^Property App\\Models\\TechnologyCategory\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/TechnologyCategoryController.php
+
+		-
+			message: '#^Property App\\Models\\TechnologyCategory\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/TechnologyCategoryController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>uuid" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Backend/TechnologyCategoryController.php
+
+		-
+			message: '#^Property App\\Models\\Technology\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/TechnologyController.php
+
+		-
+			message: '#^Property App\\Models\\Technology\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/TechnologyController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>uuid" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Backend/TechnologyController.php
+
+		-
+			message: '#^Property App\\Models\\Template\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/TemplateController.php
+
+		-
+			message: '#^Property App\\Models\\Testimonial\:\:\$is_active \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/TestimonialController.php
+
+		-
+			message: '#^Property App\\Models\\Testimonial\:\:\$is_featured \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/TestimonialController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>uuid" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Backend/TestimonialController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$is_active\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Backend/UserController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Backend/UserController.php
+
+		-
+			message: '#^Property App\\Models\\UserPermission\:\:\$is_allowed \(int\) does not accept bool\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Backend/UserPermissionController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ActivityLog.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Author.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Blog.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/BlogCategory.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Career.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/CareerApplication.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>title" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Models/CareerApplication.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/CaseStudy.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/CaseStudyCategory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Country\:\:\$phonecode\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Country.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Department.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/EmailTemplate.php
+
+		-
+			message: '#^Method App\\Models\\Faq\:\:isActive\(\) should return bool but returns int\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Faq.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/FaqCategory.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Form.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Industry.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/IndustryCategory.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Page.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Partner.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Platform.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Portfolio.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/PortfolioCategory.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Section.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Service.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>value" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Models/SiteSetting.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Skill.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SocialLink.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Tag.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Technology.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/TechnologyCategory.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Template.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Models/User.php
+
+		-
+			message: '#^Instanceof between Illuminate\\Http\\UploadedFile and Illuminate\\Http\\UploadedFile will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: app/Services/MediaUploader.php
+
+		-
+			message: '#^Trait App\\Traits\\ModelEvents is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/Traits/ModelEvents.php

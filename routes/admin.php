@@ -26,6 +26,7 @@ use App\Http\Controllers\Backend\ErrorReportController;
 use App\Http\Controllers\Backend\FailedJobController;
 use App\Http\Controllers\Backend\FaqCategoryController;
 use App\Http\Controllers\Backend\FaqController;
+use App\Http\Controllers\Backend\FormController;
 use App\Http\Controllers\Backend\GoogleReviewController;
 use App\Http\Controllers\Backend\JobBatchController;
 use App\Http\Controllers\Backend\JobController;
@@ -34,11 +35,11 @@ use App\Http\Controllers\Backend\MarketingIndustryController;
 use App\Http\Controllers\Backend\MarketingPartnerController;
 use App\Http\Controllers\Backend\MediaLibraryController;
 use App\Http\Controllers\Backend\MediaRelationController;
+use App\Http\Controllers\Backend\MediaTempController;
 use App\Http\Controllers\Backend\MigrationController;
 use App\Http\Controllers\Backend\NewsletterSubscriberController;
 use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\PageController;
-use App\Http\Controllers\Backend\FormController;
 use App\Http\Controllers\Backend\PageSectionController;
 use App\Http\Controllers\Backend\PageTemplateController;
 use App\Http\Controllers\Backend\PermissionController;
@@ -71,7 +72,6 @@ Route::get('/', function () {
     return redirect('/admin/dashboard');
 });
 
-
 // Guest Routes
 Route::middleware('admin.guest')->controller(AuthController::class)->group(function () {
     Route::get('/login', 'index')->name('login.index');
@@ -100,7 +100,6 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
 
-
     // Dashboard Routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -114,7 +113,6 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
 
-
     Route::prefix('sessions')->controller(SessionController::class)->name('sessions.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
@@ -122,9 +120,6 @@ Route::middleware('admin.auth')->group(function () {
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
-
-
-
 
     // Communication Routes
 
@@ -137,7 +132,6 @@ Route::middleware('admin.auth')->group(function () {
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
     });
 
-
     // Newsletter Subscribers
     Route::prefix('newsletter-subscribers')->name('newsletter-subscribers.')->controller(NewsletterSubscriberController::class)->group(function () {
         Route::get('/', 'index')->name('index');
@@ -145,7 +139,6 @@ Route::middleware('admin.auth')->group(function () {
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
-
 
     // Service Routes
     Route::prefix('services')->name('services.')->group(function () {
@@ -172,8 +165,6 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
         });
 
-
-
     });
 
     // Authors Routes
@@ -197,7 +188,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
 
-    //Forms Routes
+    // Forms Routes
     // Route::prefix('forms')->controller(PageController::class)->name('forms.')->group(function () {
     //     Route::get('/', 'index')->name('index');
     //     Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
@@ -216,7 +207,6 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
 
-
     // Sections Routes
     Route::prefix('sections')->controller(SectionController::class)->name('sections.')->group(function () {
         Route::get('/', 'index')->name('index');
@@ -226,7 +216,6 @@ Route::middleware('admin.auth')->group(function () {
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
-
 
     // Section Contents Routes
     Route::prefix('section-contents')->controller(SectionContentController::class)->name('section-contents.')->group(function () {
@@ -238,7 +227,6 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
 
-
     // Templates Routes
     Route::prefix('templates')->controller(TemplateController::class)->name('templates.')->group(function () {
         Route::get('/', 'index')->name('index');
@@ -248,7 +236,6 @@ Route::middleware('admin.auth')->group(function () {
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
     });
-
 
     // Marketing Routes
     Route::prefix('marketing')->name('marketing.')->group(function () {
@@ -304,7 +291,6 @@ Route::middleware('admin.auth')->group(function () {
             Route::post('/saveorupdate', 'saveorupdate')->name('saveorupdate');
         });
 
-
         // SMTP Settings Routes
         Route::prefix('/smtp')
             ->controller(SMTPSettingController::class)
@@ -317,7 +303,6 @@ Route::middleware('admin.auth')->group(function () {
                 Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             });
 
-
         // Cache Routes
         Route::prefix('/cache')->controller(CacheController::class)->name('cache.')
             ->group(function () {
@@ -325,25 +310,21 @@ Route::middleware('admin.auth')->group(function () {
                 Route::post('/clear', 'clear')->name('clear');
             });
 
-
         // Cache Locks Routes
         Route::prefix('/cache/locks')->controller(CacheLockController::class)->name('cache.locks.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/clear', 'clear')->name('clear');
         });
 
-
         // Jobs Routes
         Route::prefix('/jobs')->controller(JobController::class)->name('jobs.')->group(function () {
             Route::get('/', 'index')->name('index');
         });
 
-
         // Job Batches Routes
         Route::prefix('/jobs/batches')->controller(JobBatchController::class)->name('jobs.batches.')->group(function () {
             Route::get('/', 'index')->name('index');
         });
-
 
         // Failed Jobs Routes
         Route::prefix('/jobs/failed')->controller(FailedJobController::class)->name('jobs.failed.')->group(function () {
@@ -352,22 +333,17 @@ Route::middleware('admin.auth')->group(function () {
             Route::delete('/destroy/{id}', 'destroy')->name('destroy');
         });
 
-
         // Migrations Routes
         Route::prefix('/migrations')->controller(MigrationController::class)->name('migrations.')->group(function () {
             Route::get('/', 'index')->name('index');
         });
     });
 
-
-
-
-
     // Media Routes
     Route::prefix('media')->name('media.')->group(function () {
 
         // Temp upload for the global crop-and-upload widget
-        Route::post('/temp-upload', [\App\Http\Controllers\Backend\MediaTempController::class, 'store'])
+        Route::post('/temp-upload', [MediaTempController::class, 'store'])
             ->name('temp-upload');
 
         // Media Library Routes
@@ -380,7 +356,6 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
         });
 
-
         // Media Relations Routes
         Route::prefix('/relations')->controller(MediaRelationController::class)->name('relations.')->group(function () {
             Route::get('/', 'index')->name('index');
@@ -392,7 +367,6 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
         });
     });
-
 
     // Blogs Routes
     Route::prefix('blogs')->name('blogs.')->group(function () {
@@ -421,17 +395,16 @@ Route::middleware('admin.auth')->group(function () {
                 Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
             });
 
-             // Comments Routes
+        // Comments Routes
         Route::prefix('comments')->controller(BlogCommentController::class)->name('comments.')->group(function () {
             Route::get('/', 'index')->name('index');
-             Route::get('/details/{uuid}', 'details')->name('details');
+            Route::get('/details/{uuid}', 'details')->name('details');
             Route::get('/createoredit/{uuid?}', 'createoredit')->name('createoredit');
             Route::post('/saveorupdate/{uuid?}', 'saveorupdate')->name('saveorupdate');
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
         });
     });
-
 
     // Faqs Routes
     Route::prefix('faqs')->name('faqs.')->group(function () {
@@ -476,8 +449,6 @@ Route::middleware('admin.auth')->group(function () {
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
     });
 
-
-
     // Emails Routes
     Route::prefix('emails')->name('emails.')->group(function () {
 
@@ -491,8 +462,6 @@ Route::middleware('admin.auth')->group(function () {
             Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
         });
 
-
-
         // Email Templates
         Route::prefix('templates')->name('templates.')->controller(EmailTemplateController::class)->group(function () {
             Route::get('/', 'index')->name('index');
@@ -504,17 +473,12 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
         });
 
-
-
-
-
         // Email Logs
         Route::prefix('logs')->name('logs.')->controller(EmailLogController::class)->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/view/{uuid}', 'view')->name('view');
         });
     });
-
 
     // Case Studies Routes
     Route::prefix('casestudies')->name('casestudies.')->group(function () {
@@ -541,8 +505,6 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
         });
     });
-
-
 
     // Careers & HR Routes
     Route::prefix('careers')->name('careers.')->group(function () {
@@ -624,7 +586,6 @@ Route::middleware('admin.auth')->group(function () {
         });
     });
 
-
     // Skills Routes
     Route::prefix('skills')->controller(SkillController::class)->name('skills.')->group(function () {
         Route::get('/', 'index')->name('index');
@@ -636,10 +597,8 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
     });
 
-
     // Technologies Routes
     Route::prefix('technologies')->name('technologies.')->group(function () {
-
 
         Route::controller(TechnologyController::class)->name('')->group(function () {
             Route::get('/', 'index')->name('index');
@@ -662,12 +621,6 @@ Route::middleware('admin.auth')->group(function () {
             Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
         });
     });
-
-
-
-
-
-
 
     // Pages Routes
     Route::prefix('pages')->name('pages.')->group(function () {
@@ -727,8 +680,6 @@ Route::middleware('admin.auth')->group(function () {
         });
     });
 
-
-
     /*
         |--------------------------------------------------------------------------
         | Platforms
@@ -744,14 +695,12 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/togglefeatured/{uuid}', 'togglefeatured')->name('togglefeatured');
     });
 
-
     // Notifications Routes
     Route::prefix('notifications')->name('notifications.')->controller(NotificationController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/mark-as-read/{uuid}', 'markAsRead')->name('markAsRead');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
     });
-
 
     // Activity Logs Routes
     Route::prefix('activity-logs')->name('activity-logs.')->controller(ActivityLogController::class)->group(function () {
@@ -760,14 +709,12 @@ Route::middleware('admin.auth')->group(function () {
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
     });
 
-
     // System Logs Routes
     Route::prefix('system-logs')->name('system-logs.')->controller(SystemLogController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/view/{uuid}', 'view')->name('view');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
     });
-
 
     // API Logs Routes
     Route::prefix('api-logs')->name('api-logs.')->controller(ApiLogController::class)->group(function () {
@@ -776,14 +723,12 @@ Route::middleware('admin.auth')->group(function () {
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
     });
 
-
     // Debug Logs Routes
     Route::prefix('debug-logs')->name('debug-logs.')->controller(DebugLogController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/view/{uuid}', 'view')->name('view');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
     });
-
 
     // Error Reports Routes
     Route::prefix('error-reports')->name('error-reports.')->controller(ErrorReportController::class)->group(function () {
@@ -793,7 +738,6 @@ Route::middleware('admin.auth')->group(function () {
     });
 
     Route::prefix('roles')->name('roles.')->group(function () {
-
 
         Route::controller(RoleController::class)->name('')->group(function () {
             Route::get('/', 'index')->name('index');
@@ -813,9 +757,7 @@ Route::middleware('admin.auth')->group(function () {
         });
     });
 
-
     Route::prefix('users')->name('users.')->group(function () {
-
 
         Route::controller(UserController::class)->name('')->group(function () {
             Route::get('/', 'index')->name('index');
@@ -852,26 +794,11 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/update', 'update')->name('update');
     });
 
-
-
-
     // Sessions Routes
     Route::prefix('sessions')->name('sessions.')->controller(SessionController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
     });
-
-
-
-
-
-
-
-
-
-
-
-
 
     // Logout Routes
     Route::post('/logout/{guard}', [AuthController::class, 'logout'])->name('logout')->where('guard', 'admin|web');

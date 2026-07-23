@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Log;
 class MediaRelationController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'media.relations.';
 
     public function __construct()
@@ -29,12 +31,12 @@ class MediaRelationController extends Controller
         // Build label: no name column exists
         $reorderRows = MediaRelation::with('media')->orderBy('display_order')->orderBy('id')->get();
         $reorderRows->each(function (MediaRelation $relation) {
-            $mediaLabel = $relation->media->name ?? ('Media #' . $relation->media_id);
+            $mediaLabel = $relation->media->name ?? ('Media #'.$relation->media_id);
             $contextLabel = $relation->collection ?? $relation->model_type ?? 'relation';
-            $relation->label = $mediaLabel . ' — ' . $contextLabel;
+            $relation->label = $mediaLabel.' — '.$contextLabel;
         });
 
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Drag-drop reorder
@@ -58,7 +60,8 @@ class MediaRelationController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('MediaRelation reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('MediaRelation reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -73,14 +76,15 @@ class MediaRelationController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('MediaRelation createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('MediaRelation createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.media.relations.index')->with('error', 'Unable to load the requested media relation.');
             }
         }
 
         $media = Media::active()->orderBy('name')->pluck('name', 'id');
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('relation', 'media'));
+        return view($this->prefix.$this->folder.'createoredit', compact('relation', 'media'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -111,13 +115,13 @@ class MediaRelationController extends Controller
             if ($relation) {
                 $relation->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated media relation #' . $relation->id;
+                $description = 'Updated media relation #'.$relation->id;
             } else {
                 $data['linked_by'] = auth('admin')->id();
 
                 $relation = MediaRelation::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created media relation #' . $relation->id;
+                $description = 'Created media relation #'.$relation->id;
             }
 
             ActivityLog::log($action, config('constants.MODULES.mediarelation'), [
@@ -132,7 +136,8 @@ class MediaRelationController extends Controller
             return redirect()->route('admin.media.relations.index')->with('success', 'Media relation saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('MediaRelation saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('MediaRelation saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -146,12 +151,13 @@ class MediaRelationController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.mediarelation'), [
                 'subject_type' => MediaRelation::class,
                 'subject_id' => $relation->id,
-                'description' => 'Deleted media relation #' . $relation->id,
+                'description' => 'Deleted media relation #'.$relation->id,
             ]);
 
             return back()->with('success', 'Media relation deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('MediaRelation destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('MediaRelation destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -169,7 +175,7 @@ class MediaRelationController extends Controller
                 [
                     'subject_type' => MediaRelation::class,
                     'subject_id' => $relation->id,
-                    'description' => ($relation->is_active ? 'Activated' : 'Deactivated') . ' media relation #' . $relation->id,
+                    'description' => ($relation->is_active ? 'Activated' : 'Deactivated').' media relation #'.$relation->id,
                 ]
             );
 
@@ -179,7 +185,7 @@ class MediaRelationController extends Controller
 
             return back()->with('success', 'Media relation status updated.');
         } catch (\Throwable $e) {
-            Log::error('MediaRelation togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('MediaRelation togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -202,7 +208,7 @@ class MediaRelationController extends Controller
                 [
                     'subject_type' => MediaRelation::class,
                     'subject_id' => $relation->id,
-                    'description' => ($relation->is_featured ? 'Marked featured' : 'Unmarked featured') . ' media relation #' . $relation->id,
+                    'description' => ($relation->is_featured ? 'Marked featured' : 'Unmarked featured').' media relation #'.$relation->id,
                 ]
             );
 
@@ -212,7 +218,7 @@ class MediaRelationController extends Controller
 
             return back()->with('success', 'Media relation featured status updated.');
         } catch (\Throwable $e) {
-            Log::error('MediaRelation togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('MediaRelation togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

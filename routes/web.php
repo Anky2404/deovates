@@ -7,12 +7,13 @@ use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\CareerController;
 use App\Http\Controllers\Front\CaseStudyController;
 use App\Http\Controllers\Front\ContactController;
-use App\Http\Controllers\Front\NewsletterController;
 use App\Http\Controllers\Front\FaqController;
 use App\Http\Controllers\Front\HireMeController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\IndustryController;
 use App\Http\Controllers\Front\LegalController;
+use App\Http\Controllers\Front\NewsletterController;
+use App\Http\Controllers\Front\PageSpeedController;
 use App\Http\Controllers\Front\PortfolioController;
 use App\Http\Controllers\Front\PricingController;
 use App\Http\Controllers\Front\ServiceController;
@@ -20,8 +21,6 @@ use App\Http\Controllers\Front\TechStackController;
 use App\Http\Controllers\Front\TestimonialController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +39,7 @@ Route::prefix('deploy')->group(function () {
 
         Artisan::call('optimize:clear');
 
-        return response('OK: caches cleared (config, route, view, event, application).' . "\n\n" . Artisan::output(), 200)
+        return response('OK: caches cleared (config, route, view, event, application).'."\n\n".Artisan::output(), 200)
             ->header('Content-Type', 'text/plain');
     });
 
@@ -51,7 +50,7 @@ Route::prefix('deploy')->group(function () {
 
         Artisan::call('storage:link');
 
-        return response('OK: storage link created/verified.' . "\n\n" . Artisan::output(), 200)
+        return response('OK: storage link created/verified.'."\n\n".Artisan::output(), 200)
             ->header('Content-Type', 'text/plain');
     });
 });
@@ -62,7 +61,7 @@ Route::prefix('deploy')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')->name('admin.')->group(function(){
+Route::prefix('admin')->name('admin.')->group(function () {
     return require_once base_path('./routes/admin.php');
 });
 
@@ -73,7 +72,6 @@ Route::prefix('admin')->middleware('admin.guest')->group(function () {
     Route::get('/password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
     Route::post('/password/reset', [AuthController::class, 'reset'])->name('password.update');
 });
-
 
 Route::name('front.')->middleware('track.visit')->group(function () {
     /* ================= HOME ================= */
@@ -87,6 +85,13 @@ Route::name('front.')->middleware('track.visit')->group(function () {
     Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
     Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
+    /* ================= PAGE SPEED CHECKER ================= */
+    Route::prefix('speed-test')->controller(PageSpeedController::class)->name('pagespeed.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/check', 'check')->name('check')->middleware('throttle:10,1');
+        Route::post('/lead', 'submitLead')->name('lead')->middleware('throttle:10,1');
+    });
 
     /* ================= SERVICES ================= */
     Route::prefix('services')->controller(ServiceController::class)->name('services.')->group(function () {

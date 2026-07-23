@@ -17,13 +17,12 @@ class ContactUserConfirmationMail extends Mailable
 
     public function __construct(
         public Enquiry $enquiry,
-    ) {
-    }
+    ) {}
 
     public function build(): static
     {
-        $subject = 'Thanks for contacting ' . config('constants.BUSINESS.name')
-            . ' — ' . ($this->enquiry->subject ?: 'your enquiry');
+        $subject = 'Thanks for contacting '.config('constants.BUSINESS.name')
+            .' — '.($this->enquiry->subject ?: 'your enquiry');
 
         return $this->subject($subject)
             ->view('emails.layout')

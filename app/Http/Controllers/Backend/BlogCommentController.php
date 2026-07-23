@@ -15,7 +15,9 @@ use Illuminate\Validation\Rule;
 class BlogCommentController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'blogs.comments.';
 
     public function __construct()
@@ -30,14 +32,14 @@ class BlogCommentController extends Controller
             ->paginate($this->pagerecords)
             ->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function details(Request $request, string $uuid)
     {
         $row = Comment::with(['blog', 'user', 'parent', 'replies'])->where('uuid', $uuid)->firstOrFail();
 
-        return view($this->prefix . $this->folder . 'details', ['comment' => $row]);
+        return view($this->prefix.$this->folder.'details', ['comment' => $row]);
     }
 
     public function createoredit(Request $request, ?string $uuid = null)
@@ -47,7 +49,7 @@ class BlogCommentController extends Controller
         $blogs = Blog::orderBy('title')->get(['id', 'title']);
         $users = User::orderBy('name')->get(['id', 'name']);
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('comment', 'blogs', 'users'));
+        return view($this->prefix.$this->folder.'createoredit', compact('comment', 'blogs', 'users'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -75,7 +77,7 @@ class BlogCommentController extends Controller
         try {
             DB::beginTransaction();
 
-            $comment = $comment ?? new Comment();
+            $comment = $comment ?? new Comment;
             $isNew = ! $comment->exists;
 
             $comment->fill([
@@ -103,13 +105,13 @@ class BlogCommentController extends Controller
             $comment->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
+                config('constants.ACTIVITY_ACTIONS.'.($isNew ? 'create' : 'update')),
                 config('constants.MODULES.comment'),
                 [
                     'subject_type' => Comment::class,
                     'subject_id' => $comment->id,
                     'new_values' => $comment->getChanges(),
-                    'description' => ($isNew ? 'Created' : 'Updated') . " comment by \"{$comment->name}\".",
+                    'description' => ($isNew ? 'Created' : 'Updated')." comment by \"{$comment->name}\".",
                 ]
             );
 
@@ -118,7 +120,7 @@ class BlogCommentController extends Controller
             return redirect()->route('admin.blogs.comments.index')->with('success', 'Comment saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Comment saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Comment saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
@@ -147,7 +149,7 @@ class BlogCommentController extends Controller
             return back()->with('success', 'Comment deleted successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Comment destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Comment destroy failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }
@@ -163,12 +165,12 @@ class BlogCommentController extends Controller
             $comment->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($comment->is_active ? 'activate' : 'deactivate')),
+                config('constants.ACTIVITY_ACTIONS.'.($comment->is_active ? 'activate' : 'deactivate')),
                 config('constants.MODULES.comment'),
                 [
                     'subject_type' => Comment::class,
                     'subject_id' => $comment->id,
-                    'description' => 'Comment status toggled to ' . ($comment->is_active ? 'active' : 'inactive') . '.',
+                    'description' => 'Comment status toggled to '.($comment->is_active ? 'active' : 'inactive').'.',
                 ]
             );
 
@@ -181,7 +183,7 @@ class BlogCommentController extends Controller
             return back()->with('success', 'Comment status updated.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Comment togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Comment togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

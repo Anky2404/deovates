@@ -3,6 +3,11 @@
 @section('title', $data['page_header']['meta_title'] ?? $data['page_header']['title'] ?? config('constants.PAGE_SEO.about.title'))
 @section('meta_description', $data['page_header']['meta_description'] ?? config('constants.PAGE_SEO.about.meta_description'))
 @section('meta_keywords', $data['page_header']['meta_keywords'] ?? config('constants.PAGE_SEO.about.meta_keywords'))
+
+@push('preload')
+    <link rel="preload" as="image" href="{{ \App\Helper::heroBanner('about.avif', 'assets/front/img/hero/about.avif') }}" fetchpriority="high">
+@endpush
+
 @section('content')
 
     @php

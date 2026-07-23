@@ -13,7 +13,9 @@ use Illuminate\Validation\Rule;
 class EmailTemplateController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'emails.templates.';
 
     public function __construct()
@@ -25,7 +27,7 @@ class EmailTemplateController extends Controller
     {
         $rows = EmailTemplate::latest('id')->paginate($this->pagerecords)->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function details(Request $request, string $uuid)
@@ -40,7 +42,7 @@ class EmailTemplateController extends Controller
             ]);
         }
 
-        return view($this->prefix . $this->folder . 'details', compact('template'));
+        return view($this->prefix.$this->folder.'details', compact('template'));
     }
 
     public function createoredit(?string $uuid = null)
@@ -53,12 +55,13 @@ class EmailTemplateController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('EmailTemplate createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('EmailTemplate createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.emails.templates.index')->with('error', 'Unable to load the requested template.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('template'));
+        return view($this->prefix.$this->folder.'createoredit', compact('template'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -91,11 +94,11 @@ class EmailTemplateController extends Controller
             if ($template) {
                 $template->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated email template ' . $template->name;
+                $description = 'Updated email template '.$template->name;
             } else {
                 $template = EmailTemplate::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created email template ' . $template->name;
+                $description = 'Created email template '.$template->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.emailtemplate'), [
@@ -107,7 +110,8 @@ class EmailTemplateController extends Controller
 
             return redirect()->route('admin.emails.templates.index')->with('success', 'Email template saved successfully.');
         } catch (\Throwable $e) {
-            Log::error('EmailTemplate saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('EmailTemplate saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -139,12 +143,13 @@ class EmailTemplateController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.emailtemplate'), [
                 'subject_type' => EmailTemplate::class,
                 'subject_id' => $template->id,
-                'description' => 'Deleted email template ' . $template->name,
+                'description' => 'Deleted email template '.$template->name,
             ]);
 
             return back()->with('success', 'Email template deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('EmailTemplate destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('EmailTemplate destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -162,7 +167,7 @@ class EmailTemplateController extends Controller
                 [
                     'subject_type' => EmailTemplate::class,
                     'subject_id' => $template->id,
-                    'description' => ($template->is_active ? 'Activated' : 'Deactivated') . ' email template ' . $template->name,
+                    'description' => ($template->is_active ? 'Activated' : 'Deactivated').' email template '.$template->name,
                 ]
             );
 
@@ -172,7 +177,7 @@ class EmailTemplateController extends Controller
 
             return back()->with('success', 'Template status updated.');
         } catch (\Throwable $e) {
-            Log::error('EmailTemplate togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('EmailTemplate togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

@@ -3,6 +3,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
+{{--
+    LCP fix: hero/slider background images on this site are applied via
+    JS (data-background + jQuery, see main.js), which the browser's
+    preload scanner cannot see — without this hint the LCP image doesn't
+    even start downloading until after jQuery loads and runs. Each page
+    pushes its own above-the-fold image path here so it starts fetching
+    immediately, in parallel with everything else in <head>.
+--}}
+@stack('preload')
+
 <title>@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO, Digital Marketing & Branding Agency')</title>
 <meta name="title" content="@yield('title', config('constants.BUSINESS.name') . ': Web Design, Website Development, SEO, Digital Marketing & Branding Agency')">
 <meta name="description" content="@yield('meta_description', config('constants.BUSINESS.name') . ' designs and builds websites, runs SEO campaigns, and manages digital marketing for growing businesses. See how our web design, development, and branding work helps clients get found online and win more customers.')">

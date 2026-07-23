@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\EnquiryStatusUpdateMail;
 use App\Models\ActivityLog;
 use App\Models\Enquiry;
 use App\Models\EnquiryStatusLog;
@@ -15,7 +16,9 @@ use Illuminate\Support\Facades\Log;
 class EnquiryController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'enquiries.';
 
     public function __construct()
@@ -26,7 +29,8 @@ class EnquiryController extends Controller
     public function index(Request $request)
     {
         $rows = Enquiry::with('assignedUser')->latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function details(Request $request, $uuid)
@@ -40,11 +44,11 @@ class EnquiryController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.view'), config('constants.MODULES.enquiry'), [
                 'subject_type' => Enquiry::class,
                 'subject_id' => $enquiry->id,
-                'description' => 'Viewed enquiry from ' . $enquiry->name,
+                'description' => 'Viewed enquiry from '.$enquiry->name,
             ]);
         }
 
-        return view($this->prefix . $this->folder . 'details', compact('enquiry', 'users'));
+        return view($this->prefix.$this->folder.'details', compact('enquiry', 'users'));
     }
 
     public function markspam(Request $request, $uuid)
@@ -70,7 +74,7 @@ class EnquiryController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.update'), config('constants.MODULES.enquiry'), [
                 'subject_type' => Enquiry::class,
                 'subject_id' => $enquiry->id,
-                'description' => 'Marked enquiry from ' . $enquiry->name . ' as spam',
+                'description' => 'Marked enquiry from '.$enquiry->name.' as spam',
             ]);
 
             DB::commit();
@@ -78,7 +82,8 @@ class EnquiryController extends Controller
             return back()->with('success', 'Enquiry marked as spam.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Enquiry markspam failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Enquiry markspam failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -116,7 +121,7 @@ class EnquiryController extends Controller
                 'subject_type' => Enquiry::class,
                 'subject_id' => $enquiry->id,
                 'new_values' => $enquiry->getChanges(),
-                'description' => 'Updated enquiry status for ' . $enquiry->name,
+                'description' => 'Updated enquiry status for '.$enquiry->name,
             ]);
 
             DB::commit();
@@ -128,7 +133,8 @@ class EnquiryController extends Controller
             return redirect()->route('admin.enquiries.details', $enquiry->uuid)->with('success', 'Enquiry updated successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Enquiry updatestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Enquiry updatestatus failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -168,10 +174,10 @@ class EnquiryController extends Controller
                     'app_name' => config('constants.BUSINESS.name'),
                 ],
                 source: 'enquiry-status',
-                mailableClass: \App\Mail\EnquiryStatusUpdateMail::class,
+                mailableClass: EnquiryStatusUpdateMail::class,
             );
         } catch (\Throwable $e) {
-            Log::error('Enquiry status update email failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Enquiry status update email failed: '.$e->getMessage(), ['exception' => $e]);
         }
     }
 
@@ -184,12 +190,13 @@ class EnquiryController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.enquiry'), [
                 'subject_type' => Enquiry::class,
                 'subject_id' => $enquiry->id,
-                'description' => 'Deleted enquiry from ' . $enquiry->name,
+                'description' => 'Deleted enquiry from '.$enquiry->name,
             ]);
 
             return back()->with('success', 'Enquiry deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Enquiry destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Enquiry destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

@@ -18,7 +18,9 @@ class BlogCategoryController extends Controller
     use HandlesImageUploads;
 
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'blogs.categories.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -31,7 +33,7 @@ class BlogCategoryController extends Controller
         $rows = BlogCategory::latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = BlogCategory::orderBy('display_order')->orderBy('id')->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // saves drag-drop order
@@ -55,7 +57,8 @@ class BlogCategoryController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('BlogCategory reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('BlogCategory reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -64,7 +67,7 @@ class BlogCategoryController extends Controller
     {
         $category = $uuid ? BlogCategory::where('uuid', $uuid)->firstOrFail() : null;
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('category'));
+        return view($this->prefix.$this->folder.'createoredit', compact('category'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -78,13 +81,13 @@ class BlogCategoryController extends Controller
             'description' => ['nullable', 'string'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
-            'image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:2048'],
+            'image' => ['nullable', 'mimes:'.config('constants.IMAGE_MIMES'), 'max:2048'],
         ]);
 
         try {
             DB::beginTransaction();
 
-            $category = $category ?? new BlogCategory();
+            $category = $category ?? new BlogCategory;
             $isNew = ! $category->exists;
 
             $newUuid = null;
@@ -119,13 +122,13 @@ class BlogCategoryController extends Controller
             $category->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
+                config('constants.ACTIVITY_ACTIONS.'.($isNew ? 'create' : 'update')),
                 config('constants.MODULES.blogcategory'),
                 [
                     'subject_type' => BlogCategory::class,
                     'subject_id' => $category->id,
                     'new_values' => $category->getChanges(),
-                    'description' => ($isNew ? 'Created' : 'Updated') . " blog category \"{$category->name}\".",
+                    'description' => ($isNew ? 'Created' : 'Updated')." blog category \"{$category->name}\".",
                 ]
             );
 
@@ -134,7 +137,7 @@ class BlogCategoryController extends Controller
             return redirect()->route('admin.blogs.categories.index')->with('success', 'Blog category saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('BlogCategory saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('BlogCategory saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
@@ -163,7 +166,7 @@ class BlogCategoryController extends Controller
             return back()->with('success', 'Blog category deleted successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('BlogCategory destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('BlogCategory destroy failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }
@@ -179,12 +182,12 @@ class BlogCategoryController extends Controller
             $category->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($category->is_active ? 'activate' : 'deactivate')),
+                config('constants.ACTIVITY_ACTIONS.'.($category->is_active ? 'activate' : 'deactivate')),
                 config('constants.MODULES.blogcategory'),
                 [
                     'subject_type' => BlogCategory::class,
                     'subject_id' => $category->id,
-                    'description' => 'Blog category status toggled to ' . ($category->is_active ? 'active' : 'inactive') . '.',
+                    'description' => 'Blog category status toggled to '.($category->is_active ? 'active' : 'inactive').'.',
                 ]
             );
 
@@ -197,7 +200,7 @@ class BlogCategoryController extends Controller
             return back()->with('success', 'Blog category status updated.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('BlogCategory togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('BlogCategory togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

@@ -6,13 +6,13 @@ use App\Traits\HasSlug;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Role extends Model
 {
-    use HasUuid, HasSlug, SoftDeletes;
+    use HasSlug, HasUuid, SoftDeletes;
 
     protected $fillable = [
         'uuid',

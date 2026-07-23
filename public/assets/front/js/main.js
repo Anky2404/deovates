@@ -800,6 +800,119 @@ $(document).ready(function () {
         });
     });
 
+    //=====================================
+    // Website Audit Tracker (Speed / SEO popups, hero buttons)
+    //=====================================
+    $('.audit-url-input').on('blur paste', function () {
+        var $field = $(this);
+        setTimeout(function () {
+            $field.val($field.val().trim().replace(/^https?:\/\//i, '').replace(/^\/+/, ''));
+        }, 0);
+    });
+
+    function scoreClassFor(score) {
+        if (score === null || score === undefined) return '';
+        if (score >= 90) return 'score-good';
+        if (score >= 50) return 'score-average';
+        return 'score-poor';
+    }
+
+    function fillAuditPane($pane, deviceResult) {
+        var $message = $pane.find('.audit-tab-message');
+        var $content = $pane.find('.audit-tab-content');
+
+        if (!deviceResult || !deviceResult.success) {
+            $message.text(deviceResult && deviceResult.message ? deviceResult.message : 'Could not load this result.').removeClass('d-none');
+            $content.addClass('d-none');
+            return;
+        }
+
+        $message.addClass('d-none');
+        $content.removeClass('d-none');
+
+        $pane.find('[data-score]').each(function () {
+            var key = $(this).data('score');
+            var score = deviceResult.scores ? deviceResult.scores[key] : null;
+            $(this).text(score === null || score === undefined ? '—' : score);
+            $(this).attr('class', 'audit-score-circle ' + scoreClassFor(score));
+        });
+
+        $pane.find('[data-metric]').each(function () {
+            var key = $(this).data('metric');
+            var value = deviceResult.metrics ? deviceResult.metrics[key] : null;
+            $(this).text(value || '—');
+        });
+    }
+
+    $('.audit-tracker-modal').each(function () {
+        var $modal = $(this);
+        var $form = $modal.find('.audit-lead-form');
+        var $results = $modal.find('.audit-results');
+        var $error = $modal.find('.audit-lead-error');
+        var $btn = $modal.find('.audit-submit-btn');
+        var $btnText = $modal.find('.audit-submit-text');
+        var $spinner = $modal.find('.audit-submit-spinner');
+
+        $modal.on('hidden.bs.modal', function () {
+            $form.removeClass('d-none')[0].reset();
+            $results.addClass('d-none');
+            $error.addClass('d-none');
+        });
+
+        $modal.find('[data-audit-tab]').on('click', function () {
+            var tab = $(this).data('audit-tab');
+            $modal.find('[data-audit-tab]').removeClass('active');
+            $(this).addClass('active');
+            $modal.find('[data-audit-pane]').addClass('d-none');
+            $modal.find('[data-audit-pane="' + tab + '"]').removeClass('d-none');
+        });
+
+        $form.on('submit', function (e) {
+            e.preventDefault();
+
+            $error.addClass('d-none');
+            $btn.prop('disabled', true);
+            $btnText.text('Checking...');
+            $spinner.removeClass('d-none');
+
+            $.ajax({
+                url: $form.attr('data-action'),
+                method: 'POST',
+                dataType: 'json',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                data: {
+                    type: $form.data('type'),
+                    name: $form.find('[name="name"]').val(),
+                    email: $form.find('[name="email"]').val(),
+                    phone: $form.find('[name="phone"]').val(),
+                    url: $form.find('[name="url"]').val()
+                }
+            }).done(function (response) {
+                $btn.prop('disabled', false);
+                $spinner.addClass('d-none');
+                $btnText.text($form.data('type') === 'seo' ? 'Check My SEO Score' : 'Check My Speed Score');
+
+                if (!response.success) {
+                    $error.text(response.message || 'Something went wrong. Please try again.').removeClass('d-none');
+                    return;
+                }
+
+                $modal.find('.audit-result-url').text(response.url);
+                fillAuditPane($modal.find('[data-audit-pane="mobile"]'), response.mobile);
+                fillAuditPane($modal.find('[data-audit-pane="desktop"]'), response.desktop);
+
+                $form.addClass('d-none');
+                $results.removeClass('d-none');
+            }).fail(function (xhr) {
+                $btn.prop('disabled', false);
+                $spinner.addClass('d-none');
+                $btnText.text($form.data('type') === 'seo' ? 'Check My SEO Score' : 'Check My Speed Score');
+                var message = (xhr.responseJSON && xhr.responseJSON.message) || 'Something went wrong. Please try again.';
+                $error.text(message).removeClass('d-none');
+            });
+        });
+    });
+
 });
 
 

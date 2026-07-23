@@ -18,7 +18,9 @@ class PortfolioCategoryController extends Controller
     use HandlesImageUploads;
 
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'portfolios.categories.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -33,7 +35,7 @@ class PortfolioCategoryController extends Controller
             ->withQueryString();
         $reorderRows = PortfolioCategory::orderBy('display_order')->orderBy('id')->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Persist drag-drop reorder
@@ -57,7 +59,8 @@ class PortfolioCategoryController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('PortfolioCategory reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('PortfolioCategory reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -70,7 +73,7 @@ class PortfolioCategoryController extends Controller
             $category = PortfolioCategory::where('uuid', $uuid)->firstOrFail();
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('category'));
+        return view($this->prefix.$this->folder.'createoredit', compact('category'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -81,7 +84,7 @@ class PortfolioCategoryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('portfolio_categories', 'slug')->ignore($category?->id)],
             'icon' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:4096'],
+            'image' => ['nullable', 'mimes:'.config('constants.IMAGE_MIMES'), 'max:4096'],
             'description' => ['nullable', 'string'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
@@ -100,7 +103,7 @@ class PortfolioCategoryController extends Controller
 
             $newUuid = null;
 
-            if (!$category) {
+            if (! $category) {
                 $newUuid = (string) Str::uuid();
                 $data['uuid'] = $newUuid;
             }
@@ -119,13 +122,13 @@ class PortfolioCategoryController extends Controller
             }
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
+                config('constants.ACTIVITY_ACTIONS.'.($isNew ? 'create' : 'update')),
                 config('constants.MODULES.portfoliocategory'),
                 [
                     'subject_type' => PortfolioCategory::class,
                     'subject_id' => $category->id,
                     'new_values' => $category->getChanges(),
-                    'description' => ($isNew ? 'Created' : 'Updated') . ' portfolio category: ' . $category->name,
+                    'description' => ($isNew ? 'Created' : 'Updated').' portfolio category: '.$category->name,
                 ]
             );
 
@@ -134,7 +137,7 @@ class PortfolioCategoryController extends Controller
             return redirect()->route('admin.portfolios.categories.index')->with('success', 'Portfolio category saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('PortfolioCategory saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('PortfolioCategory saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
@@ -149,13 +152,13 @@ class PortfolioCategoryController extends Controller
             $category->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($category->is_active ? 'activate' : 'deactivate')),
+                config('constants.ACTIVITY_ACTIONS.'.($category->is_active ? 'activate' : 'deactivate')),
                 config('constants.MODULES.portfoliocategory'),
                 [
                     'subject_type' => PortfolioCategory::class,
                     'subject_id' => $category->id,
                     'new_values' => ['is_active' => $category->is_active],
-                    'description' => 'Toggled status of portfolio category: ' . $category->name,
+                    'description' => 'Toggled status of portfolio category: '.$category->name,
                 ]
             );
 
@@ -165,7 +168,7 @@ class PortfolioCategoryController extends Controller
 
             return back()->with('success', 'Status updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('PortfolioCategory togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('PortfolioCategory togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -184,13 +187,13 @@ class PortfolioCategoryController extends Controller
             $category->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($category->is_featured ? 'feature' : 'unfeature')),
+                config('constants.ACTIVITY_ACTIONS.'.($category->is_featured ? 'feature' : 'unfeature')),
                 config('constants.MODULES.portfoliocategory'),
                 [
                     'subject_type' => PortfolioCategory::class,
                     'subject_id' => $category->id,
                     'new_values' => ['is_featured' => $category->is_featured],
-                    'description' => 'Toggled featured status of portfolio category: ' . $category->name,
+                    'description' => 'Toggled featured status of portfolio category: '.$category->name,
                 ]
             );
 
@@ -200,7 +203,7 @@ class PortfolioCategoryController extends Controller
 
             return back()->with('success', 'Status updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('PortfolioCategory togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('PortfolioCategory togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -223,13 +226,13 @@ class PortfolioCategoryController extends Controller
                 [
                     'subject_type' => PortfolioCategory::class,
                     'subject_id' => $category->id,
-                    'description' => 'Deleted portfolio category: ' . $category->name,
+                    'description' => 'Deleted portfolio category: '.$category->name,
                 ]
             );
 
             return back()->with('success', 'Portfolio category deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('PortfolioCategory destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('PortfolioCategory destroy failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }

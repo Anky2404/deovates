@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FaqCategory extends Model
 {
-    use HasUuid, HasSlug, SoftDeletes;
+    use HasSlug, HasUuid, SoftDeletes;
 
     protected string $slugSource = 'title';
 
-    public $table='faq_categories';
+    public $table = 'faq_categories';
 
     protected $fillable = [
         'uuid',

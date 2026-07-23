@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use App\Traits\HasUuid;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class AuthLog extends Model
@@ -72,10 +72,16 @@ class AuthLog extends Model
     {
         $ua = request()->userAgent();
 
-        if (!$ua) return null;
+        if (! $ua) {
+            return null;
+        }
 
-        if (stripos($ua, 'Mobile') !== false) return 'Mobile';
-        if (stripos($ua, 'Tablet') !== false) return 'Tablet';
+        if (stripos($ua, 'Mobile') !== false) {
+            return 'Mobile';
+        }
+        if (stripos($ua, 'Tablet') !== false) {
+            return 'Tablet';
+        }
 
         return 'Desktop';
     }
@@ -84,7 +90,9 @@ class AuthLog extends Model
     {
         $ua = request()->userAgent();
 
-        if (!$ua) return null;
+        if (! $ua) {
+            return null;
+        }
 
         return match (true) {
             stripos($ua, 'Windows') !== false => 'Windows',
@@ -102,7 +110,9 @@ class AuthLog extends Model
     {
         $ua = request()->userAgent();
 
-        if (!$ua) return null;
+        if (! $ua) {
+            return null;
+        }
 
         return match (true) {
             stripos($ua, 'Firefox') !== false => 'Firefox',
@@ -134,15 +144,15 @@ class AuthLog extends Model
         }
 
         return static::create([
-            'user_id'        => $userId,
-            'event'          => $event,
-            'ip_address'     => request()->ip(),
-            'user_agent'     => request()->userAgent(),
-            'device'         => self::detectDevice(),
-            'platform'       => self::detectPlatform(),
-            'browser'        => self::detectBrowser(),
-            'location'       => request()->header('CF-IPCountry') ?? null,
-            'is_success'     => $success,
+            'user_id' => $userId,
+            'event' => $event,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'device' => self::detectDevice(),
+            'platform' => self::detectPlatform(),
+            'browser' => self::detectBrowser(),
+            'location' => request()->header('CF-IPCountry') ?? null,
+            'is_success' => $success,
             'failure_reason' => $failureReason,
         ]);
     }

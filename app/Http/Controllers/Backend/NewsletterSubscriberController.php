@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Log;
 class NewsletterSubscriberController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'newsletter-subscribers.';
 
     public function __construct()
@@ -22,7 +24,8 @@ class NewsletterSubscriberController extends Controller
     public function index(Request $request)
     {
         $rows = NewsletterSubscriber::latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function details(Request $request, $uuid)
@@ -35,11 +38,11 @@ class NewsletterSubscriberController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.view'), config('constants.MODULES.newslettersubscriber'), [
                 'subject_type' => NewsletterSubscriber::class,
                 'subject_id' => $subscriber->id,
-                'description' => 'Viewed subscriber ' . $subscriber->email,
+                'description' => 'Viewed subscriber '.$subscriber->email,
             ]);
         }
 
-        return view($this->prefix . $this->folder . 'details', compact('subscriber'));
+        return view($this->prefix.$this->folder.'details', compact('subscriber'));
     }
 
     // Keeps unsubscribed_at flag in sync
@@ -60,7 +63,7 @@ class NewsletterSubscriberController extends Controller
                 [
                     'subject_type' => NewsletterSubscriber::class,
                     'subject_id' => $subscriber->id,
-                    'description' => ($subscriber->is_active ? 'Resubscribed' : 'Unsubscribed') . ' ' . $subscriber->email,
+                    'description' => ($subscriber->is_active ? 'Resubscribed' : 'Unsubscribed').' '.$subscriber->email,
                 ]
             );
 
@@ -70,7 +73,7 @@ class NewsletterSubscriberController extends Controller
 
             return back()->with('success', 'Subscriber status updated.');
         } catch (\Throwable $e) {
-            Log::error('NewsletterSubscriber togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('NewsletterSubscriber togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -89,12 +92,13 @@ class NewsletterSubscriberController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.newslettersubscriber'), [
                 'subject_type' => NewsletterSubscriber::class,
                 'subject_id' => $subscriber->id,
-                'description' => 'Deleted subscriber ' . $subscriber->email,
+                'description' => 'Deleted subscriber '.$subscriber->email,
             ]);
 
             return back()->with('success', 'Subscriber deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('NewsletterSubscriber destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('NewsletterSubscriber destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

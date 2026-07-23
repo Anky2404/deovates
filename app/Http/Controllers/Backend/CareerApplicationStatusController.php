@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 class CareerApplicationStatusController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'careers.application-status.';
 
     public function __construct()
@@ -25,7 +27,7 @@ class CareerApplicationStatusController extends Controller
             ->paginate($this->pagerecords)
             ->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     // full status progression for one application
@@ -39,6 +41,6 @@ class CareerApplicationStatusController extends Controller
             ->orderBy('id')
             ->get();
 
-        return view($this->prefix . $this->folder . 'history', compact('application', 'statuses'));
+        return view($this->prefix.$this->folder.'history', compact('application', 'statuses'));
     }
 }

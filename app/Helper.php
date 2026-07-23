@@ -7,12 +7,11 @@ use App\Models\Page;
 use App\Models\Role;
 use App\Models\Section;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Helper
 {
@@ -55,7 +54,6 @@ class Helper
         return '';
     }
 
-
     /**
      * Get all roles except Admin & Super Admin
      */
@@ -85,17 +83,17 @@ class Helper
     // Read JSON file
     public static function readJSONData(string $filename): array
     {
-        $path = storage_path('app/data/' . ltrim($filename, '/'));
+        $path = storage_path('app/data/'.ltrim($filename, '/'));
 
-        if (!file_exists($path)) {
-            abort(500, 'JSON file not found at: ' . $path);
+        if (! file_exists($path)) {
+            abort(500, 'JSON file not found at: '.$path);
         }
 
         $json = file_get_contents($path);
         $data = json_decode($json, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            abort(500, 'Invalid JSON format in: ' . $filename);
+            abort(500, 'Invalid JSON format in: '.$filename);
         }
 
         return $data;
@@ -156,12 +154,12 @@ class Helper
         // pre-conversion .png/.jpg name, so check the .avif variant first.
         $avifFilename = preg_replace('/\.(png|jpe?g|gif|webp)$/i', '.avif', $filename);
 
-        if (file_exists(public_path('assets/front/img/banners/' . $avifFilename))) {
-            return asset('assets/front/img/banners/' . $avifFilename);
+        if (file_exists(public_path('assets/front/img/banners/'.$avifFilename))) {
+            return asset('assets/front/img/banners/'.$avifFilename);
         }
 
-        if (file_exists(public_path('assets/front/img/banners/' . $filename))) {
-            return asset('assets/front/img/banners/' . $filename);
+        if (file_exists(public_path('assets/front/img/banners/'.$filename))) {
+            return asset('assets/front/img/banners/'.$filename);
         }
 
         return asset($fallback);
@@ -175,8 +173,8 @@ class Helper
      */
     public static function img(?string $path, string $fallback = 'assets/front/img/default-img.avif'): string
     {
-        if (!empty($path) && Storage::disk('public')->exists($path)) {
-            return asset('storage/' . $path);
+        if (! empty($path) && Storage::disk('public')->exists($path)) {
+            return asset('storage/'.$path);
         }
 
         return asset($fallback);
@@ -187,15 +185,11 @@ class Helper
         return auth('admin')->user()?->role?->name === $role;
     }
 
-
-
-
-
     public static function uploadImage($file, $directory, $model = null, $column = 'filename', $isDeleteOld = true)
     {
         try {
 
-            if (!$file instanceof UploadedFile) {
+            if (! $file instanceof UploadedFile) {
                 return null;
             }
 
@@ -203,7 +197,7 @@ class Helper
             $basePath = "{$directory}/{$uuid}";
 
             // Delete old file if enabled and exists
-            if ($isDeleteOld && $model && !empty($model->{$column})) {
+            if ($isDeleteOld && $model && ! empty($model->{$column})) {
                 if (Storage::disk('public')->exists($model->{$column})) {
                     Storage::disk('public')->delete($model->{$column});
                 }
@@ -211,11 +205,11 @@ class Helper
 
             // Generate new filename
             $originalExt = $file->getClientOriginalExtension();
-            $username    = Str::slug($model?->username ?? 'user');
-            $filename    = $username . '.' . $originalExt;
+            $username = Str::slug($model?->username ?? 'user');
+            $filename = $username.'.'.$originalExt;
 
             // Make sure the target folder exists (and is readable) before storing
-            if (!Storage::disk('public')->directoryExists($basePath)) {
+            if (! Storage::disk('public')->directoryExists($basePath)) {
                 Storage::disk('public')->makeDirectory($basePath);
 
                 $fullPath = Storage::disk('public')->path($basePath);
@@ -235,23 +229,17 @@ class Helper
 
             return $storedPath;
         } catch (\Exception $e) {
-            Log::error('uploadImage failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('uploadImage failed: '.$e->getMessage(), ['exception' => $e]);
+
             return null;
         }
     }
 
-
-
-
-
-
-
-
     /**
      * Upload Multiple Images
      *
-     * @param array|object $files
-     * @param string       $directory
+     * @param  array|object  $files
+     * @param  string  $directory
      * @return array
      */
     public static function uploadImages($files, $directory)
@@ -260,12 +248,14 @@ class Helper
 
         try {
 
-            if (!$files) return [];
+            if (! $files) {
+                return [];
+            }
 
             $path = public_path($directory);
 
             // Create directory if not exists
-            if (!File::exists($path)) {
+            if (! File::exists($path)) {
                 File::makeDirectory($path, 0777, true, true);
             }
 
@@ -277,14 +267,14 @@ class Helper
                     [$meta, $encoded] = explode(',', $file);
                     $image = base64_decode($encoded);
 
-                    $filename = Str::uuid() . ".png";
-                    file_put_contents($path . '/' . $filename, $image);
+                    $filename = Str::uuid().'.png';
+                    file_put_contents($path.'/'.$filename, $image);
                 } else {
 
                     // Normal uploaded file
-                    $ext       = $file->getClientOriginalExtension();
-                    $origName  = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-                    $filename  = Str::uuid() . '-' . $origName . '.' . $ext;
+                    $ext = $file->getClientOriginalExtension();
+                    $origName = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+                    $filename = Str::uuid().'-'.$origName.'.'.$ext;
 
                     $file->move($path, $filename);
                 }
@@ -298,10 +288,8 @@ class Helper
         }
     }
 
-
     public static function saveactivity(array $data = []): void
     {
-
 
         try {
             ActivityLog::create([

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\Concerns\LoadsPageSections;
+use App\Mail\CareerApplicationAdminNotificationMail;
+use App\Mail\CareerApplicationConfirmationMail;
 use App\Models\ActivityLog;
 use App\Models\Career;
 use App\Models\CareerApplication;
 use App\Models\Resume;
-use App\Helper;
 use App\Services\EmailSenderService;
 use App\Services\MediaUploader;
 use Illuminate\Http\Request;
@@ -21,6 +23,7 @@ class CareerController extends Controller
     use LoadsPageSections;
 
     private $prefix = 'front.';
+
     private $folder = 'career.';
 
     public function index()
@@ -43,7 +46,7 @@ class CareerController extends Controller
 
         [$page, $sectionContents] = $this->loadPageSections('career');
 
-        return view($this->prefix . $this->folder . 'index', compact('careers', 'page', 'sectionContents'));
+        return view($this->prefix.$this->folder.'index', compact('careers', 'page', 'sectionContents'));
     }
 
     public function details($slug)
@@ -67,7 +70,7 @@ class CareerController extends Controller
                 ->get();
         });
 
-        return view($this->prefix . $this->folder . 'details', compact('career', 'related'));
+        return view($this->prefix.$this->folder.'details', compact('career', 'related'));
     }
 
     public function apply(Request $request, $slug)
@@ -138,7 +141,7 @@ class CareerController extends Controller
                 'subject_type' => CareerApplication::class,
                 'subject_id' => $application->id,
                 'is_system' => true,
-                'description' => $application->full_name . ' applied for "' . $career->title . '".',
+                'description' => $application->full_name.' applied for "'.$career->title.'".',
             ]);
 
             $this->sendApplicationConfirmation($application, $career);
@@ -146,7 +149,7 @@ class CareerController extends Controller
 
             return back()->with('success', 'Your application has been submitted successfully. We will get back to you soon.');
         } catch (\Throwable $e) {
-            Log::error('Career application submit failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Career application submit failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong while submitting your application. Please try again.');
         }
@@ -180,10 +183,10 @@ class CareerController extends Controller
                     'app_name' => config('constants.BUSINESS.name'),
                 ],
                 source: 'career-application',
-                mailableClass: \App\Mail\CareerApplicationConfirmationMail::class,
+                mailableClass: CareerApplicationConfirmationMail::class,
             );
         } catch (\Throwable $e) {
-            Log::error('Career application confirmation email failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Career application confirmation email failed: '.$e->getMessage(), ['exception' => $e]);
         }
     }
 
@@ -231,10 +234,10 @@ class CareerController extends Controller
                         'app_name' => $appName,
                     ],
                     source: 'career-application',
-                    mailableClass: \App\Mail\CareerApplicationAdminNotificationMail::class,
+                    mailableClass: CareerApplicationAdminNotificationMail::class,
                 );
             } catch (\Throwable $e) {
-                Log::error('Career application admin notification failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Career application admin notification failed: '.$e->getMessage(), ['exception' => $e]);
             }
         }
     }

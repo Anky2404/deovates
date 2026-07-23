@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Storage;
 class CareerApplicationController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'careers.applications.';
 
     public function __construct()
@@ -29,7 +31,7 @@ class CareerApplicationController extends Controller
             ->paginate($this->pagerecords)
             ->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function details(string $uuid)
@@ -38,7 +40,7 @@ class CareerApplicationController extends Controller
             ->where('uuid', $uuid)
             ->firstOrFail();
 
-        return view($this->prefix . $this->folder . 'details', compact('application'));
+        return view($this->prefix.$this->folder.'details', compact('application'));
     }
 
     public function createoredit(?string $uuid = null)
@@ -46,7 +48,7 @@ class CareerApplicationController extends Controller
         $application = $uuid ? CareerApplication::where('uuid', $uuid)->firstOrFail() : null;
         $careers = Career::orderBy('title')->get();
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('application', 'careers'));
+        return view($this->prefix.$this->folder.'createoredit', compact('application', 'careers'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -76,7 +78,7 @@ class CareerApplicationController extends Controller
                 ActivityLog::log(config('constants.ACTIVITY_ACTIONS.update'), config('constants.MODULES.careerapplication'), [
                     'subject_type' => CareerApplication::class,
                     'subject_id' => $application->id,
-                    'description' => 'Updated application for "' . $application->full_name . '".',
+                    'description' => 'Updated application for "'.$application->full_name.'".',
                 ]);
                 $message = 'Application updated successfully.';
             } else {
@@ -87,14 +89,14 @@ class CareerApplicationController extends Controller
                 ActivityLog::log(config('constants.ACTIVITY_ACTIONS.create'), config('constants.MODULES.careerapplication'), [
                     'subject_type' => CareerApplication::class,
                     'subject_id' => $application->id,
-                    'description' => 'Created application for "' . $application->full_name . '".',
+                    'description' => 'Created application for "'.$application->full_name.'".',
                 ]);
                 $message = 'Application created successfully.';
             }
 
             return redirect()->route('admin.careers.applications.index')->with('success', $message);
         } catch (\Throwable $e) {
-            Log::error('Application save failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Application save failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong while saving.');
         }
@@ -114,20 +116,20 @@ class CareerApplicationController extends Controller
             $application->updateStatus($data['new_status'], Auth::guard('admin')->id(), $data['remarks'] ?? null);
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . $data['new_status'], config('constants.ACTIVITY_ACTIONS.update')),
+                config('constants.ACTIVITY_ACTIONS.'.$data['new_status'], config('constants.ACTIVITY_ACTIONS.update')),
                 config('constants.MODULES.careerapplication'),
                 [
                     'subject_type' => CareerApplication::class,
                     'subject_id' => $application->id,
                     'old_values' => ['status' => $oldStatus],
                     'new_values' => ['status' => $data['new_status']],
-                    'description' => 'Changed status of "' . $application->full_name . '" from ' . $oldStatus . ' to ' . $data['new_status'] . '.',
+                    'description' => 'Changed status of "'.$application->full_name.'" from '.$oldStatus.' to '.$data['new_status'].'.',
                 ]
             );
 
             return back()->with('success', 'Application status updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('Application status update failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Application status update failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong while updating status.');
         }
@@ -149,7 +151,7 @@ class CareerApplicationController extends Controller
         ActivityLog::log(config('constants.ACTIVITY_ACTIONS.download'), config('constants.MODULES.careerapplication'), [
             'subject_type' => CareerApplication::class,
             'subject_id' => $application->id,
-            'description' => 'Downloaded resume for "' . $application->full_name . '".',
+            'description' => 'Downloaded resume for "'.$application->full_name.'".',
         ]);
 
         return Storage::disk('public')->download($application->resume->resume_file);
@@ -164,12 +166,12 @@ class CareerApplicationController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.careerapplication'), [
                 'subject_type' => CareerApplication::class,
                 'subject_id' => $application->id,
-                'description' => 'Deleted application for "' . $application->full_name . '".',
+                'description' => 'Deleted application for "'.$application->full_name.'".',
             ]);
 
             return back()->with('success', 'Application deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Application delete failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Application delete failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong while deleting the application.');
         }

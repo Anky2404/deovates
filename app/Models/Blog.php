@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Blog extends Model
 {
-    use HasUuid, HasSlug, SoftDeletes;
+    use HasSlug, HasUuid, SoftDeletes;
 
     protected string $slugSource = 'title';
 
@@ -130,6 +130,7 @@ class Blog extends Model
     public function calculateReadingTime(): int
     {
         $wordCount = str_word_count(strip_tags($this->content));
+
         return max(1, (int) ceil($wordCount / 200));
     }
 }

@@ -13,7 +13,9 @@ use Illuminate\Validation\Rule;
 class PermissionController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'permissions.';
 
     public function __construct()
@@ -24,7 +26,8 @@ class PermissionController extends Controller
     public function index(Request $request)
     {
         $rows = Permission::latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function createoredit(Request $request, $uuid = null)
@@ -37,12 +40,13 @@ class PermissionController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Permission createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Permission createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.permissions.index')->with('error', 'Unable to load the requested permission.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('permission'));
+        return view($this->prefix.$this->folder.'createoredit', compact('permission'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -82,13 +86,13 @@ class PermissionController extends Controller
             if ($permission) {
                 $permission->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated permission ' . $permission->name;
+                $description = 'Updated permission '.$permission->name;
             } else {
                 // Admin guard, not default guard
                 $data['created_by'] = auth('admin')->id();
                 $permission = Permission::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created permission ' . $permission->name;
+                $description = 'Created permission '.$permission->name;
             }
 
             $newValues = collect($permission->getChanges())->except('updated_at')->toArray();
@@ -104,7 +108,8 @@ class PermissionController extends Controller
 
             return redirect()->route('admin.permissions.index')->with('success', 'Permission saved successfully.');
         } catch (\Throwable $e) {
-            Log::error('Permission saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Permission saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -118,12 +123,13 @@ class PermissionController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.permission'), [
                 'subject_type' => Permission::class,
                 'subject_id' => $permission->id,
-                'description' => 'Deleted permission ' . $permission->name,
+                'description' => 'Deleted permission '.$permission->name,
             ]);
 
             return back()->with('success', 'Permission deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Permission destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Permission destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -141,7 +147,7 @@ class PermissionController extends Controller
                 [
                     'subject_type' => Permission::class,
                     'subject_id' => $permission->id,
-                    'description' => ($permission->is_active ? 'Activated' : 'Deactivated') . ' permission ' . $permission->name,
+                    'description' => ($permission->is_active ? 'Activated' : 'Deactivated').' permission '.$permission->name,
                 ]
             );
 
@@ -151,7 +157,7 @@ class PermissionController extends Controller
 
             return back()->with('success', 'Permission status updated.');
         } catch (\Throwable $e) {
-            Log::error('Permission togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Permission togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

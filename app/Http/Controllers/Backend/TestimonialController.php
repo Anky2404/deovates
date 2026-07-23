@@ -19,7 +19,9 @@ class TestimonialController extends Controller
     use HandlesImageUploads;
 
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'testimonials.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -32,7 +34,8 @@ class TestimonialController extends Controller
         $rows = Testimonial::latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Testimonial::orderBy('display_order')->orderBy('id')->get();
         $pageNamesBySlug = Page::pluck('name', 'slug');
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows', 'pageNamesBySlug'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows', 'pageNamesBySlug'));
     }
 
     // Persist drag-drop reorder
@@ -56,7 +59,8 @@ class TestimonialController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Testimonial reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Testimonial reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -71,14 +75,15 @@ class TestimonialController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Testimonial createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Testimonial createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.testimonials.index')->with('error', 'Unable to load the requested testimonial.');
             }
         }
 
         $pages = Page::orderBy('display_order')->orderBy('id')->get(['slug', 'name']);
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('testimonial', 'pages'));
+        return view($this->prefix.$this->folder.'createoredit', compact('testimonial', 'pages'));
     }
 
     // Form field "image" maps to column "photo"
@@ -96,7 +101,7 @@ class TestimonialController extends Controller
             'display_order' => 'nullable|integer|min:0',
             'is_featured' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
-            'photo' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
+            'photo' => 'nullable|mimes:'.config('constants.IMAGE_MIMES').'|max:4096',
         ]);
 
         unset($data['photo']);
@@ -108,7 +113,7 @@ class TestimonialController extends Controller
         try {
             $newUuid = null;
 
-            if (!$testimonial) {
+            if (! $testimonial) {
                 $newUuid = (string) Str::uuid();
                 $data['uuid'] = $newUuid;
             }
@@ -120,11 +125,11 @@ class TestimonialController extends Controller
             if ($testimonial) {
                 $testimonial->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated testimonial ' . $testimonial->name;
+                $description = 'Updated testimonial '.$testimonial->name;
             } else {
                 $testimonial = Testimonial::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created testimonial ' . $testimonial->name;
+                $description = 'Created testimonial '.$testimonial->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.testimonial'), [
@@ -136,7 +141,8 @@ class TestimonialController extends Controller
 
             return redirect()->route('admin.testimonials.index')->with('success', 'Testimonial saved successfully.');
         } catch (\Throwable $e) {
-            Log::error('Testimonial saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Testimonial saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -150,12 +156,13 @@ class TestimonialController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.testimonial'), [
                 'subject_type' => Testimonial::class,
                 'subject_id' => $testimonial->id,
-                'description' => 'Deleted testimonial ' . $testimonial->name,
+                'description' => 'Deleted testimonial '.$testimonial->name,
             ]);
 
             return back()->with('success', 'Testimonial deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Testimonial destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Testimonial destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -173,7 +180,7 @@ class TestimonialController extends Controller
                 [
                     'subject_type' => Testimonial::class,
                     'subject_id' => $testimonial->id,
-                    'description' => ($testimonial->is_active ? 'Activated' : 'Deactivated') . ' testimonial ' . $testimonial->name,
+                    'description' => ($testimonial->is_active ? 'Activated' : 'Deactivated').' testimonial '.$testimonial->name,
                 ]
             );
 
@@ -183,7 +190,7 @@ class TestimonialController extends Controller
 
             return back()->with('success', 'Testimonial status updated.');
         } catch (\Throwable $e) {
-            Log::error('Testimonial togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Testimonial togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -206,7 +213,7 @@ class TestimonialController extends Controller
                 [
                     'subject_type' => Testimonial::class,
                     'subject_id' => $testimonial->id,
-                    'description' => ($testimonial->is_featured ? 'Marked featured: ' : 'Unmarked featured: ') . $testimonial->name,
+                    'description' => ($testimonial->is_featured ? 'Marked featured: ' : 'Unmarked featured: ').$testimonial->name,
                 ]
             );
 
@@ -216,7 +223,7 @@ class TestimonialController extends Controller
 
             return back()->with('success', 'Testimonial featured status updated.');
         } catch (\Throwable $e) {
-            Log::error('Testimonial togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Testimonial togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

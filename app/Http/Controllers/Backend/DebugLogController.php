@@ -13,8 +13,11 @@ use Illuminate\Support\Facades\Schema;
 class DebugLogController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'debug-logs.';
+
     private $table = 'debug_logs';
 
     public function __construct()
@@ -26,13 +29,14 @@ class DebugLogController extends Controller
     {
         if (! Schema::hasTable($this->table)) {
             $rows = new LengthAwarePaginator([], 0, $this->pagerecords);
-            return view($this->prefix . $this->folder . 'index', compact('rows'))
+
+            return view($this->prefix.$this->folder.'index', compact('rows'))
                 ->with('warning', 'This log table has not been created yet.');
         }
 
         $rows = DB::table($this->table)->orderByDesc('id')->paginate($this->pagerecords);
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function view(Request $request, $uuid)
@@ -47,7 +51,7 @@ class DebugLogController extends Controller
             abort(404);
         }
 
-        return view($this->prefix . $this->folder . 'view', compact('row'));
+        return view($this->prefix.$this->folder.'view', compact('row'));
     }
 
     public function destroy(Request $request, $uuid)
@@ -65,7 +69,8 @@ class DebugLogController extends Controller
 
             return back()->with('success', 'Debug log deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('DebugLog destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('DebugLog destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

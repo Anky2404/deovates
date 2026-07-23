@@ -16,7 +16,9 @@ use Illuminate\Validation\Rule;
 class RolePermissionController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'roles.permissions.';
 
     public function __construct()
@@ -27,7 +29,8 @@ class RolePermissionController extends Controller
     public function index(Request $request)
     {
         $rows = RolePermission::with(['role', 'permission'])->latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function createoredit(Request $request, $uuid = null)
@@ -40,7 +43,8 @@ class RolePermissionController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('RolePermission createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('RolePermission createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.roles.permissions.index')->with('error', 'Unable to load the requested role permission.');
             }
         }
@@ -56,7 +60,7 @@ class RolePermissionController extends Controller
             $permissions->push($rolePermission->permission);
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('rolePermission', 'roles', 'permissions'));
+        return view($this->prefix.$this->folder.'createoredit', compact('rolePermission', 'roles', 'permissions'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -119,7 +123,8 @@ class RolePermissionController extends Controller
             return redirect()->route('admin.roles.permissions.index')->with('success', 'Role permission saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('RolePermission saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('RolePermission saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -138,7 +143,8 @@ class RolePermissionController extends Controller
 
             return back()->with('success', 'Role permission deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('RolePermission destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('RolePermission destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -157,7 +163,7 @@ class RolePermissionController extends Controller
                 [
                     'subject_type' => RolePermission::class,
                     'subject_id' => $rolePermission->id,
-                    'description' => ($rolePermission->is_allowed ? 'Allowed' : 'Disallowed') . ' role permission assignment',
+                    'description' => ($rolePermission->is_allowed ? 'Allowed' : 'Disallowed').' role permission assignment',
                 ]
             );
 
@@ -167,7 +173,7 @@ class RolePermissionController extends Controller
 
             return back()->with('success', 'Role permission status updated.');
         } catch (\Throwable $e) {
-            Log::error('RolePermission togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('RolePermission togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

@@ -11,7 +11,15 @@
     $tawkPropertyId = config('constants.TAWK_TO.property_id');
     $tawkWidgetId = config('constants.TAWK_TO.widget_id');
     $tawkEnabled = !empty($tawkPropertyId) && !empty($tawkWidgetId);
+    $meetingUrl = config('constants.CONTACT.meeting_url');
 @endphp
+
+@if ($meetingUrl)
+    <a href="{{ $meetingUrl }}" target="_blank" rel="noopener" class="floating-meeting-btn" aria-label="Schedule a meeting">
+        <i class="fas fa-calendar-check"></i>
+        <span>Book a Meeting</span>
+    </a>
+@endif
 
 <a href="{{ config('constants.CONTACT.whatsapp.link') }}" target="_blank" rel="noopener" class="floating-whatsapp-btn" aria-label="Chat with us on WhatsApp">
     <i class="fab fa-whatsapp"></i>
@@ -53,6 +61,44 @@
             width: 50px;
             height: 50px;
             font-size: 26px;
+        }
+    }
+
+    .floating-meeting-btn {
+        position: fixed;
+        right: 24px;
+        bottom: 166px;
+        z-index: 9998;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 18px;
+        border-radius: 50px;
+        background: #0B3C8A;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 8px 24px rgba(11, 60, 138, 0.35);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .floating-meeting-btn:hover {
+        color: #fff;
+        transform: scale(1.05);
+        box-shadow: 0 10px 28px rgba(11, 60, 138, 0.45);
+    }
+    .floating-meeting-btn i {
+        font-size: 18px;
+    }
+
+    @media (max-width: 575px) {
+        .floating-meeting-btn {
+            right: 16px;
+            bottom: 146px;
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+        .floating-meeting-btn span {
+            display: none;
         }
     }
 </style>

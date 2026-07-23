@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Log;
 class GoogleReviewController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'google-reviews.';
 
     public function __construct()
@@ -29,7 +31,7 @@ class GoogleReviewController extends Controller
         $totalCount = SiteSetting::get('google_reviews_total_count');
         $lastSyncedAt = SiteSetting::get('google_reviews_last_synced_at');
 
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'averageRating', 'totalCount', 'lastSyncedAt'));
+        return view($this->prefix.$this->folder.'index', compact('rows', 'averageRating', 'totalCount', 'lastSyncedAt'));
     }
 
     public function sync(Request $request, GoogleReviewSyncService $service)
@@ -55,13 +57,13 @@ class GoogleReviewController extends Controller
                 [
                     'subject_type' => GoogleReview::class,
                     'subject_id' => $review->id,
-                    'description' => ($review->is_active ? 'Showed' : 'Hid') . ' Google review from ' . $review->author_name,
+                    'description' => ($review->is_active ? 'Showed' : 'Hid').' Google review from '.$review->author_name,
                 ]
             );
 
             return back()->with('success', 'Review visibility updated.');
         } catch (\Throwable $e) {
-            Log::error('Google review toggle status failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Google review toggle status failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }
@@ -76,12 +78,12 @@ class GoogleReviewController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.googlereview'), [
                 'subject_type' => GoogleReview::class,
                 'subject_id' => $review->id,
-                'description' => 'Deleted Google review from ' . $review->author_name,
+                'description' => 'Deleted Google review from '.$review->author_name,
             ]);
 
             return back()->with('success', 'Review deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Google review delete failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Google review delete failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }

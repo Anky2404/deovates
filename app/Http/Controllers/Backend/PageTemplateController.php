@@ -15,7 +15,9 @@ use Illuminate\Validation\Rule;
 class PageTemplateController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'pages.templates.';
 
     public function __construct()
@@ -31,7 +33,7 @@ class PageTemplateController extends Controller
             ->paginate($this->pagerecords)
             ->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function createoredit(Request $request, $uuid = null)
@@ -44,12 +46,13 @@ class PageTemplateController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('PageTemplate createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('PageTemplate createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.pages.templates.index')->with('error', 'Unable to load the requested template.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('template'));
+        return view($this->prefix.$this->folder.'createoredit', compact('template'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -87,11 +90,11 @@ class PageTemplateController extends Controller
             if ($template) {
                 $template->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated page template ' . $template->name;
+                $description = 'Updated page template '.$template->name;
             } else {
                 $template = Template::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created page template ' . $template->name;
+                $description = 'Created page template '.$template->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.template'), [
@@ -106,7 +109,8 @@ class PageTemplateController extends Controller
             return redirect()->route('admin.pages.templates.index')->with('success', 'Template saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('PageTemplate saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('PageTemplate saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -122,7 +126,7 @@ class PageTemplateController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.template'), [
                 'subject_type' => Template::class,
                 'subject_id' => $template->id,
-                'description' => 'Deleted page template ' . $template->name,
+                'description' => 'Deleted page template '.$template->name,
             ]);
 
             DB::commit();
@@ -130,7 +134,8 @@ class PageTemplateController extends Controller
             return back()->with('success', 'Template deleted successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('PageTemplate destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('PageTemplate destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -148,7 +153,7 @@ class PageTemplateController extends Controller
                 [
                     'subject_type' => Template::class,
                     'subject_id' => $template->id,
-                    'description' => ($template->is_active ? 'Activated' : 'Deactivated') . ' page template ' . $template->name,
+                    'description' => ($template->is_active ? 'Activated' : 'Deactivated').' page template '.$template->name,
                 ]
             );
 
@@ -158,7 +163,7 @@ class PageTemplateController extends Controller
 
             return back()->with('success', 'Template status updated.');
         } catch (\Throwable $e) {
-            Log::error('PageTemplate togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('PageTemplate togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

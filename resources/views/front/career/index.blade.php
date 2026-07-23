@@ -3,6 +3,11 @@
 @section('title', config('constants.PAGE_SEO.career.title'))
 @section('meta_description', config('constants.PAGE_SEO.career.meta_description'))
 @section('meta_keywords', config('constants.PAGE_SEO.career.meta_keywords'))
+
+@push('preload')
+    <link rel="preload" as="image" href="{{ \App\Helper::heroBanner('career.avif', 'assets/front/img/hero/h1_hero.avif') }}" fetchpriority="high">
+@endpush
+
 @section('content')
 
     @php

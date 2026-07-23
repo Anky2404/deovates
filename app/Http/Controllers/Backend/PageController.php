@@ -16,7 +16,9 @@ use Illuminate\Validation\Rule;
 class PageController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'pages.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -29,7 +31,7 @@ class PageController extends Controller
         $rows = Page::orderBy('display_order')->orderBy('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Page::orderBy('display_order')->orderBy('id')->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Persist drag-drop reorder
@@ -53,7 +55,8 @@ class PageController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Page reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Page reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -66,7 +69,7 @@ class PageController extends Controller
 
         $sectionContents = $page->sectionContents()->pluck('data', 'section_id');
 
-        return view($this->prefix . $this->folder . 'details', compact('page', 'sectionContents'));
+        return view($this->prefix.$this->folder.'details', compact('page', 'sectionContents'));
     }
 
     public function createoredit(?string $uuid = null)
@@ -84,7 +87,7 @@ class PageController extends Controller
 
         $sections = Section::with('form.fields')->orderBy('name')->get();
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('page', 'sections', 'sectionContents'));
+        return view($this->prefix.$this->folder.'createoredit', compact('page', 'sections', 'sectionContents'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -150,13 +153,13 @@ class PageController extends Controller
             }
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
+                config('constants.ACTIVITY_ACTIONS.'.($isNew ? 'create' : 'update')),
                 config('constants.MODULES.page'),
                 [
                     'subject_type' => Page::class,
                     'subject_id' => $page->id,
                     'new_values' => $page->getChanges(),
-                    'description' => ($isNew ? 'Created' : 'Updated') . ' page: ' . $page->name,
+                    'description' => ($isNew ? 'Created' : 'Updated').' page: '.$page->name,
                 ]
             );
 
@@ -165,7 +168,7 @@ class PageController extends Controller
             return redirect()->route('admin.pages.index')->with('success', 'Page saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Page saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Page saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
@@ -180,13 +183,13 @@ class PageController extends Controller
             $page->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($page->is_active ? 'activate' : 'deactivate')),
+                config('constants.ACTIVITY_ACTIONS.'.($page->is_active ? 'activate' : 'deactivate')),
                 config('constants.MODULES.page'),
                 [
                     'subject_type' => Page::class,
                     'subject_id' => $page->id,
                     'new_values' => ['is_active' => $page->is_active],
-                    'description' => 'Toggled status of page: ' . $page->name,
+                    'description' => 'Toggled status of page: '.$page->name,
                 ]
             );
 
@@ -196,7 +199,7 @@ class PageController extends Controller
 
             return back()->with('success', 'Status updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('Page togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Page togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -219,13 +222,13 @@ class PageController extends Controller
                 [
                     'subject_type' => Page::class,
                     'subject_id' => $page->id,
-                    'description' => 'Deleted page: ' . $page->name,
+                    'description' => 'Deleted page: '.$page->name,
                 ]
             );
 
             return back()->with('success', 'Page deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Page destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Page destroy failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }
@@ -266,7 +269,7 @@ class PageController extends Controller
     {
         $result = [];
         $renderedGroups = [];
-        $fieldKeyFor = fn ($f) => $f->name ?: ($f->field_id ?: 'field_' . $f->id);
+        $fieldKeyFor = fn ($f) => $f->name ?: ($f->field_id ?: 'field_'.$f->id);
 
         foreach ($fields as $field) {
             if (! empty($field->group_key)) {
@@ -304,6 +307,7 @@ class PageController extends Controller
                 }
 
                 $result['group_data'][$groupKey] = array_values($instances);
+
                 continue;
             }
 
@@ -345,8 +349,8 @@ class PageController extends Controller
     private function resolveFieldValue(Request $request, $field, string $dotPath, $oldValue, string $directory)
     {
         if ($field->type === 'file') {
-            $tempPath = $request->input($dotPath . '_temp');
-            $altText = $request->input($dotPath . '_alt');
+            $tempPath = $request->input($dotPath.'_temp');
+            $altText = $request->input($dotPath.'_alt');
             $oldPath = is_string($oldValue) ? $oldValue : null;
 
             if (! empty($tempPath)) {

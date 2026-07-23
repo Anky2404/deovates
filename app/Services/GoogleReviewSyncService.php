@@ -40,7 +40,7 @@ class GoogleReviewSyncService
 
             if (! $response->ok() || $response->json('status') !== 'OK') {
                 $message = $response->json('error_message') ?? $response->json('status') ?? 'Unknown error from Google Places API.';
-                Log::error('Google Places API sync failed: ' . $message);
+                Log::error('Google Places API sync failed: '.$message);
 
                 return ['success' => false, 'message' => $message, 'count' => 0];
             }
@@ -82,7 +82,7 @@ class GoogleReviewSyncService
                 'count' => $synced,
             ];
         } catch (\Throwable $e) {
-            Log::error('Google Places API sync exception: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Google Places API sync exception: '.$e->getMessage(), ['exception' => $e]);
 
             return ['success' => false, 'message' => 'Something went wrong while contacting Google. Check the log for details.', 'count' => 0];
         }
@@ -94,6 +94,6 @@ class GoogleReviewSyncService
      */
     private function stableReviewId(array $review): string
     {
-        return md5(($review['author_name'] ?? '') . '|' . ($review['time'] ?? ''));
+        return md5(($review['author_name'] ?? '').'|'.($review['time'] ?? ''));
     }
 }

@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Section extends Model
 {
-    use HasUuid, HasSlug, SoftDeletes;
+    use HasSlug, HasUuid, SoftDeletes;
 
     protected $fillable = [
         'uuid',

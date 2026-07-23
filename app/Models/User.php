@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Mail\PasswordResetMail;
 use App\Services\EmailSenderService;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasUuid, SoftDeletes;
+    use HasFactory, HasUuid, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'uuid',
@@ -94,7 +95,7 @@ class User extends Authenticatable
 
     public function scopeNotAdmin(Builder $query): Builder
     {
-        return $query->whereHas('role', fn($q) => $q->whereNotIn('slug', ['super-admin', 'admin']));
+        return $query->whereHas('role', fn ($q) => $q->whereNotIn('slug', ['super-admin', 'admin']));
     }
 
     // Helpers
@@ -145,7 +146,7 @@ class User extends Authenticatable
                 'app_name' => config('constants.BUSINESS.name'),
             ],
             source: 'password-reset',
-            mailableClass: \App\Mail\PasswordResetMail::class,
+            mailableClass: PasswordResetMail::class,
         );
     }
 }

@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Portfolio extends Model
 {
-    use HasUuid, HasSlug, SoftDeletes;
+    use HasSlug, HasUuid, SoftDeletes;
 
     protected string $slugSource = 'title';
 
@@ -103,7 +103,7 @@ class Portfolio extends Model
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('is_active', true)
-            ->where(fn($q) => $q->whereNull('published_at')
+            ->where(fn ($q) => $q->whereNull('published_at')
                 ->orWhere('published_at', '<=', now()));
     }
 

@@ -27,7 +27,7 @@ class EmailSenderService
                 'message_id' => null,
             ];
         } catch (\Throwable $e) {
-            Log::error('Email send failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Email send failed: '.$e->getMessage(), ['exception' => $e]);
 
             return [
                 'status' => 'failed',

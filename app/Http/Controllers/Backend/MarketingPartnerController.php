@@ -19,7 +19,9 @@ class MarketingPartnerController extends Controller
     use HandlesImageUploads;
 
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'partners.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -31,7 +33,8 @@ class MarketingPartnerController extends Controller
     {
         $rows = Partner::latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Partner::orderBy('display_order')->orderBy('id')->get();
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Drag-drop reorder
@@ -55,7 +58,8 @@ class MarketingPartnerController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Partner reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Partner reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -70,12 +74,13 @@ class MarketingPartnerController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Partner createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Partner createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.marketing.partners.index')->with('error', 'Unable to load the requested partner.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('partner'));
+        return view($this->prefix.$this->folder.'createoredit', compact('partner'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -85,7 +90,7 @@ class MarketingPartnerController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => ['required', 'string', 'max:255', Rule::unique('partners', 'slug')->ignore($partner?->id)],
-            'logo' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
+            'logo' => 'nullable|mimes:'.config('constants.IMAGE_MIMES').'|max:4096',
             'website_url' => 'nullable|url|max:255',
             'type' => 'nullable|string|max:255',
             'industry' => 'nullable|string|max:255',
@@ -106,7 +111,7 @@ class MarketingPartnerController extends Controller
 
             $newUuid = null;
 
-            if (!$partner) {
+            if (! $partner) {
                 $newUuid = (string) Str::uuid();
                 $data['uuid'] = $newUuid;
             }
@@ -118,11 +123,11 @@ class MarketingPartnerController extends Controller
             if ($partner) {
                 $partner->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated partner ' . $partner->name;
+                $description = 'Updated partner '.$partner->name;
             } else {
                 $partner = Partner::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created partner ' . $partner->name;
+                $description = 'Created partner '.$partner->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.partner'), [
@@ -137,7 +142,8 @@ class MarketingPartnerController extends Controller
             return redirect()->route('admin.marketing.partners.index')->with('success', 'Partner saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Partner saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Partner saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -151,12 +157,13 @@ class MarketingPartnerController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.partner'), [
                 'subject_type' => Partner::class,
                 'subject_id' => $partner->id,
-                'description' => 'Deleted partner ' . $partner->name,
+                'description' => 'Deleted partner '.$partner->name,
             ]);
 
             return back()->with('success', 'Partner deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Partner destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Partner destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -174,7 +181,7 @@ class MarketingPartnerController extends Controller
                 [
                     'subject_type' => Partner::class,
                     'subject_id' => $partner->id,
-                    'description' => ($partner->is_active ? 'Activated' : 'Deactivated') . ' partner ' . $partner->name,
+                    'description' => ($partner->is_active ? 'Activated' : 'Deactivated').' partner '.$partner->name,
                 ]
             );
 
@@ -184,7 +191,7 @@ class MarketingPartnerController extends Controller
 
             return back()->with('success', 'Partner status updated.');
         } catch (\Throwable $e) {
-            Log::error('Partner togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Partner togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -207,7 +214,7 @@ class MarketingPartnerController extends Controller
                 [
                     'subject_type' => Partner::class,
                     'subject_id' => $partner->id,
-                    'description' => ($partner->is_featured ? 'Marked featured' : 'Unmarked featured') . ' partner ' . $partner->name,
+                    'description' => ($partner->is_featured ? 'Marked featured' : 'Unmarked featured').' partner '.$partner->name,
                 ]
             );
 
@@ -217,7 +224,7 @@ class MarketingPartnerController extends Controller
 
             return back()->with('success', 'Partner featured status updated.');
         } catch (\Throwable $e) {
-            Log::error('Partner togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Partner togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

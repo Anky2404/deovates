@@ -3,6 +3,11 @@
 @section('title', config('constants.PAGE_SEO.blog.title'))
 @section('meta_description', config('constants.PAGE_SEO.blog.meta_description'))
 @section('meta_keywords', config('constants.PAGE_SEO.blog.meta_keywords'))
+
+@push('preload')
+    <link rel="preload" as="image" href="{{ \App\Helper::heroBanner('blog.avif', 'assets/front/img/hero/h2_hero.avif') }}" fetchpriority="high">
+@endpush
+
 @section('content')
 
     <!-- Start Hero Section -->

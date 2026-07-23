@@ -37,7 +37,7 @@ class TrackSiteVisit
                     'device_type' => $this->detectDeviceType($userAgent),
                 ]);
             } catch (\Throwable $e) {
-                Log::error('Site visit tracking failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Site visit tracking failed: '.$e->getMessage(), ['exception' => $e]);
             }
         }
 

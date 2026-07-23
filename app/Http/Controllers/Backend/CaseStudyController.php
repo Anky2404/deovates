@@ -20,7 +20,9 @@ class CaseStudyController extends Controller
     use HandlesImageUploads;
 
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'casestudies.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -36,7 +38,7 @@ class CaseStudyController extends Controller
             ->withQueryString();
         $reorderRows = CaseStudy::orderBy('display_order')->orderBy('id')->take(300)->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // saves drag-drop order
@@ -60,7 +62,8 @@ class CaseStudyController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('CaseStudy reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('CaseStudy reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -75,7 +78,7 @@ class CaseStudyController extends Controller
 
         $categories = CaseStudyCategory::orderBy('name')->get();
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('caseStudy', 'categories'));
+        return view($this->prefix.$this->folder.'createoredit', compact('caseStudy', 'categories'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -94,9 +97,9 @@ class CaseStudyController extends Controller
             'canonical_url' => ['nullable', 'url', 'max:255'],
             'display_order' => ['nullable', 'integer'],
             'published_at' => ['nullable', 'date'],
-            'featured_image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:4096'],
+            'featured_image' => ['nullable', 'mimes:'.config('constants.IMAGE_MIMES'), 'max:4096'],
             'featured_image_alt' => ['nullable', 'string', 'max:255'],
-            'banner_image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:4096'],
+            'banner_image' => ['nullable', 'mimes:'.config('constants.IMAGE_MIMES'), 'max:4096'],
             'banner_image_alt' => ['nullable', 'string', 'max:255'],
             'gallery_items' => ['nullable', 'array'],
             'gallery_items.*.id' => ['nullable', 'string'],
@@ -147,13 +150,13 @@ class CaseStudyController extends Controller
             $this->syncGalleryMedia($request, $caseStudy);
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
+                config('constants.ACTIVITY_ACTIONS.'.($isNew ? 'create' : 'update')),
                 config('constants.MODULES.casestudy'),
                 [
                     'subject_type' => CaseStudy::class,
                     'subject_id' => $caseStudy->id,
                     'new_values' => $caseStudy->getChanges(),
-                    'description' => ($isNew ? 'Created' : 'Updated') . ' case study: ' . $caseStudy->title,
+                    'description' => ($isNew ? 'Created' : 'Updated').' case study: '.$caseStudy->title,
                 ]
             );
 
@@ -162,7 +165,7 @@ class CaseStudyController extends Controller
             return redirect()->route('admin.casestudies.index')->with('success', 'Case study saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('CaseStudy saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('CaseStudy saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
@@ -177,13 +180,13 @@ class CaseStudyController extends Controller
             $caseStudy->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($caseStudy->is_active ? 'activate' : 'deactivate')),
+                config('constants.ACTIVITY_ACTIONS.'.($caseStudy->is_active ? 'activate' : 'deactivate')),
                 config('constants.MODULES.casestudy'),
                 [
                     'subject_type' => CaseStudy::class,
                     'subject_id' => $caseStudy->id,
                     'new_values' => ['is_active' => $caseStudy->is_active],
-                    'description' => 'Toggled status of case study: ' . $caseStudy->title,
+                    'description' => 'Toggled status of case study: '.$caseStudy->title,
                 ]
             );
 
@@ -193,7 +196,7 @@ class CaseStudyController extends Controller
 
             return back()->with('success', 'Status updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('CaseStudy togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('CaseStudy togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -212,13 +215,13 @@ class CaseStudyController extends Controller
             $caseStudy->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($caseStudy->is_featured ? 'feature' : 'unfeature')),
+                config('constants.ACTIVITY_ACTIONS.'.($caseStudy->is_featured ? 'feature' : 'unfeature')),
                 config('constants.MODULES.casestudy'),
                 [
                     'subject_type' => CaseStudy::class,
                     'subject_id' => $caseStudy->id,
                     'new_values' => ['is_featured' => $caseStudy->is_featured],
-                    'description' => 'Toggled featured status of case study: ' . $caseStudy->title,
+                    'description' => 'Toggled featured status of case study: '.$caseStudy->title,
                 ]
             );
 
@@ -228,7 +231,7 @@ class CaseStudyController extends Controller
 
             return back()->with('success', 'Status updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('CaseStudy togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('CaseStudy togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -259,7 +262,7 @@ class CaseStudyController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('CaseStudy galleryreorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('CaseStudy galleryreorder failed: '.$e->getMessage(), ['exception' => $e]);
 
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
@@ -278,13 +281,13 @@ class CaseStudyController extends Controller
                 [
                     'subject_type' => CaseStudy::class,
                     'subject_id' => $caseStudy->id,
-                    'description' => 'Deleted case study: ' . $caseStudy->title,
+                    'description' => 'Deleted case study: '.$caseStudy->title,
                 ]
             );
 
             return back()->with('success', 'Case study deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('CaseStudy destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('CaseStudy destroy failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }
@@ -303,7 +306,7 @@ class CaseStudyController extends Controller
             $alt = $row['alt'] ?? null;
             $title = $row['title'] ?? null;
 
-            if (!empty($row['id']) && $existing->has($row['id'])) {
+            if (! empty($row['id']) && $existing->has($row['id'])) {
                 $media = $existing->get($row['id']);
                 $media->update([
                     'alt_text' => $alt,
@@ -316,7 +319,7 @@ class CaseStudyController extends Controller
                 continue;
             }
 
-            if (!empty($row['temp'])) {
+            if (! empty($row['temp'])) {
                 $media = $this->mediaUploader->promoteTempToMedia($row['temp'], $caseStudy, 'gallery', 'case-studies', $alt, $title);
 
                 if ($media) {

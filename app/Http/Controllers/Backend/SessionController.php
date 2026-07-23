@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Log;
 class SessionController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'sessions.';
 
     public function __construct()
@@ -22,7 +24,8 @@ class SessionController extends Controller
     public function index(Request $request)
     {
         $rows = Session::with('user')->orderByDesc('last_activity')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     // No-op: sessions are auto-created
@@ -51,7 +54,8 @@ class SessionController extends Controller
 
             return back()->with('success', 'Session terminated successfully.');
         } catch (\Throwable $e) {
-            Log::error('Session destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Session destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

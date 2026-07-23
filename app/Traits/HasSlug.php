@@ -39,7 +39,7 @@ trait HasSlug
                 )
                 ->exists()
         ) {
-            $candidate = $slug . '-' . ++$suffix;
+            $candidate = $slug.'-'.++$suffix;
         }
 
         return $candidate;

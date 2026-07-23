@@ -3,6 +3,11 @@
 @section('title', $data['meta_title'] ?? $data['title'] ?? config('constants.PAGE_SEO.services.title'))
 @section('meta_description', $data['meta_description'] ?? config('constants.PAGE_SEO.services.meta_description'))
 @section('meta_keywords', $data['meta_keywords'] ?? config('constants.PAGE_SEO.services.meta_keywords'))
+
+@push('preload')
+    <link rel="preload" as="image" href="{{ asset('assets/front/img/hero/h2_hero.avif') }}" fetchpriority="high">
+@endpush
+
 @section('content')
 
     <!-- Start Hero Section -->

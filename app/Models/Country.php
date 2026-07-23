@@ -63,6 +63,6 @@ class Country extends Model
 
     public function getFullPhonecodeAttribute(): string
     {
-        return '+' . $this->phonecode;
+        return '+'.$this->phonecode;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
@@ -40,15 +40,17 @@ class Session extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function scopeActive(Builder $query, int $minutes = null): Builder
+    public function scopeActive(Builder $query, ?int $minutes = null): Builder
     {
         $lifetime = $minutes ?? config('session.lifetime');
+
         return $query->where('last_activity', '>=', now()->subMinutes($lifetime)->timestamp);
     }
 
-    public function scopeExpired(Builder $query, int $minutes = null): Builder
+    public function scopeExpired(Builder $query, ?int $minutes = null): Builder
     {
         $lifetime = $minutes ?? config('session.lifetime');
+
         return $query->where('last_activity', '<', now()->subMinutes($lifetime)->timestamp);
     }
 
@@ -64,9 +66,10 @@ class Session extends Model
             : null;
     }
 
-    public function isExpired(int $minutes = null): bool
+    public function isExpired(?int $minutes = null): bool
     {
         $lifetime = $minutes ?? config('session.lifetime');
+
         return $this->last_activity < now()->subMinutes($lifetime)->timestamp;
     }
 

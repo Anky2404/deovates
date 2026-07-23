@@ -19,19 +19,20 @@ use Illuminate\View\View;
 class DashboardController extends Controller
 {
     private string $prefix = 'backend.';
+
     private string $folder = 'dashboard.';
 
     public function index(): View
     {
         $stats = [
-            'enquiries_new'       => Enquiry::new()->count(),
+            'enquiries_new' => Enquiry::new()->count(),
             'enquiries_follow_up' => Enquiry::requiresFollowUp()->count(),
-            'blogs'               => Blog::published()->count(),
-            'services'            => Service::active()->count(),
-            'portfolios'          => Portfolio::active()->count(),
-            'case_studies'        => CaseStudy::active()->count(),
-            'users'               => User::active()->count(),
-            'newsletter'          => NewsletterSubscriber::active()->count(),
+            'blogs' => Blog::published()->count(),
+            'services' => Service::active()->count(),
+            'portfolios' => Portfolio::active()->count(),
+            'case_studies' => CaseStudy::active()->count(),
+            'users' => User::active()->count(),
+            'newsletter' => NewsletterSubscriber::active()->count(),
         ];
 
         $enquiryStatusBreakdown = Enquiry::selectRaw('status, count(*) as total')
@@ -39,11 +40,11 @@ class DashboardController extends Controller
             ->pluck('total', 'status');
 
         $contentDistribution = [
-            'Blogs'         => Blog::count(),
-            'Services'      => Service::count(),
-            'Portfolios'    => Portfolio::count(),
-            'Case Studies'  => CaseStudy::count(),
-            'Testimonials'  => Testimonial::count(),
+            'Blogs' => Blog::count(),
+            'Services' => Service::count(),
+            'Portfolios' => Portfolio::count(),
+            'Case Studies' => CaseStudy::count(),
+            'Testimonials' => Testimonial::count(),
         ];
 
         $recentEnquiries = Enquiry::latest()->take(5)->get();
@@ -79,7 +80,7 @@ class DashboardController extends Controller
             ->take(5)
             ->values();
 
-        return view($this->prefix . $this->folder . 'index', compact(
+        return view($this->prefix.$this->folder.'index', compact(
             'stats',
             'enquiryStatusBreakdown',
             'contentDistribution',

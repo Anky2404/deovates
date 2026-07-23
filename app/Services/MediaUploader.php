@@ -62,7 +62,7 @@ class MediaUploader
     {
         $this->ensureDirectoryExists('temp');
         $extension = $file->getClientOriginalExtension() ?: 'jpg';
-        $filename = Str::uuid() . '.' . $extension;
+        $filename = Str::uuid().'.'.$extension;
         $path = $file->storeAs('temp', $filename, $this->disk);
         $this->mirrorToPublic($path);
 
@@ -88,7 +88,7 @@ class MediaUploader
         $this->ensureDirectoryExists($directory);
         $extension = pathinfo($tempPath, PATHINFO_EXTENSION) ?: 'jpg';
         $filename = $this->resolveFilename($desiredName, $extension, $directory);
-        $path = $directory . '/' . $filename;
+        $path = $directory.'/'.$filename;
 
         Storage::disk($this->disk)->copy($tempPath, $path);
         Storage::disk($this->disk)->delete($tempPath);
@@ -119,7 +119,7 @@ class MediaUploader
         $this->ensureDirectoryExists($directory);
         $extension = pathinfo($tempPath, PATHINFO_EXTENSION) ?: 'jpg';
         $filename = $this->resolveFilename($title ?: $alt, $extension, $directory);
-        $path = $directory . '/' . $filename;
+        $path = $directory.'/'.$filename;
 
         Storage::disk($this->disk)->copy($tempPath, $path);
         Storage::disk($this->disk)->delete($tempPath);
@@ -164,7 +164,7 @@ class MediaUploader
     {
         $directory = trim($directory, '/');
 
-        return empty($uuid) ? $directory : $directory . '/' . $uuid;
+        return empty($uuid) ? $directory : $directory.'/'.$uuid;
     }
 
     /**
@@ -215,7 +215,7 @@ class MediaUploader
             return;
         }
 
-        $destination = public_path('storage/' . $relativePath);
+        $destination = public_path('storage/'.$relativePath);
         File::ensureDirectoryExists(dirname($destination));
         File::copy($source, $destination);
     }
@@ -231,7 +231,7 @@ class MediaUploader
             return;
         }
 
-        $destination = public_path('storage/' . $relativePath);
+        $destination = public_path('storage/'.$relativePath);
 
         if (File::exists($destination)) {
             File::delete($destination);
@@ -249,20 +249,20 @@ class MediaUploader
         $slug = trim((string) $desiredName) !== '' ? Str::slug($desiredName) : '';
 
         if ($slug === '') {
-            return Str::uuid() . '.' . $extension;
+            return Str::uuid().'.'.$extension;
         }
 
         $candidate = "{$slug}.{$extension}";
 
         for ($attempt = 0; $attempt < 5; $attempt++) {
-            if (! Storage::disk($this->disk)->exists(trim($directory . '/' . $candidate, '/'))) {
+            if (! Storage::disk($this->disk)->exists(trim($directory.'/'.$candidate, '/'))) {
                 return $candidate;
             }
 
-            $candidate = "{$slug}-" . Str::random(5) . ".{$extension}";
+            $candidate = "{$slug}-".Str::random(5).".{$extension}";
         }
 
-        return Str::uuid() . '.' . $extension;
+        return Str::uuid().'.'.$extension;
     }
 
     /**
@@ -282,7 +282,7 @@ class MediaUploader
         $basename = pathinfo($path, PATHINFO_FILENAME);
 
         foreach (Storage::disk($this->disk)->files($directory === '.' ? '' : $directory) as $file) {
-            if (Str::startsWith(pathinfo($file, PATHINFO_FILENAME), $basename . '_')) {
+            if (Str::startsWith(pathinfo($file, PATHINFO_FILENAME), $basename.'_')) {
                 Storage::disk($this->disk)->delete($file);
                 $this->removeMirroredPublic($file);
             }
@@ -322,7 +322,7 @@ class MediaUploader
             }
 
             $extension = $file->getClientOriginalExtension() ?: 'jpg';
-            $filename = Str::uuid() . '.' . $extension;
+            $filename = Str::uuid().'.'.$extension;
             $path = $file->storeAs($directory, $filename, $this->disk);
             $this->mirrorToPublic($path);
 
@@ -388,12 +388,12 @@ class MediaUploader
             $sizedPath = $this->sizedPath($path, $size);
 
             if (Storage::disk($this->disk)->exists($sizedPath)) {
-                return asset('storage/' . $sizedPath);
+                return asset('storage/'.$sizedPath);
             }
         }
 
         if (Storage::disk($this->disk)->exists($path)) {
-            return asset('storage/' . $path);
+            return asset('storage/'.$path);
         }
 
         return asset($fallback);
@@ -401,7 +401,7 @@ class MediaUploader
 
     /**
      * @param  array<string, array{0:int,1:int}>  $sizes
-     * @return array<string, string>  size key => relative path
+     * @return array<string, string> size key => relative path
      */
     protected function generateSizes(string $originalPath, array $sizes): array
     {
@@ -437,7 +437,7 @@ class MediaUploader
         $directory = pathinfo($path, PATHINFO_DIRNAME);
         $basename = pathinfo($path, PATHINFO_FILENAME);
         $extension = pathinfo($path, PATHINFO_EXTENSION);
-        $prefix = $directory === '.' ? '' : $directory . '/';
+        $prefix = $directory === '.' ? '' : $directory.'/';
 
         return "{$prefix}{$basename}_{$size}.{$extension}";
     }

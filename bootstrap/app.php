@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\Admin\Authenticate;
+use App\Http\Middleware\Admin\RedirectIfAuthenticated;
+use App\Http\Middleware\TrackSiteVisit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,11 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'admin.auth'  => \App\Http\Middleware\Admin\Authenticate::class,
-            'admin.guest' => \App\Http\Middleware\Admin\RedirectIfAuthenticated::class,
-            'user.auth'   => \App\Http\Middleware\User\Authenticate::class,
-            'user.guest'  => \App\Http\Middleware\User\RedirectIfAuthenticated::class,
-            'track.visit' => \App\Http\Middleware\TrackSiteVisit::class,
+            'admin.auth' => Authenticate::class,
+            'admin.guest' => RedirectIfAuthenticated::class,
+            'user.auth' => App\Http\Middleware\User\Authenticate::class,
+            'user.guest' => App\Http\Middleware\User\RedirectIfAuthenticated::class,
+            'track.visit' => TrackSiteVisit::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -13,7 +13,9 @@ use Illuminate\Support\Str;
 class CareerController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'careers.';
 
     public function __construct()
@@ -29,7 +31,7 @@ class CareerController extends Controller
             ->paginate($this->pagerecords)
             ->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function createoredit(?string $uuid = null)
@@ -37,7 +39,7 @@ class CareerController extends Controller
         $career = $uuid ? Career::where('uuid', $uuid)->firstOrFail() : null;
         $departments = Department::active()->orderBy('name')->get();
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('career', 'departments'));
+        return view($this->prefix.$this->folder.'createoredit', compact('career', 'departments'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -47,7 +49,7 @@ class CareerController extends Controller
         $data = $request->validate([
             'department_id' => ['required', 'exists:departments,id'],
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'unique:careers,slug,' . ($career->id ?? 'NULL')],
+            'slug' => ['required', 'string', 'max:255', 'unique:careers,slug,'.($career->id ?? 'NULL')],
             'employment_type' => ['nullable', 'in:full-time,part-time,contract,internship,freelance'],
             'experience_level' => ['nullable', 'in:fresher,junior,mid,senior,lead'],
             'location' => ['nullable', 'string', 'max:255'],
@@ -84,7 +86,7 @@ class CareerController extends Controller
                 ActivityLog::log(config('constants.ACTIVITY_ACTIONS.update'), config('constants.MODULES.career'), [
                     'subject_type' => Career::class,
                     'subject_id' => $career->id,
-                    'description' => 'Updated career "' . $career->title . '".',
+                    'description' => 'Updated career "'.$career->title.'".',
                 ]);
                 $message = 'Career updated successfully.';
             } else {
@@ -93,14 +95,14 @@ class CareerController extends Controller
                 ActivityLog::log(config('constants.ACTIVITY_ACTIONS.create'), config('constants.MODULES.career'), [
                     'subject_type' => Career::class,
                     'subject_id' => $career->id,
-                    'description' => 'Created career "' . $career->title . '".',
+                    'description' => 'Created career "'.$career->title.'".',
                 ]);
                 $message = 'Career created successfully.';
             }
 
             return redirect()->route('admin.careers.index')->with('success', $message);
         } catch (\Throwable $e) {
-            Log::error('Career save failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Career save failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong while saving the career.');
         }
@@ -115,12 +117,12 @@ class CareerController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.career'), [
                 'subject_type' => Career::class,
                 'subject_id' => $career->id,
-                'description' => 'Deleted career "' . $career->title . '".',
+                'description' => 'Deleted career "'.$career->title.'".',
             ]);
 
             return back()->with('success', 'Career deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Career delete failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Career delete failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong while deleting the career.');
         }
@@ -138,13 +140,13 @@ class CareerController extends Controller
                 [
                     'subject_type' => Career::class,
                     'subject_id' => $career->id,
-                    'description' => ($career->is_active ? 'Activated' : 'Deactivated') . ' career "' . $career->title . '".',
+                    'description' => ($career->is_active ? 'Activated' : 'Deactivated').' career "'.$career->title.'".',
                 ]
             );
 
             return back()->with('success', 'Career status updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('Career toggle status failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Career toggle status failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong while updating status.');
         }

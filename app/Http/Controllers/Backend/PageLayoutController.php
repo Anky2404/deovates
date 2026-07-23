@@ -15,7 +15,9 @@ use Illuminate\Validation\Rule;
 class PageLayoutController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'pages.layouts.';
 
     public function __construct()
@@ -27,14 +29,14 @@ class PageLayoutController extends Controller
     {
         $rows = Form::latest('id')->paginate($this->pagerecords)->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function details(string $uuid)
     {
         $form = Form::with('fields')->where('uuid', $uuid)->firstOrFail();
 
-        return view($this->prefix . $this->folder . 'details', compact('form'));
+        return view($this->prefix.$this->folder.'details', compact('form'));
     }
 
     public function createoredit(?string $uuid = null)
@@ -47,12 +49,13 @@ class PageLayoutController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Form createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Form createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.pages.forms.index')->with('error', 'Unable to load the requested form.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('form'));
+        return view($this->prefix.$this->folder.'createoredit', compact('form'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -101,13 +104,13 @@ class PageLayoutController extends Controller
             $this->syncFields($form, $request->input('fields', []));
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
+                config('constants.ACTIVITY_ACTIONS.'.($isNew ? 'create' : 'update')),
                 config('constants.MODULES.form'),
                 [
                     'subject_type' => Form::class,
                     'subject_id' => $form->id,
                     'new_values' => $form->getChanges(),
-                    'description' => ($isNew ? 'Created' : 'Updated') . ' form: ' . $form->name,
+                    'description' => ($isNew ? 'Created' : 'Updated').' form: '.$form->name,
                 ]
             );
 
@@ -116,7 +119,7 @@ class PageLayoutController extends Controller
             return redirect()->route('admin.pages.forms.index')->with('success', 'Form saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Form saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Form saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
@@ -142,10 +145,10 @@ class PageLayoutController extends Controller
                 'type' => $row['type'] ?? 'text',
                 'field_id' => $row['field_id'] ?? null,
                 'class' => $row['class'] ?? null,
-                'required' => !empty($row['required']),
-                'disabled' => !empty($row['disabled']),
-                'use_ck_editor' => !empty($row['use_ck_editor']),
-                'add_country_code' => !empty($row['add_country_code']),
+                'required' => ! empty($row['required']),
+                'disabled' => ! empty($row['disabled']),
+                'use_ck_editor' => ! empty($row['use_ck_editor']),
+                'add_country_code' => ! empty($row['add_country_code']),
                 'placeholder' => $row['placeholder'] ?? null,
                 'field_width' => $row['field_width'] ?? '12',
                 'options' => $this->parseCommaList($row['options'] ?? null),
@@ -153,7 +156,7 @@ class PageLayoutController extends Controller
                 'is_active' => true,
             ];
 
-            $field = !empty($row['id']) ? FormField::where('form_id', $form->id)->find($row['id']) : null;
+            $field = ! empty($row['id']) ? FormField::where('form_id', $form->id)->find($row['id']) : null;
 
             if ($field) {
                 $field->update($fieldData);
@@ -189,7 +192,7 @@ class PageLayoutController extends Controller
                 [
                     'subject_type' => Form::class,
                     'subject_id' => $form->id,
-                    'description' => ($form->is_active ? 'Activated' : 'Deactivated') . ' form ' . $form->name,
+                    'description' => ($form->is_active ? 'Activated' : 'Deactivated').' form '.$form->name,
                 ]
             );
 
@@ -199,7 +202,7 @@ class PageLayoutController extends Controller
 
             return back()->with('success', 'Form status updated.');
         } catch (\Throwable $e) {
-            Log::error('Form togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Form togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -218,12 +221,13 @@ class PageLayoutController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.form'), [
                 'subject_type' => Form::class,
                 'subject_id' => $form->id,
-                'description' => 'Deleted form ' . $form->name,
+                'description' => 'Deleted form '.$form->name,
             ]);
 
             return back()->with('success', 'Form deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Form destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Form destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

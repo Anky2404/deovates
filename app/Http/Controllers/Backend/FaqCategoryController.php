@@ -14,7 +14,9 @@ use Illuminate\Validation\Rule;
 class FaqCategoryController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'faqs.categories.';
 
     public function __construct()
@@ -27,7 +29,7 @@ class FaqCategoryController extends Controller
         $rows = FaqCategory::withCount('faqs')->latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = FaqCategory::orderBy('display_order')->orderBy('id')->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Drag-drop reorder
@@ -51,7 +53,8 @@ class FaqCategoryController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('FaqCategory reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('FaqCategory reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -60,7 +63,7 @@ class FaqCategoryController extends Controller
     {
         $category = $uuid ? FaqCategory::with('faqs')->where('uuid', $uuid)->firstOrFail() : null;
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('category'));
+        return view($this->prefix.$this->folder.'createoredit', compact('category'));
     }
 
     // Missing FAQ rows are deleted
@@ -83,7 +86,7 @@ class FaqCategoryController extends Controller
         try {
             DB::beginTransaction();
 
-            $category = $category ?? new FaqCategory();
+            $category = $category ?? new FaqCategory;
             $isNew = ! $category->exists;
 
             $category->fill([
@@ -166,13 +169,13 @@ class FaqCategoryController extends Controller
             }
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
+                config('constants.ACTIVITY_ACTIONS.'.($isNew ? 'create' : 'update')),
                 config('constants.MODULES.faqcategory'),
                 [
                     'subject_type' => FaqCategory::class,
                     'subject_id' => $category->id,
                     'new_values' => $category->getChanges(),
-                    'description' => ($isNew ? 'Created' : 'Updated') . " FAQ category \"{$category->title}\".",
+                    'description' => ($isNew ? 'Created' : 'Updated')." FAQ category \"{$category->title}\".",
                 ]
             );
 
@@ -181,7 +184,7 @@ class FaqCategoryController extends Controller
             return redirect()->route('admin.faqs.categories.index')->with('success', 'FAQ category saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('FaqCategory saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('FaqCategory saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
@@ -210,7 +213,7 @@ class FaqCategoryController extends Controller
             return back()->with('success', 'FAQ category deleted successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('FaqCategory destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('FaqCategory destroy failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }
@@ -226,12 +229,12 @@ class FaqCategoryController extends Controller
             $category->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($category->is_active ? 'activate' : 'deactivate')),
+                config('constants.ACTIVITY_ACTIONS.'.($category->is_active ? 'activate' : 'deactivate')),
                 config('constants.MODULES.faqcategory'),
                 [
                     'subject_type' => FaqCategory::class,
                     'subject_id' => $category->id,
-                    'description' => 'FAQ category status toggled to ' . ($category->is_active ? 'active' : 'inactive') . '.',
+                    'description' => 'FAQ category status toggled to '.($category->is_active ? 'active' : 'inactive').'.',
                 ]
             );
 
@@ -244,7 +247,7 @@ class FaqCategoryController extends Controller
             return back()->with('success', 'FAQ category status updated.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('FaqCategory togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('FaqCategory togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

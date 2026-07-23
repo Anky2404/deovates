@@ -17,6 +17,10 @@
         }
     @endphp
 
+    @push('preload')
+        <link rel="preload" as="image" href="{{ !empty($heroContent['hero_image']) ? asset('storage/' . $heroContent['hero_image']) : \App\Helper::heroBanner('contact.avif', 'assets/front/img/hero/h2_hero.avif') }}" fetchpriority="high">
+    @endpush
+
     <!-- Start Hero Section -->
     <!-- Hero -->
     <div class="slider-area">

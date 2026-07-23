@@ -22,7 +22,9 @@ class BlogController extends Controller
     use HandlesImageUploads;
 
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'blogs.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -38,7 +40,7 @@ class BlogController extends Controller
             ->withQueryString();
         $reorderRows = Blog::orderBy('display_order')->orderBy('id')->take(300)->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // saves drag-drop order
@@ -62,7 +64,8 @@ class BlogController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Blog reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Blog reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -75,7 +78,7 @@ class BlogController extends Controller
         $authors = Author::active()->orderBy('name')->get();
         $tags = Tag::active()->orderBy('name')->get();
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('blog', 'categories', 'authors', 'tags'));
+        return view($this->prefix.$this->folder.'createoredit', compact('blog', 'categories', 'authors', 'tags'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -98,9 +101,9 @@ class BlogController extends Controller
             'views' => ['nullable', 'integer', 'min:0'],
             'reading_time' => ['nullable', 'integer', 'min:0'],
             'comment_count' => ['nullable', 'integer', 'min:0'],
-            'featured_image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:2048'],
+            'featured_image' => ['nullable', 'mimes:'.config('constants.IMAGE_MIMES'), 'max:2048'],
             'featured_image_alt' => ['nullable', 'string', 'max:255'],
-            'og_image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:2048'],
+            'og_image' => ['nullable', 'mimes:'.config('constants.IMAGE_MIMES'), 'max:2048'],
             'og_image_alt' => ['nullable', 'string', 'max:255'],
             'gallery_items' => ['nullable', 'array'],
             'gallery_items.*.id' => ['nullable', 'string'],
@@ -112,7 +115,7 @@ class BlogController extends Controller
         try {
             DB::beginTransaction();
 
-            $blog = $blog ?? new Blog();
+            $blog = $blog ?? new Blog;
             $isNew = ! $blog->exists;
 
             $data = [
@@ -155,13 +158,13 @@ class BlogController extends Controller
             $blog->tags()->sync($this->parseTagIds($request->input('tags', [])));
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
+                config('constants.ACTIVITY_ACTIONS.'.($isNew ? 'create' : 'update')),
                 config('constants.MODULES.blog'),
                 [
                     'subject_type' => Blog::class,
                     'subject_id' => $blog->id,
                     'new_values' => $blog->getChanges(),
-                    'description' => ($isNew ? 'Created' : 'Updated') . " blog \"{$blog->title}\".",
+                    'description' => ($isNew ? 'Created' : 'Updated')." blog \"{$blog->title}\".",
                 ]
             );
 
@@ -170,7 +173,7 @@ class BlogController extends Controller
             return redirect()->route('admin.blogs.index')->with('success', 'Blog saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Blog saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Blog saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
@@ -199,7 +202,7 @@ class BlogController extends Controller
             return back()->with('success', 'Blog deleted successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Blog destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Blog destroy failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }
@@ -215,12 +218,12 @@ class BlogController extends Controller
             $blog->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($blog->is_active ? 'activate' : 'deactivate')),
+                config('constants.ACTIVITY_ACTIONS.'.($blog->is_active ? 'activate' : 'deactivate')),
                 config('constants.MODULES.blog'),
                 [
                     'subject_type' => Blog::class,
                     'subject_id' => $blog->id,
-                    'description' => 'Blog status toggled to ' . ($blog->is_active ? 'active' : 'inactive') . '.',
+                    'description' => 'Blog status toggled to '.($blog->is_active ? 'active' : 'inactive').'.',
                 ]
             );
 
@@ -233,7 +236,7 @@ class BlogController extends Controller
             return back()->with('success', 'Blog status updated.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Blog togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Blog togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -253,12 +256,12 @@ class BlogController extends Controller
             $blog->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($blog->is_featured ? 'feature' : 'unfeature')),
+                config('constants.ACTIVITY_ACTIONS.'.($blog->is_featured ? 'feature' : 'unfeature')),
                 config('constants.MODULES.blog'),
                 [
                     'subject_type' => Blog::class,
                     'subject_id' => $blog->id,
-                    'description' => 'Blog featured status toggled to ' . ($blog->is_featured ? 'featured' : 'unfeatured') . '.',
+                    'description' => 'Blog featured status toggled to '.($blog->is_featured ? 'featured' : 'unfeatured').'.',
                 ]
             );
 
@@ -271,7 +274,7 @@ class BlogController extends Controller
             return back()->with('success', 'Blog featured status updated.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Blog togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Blog togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -294,7 +297,7 @@ class BlogController extends Controller
             $alt = $row['alt'] ?? null;
             $title = $row['title'] ?? null;
 
-            if (!empty($row['id']) && $existing->has($row['id'])) {
+            if (! empty($row['id']) && $existing->has($row['id'])) {
                 $media = $existing->get($row['id']);
                 $media->update([
                     'alt_text' => $alt,
@@ -307,7 +310,7 @@ class BlogController extends Controller
                 continue;
             }
 
-            if (!empty($row['temp'])) {
+            if (! empty($row['temp'])) {
                 $media = $this->mediaUploader->promoteTempToMedia($row['temp'], $blog, 'gallery', 'blogs', $alt, $title);
 
                 if ($media) {
@@ -341,7 +344,7 @@ class BlogController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Blog galleryreorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Blog galleryreorder failed: '.$e->getMessage(), ['exception' => $e]);
 
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }

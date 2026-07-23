@@ -46,7 +46,7 @@ return new class extends Migration
         foreach ($this->tables as $table) {
             if (Schema::hasTable($table) && Schema::hasColumn($table, 'display_order')) {
                 Schema::table($table, function (Blueprint $blueprint) {
-                    $blueprint->dropIndex([$blueprint->getTable() . '_display_order_index']);
+                    $blueprint->dropIndex([$blueprint->getTable().'_display_order_index']);
                     $blueprint->dropColumn('display_order');
                 });
             }

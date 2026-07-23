@@ -16,7 +16,9 @@ use Illuminate\Validation\Rule;
 class PageSectionController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'pages.sections.';
 
     public function __construct()
@@ -31,7 +33,7 @@ class PageSectionController extends Controller
             ->paginate($this->pagerecords)
             ->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function createoredit(Request $request, $uuid = null)
@@ -44,7 +46,8 @@ class PageSectionController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('PageSection createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('PageSection createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.pages.sections.index')->with('error', 'Unable to load the requested page section.');
             }
         }
@@ -52,7 +55,7 @@ class PageSectionController extends Controller
         $pages = Page::active()->orderBy('title')->pluck('title', 'id');
         $forms = Form::active()->orderBy('name')->pluck('name', 'id');
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('row', 'pages', 'forms'));
+        return view($this->prefix.$this->folder.'createoredit', compact('row', 'pages', 'forms'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -79,11 +82,11 @@ class PageSectionController extends Controller
             if ($row) {
                 $row->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated page section link #' . $row->id;
+                $description = 'Updated page section link #'.$row->id;
             } else {
                 $row = PageSection::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created page section link #' . $row->id;
+                $description = 'Created page section link #'.$row->id;
             }
 
             ActivityLog::log($action, config('constants.MODULES.pagesection'), [
@@ -98,7 +101,8 @@ class PageSectionController extends Controller
             return redirect()->route('admin.pages.sections.index')->with('success', 'Page section saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('PageSection saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('PageSection saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -115,7 +119,7 @@ class PageSectionController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.pagesection'), [
                 'subject_type' => PageSection::class,
                 'subject_id' => $row->id,
-                'description' => 'Deleted page section link #' . $row->id,
+                'description' => 'Deleted page section link #'.$row->id,
             ]);
 
             DB::commit();
@@ -123,7 +127,8 @@ class PageSectionController extends Controller
             return back()->with('success', 'Page section deleted successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('PageSection destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('PageSection destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -141,7 +146,7 @@ class PageSectionController extends Controller
                 [
                     'subject_type' => PageSection::class,
                     'subject_id' => $row->id,
-                    'description' => ($row->is_active ? 'Activated' : 'Deactivated') . ' page section link #' . $row->id,
+                    'description' => ($row->is_active ? 'Activated' : 'Deactivated').' page section link #'.$row->id,
                 ]
             );
 
@@ -151,7 +156,7 @@ class PageSectionController extends Controller
 
             return back()->with('success', 'Page section status updated.');
         } catch (\Throwable $e) {
-            Log::error('PageSection togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('PageSection togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

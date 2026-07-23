@@ -19,7 +19,9 @@ class AuthorController extends Controller
     use HandlesImageUploads;
 
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'authors.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -31,7 +33,8 @@ class AuthorController extends Controller
     {
         $rows = Author::latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Author::orderBy('display_order')->orderBy('id')->get();
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // saves drag-drop order
@@ -55,7 +58,8 @@ class AuthorController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Author reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Author reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -70,12 +74,13 @@ class AuthorController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Author createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Author createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.authors.index')->with('error', 'Unable to load the requested author.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('author'));
+        return view($this->prefix.$this->folder.'createoredit', compact('author'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -97,8 +102,8 @@ class AuthorController extends Controller
             'total_blogs' => 'nullable|integer|min:0',
             'is_featured' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
-            'profile_image' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
-            'cover_image' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
+            'profile_image' => 'nullable|mimes:'.config('constants.IMAGE_MIMES').'|max:4096',
+            'cover_image' => 'nullable|mimes:'.config('constants.IMAGE_MIMES').'|max:4096',
         ]);
 
         // guards against bad JSON
@@ -112,7 +117,7 @@ class AuthorController extends Controller
         try {
             $newUuid = null;
 
-            if (!$author) {
+            if (! $author) {
                 $newUuid = (string) Str::uuid();
                 $data['uuid'] = $newUuid;
             }
@@ -125,11 +130,11 @@ class AuthorController extends Controller
             if ($author) {
                 $author->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated author ' . $author->name;
+                $description = 'Updated author '.$author->name;
             } else {
                 $author = Author::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created author ' . $author->name;
+                $description = 'Created author '.$author->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.author'), [
@@ -141,7 +146,8 @@ class AuthorController extends Controller
 
             return redirect()->route('admin.authors.index')->with('success', 'Author saved successfully.');
         } catch (\Throwable $e) {
-            Log::error('Author saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Author saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -155,12 +161,13 @@ class AuthorController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.author'), [
                 'subject_type' => Author::class,
                 'subject_id' => $author->id,
-                'description' => 'Deleted author ' . $author->name,
+                'description' => 'Deleted author '.$author->name,
             ]);
 
             return back()->with('success', 'Author deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Author destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Author destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -178,7 +185,7 @@ class AuthorController extends Controller
                 [
                     'subject_type' => Author::class,
                     'subject_id' => $author->id,
-                    'description' => ($author->is_active ? 'Activated' : 'Deactivated') . ' author ' . $author->name,
+                    'description' => ($author->is_active ? 'Activated' : 'Deactivated').' author '.$author->name,
                 ]
             );
 
@@ -188,7 +195,7 @@ class AuthorController extends Controller
 
             return back()->with('success', 'Author status updated.');
         } catch (\Throwable $e) {
-            Log::error('Author togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Author togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -211,7 +218,7 @@ class AuthorController extends Controller
                 [
                     'subject_type' => Author::class,
                     'subject_id' => $author->id,
-                    'description' => ($author->is_featured ? 'Marked featured' : 'Unmarked featured') . ' author ' . $author->name,
+                    'description' => ($author->is_featured ? 'Marked featured' : 'Unmarked featured').' author '.$author->name,
                 ]
             );
 
@@ -221,7 +228,7 @@ class AuthorController extends Controller
 
             return back()->with('success', 'Author featured status updated.');
         } catch (\Throwable $e) {
-            Log::error('Author togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Author togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

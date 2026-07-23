@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\DB;
 class JobController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'settings.jobs.';
 
     public function __construct()
@@ -20,6 +22,7 @@ class JobController extends Controller
     public function index(Request $request)
     {
         $rows = DB::table('jobs')->orderByDesc('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 }

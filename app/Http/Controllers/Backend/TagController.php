@@ -14,7 +14,9 @@ use Illuminate\Validation\Rule;
 class TagController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'tags.';
 
     public function __construct()
@@ -26,7 +28,8 @@ class TagController extends Controller
     {
         $rows = Tag::latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Tag::orderBy('display_order')->orderBy('id')->get();
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Persist drag-drop reorder
@@ -50,7 +53,8 @@ class TagController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Tag reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Tag reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -65,12 +69,13 @@ class TagController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Tag createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Tag createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.tags.index')->with('error', 'Unable to load the requested tag.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('tag'));
+        return view($this->prefix.$this->folder.'createoredit', compact('tag'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -91,11 +96,11 @@ class TagController extends Controller
             if ($tag) {
                 $tag->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated tag ' . $tag->name;
+                $description = 'Updated tag '.$tag->name;
             } else {
                 $tag = Tag::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created tag ' . $tag->name;
+                $description = 'Created tag '.$tag->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.tag'), [
@@ -107,7 +112,8 @@ class TagController extends Controller
 
             return redirect()->route('admin.tags.index')->with('success', 'Tag saved successfully.');
         } catch (\Throwable $e) {
-            Log::error('Tag saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Tag saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -121,12 +127,13 @@ class TagController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.tag'), [
                 'subject_type' => Tag::class,
                 'subject_id' => $tag->id,
-                'description' => 'Deleted tag ' . $tag->name,
+                'description' => 'Deleted tag '.$tag->name,
             ]);
 
             return back()->with('success', 'Tag deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Tag destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Tag destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -144,7 +151,7 @@ class TagController extends Controller
                 [
                     'subject_type' => Tag::class,
                     'subject_id' => $tag->id,
-                    'description' => ($tag->is_active ? 'Activated' : 'Deactivated') . ' tag ' . $tag->name,
+                    'description' => ($tag->is_active ? 'Activated' : 'Deactivated').' tag '.$tag->name,
                 ]
             );
 
@@ -154,7 +161,7 @@ class TagController extends Controller
 
             return back()->with('success', 'Tag status updated.');
         } catch (\Throwable $e) {
-            Log::error('Tag togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Tag togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

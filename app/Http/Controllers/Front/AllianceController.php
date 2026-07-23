@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
 use App\Helper;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\Concerns\LoadsPageSections;
 use App\Models\Partner;
 use Illuminate\Support\Facades\Cache;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
 use App\Helper;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\Concerns\LoadsPageSections;
 use App\Models\FaqCategory;
 use App\Models\Testimonial;
@@ -39,9 +39,9 @@ class FaqController extends Controller
         } catch (\Throwable $e) {
             Log::error('FAQ Page Error', [
                 'message' => $e->getMessage(),
-                'file'    => $e->getFile(),
-                'line'    => $e->getLine(),
-                'trace'   => $e->getTraceAsString(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
             ]);
 
             if (config('app.debug')) {

@@ -9,77 +9,77 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-
 class ActivityLogController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'logs.activities.';
 
-
-    public function  __construct()
+    public function __construct()
     {
         $this->pagerecords = config('constants.ADMIN_PAGE_RECORDS');
     }
 
     public function index(Request $request)
-{
-    $query = ActivityLog::with('user');
+    {
+        $query = ActivityLog::with('user');
 
-    if ($request->filled('user_id')) {
-        $query->where('user_id', $request->user_id);
-    }
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
 
-    if ($request->filled('module')) {
-        $query->where('module', $request->module);
-    }
+        if ($request->filled('module')) {
+            $query->where('module', $request->module);
+        }
 
-    if ($request->filled('action')) {
-        $query->where('action', $request->action);
-    }
+        if ($request->filled('action')) {
+            $query->where('action', $request->action);
+        }
 
-    if ($request->filled('subject_id')) {
-        $query->where('subject_id', $request->subject_id);
-    }
+        if ($request->filled('subject_id')) {
+            $query->where('subject_id', $request->subject_id);
+        }
 
-    $rows = $query
-        ->latest('id')
-        ->paginate($this->pagerecords)
-        ->withQueryString();
+        $rows = $query
+            ->latest('id')
+            ->paginate($this->pagerecords)
+            ->withQueryString();
 
-    $users = User::active()
-        ->orderBy('name')
-        ->pluck('name', 'id');
+        $users = User::active()
+            ->orderBy('name')
+            ->pluck('name', 'id');
 
-    $modules = array_values(config('constants.MODULES', []));
+        $modules = array_values(config('constants.MODULES', []));
 
-    $actions = array_values(config('constants.ACTIVITY_ACTIONS', []));
+        $actions = array_values(config('constants.ACTIVITY_ACTIONS', []));
 
-    $subjectIds = ActivityLog::when($request->module, function ($q) use ($request) {
+        $subjectIds = ActivityLog::when($request->module, function ($q) use ($request) {
             $q->where('module', $request->module);
         })
-        ->whereNotNull('subject_id')
-        ->distinct()
-        ->orderBy('subject_id')
-        ->pluck('subject_id');
+            ->whereNotNull('subject_id')
+            ->distinct()
+            ->orderBy('subject_id')
+            ->pluck('subject_id');
 
-    return view(
-        $this->prefix . $this->folder . 'index',
-        compact(
-            'rows',
-            'users',
-            'modules',
-            'actions',
-            'subjectIds'
-        )
-    );
-}
+        return view(
+            $this->prefix.$this->folder.'index',
+            compact(
+                'rows',
+                'users',
+                'modules',
+                'actions',
+                'subjectIds'
+            )
+        );
+    }
 
     public function view(Request $request, $uuid)
     {
         $row = ActivityLog::with('user')->where('uuid', $uuid)->firstOrFail();
 
-        return view($this->prefix . $this->folder . 'view', compact('row'));
+        return view($this->prefix.$this->folder.'view', compact('row'));
     }
 
     // Manual delete only, read-only log
@@ -94,7 +94,7 @@ class ActivityLogController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.activitylog'), [
                 'subject_type' => ActivityLog::class,
                 'subject_id' => $row->id,
-                'description' => 'Deleted activity log #' . $row->id . ' (' . $row->action . ').',
+                'description' => 'Deleted activity log #'.$row->id.' ('.$row->action.').',
             ]);
 
             DB::commit();
@@ -102,7 +102,8 @@ class ActivityLogController extends Controller
             return back()->with('success', 'Activity log deleted successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('ActivityLog destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('ActivityLog destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

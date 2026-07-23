@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Log;
 class CacheController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'settings.cache.';
 
     public function __construct()
@@ -23,7 +25,7 @@ class CacheController extends Controller
         $currentDriver = config('cache.default');
         $availableDrivers = array_keys(config('cache.stores', []));
 
-        return view($this->prefix . $this->folder . 'index', compact('currentDriver', 'availableDrivers'));
+        return view($this->prefix.$this->folder.'index', compact('currentDriver', 'availableDrivers'));
     }
 
     public function clear(Request $request)
@@ -33,7 +35,8 @@ class CacheController extends Controller
 
             return back()->with('success', 'Application cache cleared successfully.');
         } catch (\Throwable $e) {
-            Log::error('Cache clear failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Cache clear failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

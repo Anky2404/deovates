@@ -14,7 +14,9 @@ use Illuminate\Validation\Rule;
 class SMTPSettingController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'settings.smtp.';
 
     public function __construct()
@@ -25,7 +27,8 @@ class SMTPSettingController extends Controller
     public function index(Request $request)
     {
         $rows = SMTPSetting::latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function createoredit(Request $request, $uuid = null)
@@ -38,12 +41,13 @@ class SMTPSettingController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('SMTPSetting createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('SMTPSetting createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.settings.smtp.index')->with('error', 'Unable to load the requested SMTP setting.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('smtpSetting'));
+        return view($this->prefix.$this->folder.'createoredit', compact('smtpSetting'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -76,12 +80,12 @@ class SMTPSettingController extends Controller
             if ($smtpSetting) {
                 $smtpSetting->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated SMTP setting ' . $smtpSetting->name;
+                $description = 'Updated SMTP setting '.$smtpSetting->name;
             } else {
                 $data['created_by'] = Auth::guard('admin')->id();
                 $smtpSetting = SMTPSetting::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created SMTP setting ' . $smtpSetting->name;
+                $description = 'Created SMTP setting '.$smtpSetting->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.smtpsetting'), [
@@ -92,7 +96,8 @@ class SMTPSettingController extends Controller
 
             return redirect()->route('admin.settings.smtp.index')->with('success', 'SMTP setting saved successfully.');
         } catch (\Throwable $e) {
-            Log::error('SMTPSetting saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('SMTPSetting saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -106,12 +111,13 @@ class SMTPSettingController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.smtpsetting'), [
                 'subject_type' => SMTPSetting::class,
                 'subject_id' => $smtpSetting->id,
-                'description' => 'Deleted SMTP setting ' . $smtpSetting->name,
+                'description' => 'Deleted SMTP setting '.$smtpSetting->name,
             ]);
 
             return back()->with('success', 'SMTP setting deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('SMTPSetting destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('SMTPSetting destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -129,7 +135,7 @@ class SMTPSettingController extends Controller
                 [
                     'subject_type' => SMTPSetting::class,
                     'subject_id' => $smtpSetting->id,
-                    'description' => ($smtpSetting->is_active ? 'Activated' : 'Deactivated') . ' SMTP setting ' . $smtpSetting->name,
+                    'description' => ($smtpSetting->is_active ? 'Activated' : 'Deactivated').' SMTP setting '.$smtpSetting->name,
                 ]
             );
 
@@ -139,7 +145,7 @@ class SMTPSettingController extends Controller
 
             return back()->with('success', 'SMTP setting status updated.');
         } catch (\Throwable $e) {
-            Log::error('SMTPSetting togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('SMTPSetting togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

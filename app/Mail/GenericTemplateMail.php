@@ -18,8 +18,7 @@ class GenericTemplateMail extends Mailable
     public function __construct(
         public string $mailSubject,
         public string $renderedBody,
-    ) {
-    }
+    ) {}
 
     public function build(): static
     {

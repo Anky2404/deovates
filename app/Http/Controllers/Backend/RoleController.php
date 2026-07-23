@@ -13,7 +13,9 @@ use Illuminate\Validation\Rule;
 class RoleController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'roles.';
 
     public function __construct()
@@ -24,7 +26,8 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         $rows = Role::latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function createoredit(Request $request, $uuid = null)
@@ -37,12 +40,13 @@ class RoleController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Role createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Role createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.roles.index')->with('error', 'Unable to load the requested role.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('role'));
+        return view($this->prefix.$this->folder.'createoredit', compact('role'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -65,11 +69,11 @@ class RoleController extends Controller
             if ($role) {
                 $role->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated role ' . $role->name;
+                $description = 'Updated role '.$role->name;
             } else {
                 $role = Role::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created role ' . $role->name;
+                $description = 'Created role '.$role->name;
             }
 
             $newValues = collect($role->getChanges())->except('updated_at')->toArray();
@@ -85,7 +89,8 @@ class RoleController extends Controller
 
             return redirect()->route('admin.roles.index')->with('success', 'Role saved successfully.');
         } catch (\Throwable $e) {
-            Log::error('Role saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Role saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -105,12 +110,13 @@ class RoleController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.role'), [
                 'subject_type' => Role::class,
                 'subject_id' => $role->id,
-                'description' => 'Deleted role ' . $role->name,
+                'description' => 'Deleted role '.$role->name,
             ]);
 
             return back()->with('success', 'Role deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Role destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Role destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -128,7 +134,7 @@ class RoleController extends Controller
                 [
                     'subject_type' => Role::class,
                     'subject_id' => $role->id,
-                    'description' => ($role->is_active ? 'Activated' : 'Deactivated') . ' role ' . $role->name,
+                    'description' => ($role->is_active ? 'Activated' : 'Deactivated').' role '.$role->name,
                 ]
             );
 
@@ -138,7 +144,7 @@ class RoleController extends Controller
 
             return back()->with('success', 'Role status updated.');
         } catch (\Throwable $e) {
-            Log::error('Role togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Role togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

@@ -3,6 +3,11 @@
 @section('title', config('constants.PAGE_SEO.home.title'))
 @section('meta_description', config('constants.PAGE_SEO.home.meta_description'))
 @section('meta_keywords', config('constants.PAGE_SEO.home.meta_keywords'))
+
+@push('preload')
+    <link rel="preload" as="image" href="{{ asset('assets/front/img/hero/h1_hero.avif') }}" fetchpriority="high">
+@endpush
+
 @section('content')
     <!-- Start Hero Slider Section -->
     <section>
@@ -43,6 +48,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="hero-audit-buttons">
+                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#speedTrackerModal">
+                            <i class="fas fa-tachometer-alt me-1"></i> Track Speed
+                        </button>
+                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#seoTrackerModal">
+                            <i class="fas fa-chart-line me-1"></i> Track SEO
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Slider 2 -->
@@ -78,6 +91,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="hero-audit-buttons">
+                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#speedTrackerModal">
+                            <i class="fas fa-tachometer-alt me-1"></i> Track Speed
+                        </button>
+                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#seoTrackerModal">
+                            <i class="fas fa-chart-line me-1"></i> Track SEO
+                        </button>
+                    </div>
                 </div>
                 <!-- Slider 2 -->
                 <div class="single-slider hero-overly slider-height d-flex align-items-center"
@@ -112,11 +133,68 @@
                             </div>
                         </div>
                     </div>
+                    <div class="hero-audit-buttons">
+                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#speedTrackerModal">
+                            <i class="fas fa-tachometer-alt me-1"></i> Track Speed
+                        </button>
+                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#seoTrackerModal">
+                            <i class="fas fa-chart-line me-1"></i> Track SEO
+                        </button>
+                    </div>
                 </div>
 
             </div>
         </div>
     </section>
+
+    @include('front.common.audit-tracker-modal', ['type' => 'speed', 'modalId' => 'speedTrackerModal'])
+    @include('front.common.audit-tracker-modal', ['type' => 'seo', 'modalId' => 'seoTrackerModal'])
+
+    @once
+    <style>
+        .single-slider { position: relative; }
+
+        .hero-audit-buttons {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .hero-audit-btn {
+            pointer-events: auto;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #073965;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .hero-audit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+            color: #0B3C8A;
+        }
+
+        @media (max-width: 575px) {
+            .hero-audit-buttons {
+                bottom: 16px;
+                padding: 0 14px;
+            }
+            .hero-audit-btn {
+                padding: 9px 14px;
+                font-size: 12px;
+            }
+        }
+    </style>
+    @endonce
 
 
     @php

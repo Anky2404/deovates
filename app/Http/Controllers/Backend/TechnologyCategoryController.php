@@ -18,7 +18,9 @@ class TechnologyCategoryController extends Controller
     use HandlesImageUploads;
 
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'technologies.categories.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -34,7 +36,7 @@ class TechnologyCategoryController extends Controller
 
         $reorderRows = TechnologyCategory::orderBy('display_order')->orderBy('id')->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Persist drag-drop reorder
@@ -58,7 +60,8 @@ class TechnologyCategoryController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('TechnologyCategory reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('TechnologyCategory reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -71,7 +74,7 @@ class TechnologyCategoryController extends Controller
             $category = TechnologyCategory::where('uuid', $uuid)->firstOrFail();
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('category'));
+        return view($this->prefix.$this->folder.'createoredit', compact('category'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -82,7 +85,7 @@ class TechnologyCategoryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('technology_categories', 'slug')->ignore($category?->id)],
             'icon' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:4096'],
+            'image' => ['nullable', 'mimes:'.config('constants.IMAGE_MIMES'), 'max:4096'],
             'description' => ['nullable', 'string'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
@@ -101,7 +104,7 @@ class TechnologyCategoryController extends Controller
 
             $newUuid = null;
 
-            if (!$category) {
+            if (! $category) {
                 $newUuid = (string) Str::uuid();
                 $data['uuid'] = $newUuid;
             }
@@ -120,13 +123,13 @@ class TechnologyCategoryController extends Controller
             }
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
+                config('constants.ACTIVITY_ACTIONS.'.($isNew ? 'create' : 'update')),
                 config('constants.MODULES.technologycategory'),
                 [
                     'subject_type' => TechnologyCategory::class,
                     'subject_id' => $category->id,
                     'new_values' => $category->getChanges(),
-                    'description' => ($isNew ? 'Created' : 'Updated') . ' technology category: ' . $category->name,
+                    'description' => ($isNew ? 'Created' : 'Updated').' technology category: '.$category->name,
                 ]
             );
 
@@ -135,7 +138,7 @@ class TechnologyCategoryController extends Controller
             return redirect()->route('admin.technologies.categories.index')->with('success', 'Technology category saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('TechnologyCategory saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('TechnologyCategory saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
@@ -150,13 +153,13 @@ class TechnologyCategoryController extends Controller
             $category->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($category->is_active ? 'activate' : 'deactivate')),
+                config('constants.ACTIVITY_ACTIONS.'.($category->is_active ? 'activate' : 'deactivate')),
                 config('constants.MODULES.technologycategory'),
                 [
                     'subject_type' => TechnologyCategory::class,
                     'subject_id' => $category->id,
                     'new_values' => ['is_active' => $category->is_active],
-                    'description' => 'Toggled status of technology category: ' . $category->name,
+                    'description' => 'Toggled status of technology category: '.$category->name,
                 ]
             );
 
@@ -166,7 +169,7 @@ class TechnologyCategoryController extends Controller
 
             return back()->with('success', 'Status updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('TechnologyCategory togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('TechnologyCategory togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -185,13 +188,13 @@ class TechnologyCategoryController extends Controller
             $category->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($category->is_featured ? 'feature' : 'unfeature')),
+                config('constants.ACTIVITY_ACTIONS.'.($category->is_featured ? 'feature' : 'unfeature')),
                 config('constants.MODULES.technologycategory'),
                 [
                     'subject_type' => TechnologyCategory::class,
                     'subject_id' => $category->id,
                     'new_values' => ['is_featured' => $category->is_featured],
-                    'description' => 'Toggled featured status of technology category: ' . $category->name,
+                    'description' => 'Toggled featured status of technology category: '.$category->name,
                 ]
             );
 
@@ -201,7 +204,7 @@ class TechnologyCategoryController extends Controller
 
             return back()->with('success', 'Status updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('TechnologyCategory togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('TechnologyCategory togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -224,13 +227,13 @@ class TechnologyCategoryController extends Controller
                 [
                     'subject_type' => TechnologyCategory::class,
                     'subject_id' => $category->id,
-                    'description' => 'Deleted technology category: ' . $category->name,
+                    'description' => 'Deleted technology category: '.$category->name,
                 ]
             );
 
             return back()->with('success', 'Technology category deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('TechnologyCategory destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('TechnologyCategory destroy failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }

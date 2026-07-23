@@ -20,7 +20,9 @@ class PortfolioController extends Controller
     use HandlesImageUploads;
 
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'portfolios.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -36,7 +38,7 @@ class PortfolioController extends Controller
             ->withQueryString();
         $reorderRows = Portfolio::orderBy('display_order')->orderBy('id')->take(300)->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Persist drag-drop reorder
@@ -60,7 +62,8 @@ class PortfolioController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Portfolio reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Portfolio reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -75,7 +78,7 @@ class PortfolioController extends Controller
 
         $categories = PortfolioCategory::orderBy('name')->get();
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('portfolio', 'categories'));
+        return view($this->prefix.$this->folder.'createoredit', compact('portfolio', 'categories'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -90,9 +93,9 @@ class PortfolioController extends Controller
             'project_url' => ['nullable', 'url', 'max:255'],
             'project_duration' => ['nullable', 'string', 'max:255'],
             'project_budget' => ['nullable', 'string', 'max:255'],
-            'featured_image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:4096'],
+            'featured_image' => ['nullable', 'mimes:'.config('constants.IMAGE_MIMES'), 'max:4096'],
             'featured_image_alt' => ['nullable', 'string', 'max:255'],
-            'banner_image' => ['nullable', 'mimes:' . config('constants.IMAGE_MIMES'), 'max:4096'],
+            'banner_image' => ['nullable', 'mimes:'.config('constants.IMAGE_MIMES'), 'max:4096'],
             'banner_image_alt' => ['nullable', 'string', 'max:255'],
             'gallery_items' => ['nullable', 'array'],
             'gallery_items.*.id' => ['nullable', 'string'],
@@ -148,13 +151,13 @@ class PortfolioController extends Controller
             $this->syncGalleryMedia($request, $portfolio);
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($isNew ? 'create' : 'update')),
+                config('constants.ACTIVITY_ACTIONS.'.($isNew ? 'create' : 'update')),
                 config('constants.MODULES.portfolio'),
                 [
                     'subject_type' => Portfolio::class,
                     'subject_id' => $portfolio->id,
                     'new_values' => $portfolio->getChanges(),
-                    'description' => ($isNew ? 'Created' : 'Updated') . ' portfolio: ' . $portfolio->title,
+                    'description' => ($isNew ? 'Created' : 'Updated').' portfolio: '.$portfolio->title,
                 ]
             );
 
@@ -163,7 +166,7 @@ class PortfolioController extends Controller
             return redirect()->route('admin.portfolios.index')->with('success', 'Portfolio saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Portfolio saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Portfolio saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
@@ -178,13 +181,13 @@ class PortfolioController extends Controller
             $portfolio->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($portfolio->is_active ? 'activate' : 'deactivate')),
+                config('constants.ACTIVITY_ACTIONS.'.($portfolio->is_active ? 'activate' : 'deactivate')),
                 config('constants.MODULES.portfolio'),
                 [
                     'subject_type' => Portfolio::class,
                     'subject_id' => $portfolio->id,
                     'new_values' => ['is_active' => $portfolio->is_active],
-                    'description' => 'Toggled status of portfolio: ' . $portfolio->title,
+                    'description' => 'Toggled status of portfolio: '.$portfolio->title,
                 ]
             );
 
@@ -194,7 +197,7 @@ class PortfolioController extends Controller
 
             return back()->with('success', 'Status updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('Portfolio togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Portfolio togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -213,13 +216,13 @@ class PortfolioController extends Controller
             $portfolio->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($portfolio->is_featured ? 'feature' : 'unfeature')),
+                config('constants.ACTIVITY_ACTIONS.'.($portfolio->is_featured ? 'feature' : 'unfeature')),
                 config('constants.MODULES.portfolio'),
                 [
                     'subject_type' => Portfolio::class,
                     'subject_id' => $portfolio->id,
                     'new_values' => ['is_featured' => $portfolio->is_featured],
-                    'description' => 'Toggled featured status of portfolio: ' . $portfolio->title,
+                    'description' => 'Toggled featured status of portfolio: '.$portfolio->title,
                 ]
             );
 
@@ -229,7 +232,7 @@ class PortfolioController extends Controller
 
             return back()->with('success', 'Status updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('Portfolio togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Portfolio togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -260,7 +263,7 @@ class PortfolioController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Portfolio galleryreorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Portfolio galleryreorder failed: '.$e->getMessage(), ['exception' => $e]);
 
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
@@ -279,13 +282,13 @@ class PortfolioController extends Controller
                 [
                     'subject_type' => Portfolio::class,
                     'subject_id' => $portfolio->id,
-                    'description' => 'Deleted portfolio: ' . $portfolio->title,
+                    'description' => 'Deleted portfolio: '.$portfolio->title,
                 ]
             );
 
             return back()->with('success', 'Portfolio deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Portfolio destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Portfolio destroy failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }
@@ -304,7 +307,7 @@ class PortfolioController extends Controller
             $alt = $row['alt'] ?? null;
             $title = $row['title'] ?? null;
 
-            if (!empty($row['id']) && $existing->has($row['id'])) {
+            if (! empty($row['id']) && $existing->has($row['id'])) {
                 $media = $existing->get($row['id']);
                 $media->update([
                     'alt_text' => $alt,
@@ -317,7 +320,7 @@ class PortfolioController extends Controller
                 continue;
             }
 
-            if (!empty($row['temp'])) {
+            if (! empty($row['temp'])) {
                 $media = $this->mediaUploader->promoteTempToMedia($row['temp'], $portfolio, 'gallery', 'portfolios', $alt, $title);
 
                 if ($media) {

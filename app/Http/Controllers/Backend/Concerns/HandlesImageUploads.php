@@ -12,12 +12,12 @@ trait HandlesImageUploads
     // record) so the file lands at "{directory}/{uuid}/{filename}".
     protected function applyImage(Request $request, array &$data, string $field, string $directory, $model = null, ?string $uuid = null): void
     {
-        $altText = $data[$field . '_alt'] ?? null;
+        $altText = $data[$field.'_alt'] ?? null;
         $oldPath = $model?->{$field};
-        $tempPath = $request->input($field . '_temp');
+        $tempPath = $request->input($field.'_temp');
         $uuid ??= $model?->uuid;
 
-        if (!empty($tempPath)) {
+        if (! empty($tempPath)) {
             $promoted = $this->mediaUploader->promoteTemp($tempPath, $directory, $oldPath, $altText, $uuid);
 
             if ($promoted) {

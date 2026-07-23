@@ -17,13 +17,12 @@ class ContactAdminNotificationMail extends Mailable
 
     public function __construct(
         public Enquiry $enquiry,
-    ) {
-    }
+    ) {}
 
     public function build(): static
     {
-        $subject = 'New contact enquiry from ' . $this->enquiry->name
-            . ' — ' . ($this->enquiry->subject ?: 'your enquiry');
+        $subject = 'New contact enquiry from '.$this->enquiry->name
+            .' — '.($this->enquiry->subject ?: 'your enquiry');
 
         return $this->subject($subject)
             ->view('emails.layout')

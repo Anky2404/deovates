@@ -50,7 +50,7 @@ class UserPermission extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_allowed', true)
-            ->where(fn($q) => $q->whereNull('expires_at')
+            ->where(fn ($q) => $q->whereNull('expires_at')
                 ->orWhere('expires_at', '>=', now()));
     }
 

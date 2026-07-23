@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Log;
 class SiteSettingController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'settings.sites.';
 
     public function __construct()
@@ -23,7 +25,8 @@ class SiteSettingController extends Controller
     public function index(Request $request)
     {
         $groups = SiteSetting::orderBy('group')->orderBy('key')->get()->groupBy('group');
-        return view($this->prefix . $this->folder . 'index', compact('groups'));
+
+        return view($this->prefix.$this->folder.'index', compact('groups'));
     }
 
     // Bulk save: one form, many settings
@@ -55,7 +58,8 @@ class SiteSettingController extends Controller
 
             return redirect()->route('admin.settings.sites.index')->with('success', 'Site settings updated successfully.');
         } catch (\Throwable $e) {
-            Log::error('SiteSetting saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('SiteSetting saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }

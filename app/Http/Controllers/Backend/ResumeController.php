@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Log;
 class ResumeController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'careers.resumes.';
 
     public function __construct()
@@ -24,14 +26,14 @@ class ResumeController extends Controller
     {
         $rows = Resume::latest('id')->paginate($this->pagerecords)->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function view(Request $request, $uuid)
     {
         $row = Resume::with('applications')->where('uuid', $uuid)->firstOrFail();
 
-        return view($this->prefix . $this->folder . 'view', compact('row'));
+        return view($this->prefix.$this->folder.'view', compact('row'));
     }
 
     public function destroy(Request $request, $uuid)
@@ -47,7 +49,7 @@ class ResumeController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.resume'), [
                 'subject_type' => Resume::class,
                 'subject_id' => $row->id,
-                'description' => 'Deleted resume for ' . $row->full_name . '.',
+                'description' => 'Deleted resume for '.$row->full_name.'.',
             ]);
 
             DB::commit();
@@ -55,7 +57,8 @@ class ResumeController extends Controller
             return back()->with('success', 'Resume deleted successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Resume destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Resume destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

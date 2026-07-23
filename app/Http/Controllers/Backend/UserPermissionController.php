@@ -17,7 +17,9 @@ use Illuminate\Validation\Rule;
 class UserPermissionController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'users.permissions.';
 
     public function __construct()
@@ -33,7 +35,8 @@ class UserPermissionController extends Controller
         }
 
         $rows = UserPermission::with(['user', 'permission'])->latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     // Bulk permission-matrix view
@@ -53,7 +56,7 @@ class UserPermissionController extends Controller
                     ->pluck('permission_id')
                     ->toArray();
             } catch (\Throwable $e) {
-                Log::error('User permissions matrix lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('User permissions matrix lookup failed: '.$e->getMessage(), ['exception' => $e]);
                 $selectedUser = null;
             }
         }
@@ -71,7 +74,8 @@ class UserPermissionController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('UserPermission createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('UserPermission createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.users.permissions.index')->with('error', 'Unable to load the requested user permission.');
             }
         }
@@ -87,7 +91,7 @@ class UserPermissionController extends Controller
             $permissions->push($record->permission);
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('record', 'users', 'permissions'));
+        return view($this->prefix.$this->folder.'createoredit', compact('record', 'users', 'permissions'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -152,7 +156,8 @@ class UserPermissionController extends Controller
             return redirect()->route('admin.users.permissions.index')->with('success', 'User permission saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('UserPermission saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('UserPermission saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -171,7 +176,8 @@ class UserPermissionController extends Controller
 
             return back()->with('success', 'User permission deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('UserPermission destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('UserPermission destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -190,7 +196,7 @@ class UserPermissionController extends Controller
                 [
                     'subject_type' => UserPermission::class,
                     'subject_id' => $record->id,
-                    'description' => ($record->is_allowed ? 'Allowed' : 'Disallowed') . ' user permission assignment',
+                    'description' => ($record->is_allowed ? 'Allowed' : 'Disallowed').' user permission assignment',
                 ]
             );
 
@@ -200,7 +206,7 @@ class UserPermissionController extends Controller
 
             return back()->with('success', 'User permission status updated.');
         } catch (\Throwable $e) {
-            Log::error('UserPermission togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('UserPermission togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -240,7 +246,7 @@ class UserPermissionController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.update'), config('constants.MODULES.userpermission'), [
                 'subject_type' => User::class,
                 'subject_id' => $userId,
-                'description' => 'Updated permission matrix for user ID ' . $userId,
+                'description' => 'Updated permission matrix for user ID '.$userId,
             ]);
 
             DB::commit();
@@ -249,7 +255,8 @@ class UserPermissionController extends Controller
                 ->with('success', 'User permissions updated successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('User permissions bulk update failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('User permissions bulk update failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }

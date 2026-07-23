@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Log;
 class ServiceFaqController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'services.faqs.';
 
     public function __construct()
@@ -26,7 +28,8 @@ class ServiceFaqController extends Controller
     {
         $rows = ServiceFaq::with('service')->latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = ServiceFaq::orderBy('display_order')->orderBy('id')->get();
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Persist drag-drop reorder
@@ -50,7 +53,8 @@ class ServiceFaqController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('ServiceFaq reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('ServiceFaq reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -65,14 +69,15 @@ class ServiceFaqController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('ServiceFaq createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('ServiceFaq createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.services.faqs.index')->with('error', 'Unable to load the requested service FAQ.');
             }
         }
 
         $services = Service::active()->orderBy('title')->pluck('title', 'id');
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('faq', 'services'));
+        return view($this->prefix.$this->folder.'createoredit', compact('faq', 'services'));
     }
 
     // uuid present: only first row applied
@@ -104,7 +109,7 @@ class ServiceFaqController extends Controller
 
                 $affected[] = $faq;
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated service FAQ ' . $faq->question;
+                $description = 'Updated service FAQ '.$faq->question;
             } else {
                 foreach ($data['faqs'] as $index => $row) {
                     $affected[] = ServiceFaq::create([
@@ -117,7 +122,7 @@ class ServiceFaqController extends Controller
                 }
 
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = count($affected) . ' service FAQ(s) created';
+                $description = count($affected).' service FAQ(s) created';
             }
 
             foreach ($affected as $faq) {
@@ -134,7 +139,8 @@ class ServiceFaqController extends Controller
             return redirect()->route('admin.services.faqs.index')->with('success', 'Service FAQ(s) saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('ServiceFaq saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('ServiceFaq saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -148,12 +154,13 @@ class ServiceFaqController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.servicefaq'), [
                 'subject_type' => ServiceFaq::class,
                 'subject_id' => $faq->id,
-                'description' => 'Deleted service FAQ ' . $faq->question,
+                'description' => 'Deleted service FAQ '.$faq->question,
             ]);
 
             return back()->with('success', 'Service FAQ deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('ServiceFaq destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('ServiceFaq destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -171,7 +178,7 @@ class ServiceFaqController extends Controller
                 [
                     'subject_type' => ServiceFaq::class,
                     'subject_id' => $faq->id,
-                    'description' => ($faq->is_active ? 'Activated' : 'Deactivated') . ' service FAQ ' . $faq->question,
+                    'description' => ($faq->is_active ? 'Activated' : 'Deactivated').' service FAQ '.$faq->question,
                 ]
             );
 
@@ -181,7 +188,7 @@ class ServiceFaqController extends Controller
 
             return back()->with('success', 'Service FAQ status updated.');
         } catch (\Throwable $e) {
-            Log::error('ServiceFaq togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('ServiceFaq togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -204,7 +211,7 @@ class ServiceFaqController extends Controller
                 [
                     'subject_type' => ServiceFaq::class,
                     'subject_id' => $faq->id,
-                    'description' => ($faq->is_featured ? 'Marked featured' : 'Unmarked featured') . ' service FAQ ' . $faq->question,
+                    'description' => ($faq->is_featured ? 'Marked featured' : 'Unmarked featured').' service FAQ '.$faq->question,
                 ]
             );
 
@@ -214,7 +221,7 @@ class ServiceFaqController extends Controller
 
             return back()->with('success', 'Service FAQ featured status updated.');
         } catch (\Throwable $e) {
-            Log::error('ServiceFaq togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('ServiceFaq togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

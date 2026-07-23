@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\Concerns\LoadsPageSections;
-use App\Helper;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\FaqCategory;
@@ -16,6 +16,7 @@ class BlogController extends Controller
     use LoadsPageSections;
 
     private $prefix = 'front.';
+
     private $folder = 'blog.';
 
     public function index()
@@ -48,7 +49,7 @@ class BlogController extends Controller
 
         [$page, $sectionContents] = $this->loadPageSections('blog');
 
-        return view($this->prefix . $this->folder . 'index', $viewData + compact('page', 'sectionContents'));
+        return view($this->prefix.$this->folder.'index', $viewData + compact('page', 'sectionContents'));
     }
 
     public function details($slug)
@@ -75,6 +76,6 @@ class BlogController extends Controller
                 ->get();
         });
 
-        return view($this->prefix . $this->folder . 'details', compact('blog', 'related'));
+        return view($this->prefix.$this->folder.'details', compact('blog', 'related'));
     }
 }

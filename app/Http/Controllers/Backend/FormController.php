@@ -14,7 +14,9 @@ use Illuminate\Validation\Rule;
 class FormController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'pages.layouts.';
 
     public function __construct()
@@ -26,7 +28,8 @@ class FormController extends Controller
     public function index(Request $request)
     {
         $rows = Form::orderBy('display_order')->orderBy('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     // Create / Edit Function
@@ -40,12 +43,13 @@ class FormController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Form createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Form createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.pages.forms.index')->with('error', 'Unable to load the requested form.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('form'));
+        return view($this->prefix.$this->folder.'createoredit', compact('form'));
     }
 
     // Details Function (read-only live preview)
@@ -56,11 +60,12 @@ class FormController extends Controller
         } catch (ModelNotFoundException $e) {
             throw $e;
         } catch (\Throwable $e) {
-            Log::error('Form details lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Form details lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
             return redirect()->route('admin.pages.forms.index')->with('error', 'Unable to load the requested form.');
         }
 
-        return view($this->prefix . $this->folder . 'details', compact('form'));
+        return view($this->prefix.$this->folder.'details', compact('form'));
     }
 
     // Save / Update Function
@@ -94,12 +99,12 @@ class FormController extends Controller
             if ($form) {
                 $form->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated form ' . $form->name;
+                $description = 'Updated form '.$form->name;
             } else {
                 $data['display_order'] = (Form::max('display_order') ?? 0) + 1;
                 $form = Form::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created form ' . $form->name;
+                $description = 'Created form '.$form->name;
             }
 
             $this->syncFields($form, $request->input('fields', []));
@@ -120,7 +125,8 @@ class FormController extends Controller
             return redirect()->route('admin.pages.forms.index')->with('success', 'Form saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Form saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Form saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -141,22 +147,22 @@ class FormController extends Controller
                 'name' => $row['name'] ?? null,
                 'label' => $row['label'],
                 'type' => $row['type'],
-                'is_multiple' => !empty($row['is_multiple']) && $row['is_multiple'] !== '0',
+                'is_multiple' => ! empty($row['is_multiple']) && $row['is_multiple'] !== '0',
                 'group_key' => $row['group_key'] ?? null,
-                'enable_croppie' => !array_key_exists('enable_croppie', $row) || ($row['enable_croppie'] !== '0' && $row['enable_croppie'] !== false),
+                'enable_croppie' => ! array_key_exists('enable_croppie', $row) || ($row['enable_croppie'] !== '0' && $row['enable_croppie'] !== false),
                 'field_id' => $row['field_id'] ?? null,
                 'class' => $row['class'] ?? null,
-                'required' => !empty($row['required']) && $row['required'] !== '0',
-                'disabled' => !empty($row['disabled']) && $row['disabled'] !== '0',
-                'use_ck_editor' => !empty($row['use_ck_editor']) && $row['use_ck_editor'] !== '0',
-                'add_country_code' => !empty($row['add_country_code']) && $row['add_country_code'] !== '0',
+                'required' => ! empty($row['required']) && $row['required'] !== '0',
+                'disabled' => ! empty($row['disabled']) && $row['disabled'] !== '0',
+                'use_ck_editor' => ! empty($row['use_ck_editor']) && $row['use_ck_editor'] !== '0',
+                'add_country_code' => ! empty($row['add_country_code']) && $row['add_country_code'] !== '0',
                 'placeholder' => $row['placeholder'] ?? null,
                 'field_width' => $row['field_width'] ?? 12,
                 'options' => is_array($decodedOptions) ? $decodedOptions : [],
                 'sort_order' => $row['sort_order'] ?? $index,
             ];
 
-            $field = !empty($row['id']) ? $form->fields()->find($row['id']) : null;
+            $field = ! empty($row['id']) ? $form->fields()->find($row['id']) : null;
             $field ? $field->update($data) : $field = $form->fields()->create($data);
 
             $keepIds[] = $field->id;
@@ -175,12 +181,13 @@ class FormController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.form'), [
                 'subject_type' => Form::class,
                 'subject_id' => $form->id,
-                'description' => 'Deleted form ' . $form->name,
+                'description' => 'Deleted form '.$form->name,
             ]);
 
             return back()->with('success', 'Form deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Form destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Form destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -190,7 +197,7 @@ class FormController extends Controller
     {
         try {
             $form = Form::where('uuid', $uuid)->firstOrFail();
-            $form->is_active = !$form->is_active;
+            $form->is_active = ! $form->is_active;
             $form->save();
 
             ActivityLog::log(
@@ -199,7 +206,7 @@ class FormController extends Controller
                 [
                     'subject_type' => Form::class,
                     'subject_id' => $form->id,
-                    'description' => ($form->is_active ? 'Activated' : 'Deactivated') . ' form ' . $form->name,
+                    'description' => ($form->is_active ? 'Activated' : 'Deactivated').' form '.$form->name,
                 ]
             );
 
@@ -209,7 +216,7 @@ class FormController extends Controller
 
             return back()->with('success', 'Form status updated.');
         } catch (\Throwable $e) {
-            Log::error('Form togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Form togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

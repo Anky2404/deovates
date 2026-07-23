@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Log;
 class SystemLogController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'system-logs.';
 
     public function __construct()
@@ -27,14 +29,14 @@ class SystemLogController extends Controller
             ->paginate($this->pagerecords)
             ->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function view(Request $request, $uuid)
     {
         $row = SystemLog::with('user')->where('uuid', $uuid)->firstOrFail();
 
-        return view($this->prefix . $this->folder . 'view', compact('row'));
+        return view($this->prefix.$this->folder.'view', compact('row'));
     }
 
     // Manual delete only, read-only log
@@ -49,7 +51,7 @@ class SystemLogController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.systemlog'), [
                 'subject_type' => SystemLog::class,
                 'subject_id' => $row->id,
-                'description' => 'Deleted system log #' . $row->id . ' (' . $row->action . ').',
+                'description' => 'Deleted system log #'.$row->id.' ('.$row->action.').',
             ]);
 
             DB::commit();
@@ -57,7 +59,8 @@ class SystemLogController extends Controller
             return back()->with('success', 'System log deleted successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('SystemLog destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('SystemLog destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

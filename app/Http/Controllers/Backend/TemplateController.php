@@ -14,7 +14,9 @@ use Illuminate\Validation\Rule;
 class TemplateController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'templates.';
 
     public function __construct()
@@ -26,7 +28,8 @@ class TemplateController extends Controller
     {
         $rows = Template::latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Template::orderBy('display_order')->orderBy('id')->get();
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Persist drag-drop reorder
@@ -50,7 +53,8 @@ class TemplateController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Template reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Template reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -65,12 +69,13 @@ class TemplateController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Template createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Template createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.templates.index')->with('error', 'Unable to load the requested template.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('template'));
+        return view($this->prefix.$this->folder.'createoredit', compact('template'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -108,11 +113,11 @@ class TemplateController extends Controller
             if ($template) {
                 $template->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated template ' . $template->name;
+                $description = 'Updated template '.$template->name;
             } else {
                 $template = Template::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created template ' . $template->name;
+                $description = 'Created template '.$template->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.template'), [
@@ -127,7 +132,8 @@ class TemplateController extends Controller
             return redirect()->route('admin.templates.index')->with('success', 'Template saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Template saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Template saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -141,12 +147,13 @@ class TemplateController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.template'), [
                 'subject_type' => Template::class,
                 'subject_id' => $template->id,
-                'description' => 'Deleted template ' . $template->name,
+                'description' => 'Deleted template '.$template->name,
             ]);
 
             return back()->with('success', 'Template deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Template destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Template destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -164,7 +171,7 @@ class TemplateController extends Controller
                 [
                     'subject_type' => Template::class,
                     'subject_id' => $template->id,
-                    'description' => ($template->is_active ? 'Activated' : 'Deactivated') . ' template ' . $template->name,
+                    'description' => ($template->is_active ? 'Activated' : 'Deactivated').' template '.$template->name,
                 ]
             );
 
@@ -174,7 +181,7 @@ class TemplateController extends Controller
 
             return back()->with('success', 'Template status updated.');
         } catch (\Throwable $e) {
-            Log::error('Template togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Template togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

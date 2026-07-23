@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\Concerns\LoadsPageSections;
-use App\Helper;
 use App\Models\Industry;
 use Illuminate\Support\Facades\Cache;
 
@@ -13,6 +13,7 @@ class IndustryController extends Controller
     use LoadsPageSections;
 
     private $prefix = 'front.';
+
     private $folder = 'industries.';
 
     public function index()
@@ -26,7 +27,7 @@ class IndustryController extends Controller
 
         [$page, $sectionContents] = $this->loadPageSections('industries');
 
-        return view($this->prefix . $this->folder . 'index', compact('industries', 'page', 'sectionContents'));
+        return view($this->prefix.$this->folder.'index', compact('industries', 'page', 'sectionContents'));
     }
 
     public function details($slug)
@@ -52,6 +53,6 @@ class IndustryController extends Controller
                 ->get();
         });
 
-        return view($this->prefix . $this->folder . 'details', compact('industry', 'related'));
+        return view($this->prefix.$this->folder.'details', compact('industry', 'related'));
     }
 }

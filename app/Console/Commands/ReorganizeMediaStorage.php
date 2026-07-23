@@ -127,10 +127,11 @@ class ReorganizeMediaStorage extends Command
                     if (! $row->service || empty($row->service->uuid)) {
                         $this->warn("  [skip] {$modelClass}#{$row->id} has no parent service uuid");
                         $this->skipped++;
+
                         continue;
                     }
 
-                    $directory = 'services/' . $row->service->uuid . '/' . $subfolder;
+                    $directory = 'services/'.$row->service->uuid.'/'.$subfolder;
                     $this->moveOne($modelClass, $row->id, 'image', $row->image, $directory, null, $apply, useDirectoryAsIs: true);
                 }
             });
@@ -150,6 +151,7 @@ class ReorganizeMediaStorage extends Command
                     if (! $owner || empty($owner->uuid)) {
                         $this->warn("  [skip] Media#{$media->id} owner {$ownerClass}#{$media->model_id} not found or has no uuid");
                         $this->skipped++;
+
                         continue;
                     }
 
@@ -166,26 +168,29 @@ class ReorganizeMediaStorage extends Command
     protected function moveOne(string $modelClass, int $id, string $column, string $oldPath, string $directory, ?string $uuid, bool $apply, bool $useDirectoryAsIs = false): void
     {
         $directory = trim($directory, '/');
-        $targetDir = $useDirectoryAsIs ? $directory : ($uuid ? $directory . '/' . $uuid : $directory);
+        $targetDir = $useDirectoryAsIs ? $directory : ($uuid ? $directory.'/'.$uuid : $directory);
 
-        if (Str::startsWith($oldPath, $targetDir . '/')) {
+        if (Str::startsWith($oldPath, $targetDir.'/')) {
             $this->skipped++;
+
             return;
         }
 
         if (! Storage::disk($this->disk)->exists($oldPath)) {
             $this->warn("  [skip] {$modelClass}#{$id}.{$column}: source file missing: {$oldPath}");
             $this->skipped++;
+
             return;
         }
 
         $filename = pathinfo($oldPath, PATHINFO_BASENAME);
-        $newPath = $targetDir . '/' . $filename;
+        $newPath = $targetDir.'/'.$filename;
 
         $this->line("  {$modelClass}#{$id}.{$column}: {$oldPath}  ->  {$newPath}");
 
         if (! $apply) {
             $this->moved++;
+
             return;
         }
 
@@ -193,6 +198,7 @@ class ReorganizeMediaStorage extends Command
             if (Storage::disk($this->disk)->exists($newPath)) {
                 $this->warn("    target already exists, skipping move (leaving old file in place): {$newPath}");
                 $this->errors++;
+
                 return;
             }
 
@@ -205,13 +211,13 @@ class ReorganizeMediaStorage extends Command
             foreach (Storage::disk($this->disk)->files($oldDir === '.' ? '' : $oldDir) as $file) {
                 $fileBase = pathinfo($file, PATHINFO_FILENAME);
 
-                if (Str::startsWith($fileBase, $baseName . '_')) {
-                    $siblingNewPath = $targetDir . '/' . pathinfo($file, PATHINFO_BASENAME);
+                if (Str::startsWith($fileBase, $baseName.'_')) {
+                    $siblingNewPath = $targetDir.'/'.pathinfo($file, PATHINFO_BASENAME);
                     Storage::disk($this->disk)->move($file, $siblingNewPath);
                 }
             }
 
-            DB::table((new $modelClass())->getTable())->where('id', $id)->update([$column => $newPath]);
+            DB::table((new $modelClass)->getTable())->where('id', $id)->update([$column => $newPath]);
 
             $this->moved++;
         } catch (\Throwable $e) {

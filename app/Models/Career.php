@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Career extends Model
 {
-    use HasUuid, HasSlug, SoftDeletes;
+    use HasSlug, HasUuid, SoftDeletes;
 
     protected string $slugSource = 'title';
 
@@ -84,7 +84,7 @@ class Career extends Model
     public function scopeOpen(Builder $query): Builder
     {
         return $query->where('is_active', true)
-            ->where(fn($q) => $q->whereNull('application_deadline')
+            ->where(fn ($q) => $q->whereNull('application_deadline')
                 ->orWhere('application_deadline', '>=', now()));
     }
 
@@ -95,15 +95,18 @@ class Career extends Model
 
     public function isOpen(): bool
     {
-        return $this->is_active && (!$this->application_deadline || $this->application_deadline >= now());
+        return $this->is_active && (! $this->application_deadline || $this->application_deadline >= now());
     }
 
     public function getSalaryRangeAttribute(): ?string
     {
-        if (!$this->salary_min && !$this->salary_max) return null;
+        if (! $this->salary_min && ! $this->salary_max) {
+            return null;
+        }
         if ($this->salary_min && $this->salary_max) {
             return "{$this->salary_currency} {$this->salary_min} - {$this->salary_max}";
         }
-        return "{$this->salary_currency} " . ($this->salary_min ?: $this->salary_max);
+
+        return "{$this->salary_currency} ".($this->salary_min ?: $this->salary_max);
     }
 }

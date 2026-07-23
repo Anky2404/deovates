@@ -22,7 +22,9 @@ class ServiceController extends Controller
     use HandlesImageUploads;
 
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'services.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -35,7 +37,7 @@ class ServiceController extends Controller
         $rows = Service::orderBy('display_order')->orderBy('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Service::orderBy('display_order')->orderBy('id')->get();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Persist drag-drop reorder
@@ -59,7 +61,8 @@ class ServiceController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Service reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Service reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -76,7 +79,8 @@ class ServiceController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Service createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Service createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.services.index')->with('error', 'Unable to load the requested service.');
             }
         }
@@ -84,7 +88,7 @@ class ServiceController extends Controller
         $platforms = Platform::orderBy('name')->get();
         $technologies = Technology::orderBy('name')->get();
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('service', 'platforms', 'technologies'));
+        return view($this->prefix.$this->folder.'createoredit', compact('service', 'platforms', 'technologies'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -98,9 +102,9 @@ class ServiceController extends Controller
             'description' => 'nullable|string',
             'icon' => 'nullable|string|max:255',
             // No-JS fallback only, temp field is normal path
-            'featured_image' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
+            'featured_image' => 'nullable|mimes:'.config('constants.IMAGE_MIMES').'|max:4096',
             'featured_image_alt' => 'nullable|string|max:255',
-            'banner_image' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
+            'banner_image' => 'nullable|mimes:'.config('constants.IMAGE_MIMES').'|max:4096',
             'banner_image_alt' => 'nullable|string|max:255',
             'gallery_items' => 'nullable|array',
             'gallery_items.*.id' => 'nullable|string',
@@ -125,7 +129,7 @@ class ServiceController extends Controller
         // New services join list end
         $newUuid = null;
 
-        if (!$service) {
+        if (! $service) {
             $data['display_order'] = (Service::max('display_order') ?? 0) + 1;
             $newUuid = (string) Str::uuid();
             $data['uuid'] = $newUuid;
@@ -147,11 +151,11 @@ class ServiceController extends Controller
             if ($service) {
                 $service->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated service ' . $service->title;
+                $description = 'Updated service '.$service->title;
             } else {
                 $service = Service::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created service ' . $service->title;
+                $description = 'Created service '.$service->title;
             }
 
             $this->syncGalleryMedia($request, $service);
@@ -173,7 +177,8 @@ class ServiceController extends Controller
             return redirect()->route('admin.services.index')->with('success', 'Service saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Service saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Service saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -191,7 +196,7 @@ class ServiceController extends Controller
             $alt = $row['alt'] ?? null;
             $title = $row['title'] ?? null;
 
-            if (!empty($row['id']) && $existing->has($row['id'])) {
+            if (! empty($row['id']) && $existing->has($row['id'])) {
                 $media = $existing->get($row['id']);
                 $media->update([
                     'alt_text' => $alt,
@@ -204,7 +209,7 @@ class ServiceController extends Controller
                 continue;
             }
 
-            if (!empty($row['temp'])) {
+            if (! empty($row['temp'])) {
                 $media = $this->mediaUploader->promoteTempToMedia($row['temp'], $service, 'gallery', 'services', $alt, $title);
 
                 if ($media) {
@@ -238,7 +243,7 @@ class ServiceController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Service galleryreorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Service galleryreorder failed: '.$e->getMessage(), ['exception' => $e]);
 
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
@@ -259,7 +264,7 @@ class ServiceController extends Controller
                 'display_order' => $row['display_order'] ?? 0,
             ];
 
-            $faq = !empty($row['id']) ? $service->faqs()->find($row['id']) : null;
+            $faq = ! empty($row['id']) ? $service->faqs()->find($row['id']) : null;
             $faq ? $faq->update($data) : $faq = $service->faqs()->create($data);
 
             $keepIds[] = $faq->id;
@@ -278,7 +283,7 @@ class ServiceController extends Controller
                 continue;
             }
 
-            $feature = !empty($row['id']) ? $service->features()->find($row['id']) : null;
+            $feature = ! empty($row['id']) ? $service->features()->find($row['id']) : null;
 
             $data = [
                 'title' => $row['title'],
@@ -289,8 +294,8 @@ class ServiceController extends Controller
                 'display_order' => $row['display_order'] ?? 0,
             ];
 
-            if (!empty($row['image_temp'])) {
-                $promoted = $this->mediaUploader->promoteTemp($row['image_temp'], 'services/' . $service->uuid . '/features', $feature?->image, $row['image_alt'] ?? null);
+            if (! empty($row['image_temp'])) {
+                $promoted = $this->mediaUploader->promoteTemp($row['image_temp'], 'services/'.$service->uuid.'/features', $feature?->image, $row['image_alt'] ?? null);
 
                 if ($promoted) {
                     $data['image'] = $promoted;
@@ -319,7 +324,7 @@ class ServiceController extends Controller
                 continue;
             }
 
-            $problem = !empty($row['id']) ? $service->challenges()->find($row['id']) : null;
+            $problem = ! empty($row['id']) ? $service->challenges()->find($row['id']) : null;
 
             $data = [
                 'challenge' => $row['challenge'],
@@ -332,8 +337,8 @@ class ServiceController extends Controller
                 'display_order' => $row['display_order'] ?? 0,
             ];
 
-            if (!empty($row['image_temp'])) {
-                $promoted = $this->mediaUploader->promoteTemp($row['image_temp'], 'services/' . $service->uuid . '/challenges', $problem?->image, $row['image_alt'] ?? null);
+            if (! empty($row['image_temp'])) {
+                $promoted = $this->mediaUploader->promoteTemp($row['image_temp'], 'services/'.$service->uuid.'/challenges', $problem?->image, $row['image_alt'] ?? null);
 
                 if ($promoted) {
                     $data['image'] = $promoted;
@@ -370,7 +375,7 @@ class ServiceController extends Controller
                 'display_order' => $row['display_order'] ?? 0,
             ];
 
-            if (!in_array($platformId, $existingIds)) {
+            if (! in_array($platformId, $existingIds)) {
                 $pivotData['uuid'] = (string) Str::uuid();
                 $pivotData['is_featured'] = false;
                 $pivotData['views'] = 0;
@@ -400,7 +405,7 @@ class ServiceController extends Controller
                 'display_order' => $row['display_order'] ?? 0,
             ];
 
-            if (!in_array($technologyId, $existingIds)) {
+            if (! in_array($technologyId, $existingIds)) {
                 $pivotData['uuid'] = (string) Str::uuid();
                 $pivotData['is_featured'] = false;
             }
@@ -420,12 +425,13 @@ class ServiceController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.service'), [
                 'subject_type' => Service::class,
                 'subject_id' => $service->id,
-                'description' => 'Deleted service ' . $service->title,
+                'description' => 'Deleted service '.$service->title,
             ]);
 
             return back()->with('success', 'Service deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Service destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Service destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -443,7 +449,7 @@ class ServiceController extends Controller
                 [
                     'subject_type' => Service::class,
                     'subject_id' => $service->id,
-                    'description' => ($service->is_active ? 'Activated' : 'Deactivated') . ' service ' . $service->title,
+                    'description' => ($service->is_active ? 'Activated' : 'Deactivated').' service '.$service->title,
                 ]
             );
 
@@ -453,7 +459,7 @@ class ServiceController extends Controller
 
             return back()->with('success', 'Service status updated.');
         } catch (\Throwable $e) {
-            Log::error('Service togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Service togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -476,7 +482,7 @@ class ServiceController extends Controller
                 [
                     'subject_type' => Service::class,
                     'subject_id' => $service->id,
-                    'description' => ($service->is_featured ? 'Marked featured: ' : 'Unmarked featured: ') . $service->title,
+                    'description' => ($service->is_featured ? 'Marked featured: ' : 'Unmarked featured: ').$service->title,
                 ]
             );
 
@@ -486,7 +492,7 @@ class ServiceController extends Controller
 
             return back()->with('success', 'Service featured status updated.');
         } catch (\Throwable $e) {
-            Log::error('Service togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Service togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

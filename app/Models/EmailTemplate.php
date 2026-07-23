@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmailTemplate extends Model
 {
-    use HasUuid, HasSlug, SoftDeletes;
+    use HasSlug, HasUuid, SoftDeletes;
 
     protected $fillable = [
         'uuid',
@@ -60,8 +60,9 @@ class EmailTemplate extends Model
     {
         $body = $this->body;
         foreach ($data as $key => $value) {
-            $body = str_replace("{{" . $key . "}}", $value, $body);
+            $body = str_replace('{{'.$key.'}}', $value, $body);
         }
+
         return $body;
     }
 
@@ -69,8 +70,9 @@ class EmailTemplate extends Model
     {
         $subject = $this->subject;
         foreach ($data as $key => $value) {
-            $subject = str_replace("{{" . $key . "}}", $value, $subject);
+            $subject = str_replace('{{'.$key.'}}', $value, $subject);
         }
+
         return $subject;
     }
 }

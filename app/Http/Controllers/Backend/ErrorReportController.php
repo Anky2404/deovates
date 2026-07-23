@@ -13,8 +13,11 @@ use Illuminate\Support\Facades\Schema;
 class ErrorReportController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'error-reports.';
+
     private $table = 'error_reports';
 
     public function __construct()
@@ -26,13 +29,14 @@ class ErrorReportController extends Controller
     {
         if (! Schema::hasTable($this->table)) {
             $rows = new LengthAwarePaginator([], 0, $this->pagerecords);
-            return view($this->prefix . $this->folder . 'index', compact('rows'))
+
+            return view($this->prefix.$this->folder.'index', compact('rows'))
                 ->with('warning', 'This log table has not been created yet.');
         }
 
         $rows = DB::table($this->table)->orderByDesc('id')->paginate($this->pagerecords);
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function view(Request $request, $uuid)
@@ -47,7 +51,7 @@ class ErrorReportController extends Controller
             abort(404);
         }
 
-        return view($this->prefix . $this->folder . 'view', compact('row'));
+        return view($this->prefix.$this->folder.'view', compact('row'));
     }
 
     public function destroy(Request $request, $uuid)
@@ -65,7 +69,8 @@ class ErrorReportController extends Controller
 
             return back()->with('success', 'Error report deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('ErrorReport destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('ErrorReport destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

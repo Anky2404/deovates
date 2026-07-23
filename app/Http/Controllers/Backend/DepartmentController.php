@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Department;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -13,7 +14,9 @@ use Illuminate\Validation\Rule;
 class DepartmentController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'departments.';
 
     public function __construct()
@@ -25,7 +28,8 @@ class DepartmentController extends Controller
     {
         $rows = Department::latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = Department::orderBy('display_order')->orderBy('id')->get();
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Drag-drop reorder
@@ -49,7 +53,8 @@ class DepartmentController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Department reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Department reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -61,15 +66,16 @@ class DepartmentController extends Controller
         if ($uuid) {
             try {
                 $department = Department::where('uuid', $uuid)->firstOrFail();
-            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Department createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Department createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.departments.index')->with('error', 'Unable to load the requested department.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('department'));
+        return view($this->prefix.$this->folder.'createoredit', compact('department'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -89,11 +95,11 @@ class DepartmentController extends Controller
             if ($department) {
                 $department->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated department ' . $department->name;
+                $description = 'Updated department '.$department->name;
             } else {
                 $department = Department::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created department ' . $department->name;
+                $description = 'Created department '.$department->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.department'), [
@@ -105,7 +111,8 @@ class DepartmentController extends Controller
 
             return redirect()->route('admin.departments.index')->with('success', 'Department saved successfully.');
         } catch (\Throwable $e) {
-            Log::error('Department saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Department saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -119,12 +126,13 @@ class DepartmentController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.department'), [
                 'subject_type' => Department::class,
                 'subject_id' => $department->id,
-                'description' => 'Deleted department ' . $department->name,
+                'description' => 'Deleted department '.$department->name,
             ]);
 
             return back()->with('success', 'Department deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Department destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Department destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -142,7 +150,7 @@ class DepartmentController extends Controller
                 [
                     'subject_type' => Department::class,
                     'subject_id' => $department->id,
-                    'description' => ($department->is_active ? 'Activated' : 'Deactivated') . ' department ' . $department->name,
+                    'description' => ($department->is_active ? 'Activated' : 'Deactivated').' department '.$department->name,
                 ]
             );
 
@@ -152,7 +160,7 @@ class DepartmentController extends Controller
 
             return back()->with('success', 'Department status updated.');
         } catch (\Throwable $e) {
-            Log::error('Department togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Department togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

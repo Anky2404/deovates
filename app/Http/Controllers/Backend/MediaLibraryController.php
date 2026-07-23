@@ -15,7 +15,9 @@ use Illuminate\Support\Str;
 class MediaLibraryController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'media.library.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -26,7 +28,8 @@ class MediaLibraryController extends Controller
     public function index(Request $request)
     {
         $rows = Media::latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function createoredit(Request $request, ?string $uuid = null)
@@ -39,12 +42,13 @@ class MediaLibraryController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('Media createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('Media createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.media.library.index')->with('error', 'Unable to load the requested media item.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('media'));
+        return view($this->prefix.$this->folder.'createoredit', compact('media'));
     }
 
     public function saveorupdate(Request $request, ?string $uuid = null)
@@ -70,7 +74,7 @@ class MediaLibraryController extends Controller
 
             $newUuid = null;
 
-            if (!$media) {
+            if (! $media) {
                 $newUuid = (string) Str::uuid();
                 $data['uuid'] = $newUuid;
             }
@@ -91,7 +95,7 @@ class MediaLibraryController extends Controller
             if ($media) {
                 $media->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated media ' . $media->name;
+                $description = 'Updated media '.$media->name;
             } else {
                 // Not attached to a model yet
                 $data['model_type'] = null;
@@ -100,7 +104,7 @@ class MediaLibraryController extends Controller
 
                 $media = Media::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created media ' . $media->name;
+                $description = 'Created media '.$media->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.media'), [
@@ -115,7 +119,8 @@ class MediaLibraryController extends Controller
             return redirect()->route('admin.media.library.index')->with('success', 'Media saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Media saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Media saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -129,12 +134,13 @@ class MediaLibraryController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.media'), [
                 'subject_type' => Media::class,
                 'subject_id' => $media->id,
-                'description' => 'Deleted media ' . $media->name,
+                'description' => 'Deleted media '.$media->name,
             ]);
 
             return back()->with('success', 'Media deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Media destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Media destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -152,7 +158,7 @@ class MediaLibraryController extends Controller
                 [
                     'subject_type' => Media::class,
                     'subject_id' => $media->id,
-                    'description' => ($media->is_active ? 'Activated' : 'Deactivated') . ' media ' . $media->name,
+                    'description' => ($media->is_active ? 'Activated' : 'Deactivated').' media '.$media->name,
                 ]
             );
 
@@ -162,7 +168,7 @@ class MediaLibraryController extends Controller
 
             return back()->with('success', 'Media status updated.');
         } catch (\Throwable $e) {
-            Log::error('Media togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Media togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -185,7 +191,7 @@ class MediaLibraryController extends Controller
                 [
                     'subject_type' => Media::class,
                     'subject_id' => $media->id,
-                    'description' => ($media->is_featured ? 'Marked featured' : 'Unmarked featured') . ' media ' . $media->name,
+                    'description' => ($media->is_featured ? 'Marked featured' : 'Unmarked featured').' media '.$media->name,
                 ]
             );
 
@@ -195,7 +201,7 @@ class MediaLibraryController extends Controller
 
             return back()->with('success', 'Media featured status updated.');
         } catch (\Throwable $e) {
-            Log::error('Media togglefeatured failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Media togglefeatured failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Mail\CareerApplicationStatusUpdateMail;
 use App\Services\EmailSenderService;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,17 +41,16 @@ class CareerApplication extends Model
     protected function casts(): array
     {
         return [
-            'current_ctc'      => 'integer',
-            'expected_ctc'     => 'integer',
-            'notice_period'    => 'integer',
-            'applied_at'       => 'datetime',
+            'current_ctc' => 'integer',
+            'expected_ctc' => 'integer',
+            'notice_period' => 'integer',
+            'applied_at' => 'datetime',
         ];
     }
 
     /** -------------------------
      *  Relationships
      * ------------------------*/
-
     public function career(): BelongsTo
     {
         return $this->belongsTo(Career::class);
@@ -74,7 +74,6 @@ class CareerApplication extends Model
     /** -------------------------
      *  Scopes
      * ------------------------*/
-
     public function scopeByStatus(Builder $query, string $status): Builder
     {
         return $query->where('status', $status);
@@ -93,7 +92,6 @@ class CareerApplication extends Model
     /** -------------------------
      *  Helpers
      * ------------------------*/
-
     public function updateStatus(string $status, ?int $changedBy = null, ?string $remarks = null): void
     {
         $oldStatus = $this->status;
@@ -103,10 +101,10 @@ class CareerApplication extends Model
 
         // create status log entry
         $this->statusLogs()->create([
-            'old_status'   => $oldStatus,
-            'new_status'   => $status,
-            'changed_by'   => $changedBy,
-            'remarks'      => $remarks,
+            'old_status' => $oldStatus,
+            'new_status' => $status,
+            'changed_by' => $changedBy,
+            'remarks' => $remarks,
         ]);
 
         if ($oldStatus !== $status) {
@@ -152,10 +150,10 @@ class CareerApplication extends Model
                     'app_name' => config('constants.BUSINESS.name'),
                 ],
                 source: 'career-application-status',
-                mailableClass: \App\Mail\CareerApplicationStatusUpdateMail::class,
+                mailableClass: CareerApplicationStatusUpdateMail::class,
             );
         } catch (\Throwable $e) {
-            Log::error('Career application status email failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Career application status email failed: '.$e->getMessage(), ['exception' => $e]);
         }
     }
 }

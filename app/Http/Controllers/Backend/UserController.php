@@ -22,7 +22,9 @@ class UserController extends Controller
     use HandlesImageUploads;
 
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'users.';
 
     public function __construct(private MediaUploader $mediaUploader)
@@ -33,7 +35,8 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $rows = User::with(['role', 'department'])->latest('id')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     // Also serves "profile" route
@@ -44,11 +47,12 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             throw $e;
         } catch (\Throwable $e) {
-            Log::error('User details lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('User details lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
             return redirect()->route('admin.users.index')->with('error', 'Unable to load the requested user.');
         }
 
-        return view($this->prefix . $this->folder . 'details', compact('user'));
+        return view($this->prefix.$this->folder.'details', compact('user'));
     }
 
     public function createoredit(Request $request, $uuid = null)
@@ -61,7 +65,8 @@ class UserController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('User createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('User createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.users.index')->with('error', 'Unable to load the requested user.');
             }
         }
@@ -70,7 +75,7 @@ class UserController extends Controller
         $departments = Department::active()->orderBy('name')->get();
         $countries = Country::active()->orderBy('name')->get();
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('user', 'roles', 'departments', 'countries'));
+        return view($this->prefix.$this->folder.'createoredit', compact('user', 'roles', 'departments', 'countries'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -90,7 +95,7 @@ class UserController extends Controller
             'phone' => 'nullable|string|max:20',
             'designation' => 'required|string|max:255',
             'bio' => 'nullable|string',
-            'avatar' => 'nullable|mimes:' . config('constants.IMAGE_MIMES') . '|max:4096',
+            'avatar' => 'nullable|mimes:'.config('constants.IMAGE_MIMES').'|max:4096',
             'avatar_alt' => 'nullable|string|max:255',
             'password' => [$user ? 'nullable' : 'required', 'string', 'min:6'],
             'is_active' => 'nullable|boolean',
@@ -110,7 +115,7 @@ class UserController extends Controller
         try {
             $newUuid = null;
 
-            if (!$user) {
+            if (! $user) {
                 $newUuid = (string) Str::uuid();
                 $data['uuid'] = $newUuid;
             }
@@ -125,11 +130,11 @@ class UserController extends Controller
             if ($user) {
                 $user->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated user ' . $user->name;
+                $description = 'Updated user '.$user->name;
             } else {
                 $user = User::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created user ' . $user->name;
+                $description = 'Created user '.$user->name;
             }
 
             $newValues = collect($user->getChanges())->except(['updated_at', 'password'])->toArray();
@@ -148,7 +153,8 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')->with('success', 'User saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('User saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('User saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -167,12 +173,13 @@ class UserController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.user'), [
                 'subject_type' => User::class,
                 'subject_id' => $user->id,
-                'description' => 'Deleted user ' . $user->name,
+                'description' => 'Deleted user '.$user->name,
             ]);
 
             return back()->with('success', 'User deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('User destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('User destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -190,7 +197,7 @@ class UserController extends Controller
                 [
                     'subject_type' => User::class,
                     'subject_id' => $user->id,
-                    'description' => ($user->is_active ? 'Activated' : 'Deactivated') . ' user ' . $user->name,
+                    'description' => ($user->is_active ? 'Activated' : 'Deactivated').' user '.$user->name,
                 ]
             );
 
@@ -200,7 +207,7 @@ class UserController extends Controller
 
             return back()->with('success', 'User status updated.');
         } catch (\Throwable $e) {
-            Log::error('User togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('User togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

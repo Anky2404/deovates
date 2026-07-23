@@ -10,14 +10,12 @@ use Illuminate\Support\Facades\Log;
 // Temp upload, promoted on form save
 class MediaTempController extends Controller
 {
-    public function __construct(private MediaUploader $mediaUploader)
-    {
-    }
+    public function __construct(private MediaUploader $mediaUploader) {}
 
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'required|mimes:' . config('constants.IMAGE_MIMES') . '|max:8192',
+            'image' => 'required|mimes:'.config('constants.IMAGE_MIMES').'|max:8192',
         ]);
 
         try {
@@ -29,7 +27,7 @@ class MediaTempController extends Controller
                 'url' => $result['url'],
             ]);
         } catch (\Throwable $e) {
-            Log::error('Temp image upload failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Temp image upload failed: '.$e->getMessage(), ['exception' => $e]);
 
             return response()->json([
                 'success' => false,

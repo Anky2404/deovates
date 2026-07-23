@@ -21,15 +21,16 @@ class ContactController extends Controller
     use LoadsPageSections;
 
     private $prefix = 'front.';
+
     private $folder = 'contact.';
 
     public function index()
     {
-        $data = Helper::readJSONData($this->folder . 'json');
+        $data = Helper::readJSONData($this->folder.'json');
 
         [$page, $sectionContents] = $this->loadPageSections('contact');
 
-        return view($this->prefix . $this->folder . 'index', compact('data', 'page', 'sectionContents'));
+        return view($this->prefix.$this->folder.'index', compact('data', 'page', 'sectionContents'));
     }
 
     public function store(Request $request)
@@ -61,7 +62,7 @@ class ContactController extends Controller
                 'subject_type' => Enquiry::class,
                 'subject_id' => $enquiry->id,
                 'is_system' => true,
-                'description' => $enquiry->name . ' submitted a contact enquiry.',
+                'description' => $enquiry->name.' submitted a contact enquiry.',
             ]);
 
             $mailSent = $this->sendEnquiryEmails($enquiry);
@@ -82,7 +83,7 @@ class ContactController extends Controller
 
             return back()->with('success', 'Thanks! Your message has been noted.');
         } catch (\Throwable $e) {
-            Log::error('Contact enquiry submit failed: ' . $e->getMessage(), [
+            Log::error('Contact enquiry submit failed: '.$e->getMessage(), [
                 'exception' => $e,
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -106,10 +107,10 @@ class ContactController extends Controller
      * no database template lookup. Every send is still recorded in both
      * the Emails table and the Email Logs table.
      *
-     * @return bool  whether the enquirer's own confirmation email sent
-     *               successfully — an admin-copy failure alone doesn't
-     *               fail this, since the visitor's submission still went
-     *               through fine on their end.
+     * @return bool whether the enquirer's own confirmation email sent
+     *              successfully — an admin-copy failure alone doesn't
+     *              fail this, since the visitor's submission still went
+     *              through fine on their end.
      */
     private function sendEnquiryEmails(Enquiry $enquiry): bool
     {
@@ -136,7 +137,7 @@ class ContactController extends Controller
         } catch (\Throwable $e) {
             $status = 'failed';
             $error = $e->getMessage();
-            Log::error('Contact email send failed: ' . $e->getMessage(), [
+            Log::error('Contact email send failed: '.$e->getMessage(), [
                 'exception' => $e,
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -179,7 +180,7 @@ class ContactController extends Controller
                 'source' => 'contact-enquiry',
             ]);
         } catch (\Throwable $e) {
-            Log::error('Contact email record-keeping failed: ' . $e->getMessage(), [
+            Log::error('Contact email record-keeping failed: '.$e->getMessage(), [
                 'exception' => $e,
                 'trace' => $e->getTraceAsString(),
             ]);

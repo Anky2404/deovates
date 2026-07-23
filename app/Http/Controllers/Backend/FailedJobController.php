@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Log;
 class FailedJobController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'settings.jobs.failed.';
 
     public function __construct()
@@ -22,7 +24,8 @@ class FailedJobController extends Controller
     public function index(Request $request)
     {
         $rows = DB::table('failed_jobs')->orderByDesc('failed_at')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function retry(Request $request, $id)
@@ -32,7 +35,8 @@ class FailedJobController extends Controller
 
             return back()->with('success', 'Job has been queued for retry.');
         } catch (\Throwable $e) {
-            Log::error('Failed job retry failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Failed job retry failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -44,7 +48,8 @@ class FailedJobController extends Controller
 
             return back()->with('success', 'Failed job deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('Failed job destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Failed job destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

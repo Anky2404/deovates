@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Log;
 class NotificationController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'notifications.';
 
     public function __construct()
@@ -27,7 +29,7 @@ class NotificationController extends Controller
             ->paginate($this->pagerecords)
             ->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function markAsRead(Request $request, $uuid)
@@ -41,7 +43,7 @@ class NotificationController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.update'), config('constants.MODULES.notificationlog'), [
                 'subject_type' => NotificationLog::class,
                 'subject_id' => $row->id,
-                'description' => 'Marked notification "' . $row->title . '" as read.',
+                'description' => 'Marked notification "'.$row->title.'" as read.',
             ]);
 
             DB::commit();
@@ -53,7 +55,7 @@ class NotificationController extends Controller
             return back()->with('success', 'Notification marked as read.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Notification markAsRead failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Notification markAsRead failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
@@ -74,7 +76,7 @@ class NotificationController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.notificationlog'), [
                 'subject_type' => NotificationLog::class,
                 'subject_id' => $row->id,
-                'description' => 'Deleted notification "' . $row->title . '".',
+                'description' => 'Deleted notification "'.$row->title.'".',
             ]);
 
             DB::commit();
@@ -82,7 +84,8 @@ class NotificationController extends Controller
             return back()->with('success', 'Notification deleted successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Notification destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Notification destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

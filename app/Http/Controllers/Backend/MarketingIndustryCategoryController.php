@@ -14,7 +14,9 @@ use Illuminate\Validation\Rule;
 class MarketingIndustryCategoryController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'industries.categories.';
 
     public function __construct()
@@ -26,7 +28,8 @@ class MarketingIndustryCategoryController extends Controller
     {
         $rows = IndustryCategory::latest('id')->paginate($this->pagerecords)->withQueryString();
         $reorderRows = IndustryCategory::orderBy('display_order')->orderBy('id')->get();
-        return view($this->prefix . $this->folder . 'index', compact('rows', 'reorderRows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows', 'reorderRows'));
     }
 
     // Drag-drop reorder
@@ -50,7 +53,8 @@ class MarketingIndustryCategoryController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('IndustryCategory reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('IndustryCategory reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -65,12 +69,13 @@ class MarketingIndustryCategoryController extends Controller
             } catch (ModelNotFoundException $e) {
                 throw $e;
             } catch (\Throwable $e) {
-                Log::error('IndustryCategory createoredit lookup failed: ' . $e->getMessage(), ['exception' => $e]);
+                Log::error('IndustryCategory createoredit lookup failed: '.$e->getMessage(), ['exception' => $e]);
+
                 return redirect()->route('admin.marketing.industries.categories.index')->with('error', 'Unable to load the requested category.');
             }
         }
 
-        return view($this->prefix . $this->folder . 'createoredit', compact('category'));
+        return view($this->prefix.$this->folder.'createoredit', compact('category'));
     }
 
     public function saveorupdate(Request $request, $uuid = null)
@@ -95,11 +100,11 @@ class MarketingIndustryCategoryController extends Controller
             if ($category) {
                 $category->update($data);
                 $action = config('constants.ACTIVITY_ACTIONS.update');
-                $description = 'Updated industry category ' . $category->name;
+                $description = 'Updated industry category '.$category->name;
             } else {
                 $category = IndustryCategory::create($data);
                 $action = config('constants.ACTIVITY_ACTIONS.create');
-                $description = 'Created industry category ' . $category->name;
+                $description = 'Created industry category '.$category->name;
             }
 
             ActivityLog::log($action, config('constants.MODULES.industrycategory'), [
@@ -114,7 +119,8 @@ class MarketingIndustryCategoryController extends Controller
             return redirect()->route('admin.marketing.industries.categories.index')->with('success', 'Industry category saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('IndustryCategory saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('IndustryCategory saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -128,12 +134,13 @@ class MarketingIndustryCategoryController extends Controller
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.delete'), config('constants.MODULES.industrycategory'), [
                 'subject_type' => IndustryCategory::class,
                 'subject_id' => $category->id,
-                'description' => 'Deleted industry category ' . $category->name,
+                'description' => 'Deleted industry category '.$category->name,
             ]);
 
             return back()->with('success', 'Industry category deleted successfully.');
         } catch (\Throwable $e) {
-            Log::error('IndustryCategory destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('IndustryCategory destroy failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }
@@ -151,7 +158,7 @@ class MarketingIndustryCategoryController extends Controller
                 [
                     'subject_type' => IndustryCategory::class,
                     'subject_id' => $category->id,
-                    'description' => ($category->is_active ? 'Activated' : 'Deactivated') . ' industry category ' . $category->name,
+                    'description' => ($category->is_active ? 'Activated' : 'Deactivated').' industry category '.$category->name,
                 ]
             );
 
@@ -161,7 +168,7 @@ class MarketingIndustryCategoryController extends Controller
 
             return back()->with('success', 'Industry category status updated.');
         } catch (\Throwable $e) {
-            Log::error('IndustryCategory togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('IndustryCategory togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

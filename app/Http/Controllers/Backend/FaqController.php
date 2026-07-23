@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Log;
 class FaqController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'faqs.';
 
     public function __construct()
@@ -29,7 +31,7 @@ class FaqController extends Controller
             ->paginate($this->pagerecords)
             ->withQueryString();
 
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function reorder(Request $request)
@@ -52,7 +54,8 @@ class FaqController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
-            Log::error('Faq reorder failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Faq reorder failed: '.$e->getMessage(), ['exception' => $e]);
+
             return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);
         }
     }
@@ -71,7 +74,7 @@ class FaqController extends Controller
         $categories = FaqCategory::active()->orderBy('title')->pluck('title', 'uuid');
 
         return view(
-            $this->prefix . $this->folder . 'createoredit',
+            $this->prefix.$this->folder.'createoredit',
             compact('faqs', 'categories', 'selectedCategory')
         );
     }
@@ -175,7 +178,7 @@ class FaqController extends Controller
             return redirect()->route('admin.faqs.createoredit', $category->uuid)->with('success', 'FAQs saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Faq saveorupdate failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Faq saveorupdate failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->withInput()->with('error', 'Something went wrong. Please try again.');
         }
@@ -204,7 +207,7 @@ class FaqController extends Controller
             return back()->with('success', 'FAQ deleted successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Faq destroy failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Faq destroy failed: '.$e->getMessage(), ['exception' => $e]);
 
             return back()->with('error', 'Something went wrong. Please try again.');
         }
@@ -220,12 +223,12 @@ class FaqController extends Controller
             $faq->save();
 
             ActivityLog::log(
-                config('constants.ACTIVITY_ACTIONS.' . ($faq->is_active ? 'activate' : 'deactivate')),
+                config('constants.ACTIVITY_ACTIONS.'.($faq->is_active ? 'activate' : 'deactivate')),
                 config('constants.MODULES.faq'),
                 [
                     'subject_type' => Faq::class,
                     'subject_id' => $faq->id,
-                    'description' => 'FAQ status toggled to ' . ($faq->is_active ? 'active' : 'inactive') . '.',
+                    'description' => 'FAQ status toggled to '.($faq->is_active ? 'active' : 'inactive').'.',
                 ]
             );
 
@@ -238,7 +241,7 @@ class FaqController extends Controller
             return back()->with('success', 'FAQ status updated.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Faq togglestatus failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Faq togglestatus failed: '.$e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong.'], 500);

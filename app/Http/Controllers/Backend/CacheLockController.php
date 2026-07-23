@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Log;
 class CacheLockController extends Controller
 {
     private $pagerecords;
+
     private $prefix = 'backend.';
+
     private $folder = 'settings.cache.locks.';
 
     public function __construct()
@@ -21,7 +23,8 @@ class CacheLockController extends Controller
     public function index(Request $request)
     {
         $rows = DB::table('cache_locks')->paginate($this->pagerecords)->withQueryString();
-        return view($this->prefix . $this->folder . 'index', compact('rows'));
+
+        return view($this->prefix.$this->folder.'index', compact('rows'));
     }
 
     public function clear(Request $request)
@@ -31,7 +34,8 @@ class CacheLockController extends Controller
 
             return back()->with('success', 'Cache locks cleared successfully.');
         } catch (\Throwable $e) {
-            Log::error('Cache lock clear failed: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Cache lock clear failed: '.$e->getMessage(), ['exception' => $e]);
+
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

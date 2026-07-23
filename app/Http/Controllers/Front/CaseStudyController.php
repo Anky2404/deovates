@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\Concerns\LoadsPageSections;
-use App\Helper;
 use App\Models\CaseStudy;
 use App\Models\CaseStudyCategory;
 use Illuminate\Support\Facades\Cache;
@@ -14,6 +14,7 @@ class CaseStudyController extends Controller
     use LoadsPageSections;
 
     private $prefix = 'front.';
+
     private $folder = 'casestudies.';
 
     public function index()
@@ -34,7 +35,7 @@ class CaseStudyController extends Controller
 
         [$page, $sectionContents] = $this->loadPageSections('casestudies');
 
-        return view($this->prefix . $this->folder . 'index', $viewData + compact('page', 'sectionContents'));
+        return view($this->prefix.$this->folder.'index', $viewData + compact('page', 'sectionContents'));
     }
 
     public function details($slug)
@@ -59,6 +60,6 @@ class CaseStudyController extends Controller
                 ->get();
         });
 
-        return view($this->prefix . $this->folder . 'details', compact('casestudy', 'related'));
+        return view($this->prefix.$this->folder.'details', compact('casestudy', 'related'));
     }
 }
