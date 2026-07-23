@@ -11214,7 +11214,7 @@ ul.styled-list.list-star li:before {
 
 @media (max-width: 991px) {
     .process-flow {
-        display: block;
+        display: flex;
     }
 
     .process-step {

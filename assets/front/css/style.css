@@ -11214,7 +11214,7 @@ ul.styled-list.list-star li:before {
 
 @media (max-width: 991px) {
     .process-flow {
-        display: block;
+        display: flex;
     }
 
     .process-step {
@@ -11234,7 +11234,7 @@ ul.styled-list.list-star li:before {
         left: 31px;
         width: 2px;
         height: calc(100% - 64px);
-        background: rgba(255, 255, 255, 0.18);
+        /* background: rgba(255, 255, 255, 0.18); */
     }
 
   .main-header .logo a img {
