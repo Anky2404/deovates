@@ -480,10 +480,10 @@ return [
             'title' => 'Services',
             'route' => 'front.services.index',
         ],
-        [
-            'title' => 'Work',
-            'route' => 'front.work.index',
-        ],
+        // [
+        //     'title' => 'Work',
+        //     'route' => 'front.work.index',
+        // ],
         [
             'title' => 'Industries',
             'route' => 'front.industries.index',
