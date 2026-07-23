@@ -14409,3 +14409,19 @@ a.google-rating-counter:hover {
     box-shadow: 0 6px 16px rgba(245, 180, 0, 0.35);
 }
 
+@media (max-width: 575px) {
+  .floating-meeting-btn {
+    right: 16px;
+    bottom: 213px;
+    padding: 17px 18px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 575px) {
+  #scrollUp {
+    right: 16px;
+    bottom: 150px;
+  }
+}
+
