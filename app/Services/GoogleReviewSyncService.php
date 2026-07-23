@@ -13,8 +13,6 @@ class GoogleReviewSyncService
 {
     public function sync(): array
     {
-        dd(config('constants.ELFSIGHT_WIDGET_ID'), env('ELFSIGHT_WIDGET_ID'));
-
         if (! empty(config('constants.ELFSIGHT_WIDGET_ID'))) {
             return [
                 'success' => true,
