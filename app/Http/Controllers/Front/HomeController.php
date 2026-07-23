@@ -12,6 +12,7 @@ use App\Models\Page;
 use App\Models\Portfolio;
 use App\Models\PortfolioCategory;
 use App\Models\Service;
+use App\Models\SiteSetting;
 use App\Models\Technology;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Cache;
@@ -26,6 +27,8 @@ class HomeController extends Controller
     public function index()
     {
         try {
+
+        dd(SiteSetting::get('google_reviews_average_rating'),SiteSetting::get('google_reviews_total_count'));
 
             $viewData = Cache::remember('front.home.index', Helper::CACHE_TTL, function () {
                 $data = Helper::readJSONData($this->folder.'json');
