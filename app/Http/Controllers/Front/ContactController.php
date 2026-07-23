@@ -41,7 +41,6 @@ class ContactController extends Controller
             'subject' => ['nullable', 'string', 'max:255'],
             'message' => ['required', 'string'],
         ]);
-        
 
         try {
             $enquiry = Enquiry::create([
@@ -57,8 +56,6 @@ class ContactController extends Controller
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
             ]);
-            
-            
 
             ActivityLog::log(config('constants.ACTIVITY_ACTIONS.create'), config('constants.MODULES.enquiry'), [
                 'subject_type' => Enquiry::class,
@@ -66,11 +63,18 @@ class ContactController extends Controller
                 'is_system' => true,
                 'description' => $enquiry->name . ' submitted a contact enquiry.',
             ]);
-            
-           
 
-            $result=$this->sendEnquiryEmails($enquiry);
-            // dd($result);
+            $mailSent = $this->sendEnquiryEmails($enquiry);
+
+            if (! $mailSent) {
+                $message = 'Your message was saved, but we could not send a confirmation email. Our team will still follow up.';
+
+                if ($request->expectsJson()) {
+                    return response()->json(['success' => false, 'message' => $message], 500);
+                }
+
+                return back()->withInput()->with('error', $message);
+            }
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => true, 'message' => 'Thanks! Your message has been noted.']);
@@ -78,8 +82,6 @@ class ContactController extends Controller
 
             return back()->with('success', 'Thanks! Your message has been noted.');
         } catch (\Throwable $e) {
-            
-            
             Log::error('Contact enquiry submit failed: ' . $e->getMessage(), ['exception' => $e]);
 
             if ($request->expectsJson()) {
@@ -96,17 +98,24 @@ class ContactController extends Controller
      * (App\Mail\ContactUserConfirmationMail / ContactAdminNotificationMail),
      * no database template lookup. Every send is still recorded in both
      * the Emails table and the Email Logs table.
+     *
+     * @return bool  whether the enquirer's own confirmation email sent
+     *               successfully — an admin-copy failure alone doesn't
+     *               fail this, since the visitor's submission still went
+     *               through fine on their end.
      */
-    private function sendEnquiryEmails(Enquiry $enquiry): void
+    private function sendEnquiryEmails(Enquiry $enquiry): bool
     {
-        $this->sendAndLog($enquiry->email, $enquiry->name, new ContactUserConfirmationMail($enquiry));
+        $userMailSent = $this->sendAndLog($enquiry->email, $enquiry->name, new ContactUserConfirmationMail($enquiry));
 
         foreach ($this->adminNotificationEmails() as $adminEmail) {
             $this->sendAndLog($adminEmail, null, new ContactAdminNotificationMail($enquiry));
         }
+
+        return $userMailSent;
     }
 
-    private function sendAndLog(string $toEmail, ?string $toName, $mailable): void
+    private function sendAndLog(string $toEmail, ?string $toName, $mailable): bool
     {
         $fromEmail = config('mail.from.address');
         $fromName = config('mail.from.name');
@@ -150,6 +159,8 @@ class ContactController extends Controller
             'sent_at' => $status === 'sent' ? now() : null,
             'source' => 'contact-enquiry',
         ]);
+
+        return $status === 'sent';
     }
 
     /**
