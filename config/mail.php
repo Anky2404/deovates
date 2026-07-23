@@ -110,7 +110,7 @@ return [
     |
     */
 
-    'from' => [
+    'admin' => [
         'address' => env('MAIL_FROM_ADDRESS', 'info@deovateworld.in'),
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Deovate World')),
     ],

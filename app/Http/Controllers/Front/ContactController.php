@@ -35,66 +35,149 @@ class ContactController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:30'],
+            'name'    => ['required', 'string', 'max:255'],
+            'email'   => ['required', 'email', 'max:255'],
+            'phone'   => ['nullable', 'string', 'max:30'],
             'subject' => ['nullable', 'string', 'max:255'],
             'message' => ['required', 'string'],
         ]);
 
         try {
+
+            // Save enquiry
             $enquiry = Enquiry::create([
-                'uuid' => (string) Str::uuid(),
-                'type' => 'contact',
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'phone' => $data['phone'] ?? null,
-                'subject' => $data['subject'] ?? null,
-                'message' => $data['message'],
-                'source' => 'website',
-                'status' => 'new',
+                'uuid'       => (string) Str::uuid(),
+                'type'       => 'contact',
+                'name'       => $data['name'],
+                'email'      => $data['email'],
+                'phone'      => $data['phone'] ?? null,
+                'subject'    => $data['subject'] ?? null,
+                'message'    => $data['message'],
+                'source'     => 'website',
+                'status'     => 'new',
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
             ]);
 
-            ActivityLog::log(config('constants.ACTIVITY_ACTIONS.create'), config('constants.MODULES.enquiry'), [
-                'subject_type' => Enquiry::class,
-                'subject_id' => $enquiry->id,
-                'is_system' => true,
-                'description' => $enquiry->name . ' submitted a contact enquiry.',
+            ActivityLog::log(
+                config('constants.ACTIVITY_ACTIONS.create'),
+                config('constants.MODULES.enquiry'),
+                [
+                    'subject_type' => Enquiry::class,
+                    'subject_id'   => $enquiry->id,
+                    'is_system'    => true,
+                    'description'  => $enquiry->name . ' submitted a contact enquiry.',
+                ]
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Send Confirmation Email to User
+            |--------------------------------------------------------------------------
+            */
+
+            $userMail = new ContactUserConfirmationMail($enquiry);
+
+            Mail::to($enquiry->email)->send($userMail);
+
+            $userBody = view('emails.contact-user-static', compact('enquiry'))->render();
+
+            Email::create([
+                'uuid'         => Str::uuid(),
+                'from_email'   => config('mail.from.address'),
+                'from_name'    => config('mail.from.name'),
+                'to_email'     => $enquiry->email,
+                'to_name'      => $enquiry->name,
+                'subject'      => 'Thanks for contacting ' . config('constants.BUSINESS.name'),
+                'body'         => $userBody,
+                'type'         => 'contact_confirmation',
+                'direction'    => 'outgoing',
+                'enquiry_id'   => $enquiry->id,
+                'status'       => 'sent',
+                'retry_count'  => 0,
+                'sent_at'      => now(),
+                'source'       => 'website',
+                'ip_address'   => $request->ip(),
             ]);
 
-            $mailSent = $this->sendEnquiryEmails($enquiry);
+            EmailLog::create([
+                'uuid'         => Str::uuid(),
+                'to_email'     => $enquiry->email,
+                'to_name'      => $enquiry->name,
+                'from_email'   => config('mail.from.address'),
+                'from_name'    => config('mail.from.name'),
+                'subject'      => 'Thanks for contacting ' . config('constants.BUSINESS.name'),
+                'body'         => $userBody,
+                'status'       => 'sent',
+                'retry_count'  => 0,
+                'sent_at'      => now(),
+                'source'       => 'website',
+                'ip_address'   => $request->ip(),
+                'user_agent'   => $request->userAgent(),
+            ]);
 
-            if (! $mailSent) {
-                $message = 'Your message was saved, but we could not send a confirmation email. Our team will still follow up.';
+            /*
+            |--------------------------------------------------------------------------
+            | Send Notification Email to Admin
+            |--------------------------------------------------------------------------
+            */
 
-                if ($request->expectsJson()) {
-                    return response()->json(['success' => false, 'message' => $message], 500);
-                }
+           $adminEmail = config('mail.admin.address');
+            $adminName  = config('mail.admin.name');
 
-                return back()->withInput()->with('error', $message);
-            }
+            $adminMail = new ContactAdminNotificationMail($enquiry);
+            
 
-            if ($request->expectsJson()) {
-                return response()->json(['success' => true, 'message' => 'Thanks! Your message has been noted.']);
-            }
+            Mail::to($adminEmail)->send($adminMail);
+
+            $adminBody = view('emails.contact-admin-static', compact('enquiry'))->render();
+
+            Email::create([
+    'uuid'         => Str::uuid(),
+    'from_email'   => $adminEmail,
+    'from_name'    => $adminName,
+    'to_email'     => $adminEmail,
+    'to_name'      => $adminName,
+    'subject'      => 'New Contact Enquiry',
+    'body'         => $adminBody,
+    'type'         => 'contact_notification',
+    'direction'    => 'outgoing',
+    'enquiry_id'   => $enquiry->id,
+    'status'       => 'sent',
+    'retry_count'  => 0,
+    'sent_at'      => now(),
+    'source'       => 'website',
+    'ip_address'   => $request->ip(),
+]);
+
+            EmailLog::create([
+    'uuid'         => Str::uuid(),
+    'to_email'     => $adminEmail,
+    'to_name'      => $adminName,
+    'from_email'   => config('mail.from.address'),
+    'from_name'    => config('mail.from.name'),
+    'subject'      => 'New Contact Enquiry',
+    'body'         => $adminBody,
+    'status'       => 'sent',
+    'retry_count'  => 0,
+    'sent_at'      => now(),
+    'source'       => 'website',
+    'ip_address'   => $request->ip(),
+    'user_agent'   => $request->userAgent(),
+]);
 
             return back()->with('success', 'Thanks! Your message has been noted.');
-        } catch (\Throwable $e) {
-            Log::error('Contact enquiry submit failed: ' . $e->getMessage(), ['exception' => $e]);
 
-            if (app()->environment('local')) {
-                dd($e);
-            }
+        } catch (\Exception $e) {
 
-            if ($request->expectsJson()) {
-                return response()->json(['success' => false, 'message' => 'Something went wrong. Please try again.'], 500);
-            }
+            Log::error($e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
 
-            return back()->withInput()->with('error', 'Something went wrong. Please try again.');
+            return back()->withInput()->with('error', $e->getMessage());
         }
     }
+
 
 
     private function sendEnquiryEmails(Enquiry $enquiry): bool
