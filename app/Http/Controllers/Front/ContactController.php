@@ -84,6 +84,10 @@ class ContactController extends Controller
         } catch (\Throwable $e) {
             Log::error('Contact enquiry submit failed: ' . $e->getMessage(), ['exception' => $e]);
 
+            if (app()->environment('local')) {
+                dd($e);
+            }
+
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => 'Something went wrong. Please try again.'], 500);
             }
@@ -92,18 +96,7 @@ class ContactController extends Controller
         }
     }
 
-    /**
-     * Confirmation to the enquirer + notification to every admin address
-     * in config('constants.EMAIL.send') — static, hardcoded mail designs
-     * (App\Mail\ContactUserConfirmationMail / ContactAdminNotificationMail),
-     * no database template lookup. Every send is still recorded in both
-     * the Emails table and the Email Logs table.
-     *
-     * @return bool  whether the enquirer's own confirmation email sent
-     *               successfully — an admin-copy failure alone doesn't
-     *               fail this, since the visitor's submission still went
-     *               through fine on their end.
-     */
+
     private function sendEnquiryEmails(Enquiry $enquiry): bool
     {
         $userMailSent = $this->sendAndLog($enquiry->email, $enquiry->name, new ContactUserConfirmationMail($enquiry));
@@ -119,7 +112,7 @@ class ContactController extends Controller
     {
         $fromEmail = config('mail.from.address');
         $fromName = config('mail.from.name');
-        $subject = $mailable->build()->subject;
+        $subject = \Illuminate\Support\Str::limit($mailable->build()->subject, 255, '');
         $body = $mailable->render();
         $status = 'sent';
         $error = null;
@@ -130,35 +123,49 @@ class ContactController extends Controller
             $status = 'failed';
             $error = $e->getMessage();
             Log::error('Contact email send failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if (app()->environment('local')) {
+                dd($e);
+            }
         }
 
-        Email::create([
-            'from_email' => $fromEmail,
-            'from_name' => $fromName,
-            'to_email' => $toEmail,
-            'to_name' => $toName,
-            'subject' => $subject,
-            'body' => $body,
-            'type' => 'system',
-            'direction' => 'outgoing',
-            'status' => $status,
-            'failure_reason' => $error,
-            'sent_at' => $status === 'sent' ? now() : null,
-            'source' => 'contact-enquiry',
-        ]);
+        // Record-keeping only — must never let a logging failure mask an
+        // otherwise successful (or failed) send result back to the caller.
+        try {
+            Email::create([
+                'from_email' => $fromEmail,
+                'from_name' => $fromName,
+                'to_email' => $toEmail,
+                'to_name' => $toName,
+                'subject' => $subject,
+                'body' => $body,
+                'type' => 'system',
+                'direction' => 'outgoing',
+                'status' => $status,
+                'failure_reason' => $error,
+                'sent_at' => $status === 'sent' ? now() : null,
+                'source' => 'contact-enquiry',
+            ]);
 
-        EmailLog::create([
-            'to_email' => $toEmail,
-            'to_name' => $toName,
-            'from_email' => $fromEmail,
-            'from_name' => $fromName,
-            'subject' => $subject,
-            'body' => $body,
-            'status' => $status,
-            'error_message' => $error,
-            'sent_at' => $status === 'sent' ? now() : null,
-            'source' => 'contact-enquiry',
-        ]);
+            EmailLog::create([
+                'to_email' => $toEmail,
+                'to_name' => $toName,
+                'from_email' => $fromEmail,
+                'from_name' => $fromName,
+                'subject' => $subject,
+                'body' => $body,
+                'status' => $status,
+                'error_message' => $error,
+                'sent_at' => $status === 'sent' ? now() : null,
+                'source' => 'contact-enquiry',
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Contact email record-keeping failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            if (app()->environment('local')) {
+                dd($e);
+            }
+        }
 
         return $status === 'sent';
     }
