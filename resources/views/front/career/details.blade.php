@@ -88,8 +88,8 @@
                         </ul>
 
                         @if ($career->slug && $career->isOpen())
-                            <button type="button" class="btn btn-main w-100 text-center" data-bs-toggle="modal"
-                                data-bs-target="#applyJobModal">Apply Now</button>
+                            <button type="button" class="btn btn-main w-100 text-center" data-toggle="modal"
+                                data-target="#applyJobModal">Apply Now</button>
                         @elseif ($career->apply_url)
                             <a href="{{ $career->apply_url }}" target="_blank" rel="noopener noreferrer"
                                 class="btn btn-main w-100 text-center">Apply Now</a>
@@ -139,7 +139,7 @@
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" style="color:#073965;">Apply for {{ $career->title }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
 
@@ -194,7 +194,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-main">Submit Application</button>
                     </div>
                 </form>
@@ -206,8 +206,7 @@
     @if ($errors->any() || session('success'))
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                var modal = new bootstrap.Modal(document.getElementById('applyJobModal'));
-                modal.show();
+                jQuery('#applyJobModal').modal('show');
             });
         </script>
     @endif

@@ -1,5 +1,42 @@
 <!-- Start Foot Scripts Section -->
 {{--
+    This site's front-end runs Bootstrap 4 (assets/front/js/bootstrap.min.js
+    — a separate, older bundle from the backend admin panel's Bootstrap 5).
+    Front-end modals still use the `.btn-close` markup/class from Bootstrap
+    5 examples, which Bootstrap 4's CSS doesn't style at all (it renders as
+    a blank box) — this shim gives it the classic "×" look so every
+    front-end modal's close button is visible without rewriting each one
+    to Bootstrap 4's <button class="close"><span>&times;</span></button>
+    markup.
+--}}
+<style>
+    .modal .btn-close {
+        width: 1em;
+        height: 1em;
+        padding: 0.25em;
+        background: transparent;
+        border: 0;
+        border-radius: 0.25rem;
+        opacity: 0.5;
+        position: relative;
+    }
+    .modal .btn-close::before {
+        content: "\00d7";
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        line-height: 1;
+        color: #000;
+    }
+    .modal .btn-close:hover {
+        opacity: 0.85;
+    }
+</style>
+
+{{--
     defer lets the browser fetch all of these in parallel as soon as the
     HTML is parsed instead of one-at-a-time; execution still happens in
     this exact order, right before DOMContentLoaded, so nothing below that

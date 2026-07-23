@@ -18,7 +18,7 @@
                 <span class="audit-dot" style="background:#ffbd2e;"></span>
                 <span class="audit-dot" style="background:#27c93f;"></span>
                 <span class="audit-tracker-title">{{ config('constants.BUSINESS.name') }} — {{ $toolTitle }}</span>
-                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close ms-auto" data-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">

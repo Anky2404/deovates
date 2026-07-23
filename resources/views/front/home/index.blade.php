@@ -49,10 +49,10 @@
                         </div>
                     </div>
                     <div class="hero-audit-buttons">
-                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#speedTrackerModal">
+                        <button type="button" class="hero-audit-btn" data-toggle="modal" data-target="#speedTrackerModal">
                             <i class="fas fa-tachometer-alt me-1"></i> Track Speed
                         </button>
-                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#seoTrackerModal">
+                        <button type="button" class="hero-audit-btn" data-toggle="modal" data-target="#seoTrackerModal">
                             <i class="fas fa-chart-line me-1"></i> Track SEO
                         </button>
                     </div>
@@ -92,10 +92,10 @@
                         </div>
                     </div>
                     <div class="hero-audit-buttons">
-                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#speedTrackerModal">
+                        <button type="button" class="hero-audit-btn" data-toggle="modal" data-target="#speedTrackerModal">
                             <i class="fas fa-tachometer-alt me-1"></i> Track Speed
                         </button>
-                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#seoTrackerModal">
+                        <button type="button" class="hero-audit-btn" data-toggle="modal" data-target="#seoTrackerModal">
                             <i class="fas fa-chart-line me-1"></i> Track SEO
                         </button>
                     </div>
@@ -134,10 +134,10 @@
                         </div>
                     </div>
                     <div class="hero-audit-buttons">
-                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#speedTrackerModal">
+                        <button type="button" class="hero-audit-btn" data-toggle="modal" data-target="#speedTrackerModal">
                             <i class="fas fa-tachometer-alt me-1"></i> Track Speed
                         </button>
-                        <button type="button" class="hero-audit-btn" data-bs-toggle="modal" data-bs-target="#seoTrackerModal">
+                        <button type="button" class="hero-audit-btn" data-toggle="modal" data-target="#seoTrackerModal">
                             <i class="fas fa-chart-line me-1"></i> Track SEO
                         </button>
                     </div>

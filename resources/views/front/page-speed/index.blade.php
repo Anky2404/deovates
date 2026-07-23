@@ -68,7 +68,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Speed Test Results</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p class="text-muted small mb-4" id="speedTestResultUrl"></p>
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('metricCls').textContent = data.metrics.cumulative_layout_shift;
                 document.getElementById('metricSi').textContent = data.metrics.speed_index;
 
-                new bootstrap.Modal(document.getElementById('speedTestModal')).show();
+                jQuery('#speedTestModal').modal('show');
             })
             .catch(function () {
                 btn.disabled = false;
