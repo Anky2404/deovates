@@ -14412,7 +14412,7 @@ a.google-rating-counter:hover {
 @media (max-width: 575px) {
   .floating-meeting-btn {
     right: 16px !important;
-    bottom: 213px !important;
+    bottom: 146px !important;
     padding: 17px 17px !important;
     font-size: 12px !important;
   }
@@ -14421,7 +14421,7 @@ a.google-rating-counter:hover {
 @media (max-width: 575px) {
   #scrollUp {
     right: 16px !important;
-    bottom: 150px !important;
+    bottom: 203px !important;
   }
 
 }
