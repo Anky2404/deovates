@@ -7,6 +7,7 @@ use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\CareerController;
 use App\Http\Controllers\Front\CaseStudyController;
 use App\Http\Controllers\Front\ContactController;
+use App\Http\Controllers\Front\ElfsightReviewCaptureController;
 use App\Http\Controllers\Front\FaqController;
 use App\Http\Controllers\Front\HireMeController;
 use App\Http\Controllers\Front\HomeController;
@@ -92,6 +93,11 @@ Route::name('front.')->middleware('track.visit')->group(function () {
         Route::post('/check', 'check')->name('check')->middleware('throttle:10,1');
         Route::post('/lead', 'submitLead')->name('lead')->middleware('throttle:10,1');
     });
+
+    /* ================= ELFSIGHT REVIEW CAPTURE (client-side scrape) ================= */
+    Route::post('/elfsight-reviews/capture', [ElfsightReviewCaptureController::class, 'store'])
+        ->name('elfsight-reviews.capture')
+        ->middleware('throttle:5,1');
 
     /* ================= SERVICES ================= */
     Route::prefix('services')->controller(ServiceController::class)->name('services.')->group(function () {

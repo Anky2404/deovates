@@ -172,10 +172,129 @@
                 </div>
             </div>
 
-            <div class="elfsight-app-{{ config('constants.ELFSIGHT_WIDGET_ID') }}" data-elfsight-app-lazy></div>
+            <div class="elfsight-app-{{ config('constants.ELFSIGHT_WIDGET_ID') }}" id="elfsightGoogleReviewsWidget" data-elfsight-app-lazy></div>
         </div>
     </section>
     <!-- End Elfsight Google Reviews Widget -->
+
+    @push('scripts')
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {{--
+            Best-effort scrape of the Elfsight widget's own rendered DOM
+            (NOT Google's servers — this only reads content Elfsight
+            already displays on our page) so a copy lands in our database.
+            Explicitly approved despite the risk: Elfsight's internal
+            markup isn't a public API and can change without notice,
+            silently breaking this. If nothing ever gets captured, open
+            DevTools on this page, inspect one review card inside
+            #elfsightGoogleReviewsWidget, and adjust the selectors below
+            to match what's actually there.
+        --}}
+        var widget = document.getElementById('elfsightGoogleReviewsWidget');
+        if (!widget) return;
+
+        var captured = false;
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+        function looksLikeReviewCard(el) {
+            var text = (el.innerText || '').trim();
+            return text.length > 20 && text.length < 2000;
+        }
+
+        function extractRating(card) {
+            // Count filled/active star-like icons; Elfsight commonly marks
+            // filled stars with a class containing "active" or "filled",
+            // or renders inline SVG stars — fall back to counting any
+            // element whose class mentions "star".
+            var filled = card.querySelectorAll('[class*="star"][class*="active"], [class*="star"][class*="filled"], [class*="Star"][class*="active"]');
+            if (filled.length >= 1 && filled.length <= 5) return filled.length;
+
+            var anyStars = card.querySelectorAll('[class*="star" i]');
+            if (anyStars.length >= 1 && anyStars.length <= 5) return anyStars.length;
+
+            return 5;
+        }
+
+        function extractReviews() {
+            if (captured) return;
+
+            // Elfsight typically wraps each review in a repeated card-like
+            // element; look for common naming patterns first, then fall
+            // back to any direct-children group that repeats 2+ times.
+            var cardSelectors = [
+                '[class*="review-item" i]',
+                '[class*="reviewCard" i]',
+                '[class*="review-card" i]',
+                '[class*="testimonial-item" i]',
+                '[class*="Item"][class*="review" i]'
+            ];
+
+            var cards = [];
+            for (var i = 0; i < cardSelectors.length; i++) {
+                var found = widget.querySelectorAll(cardSelectors[i]);
+                if (found.length >= 1) {
+                    cards = Array.prototype.slice.call(found);
+                    break;
+                }
+            }
+
+            if (!cards.length) return;
+
+            var reviews = [];
+
+            cards.forEach(function (card) {
+                if (!looksLikeReviewCard(card)) return;
+
+                var nameEl = card.querySelector('[class*="name" i], [class*="author" i], h3, h4, strong, b');
+                var textEl = card.querySelector('[class*="text" i], [class*="content" i], [class*="body" i], p');
+                var imgEl = card.querySelector('img');
+
+                var authorName = nameEl ? nameEl.innerText.trim() : null;
+                var reviewText = textEl ? textEl.innerText.trim() : card.innerText.trim();
+
+                if (!authorName || authorName.length > 100) return;
+
+                reviews.push({
+                    author_name: authorName,
+                    rating: extractRating(card),
+                    review_text: reviewText.substring(0, 2000),
+                    author_photo_url: imgEl ? imgEl.src : null
+                });
+            });
+
+            if (!reviews.length) return;
+
+            captured = true;
+
+            fetch('{{ route('front.elfsight-reviews.capture') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ reviews: reviews })
+            }).catch(function () {
+                // Best-effort only — a failed capture never affects the
+                // visible widget or the rest of the page.
+            });
+        }
+
+        // The widget loads its content asynchronously from Elfsight's own
+        // servers, so watch for DOM changes instead of a fixed delay.
+        var observer = new MutationObserver(function () {
+            extractReviews();
+        });
+        observer.observe(widget, { childList: true, subtree: true });
+
+        // Safety net in case content is already there before the observer
+        // attaches, and a hard stop so this never watches forever.
+        setTimeout(extractReviews, 3000);
+        setTimeout(function () { observer.disconnect(); }, 15000);
+    });
+    </script>
+    @endpush
 
     @once
     <style>
