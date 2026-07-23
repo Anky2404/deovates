@@ -70,7 +70,7 @@ class ContactController extends Controller
            
 
             $result=$this->sendEnquiryEmails($enquiry);
-            dd($result);
+            // dd($result);
 
             if ($request->expectsJson()) {
                 return response()->json(['success' => true, 'message' => 'Thanks! Your message has been noted.']);
