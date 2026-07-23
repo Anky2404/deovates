@@ -22,6 +22,7 @@ class WebsiteAuditLead extends Model
         'mobile_metrics',
         'desktop_scores',
         'desktop_metrics',
+        'seo_audit',
         'status',
         'ip_address',
         'user_agent',
@@ -34,6 +35,7 @@ class WebsiteAuditLead extends Model
             'mobile_metrics' => 'array',
             'desktop_scores' => 'array',
             'desktop_metrics' => 'array',
+            'seo_audit' => 'array',
         ];
     }
 

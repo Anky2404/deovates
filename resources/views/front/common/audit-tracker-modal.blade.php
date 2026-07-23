@@ -145,6 +145,14 @@
                             </table>
                         </div>
                     </div>
+
+                    @if ($isSeo)
+                        <div class="audit-seo-checklist mt-4">
+                            <h6 class="mb-2">On-Page SEO Checklist</h6>
+                            <div class="audit-seo-message text-muted small d-none"></div>
+                            <ul class="list-unstyled audit-seo-list mb-0"></ul>
+                        </div>
+                    @endif
                 </div>
 
             </div>
@@ -198,5 +206,19 @@
     .audit-score-circle.score-good { background: #0cce6b; }
     .audit-score-circle.score-average { background: #ffa400; }
     .audit-score-circle.score-poor { background: #ff4e42; }
+
+    .audit-seo-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 6px 0;
+        border-bottom: 1px solid #f0f0f3;
+        font-size: 13.5px;
+    }
+    .audit-seo-list li:last-child { border-bottom: none; }
+    .audit-seo-list .seo-check-icon { flex-shrink: 0; margin-top: 2px; }
+    .audit-seo-list .seo-check-icon.ok { color: #0cce6b; }
+    .audit-seo-list .seo-check-icon.warn { color: #ff4e42; }
+    .audit-seo-list .seo-check-detail { color: #6c757d; font-size: 12px; }
 </style>
 @endonce

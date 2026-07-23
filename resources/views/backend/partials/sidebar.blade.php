@@ -678,6 +678,14 @@
                     <div>Google Reviews</div>
                 </a>
             </li>
+
+            {{-- ================= Website Audit Leads Menu ================= --}}
+            <li class="menu-item {{ Helper::isActive(['admin.website-audit-leads.index', 'admin.website-audit-leads.details']) }}">
+                <a href="{{ route('admin.website-audit-leads.index') }}" class="menu-link">
+                    <i class='menu-icon bx bx-tachometer'></i>
+                    <div>Audit Leads</div>
+                </a>
+            </li>
             {{-- ================= CASE STUDIES ================= --}}
             @php
                 $casestudyMenuOpen = Helper::isActive(['admin.casestudies.*', 'admin.casestudies.categories.*']);

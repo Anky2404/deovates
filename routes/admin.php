@@ -28,6 +28,7 @@ use App\Http\Controllers\Backend\FaqCategoryController;
 use App\Http\Controllers\Backend\FaqController;
 use App\Http\Controllers\Backend\FormController;
 use App\Http\Controllers\Backend\GoogleReviewController;
+use App\Http\Controllers\Backend\WebsiteAuditLeadController;
 use App\Http\Controllers\Backend\JobBatchController;
 use App\Http\Controllers\Backend\JobController;
 use App\Http\Controllers\Backend\MarketingIndustryCategoryController;
@@ -446,6 +447,12 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/sync', 'sync')->name('sync');
         Route::get('/togglestatus/{uuid}', 'togglestatus')->name('togglestatus');
+        Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
+    });
+
+    Route::prefix('website-audit-leads')->name('website-audit-leads.')->controller(WebsiteAuditLeadController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/details/{uuid}', 'details')->name('details');
         Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
     });
 

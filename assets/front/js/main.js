@@ -844,6 +844,44 @@ $(document).ready(function () {
         });
     }
 
+    function fillSeoChecklist($modal, seoAudit) {
+        var $section = $modal.find('.audit-seo-checklist');
+        if (!$section.length) return;
+
+        var $message = $section.find('.audit-seo-message');
+        var $list = $section.find('.audit-seo-list');
+        $list.empty();
+
+        if (!seoAudit || !seoAudit.success) {
+            $message.text((seoAudit && seoAudit.message) || 'Could not run the on-page SEO checklist for this URL.').removeClass('d-none');
+            return;
+        }
+        $message.addClass('d-none');
+
+        var items = [
+            { ok: seoAudit.title && seoAudit.title.ok, label: 'Title Tag', detail: seoAudit.title ? (seoAudit.title.value || 'Missing') + ' (' + seoAudit.title.length + ' chars)' : '' },
+            { ok: seoAudit.meta_description && seoAudit.meta_description.ok, label: 'Meta Description', detail: seoAudit.meta_description ? (seoAudit.meta_description.value ? seoAudit.meta_description.length + ' chars' : 'Missing') : '' },
+            { ok: seoAudit.h1_ok, label: 'Single H1 Heading', detail: seoAudit.headings ? 'H1 count: ' + seoAudit.headings.h1 : '' },
+            { ok: seoAudit.canonical && seoAudit.canonical.ok, label: 'Canonical URL', detail: seoAudit.canonical ? (seoAudit.canonical.value || 'Missing') : '' },
+            { ok: seoAudit.robots && seoAudit.robots.ok, label: 'Robots Meta (indexable)', detail: seoAudit.robots && seoAudit.robots.value ? seoAudit.robots.value : 'Not blocked' },
+            { ok: seoAudit.viewport && seoAudit.viewport.ok, label: 'Mobile Viewport Tag', detail: '' },
+            { ok: seoAudit.lang && seoAudit.lang.ok, label: 'HTML Lang Attribute', detail: seoAudit.lang ? (seoAudit.lang.value || 'Missing') : '' },
+            { ok: seoAudit.favicon_ok, label: 'Favicon Present', detail: '' },
+            { ok: seoAudit.open_graph_ok, label: 'Open Graph Tags', detail: '' },
+            { ok: seoAudit.twitter_card_ok, label: 'Twitter Card Tags', detail: '' },
+            { ok: seoAudit.images && seoAudit.images.ok, label: 'Image ALT Coverage', detail: seoAudit.images ? seoAudit.images.missing_alt + ' of ' + seoAudit.images.total + ' images missing ALT' : '' },
+            { ok: seoAudit.schema_ok, label: 'Structured Data (Schema)', detail: '' }
+        ];
+
+        items.forEach(function (item) {
+            var icon = item.ok
+                ? '<i class="fas fa-check-circle seo-check-icon ok"></i>'
+                : '<i class="fas fa-exclamation-circle seo-check-icon warn"></i>';
+            var detail = item.detail ? '<div class="seo-check-detail">' + $('<div>').text(item.detail).html() + '</div>' : '';
+            $list.append('<li>' + icon + '<div><div>' + item.label + '</div>' + detail + '</div></li>');
+        });
+    }
+
     $('.audit-tracker-modal').each(function () {
         var $modal = $(this);
         var $form = $modal.find('.audit-lead-form');
@@ -900,6 +938,7 @@ $(document).ready(function () {
                 $modal.find('.audit-result-url').text(response.url);
                 fillAuditPane($modal.find('[data-audit-pane="mobile"]'), response.mobile);
                 fillAuditPane($modal.find('[data-audit-pane="desktop"]'), response.desktop);
+                fillSeoChecklist($modal, response.seo_audit);
 
                 $form.addClass('d-none');
                 $results.removeClass('d-none');
