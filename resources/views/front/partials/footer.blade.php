@@ -26,18 +26,28 @@
 
                         </div>
                          @php
-                                $googleRatingFooter = \App\Models\SiteSetting::get('google_reviews_average_rating');
-                                $googleTotalFooter = \App\Models\SiteSetting::get('google_reviews_total_count');
+                                // Live-computed from whatever reviews actually exist in the
+                                // database right now — manually-added Testimonials (Admin >
+                                // Testimonials) and/or any Google Reviews rows — rather than
+                                // the old Places-API SiteSetting values, which never populate
+                                // now that the Places sync is intentionally skipped.
+                                $testimonialQuery = \App\Models\Testimonial::active()->where('rating', '>', 0);
+                                $googleReviewQuery = \App\Models\GoogleReview::active();
+
+                                $reviewTotalCount = $testimonialQuery->count() + $googleReviewQuery->count();
+                                $reviewAverageRating = $reviewTotalCount > 0
+                                    ? ($testimonialQuery->sum('rating') + $googleReviewQuery->sum('rating')) / $reviewTotalCount
+                                    : null;
                             @endphp
 
-                            @if ($googleRatingFooter && $googleTotalFooter)
+                            @if ($reviewAverageRating && $reviewTotalCount)
                                 <a href="{{ route('front.testimonials.index') }}" class="site-visitor-counter google-rating-counter">
                                     <span class="site-visitor-counter-icon google-rating-counter-icon">
                                         <i class="bx bxs-star"></i>
                                     </span>
                                     <span class="site-visitor-counter-text">
-                                        <strong class="site-visitor-counter-number">{{ number_format($googleRatingFooter, 1) }}</strong>
-                                        <span class="site-visitor-counter-label">{{ number_format($googleTotalFooter) }} Google Reviews</span>
+                                        <strong class="site-visitor-counter-number">{{ number_format($reviewAverageRating, 1) }}</strong>
+                                        <span class="site-visitor-counter-label">{{ number_format($reviewTotalCount) }} Reviews</span>
                                     </span>
                                 </a>
                             @endif
