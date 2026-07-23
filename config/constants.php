@@ -5,25 +5,11 @@ return [
     'FRONT_PAGE_RECORDS' => 50,
     'RATING_PAGE_RECORDS' => 10,
     'BRAND_NAME' => 'Deovate',
-
-    // Every image-upload form (single or gallery) validates against this list
-    // instead of Laravel's built-in "image" rule, which is missing "avif" —
-    // this site converts everything to AVIF, so admins need to be able to
-    // upload it too. Kept image-only on purpose: no pdf/mp3/etc. allowed here.
     'IMAGE_MIMES' => 'jpg,jpeg,png,gif,bmp,webp,avif,svg',
-
-    // Fill these in from your Tawk.to dashboard: Administration > Chat Widget
-    // > the embed snippet has s1.src = 'https://embed.tawk.to/{PROPERTY_ID}/{WIDGET_ID}'.
-    // The widget stays off until both are set — no broken script tag in the
-    // meantime.
     'TAWK_TO' => [
         'property_id' => env('TAWK_TO_PROPERTY_ID'),
         'widget_id' => env('TAWK_TO_WIDGET_ID'),
     ],
-
-    // Free embeddable Google Reviews widget (elfsight.com) — pulls real
-    // Google reviews via Elfsight's own backend, so no Google Cloud
-    // billing/API key needed on our side. Stays hidden until set.
     'ELFSIGHT_WIDGET_ID' => env('ELFSIGHT_WIDGET_ID'),
 
     'META_STATUSES' => [
@@ -38,8 +24,7 @@ return [
         'blog' => 'Blog',
     ],
 
-    // Dropdown source for Section Content admin: which front-end page a
-    // section's content belongs to.
+
     'PAGE_NAMES' => [
         'home' => 'Home',
         'about' => 'About',
@@ -60,8 +45,7 @@ return [
         'legal_terms' => 'Terms & Conditions',
     ],
 
-    // Dropdown source for Section Content admin: which section, within the
-    // chosen page, this content block feeds.
+
     'SECTION_NAMES' => [
         'hero' => 'Hero',
         'about' => 'About',
@@ -249,18 +233,15 @@ return [
             ],
             [
                 'label' => 'Support',
-                'number' => '94314-05900',
+                'number' => 'XXXXX-XXXXX',
             ],
         ],
         'whatsapp' => [
-            // 'number' => '+917301005510',
             'number' => '+919914156467',
             // 'link'   => 'https://wa.me/917301005510?text=Hi%20Deovate%20World,%20I%20would%20like%20to%20know%20more%20about%20your%20services.',
             'link' => "https://wa.me/919914156467?text=Hi!%20%F0%9F%91%8B%20Thanks%20for%20reaching%20out%20to%20Deovate%20World.%0A%0ATell%20us%20a%20little%20about%20what%20you're%20looking%20to%20build%20-%20a%20website%2C%20an%20app%2C%20custom%20software%2C%20whatever%20it%20is%20-%20and%20we'll%20get%20back%20to%20you%20personally%2C%20not%20a%20template%20reply.%0A%0AWe%20usually%20respond%20within%20a%20few%20hours%20on%20working%20days.%0A%0ATalk%20soon!%0A-%20Team%20Deovate%20World.",
         ],
-        // Free Google Calendar "Appointment schedule" booking link — create
-        // one at calendar.google.com (Create > Appointment schedule), then
-        // paste the public share link here. Leave null to hide the button.
+
         'meeting_url' => env('MEETING_BOOKING_URL', null),
         'emails' => [
             [
@@ -270,7 +251,7 @@ return [
         ],
     ],
 
-    // this array is for sending emails
+
     'EMAIL' => [
         'from' => 'info@deovateworld.in',
         'contact' => 'hr@deovateworld.in',
@@ -337,9 +318,7 @@ return [
 
     ],
 
-    // Fallback SEO copy for pages that have no database-driven content of their own.
-    // Detail pages (blog, portfolio, industry, case study, career, service) pull their
-    // title/description straight from the record instead of this list.
+
     'PAGE_SEO' => [
         'home' => [
             'title' => 'Deovate World: Web Design, Website Development, SEO, Digital Marketing & Branding Agency',
@@ -477,7 +456,7 @@ return [
         'admin' => 'Admin',
     ],
 
-    // Matches the `phonecode` format stored on the countries table (no "+" prefix).
+
     'DEFAULT_COUNTRY_CODE' => '91',
     'PROVIDERS' => [
         'web' => 'users',
@@ -493,22 +472,22 @@ return [
             'title' => 'About',
             'route' => 'front.about.index',
         ],
-        // [
-        //     'title' => 'Case Studies',
-        //     'route' => 'front.casestudies.index',
-        // ],
+        [
+            'title' => 'Case Studies',
+            'route' => 'front.casestudies.index',
+        ],
         [
             'title' => 'Services',
             'route' => 'front.services.index',
         ],
-        // [
-        //     'title' => 'Work',
-        //     'route' => 'front.work.index',
-        // ],
-        // [
-        //     'title' => 'Industries',
-        //     'route' => 'front.industries.index',
-        // ],
+        [
+            'title' => 'Work',
+            'route' => 'front.work.index',
+        ],
+        [
+            'title' => 'Industries',
+            'route' => 'front.industries.index',
+        ],
         [
             'title' => 'Blog',
             'route' => 'front.blog.index',
