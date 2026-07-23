@@ -8,24 +8,13 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-/**
- * Pulls reviews for the configured Google Place via the official Places
- * API (Place Details, "reviews" field) — the only Google-sanctioned
- * source of review data. Google's own API only ever returns up to 5
- * reviews per place (a hard platform limit, not something this service
- * can work around), but the place's overall rating + total review count
- * come back separately and are stored as site settings for the footer.
- *
- * Superseded by the Elfsight widget (config('constants.ELFSIGHT_WIDGET_ID'))
- * once that's configured — Elfsight pulls reviews on its own backend, no
- * Google Cloud billing needed, so this Places-API sync (and its hourly
- * cron in routes/console.php) becomes redundant and skips itself rather
- * than spamming the log every hour with an unconfigured-key message.
- */
+
 class GoogleReviewSyncService
 {
     public function sync(): array
     {
+        dd(config('constants.ELFSIGHT_WIDGET_ID'), env('ELFSIGHT_WIDGET_ID'));
+
         if (! empty(config('constants.ELFSIGHT_WIDGET_ID'))) {
             return [
                 'success' => true,
