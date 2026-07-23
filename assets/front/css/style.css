@@ -11237,6 +11237,11 @@ ul.styled-list.list-star li:before {
         background: rgba(255, 255, 255, 0.18);
     }
 
+  .main-header .logo a img {
+    right: 50px;
+    position: relative;
+  }
+
     .process-chevron {
         clip-path: none;
         flex-direction: row;
