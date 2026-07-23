@@ -472,10 +472,10 @@ return [
             'title' => 'About',
             'route' => 'front.about.index',
         ],
-        [
-            'title' => 'Case Studies',
-            'route' => 'front.casestudies.index',
-        ],
+        // [
+        //     'title' => 'Case Studies',
+        //     'route' => 'front.casestudies.index',
+        // ],
         [
             'title' => 'Services',
             'route' => 'front.services.index',
@@ -484,10 +484,10 @@ return [
         //     'title' => 'Work',
         //     'route' => 'front.work.index',
         // ],
-        [
-            'title' => 'Industries',
-            'route' => 'front.industries.index',
-        ],
+        // [
+        //     'title' => 'Industries',
+        //     'route' => 'front.industries.index',
+        // ],
         [
             'title' => 'Blog',
             'route' => 'front.blog.index',

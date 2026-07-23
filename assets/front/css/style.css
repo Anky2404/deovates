@@ -2904,6 +2904,18 @@ hr {
     }
 }
 
+/* Below the "lg" breakpoint the nav/CTA columns collapse (d-lg-block/d-lg-none)
+   and the logo's column has no matching col-xl-2/col-lg-2/col-md-2 rule at
+   this size, so it shrinks to content width and sits at the flex row's
+   default left alignment instead of being centered. */
+@media (max-width: 991px) {
+    .main-header .header-bottom .row>div:first-child {
+        flex: 0 0 100%;
+        max-width: 100%;
+        text-align: center;
+    }
+}
+
 .main-header ul>li:hover>ul.submenu {
     visibility: visible;
     opacity: 1;
@@ -14407,22 +14419,5 @@ a.google-rating-counter:hover {
 .google-rating-counter-icon {
     background: #f5b400;
     box-shadow: 0 6px 16px rgba(245, 180, 0, 0.35);
-}
-
-@media (max-width: 575px) {
-  .floating-meeting-btn {
-    right: 16px !important;
-    bottom: 146px !important;
-    padding: 17px 17px !important;
-    font-size: 12px !important;
-  }
-}
-
-@media (max-width: 575px) {
-  #scrollUp {
-    right: 16px !important;
-    bottom: 203px !important;
-  }
-
 }
 
