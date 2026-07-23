@@ -14411,17 +14411,17 @@ a.google-rating-counter:hover {
 
 @media (max-width: 575px) {
   .floating-meeting-btn {
-    right: 16px;
-    bottom: 213px;
-    padding: 17px 17px;
-    font-size: 12px;
+    right: 16px !important;
+    bottom: 213px !important;
+    padding: 17px 17px !important;
+    font-size: 12px !important;
   }
 }
 
 @media (max-width: 575px) {
   #scrollUp {
-    right: 16px;
-    bottom: 150px;
+    right: 16px !important;
+    bottom: 150px !important;
   }
 
 }
