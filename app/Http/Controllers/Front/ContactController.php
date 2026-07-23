@@ -5,11 +5,15 @@ namespace App\Http\Controllers\Front;
 use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\Concerns\LoadsPageSections;
+use App\Mail\ContactAdminNotificationMail;
+use App\Mail\ContactUserConfirmationMail;
 use App\Models\ActivityLog;
+use App\Models\Email;
+use App\Models\EmailLog;
 use App\Models\Enquiry;
-use App\Services\EmailSenderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class ContactController extends Controller
@@ -87,86 +91,64 @@ class ContactController extends Controller
 
     /**
      * Confirmation to the enquirer + notification to every admin address
-     * in config('constants.EMAIL.send') — both rendered from their own
-     * database template (auto-created from the fallback view on first
-     * use, then fully editable from Admin > Emails > Templates).
+     * in config('constants.EMAIL.send') — static, hardcoded mail designs
+     * (App\Mail\ContactUserConfirmationMail / ContactAdminNotificationMail),
+     * no database template lookup. Every send is still recorded in both
+     * the Emails table and the Email Logs table.
      */
     private function sendEnquiryEmails(Enquiry $enquiry): void
     {
-        $appName = config('constants.BUSINESS.name');
-        $sender = app(EmailSenderService::class);
-
-        $subjectLine = $enquiry->subject ?: 'your enquiry';
-
-        try {
-            $sender->sendTemplated(
-                toEmail: $enquiry->email,
-                toName: $enquiry->name,
-                templateSlug: 'contact-user-confirmation',
-                templateDefaults: [
-                    'name' => 'Contact — User Confirmation',
-                    'subject' => 'Thanks for contacting {{app_name}} — {{subject}}',
-                    'body' => view('emails.notification', [
-                        'intro' => 'Thanks for reaching out to {{app_name}} regarding <strong>{{subject}}</strong>. We\'ve received your message and our team will get back to you shortly.',
-                        'quote' => '{{message}}',
-                        'outro' => 'We usually respond within a few hours on working days.',
-                    ])->render(),
-                    'variables' => ['name', 'subject', 'message', 'app_name'],
-                    'module' => 'contact',
-                ],
-                variables: [
-                    'name' => e($enquiry->name),
-                    'subject' => e($subjectLine),
-                    'message' => nl2br(e($enquiry->message)),
-                    'app_name' => $appName,
-                ],
-                source: 'contact-enquiry',
-                mailableClass: \App\Mail\ContactUserConfirmationMail::class,
-            );
-        } catch (\Throwable $e) {
-            Log::error('Contact confirmation email failed: ' . $e->getMessage(), ['exception' => $e]);
-        }
+        $this->sendAndLog($enquiry->email, $enquiry->name, new ContactUserConfirmationMail($enquiry));
 
         foreach ($this->adminNotificationEmails() as $adminEmail) {
-            try {
-                $sender->sendTemplated(
-                    toEmail: $adminEmail,
-                    toName: null,
-                    templateSlug: 'contact-admin-notification',
-                    templateDefaults: [
-                        'name' => 'Contact — Admin Notification',
-                        'subject' => 'New contact enquiry from {{name}} — {{subject}}',
-                        'body' => view('emails.notification', [
-                            'greeting' => 'New Contact Enquiry',
-                            'intro' => 'A new enquiry was submitted on {{app_name}}.',
-                            'fields' => [
-                                'Name' => '{{name}}',
-                                'Email' => '{{email}}',
-                                'Phone' => '{{phone}}',
-                                'Subject' => '{{subject}}',
-                            ],
-                            'quote' => '{{message}}',
-                            'outro' => 'View and manage this enquiry from the admin panel.',
-                            'signoff' => '',
-                        ])->render(),
-                        'variables' => ['name', 'email', 'phone', 'subject', 'message', 'app_name'],
-                        'module' => 'contact',
-                    ],
-                    variables: [
-                        'name' => e($enquiry->name),
-                        'email' => e($enquiry->email),
-                        'phone' => e($enquiry->phone ?? '—'),
-                        'subject' => e($subjectLine),
-                        'message' => nl2br(e($enquiry->message)),
-                        'app_name' => $appName,
-                    ],
-                    source: 'contact-enquiry',
-                    mailableClass: \App\Mail\ContactAdminNotificationMail::class,
-                );
-            } catch (\Throwable $e) {
-                Log::error('Contact admin notification email failed: ' . $e->getMessage(), ['exception' => $e]);
-            }
+            $this->sendAndLog($adminEmail, null, new ContactAdminNotificationMail($enquiry));
         }
+    }
+
+    private function sendAndLog(string $toEmail, ?string $toName, $mailable): void
+    {
+        $fromEmail = config('mail.from.address');
+        $fromName = config('mail.from.name');
+        $subject = $mailable->build()->subject;
+        $body = $mailable->render();
+        $status = 'sent';
+        $error = null;
+
+        try {
+            Mail::to($toEmail)->send($mailable);
+        } catch (\Throwable $e) {
+            $status = 'failed';
+            $error = $e->getMessage();
+            Log::error('Contact email send failed: ' . $e->getMessage(), ['exception' => $e]);
+        }
+
+        Email::create([
+            'from_email' => $fromEmail,
+            'from_name' => $fromName,
+            'to_email' => $toEmail,
+            'to_name' => $toName,
+            'subject' => $subject,
+            'body' => $body,
+            'type' => 'system',
+            'direction' => 'outgoing',
+            'status' => $status,
+            'failure_reason' => $error,
+            'sent_at' => $status === 'sent' ? now() : null,
+            'source' => 'contact-enquiry',
+        ]);
+
+        EmailLog::create([
+            'to_email' => $toEmail,
+            'to_name' => $toName,
+            'from_email' => $fromEmail,
+            'from_name' => $fromName,
+            'subject' => $subject,
+            'body' => $body,
+            'status' => $status,
+            'error_message' => $error,
+            'sent_at' => $status === 'sent' ? now() : null,
+            'source' => 'contact-enquiry',
+        ]);
     }
 
     /**
