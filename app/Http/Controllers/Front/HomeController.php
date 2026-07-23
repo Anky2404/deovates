@@ -28,8 +28,6 @@ class HomeController extends Controller
     {
         try {
 
-        dd(SiteSetting::get('google_reviews_average_rating'),SiteSetting::get('google_reviews_total_count'));
-
             $viewData = Cache::remember('front.home.index', Helper::CACHE_TTL, function () {
                 $data = Helper::readJSONData($this->folder.'json');
 
