@@ -2,12 +2,20 @@
   { "use strict"
   
 /* 1. Proloder */
-    $(window).on('load', function () {
-      $('#preloader-active').delay(450).fadeOut('slow');
-      $('body').delay(450).css({
+    // Was gated on window 'load', which waits for every image, font and
+    // external resource on the page — on an image-heavy page that made the
+    // preloader sit on screen far longer than the page actually took to
+    // become usable. DOM-ready is enough (layout + CSS are already in by
+    // then); the timeout is just a safety net in case 'ready' is somehow
+    // never reached.
+    var hidePreloader = function () {
+      $('#preloader-active').stop(true, true).fadeOut(250);
+      $('body').css({
         'overflow': 'visible'
       });
-    });
+    };
+    $(hidePreloader);
+    setTimeout(hidePreloader, 2000);
 
 
 /* 2. slick Nav */
@@ -648,11 +656,12 @@ $(document).ready(function(){
 
 //=====================================
 // Contact forms (home page + /contact page)
-// client-side validation + animation only —
-// not wired to a backend yet
+// client-side validation + real AJAX submit to /contact
 //=====================================
 
 $(document).ready(function () {
+
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
     function validateField($field) {
         var el = $field.get(0);
@@ -663,6 +672,18 @@ $(document).ready(function () {
         $group.toggleClass('is-valid', valid && $field.val().trim() !== '');
 
         return valid;
+    }
+
+    function showFormMessage($form, isSuccess, message) {
+        var $box = $form.find('.app-form-success');
+        $box.find('i').attr('class', isSuccess ? 'fa fa-check-circle' : 'fa fa-times-circle')
+            .css('color', isSuccess ? '#22c07a' : '#e04b4b');
+        $box.find('p').text(message);
+        $form.addClass('is-submitted');
+
+        setTimeout(function () {
+            $form.removeClass('is-submitted');
+        }, 4000);
     }
 
     // Scoped per-form so multiple .app-contact-form instances on the
@@ -699,20 +720,196 @@ $(document).ready(function () {
             var $btn = $form.find('.app-form-submit');
             $btn.addClass('is-loading').prop('disabled', true);
 
-            // No backend endpoint exists yet for this form — this
-            // timeout simulates a submit so the loading/success
-            // animation can be reviewed. Replace with a real $.ajax /
-            // fetch POST once a route + controller are wired up.
-            setTimeout(function () {
+            // Forms without a real action (e.g. the career "general
+            // application" widgets, which post different fields and
+            // aren't wired to a backend yet) keep the old harmless
+            // simulated submit instead of AJAX-posting nowhere useful.
+            if (!$form.attr('action')) {
+                setTimeout(function () {
+                    $btn.removeClass('is-loading').prop('disabled', false);
+                    showFormMessage($form, true, 'Thanks! Your message has been noted.');
+                    $form.find('input, textarea').val('');
+                    $form.find('.app-form-group').removeClass('is-valid has-error');
+                }, 900);
+                return;
+            }
+
+            $.ajax({
+                url: $form.attr('action'),
+                method: 'POST',
+                dataType: 'json',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                data: {
+                    name: $form.find('[name="name"]').val(),
+                    email: $form.find('[name="email"]').val(),
+                    phone: $form.find('[name="phone"]').val(),
+                    subject: $form.find('[name="subject"]').val(),
+                    message: $form.find('[name="message"]').val()
+                }
+            }).done(function (response) {
                 $btn.removeClass('is-loading').prop('disabled', false);
-                $form.addClass('is-submitted');
+                showFormMessage($form, true, response.message || 'Thanks! Your message has been noted.');
                 $form.find('input, textarea').val('');
                 $form.find('.app-form-group').removeClass('is-valid has-error');
+            }).fail(function (xhr) {
+                $btn.removeClass('is-loading').prop('disabled', false);
+                var message = (xhr.responseJSON && xhr.responseJSON.message) || 'Something went wrong. Please try again.';
+                showFormMessage($form, false, message);
+            });
+        });
+    });
 
-                setTimeout(function () {
-                    $form.removeClass('is-submitted');
-                }, 4000);
-            }, 1100);
+    //=====================================
+    // Newsletter subscribe forms (home page + footer)
+    //=====================================
+    $('.app-newsletter-form').each(function () {
+        var $form = $(this);
+        var $result = $form.next('.subscribe-result, .mt-10.info');
+        var $btn = $form.find('button[type="submit"]');
+
+        $form.on('submit', function (e) {
+            e.preventDefault();
+
+            var $email = $form.find('input[type="email"]');
+
+            if (!$email.get(0).checkValidity()) {
+                $email.trigger('focus');
+                return;
+            }
+
+            $btn.prop('disabled', true);
+
+            $.ajax({
+                url: $form.attr('action'),
+                method: 'POST',
+                dataType: 'json',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                data: {
+                    email: $email.val(),
+                    name: $form.find('input[name="name"]').val()
+                }
+            }).done(function (response) {
+                $btn.prop('disabled', false);
+                $result.css('color', '#22c07a').text(response.message || 'Thanks for subscribing!');
+                $email.val('');
+            }).fail(function (xhr) {
+                $btn.prop('disabled', false);
+                var message = (xhr.responseJSON && xhr.responseJSON.message) || 'Something went wrong. Please try again.';
+                $result.css('color', '#e04b4b').text(message);
+            });
+        });
+    });
+
+    //=====================================
+    // Website Audit Tracker (Speed / SEO popups, hero buttons)
+    //=====================================
+    $('.audit-url-input').on('blur paste', function () {
+        var $field = $(this);
+        setTimeout(function () {
+            $field.val($field.val().trim().replace(/^https?:\/\//i, '').replace(/^\/+/, ''));
+        }, 0);
+    });
+
+    function scoreClassFor(score) {
+        if (score === null || score === undefined) return '';
+        if (score >= 90) return 'score-good';
+        if (score >= 50) return 'score-average';
+        return 'score-poor';
+    }
+
+    function fillAuditPane($pane, deviceResult) {
+        var $message = $pane.find('.audit-tab-message');
+        var $content = $pane.find('.audit-tab-content');
+
+        if (!deviceResult || !deviceResult.success) {
+            $message.text(deviceResult && deviceResult.message ? deviceResult.message : 'Could not load this result.').removeClass('d-none');
+            $content.addClass('d-none');
+            return;
+        }
+
+        $message.addClass('d-none');
+        $content.removeClass('d-none');
+
+        $pane.find('[data-score]').each(function () {
+            var key = $(this).data('score');
+            var score = deviceResult.scores ? deviceResult.scores[key] : null;
+            $(this).text(score === null || score === undefined ? '—' : score);
+            $(this).attr('class', 'audit-score-circle ' + scoreClassFor(score));
+        });
+
+        $pane.find('[data-metric]').each(function () {
+            var key = $(this).data('metric');
+            var value = deviceResult.metrics ? deviceResult.metrics[key] : null;
+            $(this).text(value || '—');
+        });
+    }
+
+    $('.audit-tracker-modal').each(function () {
+        var $modal = $(this);
+        var $form = $modal.find('.audit-lead-form');
+        var $results = $modal.find('.audit-results');
+        var $error = $modal.find('.audit-lead-error');
+        var $btn = $modal.find('.audit-submit-btn');
+        var $btnText = $modal.find('.audit-submit-text');
+        var $spinner = $modal.find('.audit-submit-spinner');
+
+        $modal.on('hidden.bs.modal', function () {
+            $form.removeClass('d-none')[0].reset();
+            $results.addClass('d-none');
+            $error.addClass('d-none');
+        });
+
+        $modal.find('[data-audit-tab]').on('click', function () {
+            var tab = $(this).data('audit-tab');
+            $modal.find('[data-audit-tab]').removeClass('active');
+            $(this).addClass('active');
+            $modal.find('[data-audit-pane]').addClass('d-none');
+            $modal.find('[data-audit-pane="' + tab + '"]').removeClass('d-none');
+        });
+
+        $form.on('submit', function (e) {
+            e.preventDefault();
+
+            $error.addClass('d-none');
+            $btn.prop('disabled', true);
+            $btnText.text('Checking...');
+            $spinner.removeClass('d-none');
+
+            $.ajax({
+                url: $form.attr('data-action'),
+                method: 'POST',
+                dataType: 'json',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                data: {
+                    type: $form.data('type'),
+                    name: $form.find('[name="name"]').val(),
+                    email: $form.find('[name="email"]').val(),
+                    phone: $form.find('[name="phone"]').val(),
+                    url: $form.find('[name="url"]').val()
+                }
+            }).done(function (response) {
+                $btn.prop('disabled', false);
+                $spinner.addClass('d-none');
+                $btnText.text($form.data('type') === 'seo' ? 'Check My SEO Score' : 'Check My Speed Score');
+
+                if (!response.success) {
+                    $error.text(response.message || 'Something went wrong. Please try again.').removeClass('d-none');
+                    return;
+                }
+
+                $modal.find('.audit-result-url').text(response.url);
+                fillAuditPane($modal.find('[data-audit-pane="mobile"]'), response.mobile);
+                fillAuditPane($modal.find('[data-audit-pane="desktop"]'), response.desktop);
+
+                $form.addClass('d-none');
+                $results.removeClass('d-none');
+            }).fail(function (xhr) {
+                $btn.prop('disabled', false);
+                $spinner.addClass('d-none');
+                $btnText.text($form.data('type') === 'seo' ? 'Check My SEO Score' : 'Check My Speed Score');
+                var message = (xhr.responseJSON && xhr.responseJSON.message) || 'Something went wrong. Please try again.';
+                $error.text(message).removeClass('d-none');
+            });
         });
     });
 

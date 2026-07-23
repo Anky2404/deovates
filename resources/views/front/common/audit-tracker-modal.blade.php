@@ -23,7 +23,8 @@
 
             <div class="modal-body">
 
-                <form class="audit-lead-form" data-type="{{ $type }}" data-action="{{ route('front.pagespeed.lead') }}">
+                <form class="audit-lead-form" method="POST" action="{{ route('front.pagespeed.lead') }}"
+                      data-type="{{ $type }}" data-action="{{ route('front.pagespeed.lead') }}">
                     @csrf
                     <h5 class="mb-1">{{ $isSeo ? 'Free SEO Score Check' : 'Free Speed Score Check' }}</h5>
                     <p class="text-muted small mb-3">
