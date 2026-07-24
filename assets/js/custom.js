@@ -338,9 +338,91 @@ $(document).on('click', '.remove-preview-image', function () {
     $(this).closest('.preview-item').remove();
 });
 
+// Boxed has-image / remove-file toggle for the simple `.image-preview-input`
+// widgets (partners' logo, authors' profile_image/cover_image,
+// technologies' image, industries' image). These fields skip the crop
+// modal entirely, so unlike `.croppie-upload` boxes (whose has-image class
+// is toggled by image-cropper.js once a crop is applied) this class is
+// toggled directly off the same 'change' event the preview-swap logic
+// above already listens to.
+$(document).on('change', '.image-upload-box .image-preview-input', function () {
+    if (this.files && this.files[0]) {
+        $(this).closest('.image-upload-box').addClass('has-image');
+    }
+});
+
+$(document).on('click', '.image-upload-box .image-upload-remove', function () {
+    var box = $(this).closest('.image-upload-box');
+    var input = box.find('.image-preview-input');
+
+    // Croppie boxes share the same remove-button markup/class and are
+    // already fully handled by image-cropper.js — leave those alone.
+    if (!input.length) return;
+
+    var img = box.find('.image-upload-thumb')[0];
+
+    input.val('');
+    if (img) img.src = box.data('placeholder') || 'https://placehold.co/130x130';
+    box.removeClass('has-image');
+});
+
 $(document).on('click', '.remove-old-image', function () {
 
     $(this).closest('.old-gallery-item').remove();
+});
+
+// Drag-and-drop parity for the simpler .image-preview-input widgets
+// (partners/authors/technologies/industries) — mirrors the dropzone
+// behaviour added to .croppie-upload / .gallery-cropper-upload in
+// image-cropper.js. Dropped files are copied into the input's FileList
+// via DataTransfer and a native 'change' event is dispatched, so the
+// existing preview-swap logic above fires completely unchanged.
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.image-preview-input').forEach(function (input) {
+        var zone = input.closest('.upload-dropzone') || input.parentElement;
+        if (!zone || zone.dataset.dropzoneBound) return;
+        zone.dataset.dropzoneBound = '1';
+        zone.classList.add('upload-dropzone');
+
+        ['dragenter', 'dragover'].forEach(function (evt) {
+            zone.addEventListener(evt, function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                zone.classList.add('upload-dropzone-active');
+            });
+        });
+
+        ['dragleave', 'dragend'].forEach(function (evt) {
+            zone.addEventListener(evt, function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                zone.classList.remove('upload-dropzone-active');
+            });
+        });
+
+        zone.addEventListener('drop', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            zone.classList.remove('upload-dropzone-active');
+
+            var files = e.dataTransfer && e.dataTransfer.files;
+            if (!files || !files.length) return;
+
+            if (typeof DataTransfer !== 'undefined') {
+                var dt = new DataTransfer();
+                Array.prototype.forEach.call(files, function (file) {
+                    if (file.type && file.type.indexOf('image/') === 0) {
+                        dt.items.add(file);
+                    }
+                });
+                input.files = dt.files;
+            } else {
+                input.files = files;
+            }
+
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+    });
 });
 
 

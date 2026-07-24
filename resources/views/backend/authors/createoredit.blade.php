@@ -85,51 +85,35 @@
 
             {{-- WEBSITE --}}
             <div class="col-md-6">
-                <label class="form-label">Website</label>
-                <input type="url"
-                       name="website"
-                       class="form-control"
-                       value="{{ old('website', $author->website ?? '') }}">
+                @include('backend.partials.url-input', ['name' => 'website', 'label' => 'Website', 'value' => $author->website ?? ''])
             </div>
 {{-- IMAGES (PROFILE + COVER in ONE COLUMN) --}}
 <div class="col-md-6">
 
     {{-- PROFILE IMAGE --}}
-    <label class="form-label">Profile Image</label>
-
-    <input type="file"
-        name="profile_image"
-        class="form-control image-preview-input"
-        data-preview="#profileImagePreview">
-
-    <img id="profileImagePreview"
-        src="{{ !empty($author->profile_image) ? asset('storage/' . $author->profile_image) : 'https://placehold.co/130x130' }}"
-        class="mt-2 rounded border img-thumbnail"
-        height="130"
-        width="130">
+    @include('backend.partials.simple-image-upload-box', [
+        'name' => 'profile_image',
+        'label' => 'Profile Image',
+        'previewId' => 'profileImagePreview',
+        'previewUrl' => !empty($author->profile_image) ? asset('storage/' . $author->profile_image) : null,
+    ])
 
   </div>
 <div class="col-md-6">
     {{-- COVER IMAGE --}}
-    <label class="form-label">Cover Image</label>
-
-    <input type="file"
-        name="cover_image"
-        class="form-control image-preview-input"
-        data-preview="#coverImagePreview">
-
-    <img id="coverImagePreview"
-        src="{{ !empty($author->cover_image) ? asset('storage/' . $author->cover_image) : 'https://placehold.co/130x130' }}"
-        class="mt-2 rounded border img-thumbnail"
-        height="130"
-        width="130">
+    @include('backend.partials.simple-image-upload-box', [
+        'name' => 'cover_image',
+        'label' => 'Cover Image',
+        'previewId' => 'coverImagePreview',
+        'previewUrl' => !empty($author->cover_image) ? asset('storage/' . $author->cover_image) : null,
+    ])
 
 </div>
             {{-- BIO --}}
             <div class="col-md-12">
                 <label class="form-label">Bio</label>
-                <textarea name="bio"
-                          class="form-control"
+                <textarea name="bio" id="bio_input"
+                          class="form-control ckeditor-field" data-ck-height="250"
                           rows="4">{{ old('bio', $author->bio ?? '') }}</textarea>
             </div>
 

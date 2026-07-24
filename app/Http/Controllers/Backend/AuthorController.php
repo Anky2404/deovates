@@ -87,6 +87,10 @@ class AuthorController extends Controller
     {
         $author = $uuid ? Author::where('uuid', $uuid)->firstOrFail() : null;
 
+        $request->merge([
+            'website' => \App\Helper::normalizeUrl($request->input('website')),
+        ]);
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => ['required', 'string', 'max:255', Rule::unique('authors', 'slug')->ignore($author?->id)],

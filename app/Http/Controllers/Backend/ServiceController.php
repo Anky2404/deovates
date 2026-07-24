@@ -10,6 +10,7 @@ use App\Models\Platform;
 use App\Models\Service;
 use App\Models\Technology;
 use App\Services\MediaUploader;
+use App\Traits\ParsesMetaKeywords;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,7 @@ use Illuminate\Validation\Rule;
 class ServiceController extends Controller
 {
     use HandlesImageUploads;
+    use ParsesMetaKeywords;
 
     private $pagerecords;
 
@@ -138,9 +140,7 @@ class ServiceController extends Controller
         $data['is_active'] = $request->boolean('is_active');
         $data['is_featured'] = $request->boolean('is_featured');
 
-        // Decode safely, bad JSON must not crash save
-        $decodedKeywords = json_decode($data['meta_keywords'] ?? '', true);
-        $data['meta_keywords'] = is_array($decodedKeywords) ? $decodedKeywords : [];
+        $data['meta_keywords'] = $this->parseMetaKeywords($data['meta_keywords'] ?? null);
 
         try {
             DB::beginTransaction();

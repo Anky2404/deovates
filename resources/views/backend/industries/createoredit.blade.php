@@ -60,23 +60,22 @@
 
                 {{-- ICON --}}
                 <div class="col-md-4">
-                    <label class="form-label">Icon</label>
-
-                    <input type="text" name="icon" class="form-control" placeholder="bx bx-building"
-                        value="{{ old('icon', $industry->icon ?? '') }}">
+                    @include('backend.partials.icon-picker-field', [
+                        'name' => 'icon',
+                        'value' => old('icon', $industry->icon ?? ''),
+                        'placeholder' => 'bx bx-building',
+                    ])
                 </div>
 
                 {{-- IMAGE --}}
                 <div class="col-md-4">
 
-                    <label class="form-label">Image</label>
-
-                    <input type="file" name="image" class="form-control image-preview-input"
-                        data-preview="#industryImagePreview">
-
-                    <img id="industryImagePreview"
-                        src="{{ !empty($industry->image) ? asset('storage/' . $industry->image) : 'https://placehold.co/130x130' }}"
-                        class="mt-2 rounded border img-thumbnail" height="130" width="130">
+                    @include('backend.partials.simple-image-upload-box', [
+                        'name' => 'image',
+                        'label' => 'Image',
+                        'previewId' => 'industryImagePreview',
+                        'previewUrl' => !empty($industry->image) ? asset('storage/' . $industry->image) : null,
+                    ])
 
                 </div>
                 {{-- DISPLAY ORDER --}}
@@ -91,7 +90,7 @@
                 <div class="col-md-12">
                     <label class="form-label">Description</label>
 
-                    <textarea name="description" id="description" rows="5" class="form-control">{{ old('description', $industry->description ?? '') }}</textarea>
+                    <textarea name="description" id="description_input" rows="5" data-ck-height="300" class="form-control ckeditor-field">{{ old('description', $industry->description ?? '') }}</textarea>
                 </div>
 
                 {{-- META TITLE --}}

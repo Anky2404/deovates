@@ -185,6 +185,33 @@ class Helper
         return auth('admin')->user()?->role?->name === $role;
     }
 
+    /**
+     * Strip a leading http:// or https:// (and nothing else) so a stored
+     * URL can be shown in an admin input that already displays a static
+     * "https://" prefix alongside it.
+     */
+    public static function stripUrlScheme(?string $url): string
+    {
+        if (empty($url)) {
+            return '';
+        }
+
+        return preg_replace('#^https?://#i', '', trim($url));
+    }
+
+    /**
+     * Normalize a URL typed into an admin "https://" + domain input: strips
+     * any scheme the user typed anyway, then re-adds https:// so the stored
+     * value is always a complete, validator-friendly absolute URL. Returns
+     * null for an empty input so nullable|url validation still passes.
+     */
+    public static function normalizeUrl(?string $url): ?string
+    {
+        $stripped = self::stripUrlScheme($url);
+
+        return $stripped === '' ? null : 'https://'.$stripped;
+    }
+
     public static function uploadImage($file, $directory, $model = null, $column = 'filename', $isDeleteOld = true)
     {
         try {

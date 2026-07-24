@@ -17,9 +17,6 @@ class PageSpeedController extends Controller
         return view('front.page-speed.index');
     }
 
-    /**
-     * Standalone /speed-test page — single-strategy check, no lead capture.
-     */
     public function check(Request $request)
     {
         $data = $request->validate([
@@ -45,14 +42,6 @@ class PageSpeedController extends Controller
         ]);
     }
 
-    /**
-     * Homepage popup flow — captures a lead (name/email/phone/url), then
-     * runs BOTH mobile and desktop checks in one go and stores the full
-     * results against the lead. Used for both the "Track Speed" and
-     * "Track SEO" hero buttons (same underlying Google PageSpeed Insights
-     * report powers both — the SEO tool surfaces the seo/best-practices/
-     * accessibility categories instead of the performance one).
-     */
     public function submitLead(Request $request)
     {
         $data = $request->validate([
@@ -200,12 +189,6 @@ class PageSpeedController extends Controller
     }
 
     /**
-     * Self-built on-page SEO audit — fetches the raw HTML and inspects it
-     * with DOMDocument/DOMXPath for the standard on-page checklist items
-     * (title, meta description, headings, canonical, robots, Open Graph,
-     * Twitter Card, image alt coverage, favicon, lang attribute, links).
-     * Free, no external API — everything is derived from the page's own markup.
-     *
      * @return array<string, mixed>|null
      */
     private function runOnPageSeoAudit(string $url): ?array

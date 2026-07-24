@@ -75,18 +75,15 @@
 
             {{-- IMAGE --}}
             <div class="col-md-3">
-                <label class="form-label">Client Image</label>
-                <input type="file"
-                       name="photo"
-                       class="form-control image-preview-input @error('photo') is-invalid @enderror"
-                       data-preview="#testimonialImagePreview">
+                @include('backend.partials.simple-image-upload-box', [
+                    'name' => 'photo',
+                    'label' => 'Client Image',
+                    'previewId' => 'testimonialImagePreview',
+                    'previewUrl' => isset($testimonial) && $testimonial->photo ? asset('storage/' . $testimonial->photo) : null,
+                ])
                 @error('photo')
-                    <div class="invalid-feedback">{{ $message }}</div>
+                    <div class="text-danger small mt-1">{{ $message }}</div>
                 @enderror
-
-                <img id="testimonialImagePreview"
-                     src="{{ isset($testimonial) && $testimonial->photo ? asset('storage/' . $testimonial->photo) : 'https://placehold.co/130x130' }}"
-                     class="mt-2 rounded border img-thumbnail" height="130" width="130">
             </div>
 
             {{-- RATING --}}
@@ -102,12 +99,12 @@
 
             {{-- ICON --}}
             <div class="col-md-3">
-                <label class="form-label">Icon Class</label>
-                <input type="text"
-                       name="icon"
-                       class="form-control"
-                       placeholder="bx bxs-quote-alt-left"
-                       value="{{ old('icon', $testimonial->icon ?? 'bx bxs-quote-alt-left') }}">
+                @include('backend.partials.icon-picker-field', [
+                    'name' => 'icon',
+                    'label' => 'Icon Class',
+                    'value' => old('icon', $testimonial->icon ?? 'bx bxs-quote-alt-left'),
+                    'placeholder' => 'bx bxs-quote-alt-left',
+                ])
             </div>
 
              {{-- DISPLAY ORDER --}}

@@ -9,6 +9,7 @@ use App\Models\Media;
 use App\Models\Portfolio;
 use App\Models\PortfolioCategory;
 use App\Services\MediaUploader;
+use App\Traits\ParsesMetaKeywords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -18,6 +19,7 @@ use Illuminate\Validation\Rule;
 class PortfolioController extends Controller
 {
     use HandlesImageUploads;
+    use ParsesMetaKeywords;
 
     private $pagerecords;
 
@@ -85,6 +87,12 @@ class PortfolioController extends Controller
     {
         $portfolio = $uuid ? Portfolio::where('uuid', $uuid)->firstOrFail() : null;
 
+        $request->merge([
+            'project_url' => \App\Helper::normalizeUrl($request->input('project_url')),
+            'video_url' => \App\Helper::normalizeUrl($request->input('video_url')),
+            'canonical_url' => \App\Helper::normalizeUrl($request->input('canonical_url')),
+        ]);
+
         $validated = $request->validate([
             'portfolio_category_id' => ['required', 'exists:portfolio_categories,id'],
             'title' => ['required', 'string', 'max:255'],
@@ -128,7 +136,7 @@ class PortfolioController extends Controller
             $data['is_active'] = $request->boolean('is_active');
             $data['is_featured'] = $request->boolean('is_featured');
             $data['published_at'] = $request->filled('published_at') ? $request->input('published_at') : null;
-            $data['meta_keywords'] = $this->parseJsonList($request->input('meta_keywords'));
+            $data['meta_keywords'] = $this->parseMetaKeywords($request->input('meta_keywords'));
 
             $isNew = ! $portfolio;
             $newUuid = null;
@@ -333,15 +341,4 @@ class PortfolioController extends Controller
         $existing->whereNotIn('uuid', $keepUuids)->each(fn (Media $media) => $this->mediaUploader->deleteMedia($media));
     }
 
-    // Decode safely, bad JSON must not crash save
-    private function parseJsonList(?string $value): array
-    {
-        if (empty($value)) {
-            return [];
-        }
-
-        $decoded = json_decode($value, true);
-
-        return is_array($decoded) ? array_values($decoded) : [];
-    }
 }

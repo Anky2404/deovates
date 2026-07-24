@@ -46,13 +46,12 @@
 
         {{-- ICON --}}
         <div class="col-md-6">
-            <label class="form-label">Icon Class</label>
-
-            <input type="text"
-                   name="icon"
-                   class="form-control"
-                   value="{{ old('icon', $category->icon ?? '') }}"
-                   placeholder="bx bx-category">
+            @include('backend.partials.icon-picker-field', [
+                'name' => 'icon',
+                'label' => 'Icon Class',
+                'value' => old('icon', $category->icon ?? ''),
+                'placeholder' => 'bx bx-category',
+            ])
         </div>
 
         {{-- STATUS --}}

@@ -88,18 +88,12 @@
 
                 {{-- VIDEO URL --}}
                 <div class="col-md-3">
-                    <label class="form-label">Video URL</label>
-
-                    <input type="url" name="video_url" class="form-control"
-                        value="{{ old('video_url', $caseStudy->video_url ?? '') }}">
+                    @include('backend.partials.url-input', ['name' => 'video_url', 'label' => 'Video URL', 'value' => $caseStudy->video_url ?? ''])
                 </div>
 
                 {{-- CANONICAL URL --}}
                 <div class="col-md-3">
-                    <label class="form-label">Canonical URL</label>
-
-                    <input type="url" name="canonical_url" class="form-control"
-                        value="{{ old('canonical_url', $caseStudy->canonical_url ?? '') }}">
+                    @include('backend.partials.url-input', ['name' => 'canonical_url', 'label' => 'Canonical URL', 'value' => $caseStudy->canonical_url ?? ''])
                 </div>
 
                 {{-- DISPLAY ORDER --}}
@@ -120,48 +114,46 @@
 
                 <div class="row">
 
-                    <div class="col-md-3">
+                    <div class="col-md-6">
 
-                        <label class="form-label">Featured Image</label>
-
-                        <input type="file" name="featured_image" class="form-control croppie-upload"
-                            data-preview="#featuredImagePreview" data-width="800" data-height="600" accept="image/*">
-
-                        <img id="featuredImagePreview"
-                            src="{{ !empty($caseStudy->featured_image) ? asset('storage/' . $caseStudy->featured_image) : 'https://placehold.co/130x130' }}"
-                            class="mt-2 rounded border img-thumbnail" height="130" width="130">
-
-                        <input type="text" name="featured_image_alt" class="form-control mt-2"
-                            placeholder="Alt text (used for the image name too)"
-                            value="{{ old('featured_image_alt', $caseStudy->featured_image_alt ?? '') }}">
-
-                    </div>
-
-                    <div class="col-md-3">
-
-                        <label class="form-label">Banner Image</label>
-
-                        <input type="file" name="banner_image" class="form-control croppie-upload"
-                            data-preview="#bannerImagePreview" data-width="1600" data-height="600" accept="image/*">
-
-                        <img id="bannerImagePreview"
-                            src="{{ !empty($caseStudy->banner_image) ? asset('storage/' . $caseStudy->banner_image) : 'https://placehold.co/130x130' }}"
-                            class="mt-2 rounded border img-thumbnail" height="130" width="130">
-
-                        <input type="text" name="banner_image_alt" class="form-control mt-2"
-                            placeholder="Alt text (used for the image name too)"
-                            value="{{ old('banner_image_alt', $caseStudy->banner_image_alt ?? '') }}">
+                        @include('backend.partials.image-upload-box', [
+                            'name' => 'featured_image',
+                            'label' => 'Featured Image',
+                            'previewId' => 'featuredImagePreview',
+                            'previewUrl' => !empty($caseStudy->featured_image) ? asset('storage/' . $caseStudy->featured_image) : null,
+                            'width' => 800,
+                            'height' => 600,
+                            'altName' => 'featured_image_alt',
+                            'altValue' => old('featured_image_alt', $caseStudy->featured_image_alt ?? ''),
+                        ])
 
                     </div>
 
                     <div class="col-md-6">
 
-                        <label class="form-label">Gallery Images</label>
+                        @include('backend.partials.image-upload-box', [
+                            'name' => 'banner_image',
+                            'label' => 'Banner Image',
+                            'previewId' => 'bannerImagePreview',
+                            'previewUrl' => !empty($caseStudy->banner_image) ? asset('storage/' . $caseStudy->banner_image) : null,
+                            'width' => 1600,
+                            'height' => 600,
+                            'altName' => 'banner_image_alt',
+                            'altValue' => old('banner_image_alt', $caseStudy->banner_image_alt ?? ''),
+                        ])
 
-                        <input type="file" class="form-control gallery-cropper-upload"
-                            data-container="#galleryItems" data-field="gallery_items"
-                            data-start-index="{{ isset($caseStudy) ? $caseStudy->galleryMedia->count() : 0 }}"
-                            data-width="800" data-height="600" multiple accept="image/*">
+                    </div>
+                </div>
+  <div class="row">
+                    <div class="col-md-12">
+
+                        @include('backend.partials.gallery-upload-box', [
+                            'containerId' => 'galleryItems',
+                            'field' => 'gallery_items',
+                            'startIndex' => isset($caseStudy) ? $caseStudy->galleryMedia->count() : 0,
+                            'width' => 800,
+                            'height' => 600,
+                        ])
 
                         <div id="galleryItems" class="gallery-sortable d-flex flex-wrap gap-2 mt-3"
                             data-reorder-url="{{ isset($caseStudy) ? route('admin.casestudies.galleryreorder', $caseStudy->uuid) : '' }}"
@@ -199,18 +191,19 @@
 
                 </div>
 
-                {{-- OVERVIEW --}}
-                <div class="col-md-12">
-                    <label class="form-label">Overview</label>
+                {{-- OVERVIEW + CHALLENGES (side-by-side, both CKEditor) --}}
+                <div class="row g-3 mx-0 w-100">
+                    <div class="col-md-6">
+                        <label class="form-label">Overview</label>
+                        <textarea name="overview" id="overview_input" class="form-control ckeditor-field"
+                            data-ck-height="250" rows="4">{{ old('overview', $caseStudy->overview ?? '') }}</textarea>
+                    </div>
 
-                    <textarea name="overview" id="description" class="form-control" rows="4">{{ old('overview', $caseStudy->overview ?? '') }}</textarea>
-                </div>
-
-                {{-- CHALLENGES --}}
-                <div class="col-md-6">
-                    <label class="form-label">Challenges</label>
-
-                    <textarea name="challenges" class="form-control" rows="4">{{ old('challenges', $caseStudy->challenges ?? '') }}</textarea>
+                    <div class="col-md-6">
+                        <label class="form-label">Challenges</label>
+                        <textarea name="challenges" id="challenges_input" class="form-control ckeditor-field"
+                            data-ck-height="250" rows="4">{{ old('challenges', $caseStudy->challenges ?? '') }}</textarea>
+                    </div>
                 </div>
 
                 {{-- SOLUTIONS --}}
@@ -259,9 +252,10 @@
 
                 {{-- META KEYWORDS --}}
                 <div class="col-md-4">
-                    <label class="form-label">Meta Keywords (comma separated)</label>
+                    <label class="form-label">Meta Keywords (JSON Array)</label>
 
-                    <textarea name="meta_keywords" class="form-control" rows="3">{{ old('meta_keywords', isset($caseStudy->meta_keywords) ? implode(',', $caseStudy->meta_keywords) : '') }}</textarea>
+                    <textarea name="meta_keywords" class="form-control json-auto" rows="3"
+                        placeholder="local seo, google business profile">{{ old('meta_keywords', !empty($caseStudy->meta_keywords) ? json_encode($caseStudy->meta_keywords, JSON_UNESCAPED_UNICODE) : '') }}</textarea>
                 </div>
 
 

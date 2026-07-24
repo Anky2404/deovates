@@ -107,12 +107,12 @@
             {{-- TEXTAREAS FULL WIDTH --}}
             <div class="col-md-6">
                 <label class="form-label">Description</label>
-                <textarea name="description" rows="5" class="form-control trim">{{ old('description', $career->description ?? '') }}</textarea>
+                <textarea name="description" id="description_input" class="form-control ckeditor-field" data-ck-height="250">{{ old('description', $career->description ?? '') }}</textarea>
             </div>
 
             <div class="col-md-6">
                 <label class="form-label">Responsibilities</label>
-                <textarea name="responsibilities" rows="5" class="form-control trim">{{ old('responsibilities', $career->responsibilities ?? '') }}</textarea>
+                <textarea name="responsibilities" id="responsibilities_input" class="form-control ckeditor-field" data-ck-height="250">{{ old('responsibilities', $career->responsibilities ?? '') }}</textarea>
             </div>
 
             <div class="col-md-6">
@@ -129,9 +129,7 @@
 
             {{-- APPLY INFO --}}
             <div class="col-md-4">
-                <label class="form-label">Apply URL</label>
-                <input type="url" name="apply_url" class="form-control trim"
-                       value="{{ old('apply_url', $career->apply_url ?? '') }}">
+                @include('backend.partials.url-input', ['name' => 'apply_url', 'label' => 'Apply URL', 'value' => $career->apply_url ?? ''])
             </div>
 
             <div class="col-md-4">
@@ -153,8 +151,12 @@
 
                 @php
                     $skills = $career->skills ?? '';
-                    if (is_array(json_decode($skills, true))) {
-                        $skills = implode(',', json_decode($skills, true));
+                    if (is_string($skills)) {
+                        $decoded = json_decode($skills, true);
+                        $skills = is_array($decoded) ? $decoded : $skills;
+                    }
+                    if (is_array($skills)) {
+                        $skills = implode(',', $skills);
                     }
                 @endphp
 

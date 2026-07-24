@@ -80,9 +80,7 @@
 
             {{-- PORTFOLIO --}}
             <div class="col-md-8">
-                <label class="form-label">Portfolio URL</label>
-                <input type="url" name="portfolio_url" class="form-control"
-                       value="{{ old('portfolio_url', $application->portfolio_url ?? '') }}">
+                @include('backend.partials.url-input', ['name' => 'portfolio_url', 'label' => 'Portfolio URL', 'value' => $application->portfolio_url ?? ''])
             </div>
 
             {{-- COVER LETTER --}}

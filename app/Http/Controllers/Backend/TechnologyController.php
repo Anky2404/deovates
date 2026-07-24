@@ -85,6 +85,10 @@ class TechnologyController extends Controller
     {
         $technology = $uuid ? Technology::where('uuid', $uuid)->firstOrFail() : null;
 
+        $request->merge([
+            'website_url' => \App\Helper::normalizeUrl($request->input('website_url')),
+        ]);
+
         $validated = $request->validate([
             'technology_category_id' => ['nullable', 'exists:technology_categories,id'],
             'name' => ['required', 'string', 'max:255'],

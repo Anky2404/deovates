@@ -69,13 +69,7 @@
 
         {{-- WEBSITE URL --}}
         <div class="col-md-3">
-            <label class="form-label">Website URL</label>
-
-            <input type="url"
-                   name="website_url"
-                   class="form-control"
-                   placeholder="https://example.com"
-                   value="{{ old('website_url', $partner->website_url ?? '') }}">
+            @include('backend.partials.url-input', ['name' => 'website_url', 'label' => 'Website URL', 'value' => $partner->website_url ?? ''])
         </div>
 
         {{-- DISPLAY ORDER --}}
@@ -91,18 +85,12 @@
         {{-- LOGO --}}
         <div class="col-md-3">
 
-            <label class="form-label">Partner Logo</label>
-
-            <input type="file"
-                   name="logo"
-                   class="form-control image-preview-input"
-                   data-preview="#partnerLogoPreview">
-
-            <img id="partnerLogoPreview"
-                 src="{{ !empty($partner->logo) ? asset('storage/'.$partner->logo) : 'https://placehold.co/130x130' }}"
-                 class="mt-2 rounded border img-thumbnail"
-                 width="130"
-                 height="130">
+            @include('backend.partials.simple-image-upload-box', [
+                'name' => 'logo',
+                'label' => 'Partner Logo',
+                'previewId' => 'partnerLogoPreview',
+                'previewUrl' => !empty($partner->logo) ? asset('storage/'.$partner->logo) : null,
+            ])
 
         </div>
 
@@ -121,9 +109,10 @@
             <label class="form-label">Description</label>
 
             <textarea name="description"
-                      id="description"
+                      id="description_input"
                       rows="5"
-                      class="form-control">{{ old('description', $partner->description ?? '') }}</textarea>
+                      data-ck-height="300"
+                      class="form-control ckeditor-field">{{ old('description', $partner->description ?? '') }}</textarea>
         </div>
 
         {{-- META TITLE --}}

@@ -26,6 +26,9 @@
 
 <script src="{{ asset('assets/js/custom.js') }}"></script>
 
+<script src="{{ asset('assets/js/bx-icon-list.js') }}"></script>
+<script src="{{ asset('assets/js/icon-picker.js') }}"></script>
+
 
 {{-- ================= MAIN APP (MUST BE LAST) ================= --}}
 <script src="{{ asset('assets/js/Sortable.min.js') }}"></script>
@@ -94,30 +97,57 @@
 
 <script>
     if (typeof CKEDITOR !== 'undefined') {
-        if (document.getElementById('short_description')) {
-            CKEDITOR.replace('short_description', {
-                height: 200
-            });
-        }
-        if (document.getElementById('description')) {
-            CKEDITOR.replace('description', {
-                height: 400
-            });
-        }
-        if (document.getElementById('left_description')) {
-            CKEDITOR.replace('left_description', {
-                height: 300
-            });
-        }
-        if (document.getElementById('right_list')) {
-            CKEDITOR.replace('right_list', {
-                height: 300
-            });
-        }
+        // Class-based init: every textarea with .ckeditor-field gets a CKEditor instance.
+        // data-ck-height on the element overrides the default height.
+        document.querySelectorAll('.ckeditor-field').forEach(function(el, index) {
+            if (!el.id) {
+                el.id = 'ckeditor_' + index;
+            }
+            if (!CKEDITOR.instances[el.id]) {
+                CKEDITOR.replace(el.id, {
+                    height: parseInt(el.dataset.ckHeight, 10) || 250
+                });
+            }
+        });
+
+        // Legacy safety net: old hardcoded IDs from before the class-based refactor.
+        // Guarded against double-init in case an element also carries .ckeditor-field.
+        ['short_description', 'description', 'left_description', 'right_list'].forEach(function(id) {
+            var heights = {
+                short_description: 200,
+                description: 400,
+                left_description: 300,
+                right_list: 300
+            };
+            if (document.getElementById(id) && !CKEDITOR.instances[id]) {
+                CKEDITOR.replace(id, {
+                    height: heights[id]
+                });
+            }
+        });
     }
 </script>
 
- 
+<script>
+    // URL inputs paired with a static "https://" prefix: strip any scheme
+    // the user types or pastes anyway, live, so the field always holds just
+    // the domain/path and never ends up with a doubled-up protocol.
+    document.querySelectorAll('.url-scheme-strip').forEach(function(el) {
+        var strip = function() {
+            var stripped = el.value.replace(/^\s*https?:\/\//i, '');
+            if (stripped !== el.value) {
+                el.value = stripped;
+            }
+        };
+        el.addEventListener('input', strip);
+        el.addEventListener('blur', strip);
+        el.addEventListener('paste', function() {
+            setTimeout(strip, 0);
+        });
+    });
+</script>
+
+
 
 
 {{-- ================= SWEETALERT TOAST ================= --}}

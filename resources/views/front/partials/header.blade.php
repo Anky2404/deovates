@@ -43,12 +43,12 @@
                             <div class="logo">
                                 <a href="{{ route(config('constants.HEADERS.0.route')) }}" class="big-logo">
                                     <img src="{{ asset(config('constants.CONFIG.logo.header')) }}"
-                                        alt="{{ config('constants.BUSINESS.name') }}">
+                                        alt="{{ config('constants.BUSINESS.name') }}" width="300" height="60">
                                 </a>
 
                                 <a href="{{ route(config('constants.HEADERS.0.route')) }}" class="small-logo">
                                     <img src="{{ asset(config('constants.CONFIG.dark_logo')) }}"
-                                        alt="{{ config('constants.BUSINESS.name') }}">
+                                        alt="{{ config('constants.BUSINESS.name') }}" width="300" height="60">
                                 </a>
                             </div>
                         </div>

@@ -8,6 +8,7 @@ use App\Models\Page;
 use App\Models\PageSectionContent;
 use App\Models\Section;
 use App\Services\MediaUploader;
+use App\Traits\ParsesMetaKeywords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +16,8 @@ use Illuminate\Validation\Rule;
 
 class PageController extends Controller
 {
+    use ParsesMetaKeywords;
+
     private $pagerecords;
 
     private $prefix = 'backend.';
@@ -94,6 +97,10 @@ class PageController extends Controller
     {
         $page = $uuid ? Page::where('uuid', $uuid)->firstOrFail() : null;
 
+        $request->merge([
+            'canonical_url' => \App\Helper::normalizeUrl($request->input('canonical_url')),
+        ]);
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('pages', 'slug')->ignore($page?->id)],
@@ -117,7 +124,7 @@ class PageController extends Controller
             // "name" has no dedicated field in this simplified form — keep
             // it in sync with title since the column is still NOT NULL.
             $data['name'] = $validated['title'];
-            $data['meta_keywords'] = $this->parseCommaList($request->input('meta_keywords'));
+            $data['meta_keywords'] = $this->parseMetaKeywords($request->input('meta_keywords'));
             $data['is_active'] = $request->boolean('is_active');
             $data['is_published'] = $request->boolean('is_published');
 
@@ -234,14 +241,6 @@ class PageController extends Controller
         }
     }
 
-    private function parseCommaList(?string $value): array
-    {
-        if (empty($value)) {
-            return [];
-        }
-
-        return array_values(array_filter(array_map('trim', explode(',', $value)), fn ($item) => $item !== ''));
-    }
 
     // Resolves this section's field values out of the submitted
     // sections_data[{section}] payload (promoting any new file/gallery

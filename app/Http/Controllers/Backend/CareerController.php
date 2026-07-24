@@ -46,6 +46,10 @@ class CareerController extends Controller
     {
         $career = $uuid ? Career::where('uuid', $uuid)->firstOrFail() : null;
 
+        $request->merge([
+            'apply_url' => \App\Helper::normalizeUrl($request->input('apply_url')),
+        ]);
+
         $data = $request->validate([
             'department_id' => ['required', 'exists:departments,id'],
             'title' => ['required', 'string', 'max:255'],

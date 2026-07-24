@@ -51,9 +51,7 @@
 
                 {{-- PROJECT URL --}}
                 <div class="col-md-3">
-                    <label class="form-label">Project URL</label>
-                    <input type="url" name="project_url" class="form-control"
-                        value="{{ old('project_url', $portfolio->project_url ?? '') }}">
+                    @include('backend.partials.url-input', ['name' => 'project_url', 'label' => 'Project URL', 'value' => $portfolio->project_url ?? ''])
                 </div>
 
                 {{-- PROJECT DURATION --}}
@@ -72,44 +70,41 @@
 
                 {{-- FEATURED IMAGE --}}
                 <div class="col-md-3">
-                    <label class="form-label">Featured Image</label>
-                     <input type="file" name="featured_image" class="form-control croppie-upload"
-                        data-preview="#featuredImagePreview" data-width="800" data-height="600" accept="image/*">
-
-                    <img id="featuredImagePreview"
-                        src="{{ !empty($portfolio->featured_image) ? asset('storage/' . $portfolio->featured_image) : 'https://placehold.co/130x130' }}"
-                        class="mt-2 rounded border img-thumbnail" height="130" width="130">
-
-                    <input type="text" name="featured_image_alt" class="form-control mt-2"
-                        placeholder="Alt text (used for the image name too)"
-                        value="{{ old('featured_image_alt', $portfolio->featured_image_alt ?? '') }}">
-
+                    @include('backend.partials.image-upload-box', [
+                        'name' => 'featured_image',
+                        'label' => 'Featured Image',
+                        'previewId' => 'featuredImagePreview',
+                        'previewUrl' => !empty($portfolio->featured_image) ? asset('storage/' . $portfolio->featured_image) : null,
+                        'width' => 800,
+                        'height' => 600,
+                        'altName' => 'featured_image_alt',
+                        'altValue' => old('featured_image_alt', $portfolio->featured_image_alt ?? ''),
+                    ])
                 </div>
 
                 {{-- BANNER IMAGE --}}
                 <div class="col-md-3">
-                    <label class="form-label">Banner Image</label>
-                     <input type="file" name="banner_image" class="form-control croppie-upload"
-                        data-preview="#bannerImagePreview" data-width="1600" data-height="600" accept="image/*">
-
-                    <img id="bannerImagePreview"
-                        src="{{ !empty($portfolio->banner_image) ? asset('storage/' . $portfolio->banner_image) : 'https://placehold.co/130x130' }}"
-                        class="mt-2 rounded border img-thumbnail" height="130" width="130">
-
-                    <input type="text" name="banner_image_alt" class="form-control mt-2"
-                        placeholder="Alt text (used for the image name too)"
-                        value="{{ old('banner_image_alt', $portfolio->banner_image_alt ?? '') }}">
-
+                    @include('backend.partials.image-upload-box', [
+                        'name' => 'banner_image',
+                        'label' => 'Banner Image',
+                        'previewId' => 'bannerImagePreview',
+                        'previewUrl' => !empty($portfolio->banner_image) ? asset('storage/' . $portfolio->banner_image) : null,
+                        'width' => 1600,
+                        'height' => 600,
+                        'altName' => 'banner_image_alt',
+                        'altValue' => old('banner_image_alt', $portfolio->banner_image_alt ?? ''),
+                    ])
                 </div>
 
                 {{-- GALLERY (multiple images, each cropped + alt-texted individually) --}}
                 <div class="col-md-6">
-                    <label class="form-label">Gallery Images</label>
-
-                    <input type="file" class="form-control gallery-cropper-upload"
-                        data-container="#galleryItems" data-field="gallery_items"
-                        data-start-index="{{ isset($portfolio) ? $portfolio->galleryMedia->count() : 0 }}"
-                        data-width="800" data-height="600" multiple accept="image/*">
+                    @include('backend.partials.gallery-upload-box', [
+                        'containerId' => 'galleryItems',
+                        'field' => 'gallery_items',
+                        'startIndex' => isset($portfolio) ? $portfolio->galleryMedia->count() : 0,
+                        'width' => 800,
+                        'height' => 600,
+                    ])
 
                     <div id="galleryItems" class="gallery-sortable d-flex flex-wrap gap-2 mt-3"
                         data-reorder-url="{{ isset($portfolio) ? route('admin.portfolios.galleryreorder', $portfolio->uuid) : '' }}"
@@ -144,31 +139,29 @@
 
                 <div class="col-md-6">
 
-
-                    {{-- DESCRIPTION --}}
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea name="description" id="short_description" class="form-control" rows="6">{{ old('description', $portfolio->description ?? '') }}</textarea>
-                    </div>
                     {{-- VIDEO URL --}}
                     <div class="mb-3">
-                        <label class="form-label">Video URL</label>
-                        <input type="url" name="video_url" class="form-control"
-                            value="{{ old('video_url', $portfolio->video_url ?? '') }}">
+                        @include('backend.partials.url-input', ['name' => 'video_url', 'label' => 'Video URL', 'value' => $portfolio->video_url ?? ''])
                     </div>
                     {{-- CANONICAL URL --}}
                     <div class="mb-3">
-                        <label class="form-label">Canonical URL</label>
-                        <input type="url" name="canonical_url" class="form-control"
-                            value="{{ old('canonical_url', $portfolio->canonical_url ?? '') }}">
-
+                        @include('backend.partials.url-input', ['name' => 'canonical_url', 'label' => 'Canonical URL', 'value' => $portfolio->canonical_url ?? ''])
                     </div>
                 </div>
 
-                {{-- OVERVIEW --}}
-                <div class="col-md-6">
-                    <label class="form-label">Overview</label>
-                    <textarea name="overview" class="form-control" id="description" rows="3">{{ old('overview', $portfolio->overview ?? '') }}</textarea>
+                {{-- DESCRIPTION + OVERVIEW (side-by-side, both CKEditor) --}}
+                <div class="row g-3 mx-0 w-100">
+                    <div class="col-md-6">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" id="description_input" class="form-control ckeditor-field"
+                            data-ck-height="300" rows="6">{{ old('description', $portfolio->description ?? '') }}</textarea>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Overview</label>
+                        <textarea name="overview" id="overview_input" class="form-control ckeditor-field"
+                            data-ck-height="300" rows="3">{{ old('overview', $portfolio->overview ?? '') }}</textarea>
+                    </div>
                 </div>
 
 

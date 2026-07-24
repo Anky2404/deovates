@@ -39,12 +39,11 @@
 
             {{-- ICON --}}
             <div class="col-md-4">
-                <label class="form-label">Icon</label>
-                <input type="text"
-                       name="icon"
-                       class="form-control"
-                       placeholder="e.g. bx bx-mobile"
-                       value="{{ old('icon', $platform->icon ?? '') }}">
+                @include('backend.partials.icon-picker-field', [
+                    'name' => 'icon',
+                    'value' => old('icon', $platform->icon ?? ''),
+                    'placeholder' => 'bx bx-mobile',
+                ])
             </div>
 
             {{-- DESCRIPTION --}}

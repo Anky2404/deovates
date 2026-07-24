@@ -106,33 +106,16 @@
 
                     {{-- AVATAR --}}
                    <div class="col-md-6">
-    <label class="form-label">Profile Image</label>
-
-    <input
-        type="file"
-        name="avatar"
-        class="form-control croppie-upload"
-        data-preview="#avatarPreview"
-        data-width="400"
-        data-height="400"
-        accept="image/*"
-    >
-
-    <img
-        id="avatarPreview"
-        src="{{ isset($user) && $user->avatar ? asset('storage/' . $user->avatar) : 'https://placehold.co/130x130' }}"
-        class="mt-2 rounded border img-thumbnail"
-        height="130"
-        width="130"
-    >
-
-    <input
-        type="text"
-        name="avatar_alt"
-        class="form-control mt-2"
-        placeholder="Alt text (used for the image name too)"
-        value="{{ old('avatar_alt', $user->avatar_alt ?? '') }}"
-    >
+    @include('backend.partials.image-upload-box', [
+        'name' => 'avatar',
+        'label' => 'Profile Image',
+        'previewId' => 'avatarPreview',
+        'previewUrl' => isset($user) && $user->avatar ? asset('storage/' . $user->avatar) : null,
+        'width' => 400,
+        'height' => 400,
+        'altName' => 'avatar_alt',
+        'altValue' => old('avatar_alt', $user->avatar_alt ?? ''),
+    ])
 </div>
 
                     {{-- PASSWORD --}}
@@ -149,7 +132,7 @@
                     {{-- BIO --}}
                     <div class="col-md-12">
                         <label class="form-label">Bio</label>
-                        <textarea name="bio" class="form-control" rows="4">{{ $user->bio ?? old('bio') }}</textarea>
+                        <textarea name="bio" id="bio_input" class="form-control ckeditor-field" data-ck-height="250" rows="4">{{ $user->bio ?? old('bio') }}</textarea>
                     </div>
 
                     {{-- ACTIVE --}}

@@ -9,6 +9,7 @@ use App\Models\CaseStudy;
 use App\Models\CaseStudyCategory;
 use App\Models\Media;
 use App\Services\MediaUploader;
+use App\Traits\ParsesMetaKeywords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -18,6 +19,7 @@ use Illuminate\Validation\Rule;
 class CaseStudyController extends Controller
 {
     use HandlesImageUploads;
+    use ParsesMetaKeywords;
 
     private $pagerecords;
 
@@ -85,6 +87,11 @@ class CaseStudyController extends Controller
     {
         $caseStudy = $uuid ? CaseStudy::where('uuid', $uuid)->firstOrFail() : null;
 
+        $request->merge([
+            'video_url' => \App\Helper::normalizeUrl($request->input('video_url')),
+            'canonical_url' => \App\Helper::normalizeUrl($request->input('canonical_url')),
+        ]);
+
         $validated = $request->validate([
             'case_study_category_id' => ['nullable', 'exists:case_study_categories,id'],
             'title' => ['required', 'string', 'max:255'],
@@ -127,7 +134,7 @@ class CaseStudyController extends Controller
             $data['is_featured'] = $request->boolean('is_featured');
             $data['published_at'] = $request->filled('published_at') ? $request->input('published_at') : null;
             $data['key_metrics'] = $this->parseCommaList($request->input('key_metrics'));
-            $data['meta_keywords'] = $this->parseCommaList($request->input('meta_keywords'));
+            $data['meta_keywords'] = $this->parseMetaKeywords($request->input('meta_keywords'));
 
             $isNew = ! $caseStudy;
             $newUuid = null;

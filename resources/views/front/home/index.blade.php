@@ -316,7 +316,7 @@
 
                             <img src="{{ !empty($aboutContent['right_image']) ? asset('storage/' . $aboutContent['right_image']) : asset('assets/front/img/about.avif') }}"
                                 alt="{{ $aboutContent['section_title'] ?? 'Professional Web Development Company' }}"
-                                class="img-responsive about-img">
+                                class="img-responsive about-img" width="1323" height="1189">
 
                         </div>
 
@@ -548,7 +548,7 @@
                 @foreach ($clientLogos as $logo)
                     <div class="item">
                         <img src="{{ !empty($logo['external']) ? asset($logo['path']) : asset('storage/' . ($logo['path'] ?? '')) }}"
-                            class="img-fluid" alt="{{ $logo['alt'] ?? 'Client' }}">
+                            class="img-fluid" alt="{{ $logo['alt'] ?? 'Client' }}" width="184" height="100">
                     </div>
                 @endforeach
             </div>

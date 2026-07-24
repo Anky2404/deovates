@@ -50,65 +50,52 @@
 
                         <div class="row g-3 mt-1">
 
-                            <!-- LEFT -->
-                            <div class="col-md-6">
-                                <label class="form-label">Short Description</label>
-                                <textarea name="short_description" id="short_description" class="form-control" rows="5">{{ old('short_description', $service->short_description ?? '') }}</textarea>
+                            <div class="col-md-4">
+                                @include('backend.partials.image-upload-box', [
+                                    'name' => 'featured_image',
+                                    'label' => 'Featured Image',
+                                    'previewId' => 'featuredImagePreview',
+                                    'previewUrl' => !empty($service->featured_image) ? asset('storage/' . $service->featured_image) : null,
+                                    'width' => 800,
+                                    'height' => 600,
+                                    'altName' => 'featured_image_alt',
+                                    'altValue' => old('featured_image_alt', $service->featured_image_alt ?? ''),
+                                ])
                             </div>
 
-                            <!-- RIGHT -->
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                @include('backend.partials.image-upload-box', [
+                                    'name' => 'banner_image',
+                                    'label' => 'Banner Image',
+                                    'previewId' => 'bannerImagePreview',
+                                    'previewUrl' => !empty($service->banner_image) ? asset('storage/' . $service->banner_image) : null,
+                                    'width' => 1600,
+                                    'height' => 600,
+                                    'altName' => 'banner_image_alt',
+                                    'altValue' => old('banner_image_alt', $service->banner_image_alt ?? ''),
+                                ])
+                            </div>
 
-                                <label class="form-label">Featured Image</label>
-
-                                <input type="file" class="form-control croppie-upload"
-                                    name="featured_image" id="featured_image" data-preview="#featuredImagePreview"
-                                    data-width="800" data-height="600" accept="image/*">
-
-                                <img id="featuredImagePreview"
-                                    src="{{ !empty($service->featured_image) ? asset('storage/' . $service->featured_image) : 'https://placehold.co/130x130' }}"
-                                    class="mt-2 rounded border img-thumbnail" height="130" width="130">
-
-                                <input type="text" name="featured_image_alt" class="form-control mt-2"
-                                    placeholder="Alt text (used for the image name too)"
-                                    value="{{ old('featured_image_alt', $service->featured_image_alt ?? '') }}">
-
-                                <label class="form-label mt-3">Banner Image</label>
-
-                                <input type="file" class="form-control croppie-upload"
-                                    name="banner_image" id="banner_image" data-preview="#bannerImagePreview"
-                                    data-width="1600" data-height="600" accept="image/*">
-
-                                <img id="bannerImagePreview"
-                                    src="{{ !empty($service->banner_image) ? asset('storage/' . $service->banner_image) : 'https://placehold.co/260x100' }}"
-                                    class="mt-2 rounded border img-thumbnail" height="100" width="260">
-
-                                <input type="text" name="banner_image_alt" class="form-control mt-2"
-                                    placeholder="Alt text (used for the image name too)"
-                                    value="{{ old('banner_image_alt', $service->banner_image_alt ?? '') }}">
-
-                                <label class="form-label mt-3">Icon (CSS Class)</label>
-
-                                <input type="text" id="icon_input" name="icon" class="form-control mb-2"
-                                    value="{{ old('icon', $service->icon ?? '') }}" placeholder="bx bx-cog">
-
-                                <div class="border rounded p-3 text-center">
-                                    <i id="icon_preview" class="{{ old('icon', $service->icon ?? 'bx bx-cog') }}"
-                                        style="font-size:32px;"></i>
-                                </div>
-
+                            <div class="col-md-4">
+                                @include('backend.partials.icon-picker-field', [
+                                    'name' => 'icon',
+                                    'value' => old('icon', $service->icon ?? ''),
+                                    'inputId' => 'icon_input',
+                                    'previewId' => 'icon_preview',
+                                ])
                             </div>
 
                         </div>
 
                         {{-- GALLERY (multiple images, each cropped + alt/title-texted individually) --}}
                         <div class="col-md-12">
-                            <label class="form-label">Gallery Images</label>
-
-                            <input type="file" class="form-control gallery-cropper-upload"
-                                data-container="#galleryItems" data-field="gallery_items"
-                                data-start-index="{{ isset($service) ? $service->galleryMedia->count() : 0 }}"
-                                data-width="800" data-height="600" multiple accept="image/*">
+                            @include('backend.partials.gallery-upload-box', [
+                                'containerId' => 'galleryItems',
+                                'field' => 'gallery_items',
+                                'startIndex' => isset($service) ? $service->galleryMedia->count() : 0,
+                                'width' => 800,
+                                'height' => 600,
+                            ])
 
                             <div id="galleryItems" class="gallery-sortable d-flex flex-wrap gap-2 mt-3"
                                 data-reorder-url="{{ isset($service) ? route('admin.services.galleryreorder', $service->uuid) : '' }}"
@@ -124,15 +111,19 @@
                                             &times;
                                         </button>
 
-                                        <img src="{{ $item->url }}"
-                                            class="rounded border img-thumbnail" width="120" height="120" style="object-fit:cover;">
+                                        <img src="{{ $item->url }}" class="rounded border img-thumbnail"
+                                            width="120" height="120" style="object-fit:cover;">
 
-                                        <input type="hidden" name="gallery_items[{{ $index }}][id]" value="{{ $item->uuid }}">
-                                        <input type="text" name="gallery_items[{{ $index }}][title]" class="form-control form-control-sm mt-1"
-                                            placeholder="Title" value="{{ $item->caption }}">
-                                        <input type="text" name="gallery_items[{{ $index }}][alt]" class="form-control form-control-sm mt-1"
-                                            placeholder="Alt text" value="{{ $item->alt_text }}">
-                                        <button type="button" class="btn btn-outline-secondary btn-sm copy-gallery-link w-100 mt-1"
+                                        <input type="hidden" name="gallery_items[{{ $index }}][id]"
+                                            value="{{ $item->uuid }}">
+                                        <input type="text" name="gallery_items[{{ $index }}][title]"
+                                            class="form-control form-control-sm mt-1" placeholder="Title"
+                                            value="{{ $item->caption }}">
+                                        <input type="text" name="gallery_items[{{ $index }}][alt]"
+                                            class="form-control form-control-sm mt-1" placeholder="Alt text"
+                                            value="{{ $item->alt_text }}">
+                                        <button type="button"
+                                            class="btn btn-outline-secondary btn-sm copy-gallery-link w-100 mt-1"
                                             data-path="{{ $item->path }}" title="Copy image path">
                                             <i class="bx bx-link"></i> Copy link
                                         </button>
@@ -141,9 +132,19 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <label class="form-label">Description</label>
-                            <textarea name="description" id="description" class="form-control" rows="5">{{ old('description', $service->description ?? '') }}</textarea>
+                        {{-- SHORT DESCRIPTION + DESCRIPTION (side-by-side, both CKEditor) --}}
+                        <div class="row g-3 mx-0 w-100">
+                            <div class="col-md-6">
+                                <label class="form-label">Short Description</label>
+                                <textarea name="short_description" id="short_description_input" class="form-control ckeditor-field"
+                                    data-ck-height="200" rows="5">{{ old('short_description', $service->short_description ?? '') }}</textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Description</label>
+                                <textarea name="description" id="description_input" class="form-control ckeditor-field" data-ck-height="300"
+                                    rows="5">{{ old('description', $service->description ?? '') }}</textarea>
+                            </div>
                         </div>
 
                         <div class="col-md-6">
@@ -282,17 +283,16 @@
                                             </div>
 
                                             <div class="mb-2 mt-2">
-                                                <label class="form-label">Image</label>
-                                                <input type="file" class="form-control croppie-upload"
-                                                    name="features[{{ $loop->index }}][image]"
-                                                    data-preview="#featureImagePreview{{ $loop->index }}"
-                                                    data-width="300" data-height="300" accept="image/*">
-                                                <img id="featureImagePreview{{ $loop->index }}"
-                                                    src="{{ !empty($feature->image) ? asset('storage/' . $feature->image) : 'https://placehold.co/100x100' }}"
-                                                    class="mt-2 rounded border img-thumbnail" height="100" width="100">
-                                                <input type="text" name="features[{{ $loop->index }}][image_alt]"
-                                                    class="form-control mt-2" placeholder="Alt text"
-                                                    value="{{ old('features.' . $loop->index . '.image_alt', $feature->image_alt) }}">
+                                                @include('backend.partials.image-upload-box', [
+                                                    'name' => 'features[' . $loop->index . '][image]',
+                                                    'label' => 'Image',
+                                                    'previewId' => 'featureImagePreview' . $loop->index,
+                                                    'previewUrl' => !empty($feature->image) ? asset('storage/' . $feature->image) : null,
+                                                    'width' => 300,
+                                                    'height' => 300,
+                                                    'altName' => 'features[' . $loop->index . '][image_alt]',
+                                                    'altValue' => old('features.' . $loop->index . '.image_alt', $feature->image_alt),
+                                                ])
                                             </div>
 
                                             <div class="d-flex justify-content-between align-items-center mt-2">
@@ -444,18 +444,18 @@
                                                 class="form-control mb-2 icon-text" placeholder="fa-solid fa-star"
                                                 value="{{ $problem->icon }}">
 
-                                            <input type="file" name="problems[{{ $loop->index }}][image]"
-                                                class="form-control mb-2 croppie-upload"
-                                                data-preview="#problemImagePreview{{ $loop->index }}"
-                                                data-width="600" data-height="400" accept="image/*">
-
-                                            <img id="problemImagePreview{{ $loop->index }}"
-                                                src="{{ !empty($problem->image) ? asset('storage/' . $problem->image) : 'https://placehold.co/130x130' }}"
-                                                class="mt-2 rounded border img-thumbnail mb-2" height="130" width="130">
-
-                                            <input type="text" name="problems[{{ $loop->index }}][image_alt]"
-                                                class="form-control mb-2" placeholder="Alt text"
-                                                value="{{ $problem->image_alt }}">
+                                            <div class="mb-2">
+                                                @include('backend.partials.image-upload-box', [
+                                                    'name' => 'problems[' . $loop->index . '][image]',
+                                                    'label' => 'Image',
+                                                    'previewId' => 'problemImagePreview' . $loop->index,
+                                                    'previewUrl' => !empty($problem->image) ? asset('storage/' . $problem->image) : null,
+                                                    'width' => 600,
+                                                    'height' => 400,
+                                                    'altName' => 'problems[' . $loop->index . '][image_alt]',
+                                                    'altValue' => $problem->image_alt,
+                                                ])
+                                            </div>
 
                                             <input type="number" name="problems[{{ $loop->index }}][views]"
                                                 class="form-control mb-2 views-text" value="{{ $problem->views ?? 0 }}">
@@ -597,7 +597,8 @@
                                                 </div>
                                             </div>
 
-                                            <input type="hidden" name="technologies[{{ $loop->index }}][display_order]"
+                                            <input type="hidden"
+                                                name="technologies[{{ $loop->index }}][display_order]"
                                                 class="technology-order" value="{{ $technology->display_order }}">
                                         </div>
                                     </div>
@@ -630,14 +631,12 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Meta Keywords</label>
-                            <input type="text" name="meta_keywords" class="form-control json-auto"
-                                value="{{ old(
+                            <label class="form-label">Meta Keywords (JSON Array)</label>
+                            <textarea name="meta_keywords" class="form-control json-auto" rows="3"
+                                placeholder="local seo, google business profile">{{ old(
                                     'meta_keywords',
-                                    is_array(optional($service)->meta_keywords)
-                                        ? implode(', ', optional($service)->meta_keywords)
-                                        : optional($service)->meta_keywords,
-                                ) }}">
+                                    !empty(optional($service)->meta_keywords) ? json_encode($service->meta_keywords, JSON_UNESCAPED_UNICODE) : '',
+                                ) }}</textarea>
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Meta Description</label>
@@ -830,14 +829,20 @@
 
             <div class="mb-2 mt-2">
                 <label class="form-label">Image</label>
-                <input type="file" class="form-control croppie-upload"
-                       name="features[${featureIndex}][image]"
-                       data-preview="#featureImagePreview${featureIndex}"
-                       data-width="300" data-height="300" accept="image/*">
-                <img id="featureImagePreview${featureIndex}" src="https://placehold.co/100x100"
-                     class="mt-2 rounded border img-thumbnail" height="100" width="100">
+                <div class="image-upload-box upload-dropzone" data-placeholder="https://placehold.co/130x130">
+                    <input type="file" name="features[${featureIndex}][image]" class="image-upload-input croppie-upload"
+                           data-preview="#featureImagePreview${featureIndex}" data-width="300" data-height="300" accept="image/*">
+                    <div class="image-upload-empty">
+                        <i class="bx bx-cloud-upload image-upload-icon"></i>
+                        <p class="image-upload-text">Drag &amp; drop image here, or click to browse</p>
+                    </div>
+                    <div class="image-upload-preview">
+                        <img id="featureImagePreview${featureIndex}" src="https://placehold.co/130x130" class="image-upload-thumb">
+                        <button type="button" class="btn btn-link btn-sm text-danger image-upload-remove">Remove file</button>
+                    </div>
+                </div>
                 <input type="text" name="features[${featureIndex}][image_alt]"
-                       class="form-control mt-2" placeholder="Alt text">
+                       class="form-control mt-2" placeholder="Alt text (used for the image name too)">
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-2">
@@ -1086,9 +1091,18 @@
                 <input type="text" name="problems[${problemIndex}][challenge]" class="form-control mb-2 challenge-text" placeholder="Challenge" required>
                 <textarea name="problems[${problemIndex}][solution]" class="form-control mb-2 solution-text" rows="3" placeholder="Solution" required></textarea>
                 <input type="text" name="problems[${problemIndex}][icon]" class="form-control mb-2 icon-text" placeholder="fa-solid fa-star">
-                <input type="file" name="problems[${problemIndex}][image]" class="form-control mb-2 croppie-upload" data-preview="#problemImagePreview${problemIndex}" data-width="600" data-height="400" accept="image/*">
-                <img id="problemImagePreview${problemIndex}" src="https://placehold.co/130x130" class="mt-2 rounded border img-thumbnail mb-2" height="130" width="130">
-                <input type="text" name="problems[${problemIndex}][image_alt]" class="form-control mb-2" placeholder="Alt text">
+                <div class="image-upload-box upload-dropzone mb-2" data-placeholder="https://placehold.co/130x130">
+                    <input type="file" name="problems[${problemIndex}][image]" class="image-upload-input croppie-upload" data-preview="#problemImagePreview${problemIndex}" data-width="600" data-height="400" accept="image/*">
+                    <div class="image-upload-empty">
+                        <i class="bx bx-cloud-upload image-upload-icon"></i>
+                        <p class="image-upload-text">Drag &amp; drop image here, or click to browse</p>
+                    </div>
+                    <div class="image-upload-preview">
+                        <img id="problemImagePreview${problemIndex}" src="https://placehold.co/130x130" class="image-upload-thumb">
+                        <button type="button" class="btn btn-link btn-sm text-danger image-upload-remove">Remove file</button>
+                    </div>
+                </div>
+                <input type="text" name="problems[${problemIndex}][image_alt]" class="form-control mb-2" placeholder="Alt text (used for the image name too)">
                 <input type="number" name="problems[${problemIndex}][views]" class="form-control mb-2 views-text" value="0">
 
                 <div class="d-flex justify-content-between">

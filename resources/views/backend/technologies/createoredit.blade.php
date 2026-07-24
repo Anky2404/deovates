@@ -53,32 +53,27 @@
 
             {{-- ICON --}}
             <div class="col-md-4">
-                <label class="form-label">Icon Class</label>
-                <input type="text"
-                       name="icon"
-                       class="form-control"
-                       placeholder="bx bxl-react"
-                       value="{{ old('icon', $technology->icon ?? '') }}">
+                @include('backend.partials.icon-picker-field', [
+                    'name' => 'icon',
+                    'label' => 'Icon Class',
+                    'value' => old('icon', $technology->icon ?? ''),
+                    'placeholder' => 'bx bxl-react',
+                ])
             </div>
 
             {{-- IMAGE --}}
             <div class="col-md-4">
-                <label class="form-label">Image</label>
-                <input type="file" name="image" class="form-control image-preview-input"
-                        data-preview="#ImagePreview">
-
-                    <img id="ImagePreview"
-                        src="{{ !empty($technology->image) ? asset('storage/' . $technology->image) : 'https://placehold.co/130x130' }}"
-                        class="mt-2 rounded border img-thumbnail" height="130" width="130">
+                @include('backend.partials.simple-image-upload-box', [
+                    'name' => 'image',
+                    'label' => 'Image',
+                    'previewId' => 'ImagePreview',
+                    'previewUrl' => !empty($technology->image) ? asset('storage/' . $technology->image) : null,
+                ])
             </div>
 
             {{-- WEBSITE URL --}}
             <div class="col-md-4">
-                <label class="form-label">Website URL</label>
-                <input type="url"
-                       name="website_url"
-                       class="form-control"
-                       value="{{ old('website_url', $technology->website_url ?? '') }}">
+                @include('backend.partials.url-input', ['name' => 'website_url', 'label' => 'Website URL', 'value' => $technology->website_url ?? ''])
             </div>
 
             {{-- VERSION --}}
@@ -110,8 +105,8 @@
             {{-- DESCRIPTION --}}
             <div class="col-md-12">
                 <label class="form-label">Description</label>
-                <textarea name="description" id="description"
-                          class="form-control"
+                <textarea name="description" id="description_input"
+                          class="form-control ckeditor-field" data-ck-height="250"
                           rows="4">{{ old('description', $technology->description ?? '') }}</textarea>
             </div>
 

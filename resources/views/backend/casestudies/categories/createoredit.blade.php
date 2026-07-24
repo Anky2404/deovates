@@ -48,28 +48,31 @@
 
             {{-- ICON --}}
             <div class="col-md-6">
-                <label class="form-label">Icon (Boxicons Class)</label>
-
-                <input
-                    type="text"
-                    name="icon"
-                    class="form-control"
-                    value="{{ old('icon', $category->icon ?? '') }}"
-                    placeholder="bx bx-line-chart">
+                @include('backend.partials.icon-picker-field', [
+                    'name' => 'icon',
+                    'label' => 'Icon (Boxicons Class)',
+                    'value' => old('icon', $category->icon ?? ''),
+                    'placeholder' => 'bx bx-line-chart',
+                ])
             </div>
 
             {{-- IMAGE --}}
-            <div class="col-md-6">
 
-                <label class="form-label">Image</label>
+             <div class="col-md-6">
 
-                <input type="file" name="image" class="form-control image-preview-input"
-                       data-preview="#categoryImagePreview">
+                        @include('backend.partials.image-upload-box', [
+                            'name' => 'image',
+                            'label' => 'Image',
+                            'previewId' => 'imagePreview',
+                            'previewUrl' => !empty($category->image) ? asset('storage/' . $category->image) : null,
+                            'width' => 800,
+                            'height' => 600,
+                            'altName' => 'image_alt',
+                            'altValue' => old('featured_image_alt', $category->image ?? ''),
+                        ])
 
-                <img id="categoryImagePreview"
-                     src="{{ !empty($category->image) ? asset('storage/' . $category->image) : 'https://placehold.co/130x130' }}"
-                     class="mt-2 rounded border img-thumbnail" height="130" width="130">
-            </div>
+                    </div>
+            
 
             {{-- DESCRIPTION --}}
             <div class="col-md-12">

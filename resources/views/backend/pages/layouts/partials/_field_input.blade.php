@@ -24,8 +24,9 @@
     <textarea
         name="{{ $name }}"
         id="{{ $idPrefix }}"
-        class="form-control {{ $class }} {{ $field->use_ck_editor ? 'ckeditor' : '' }}"
+        class="form-control {{ $class }} {{ $field->use_ck_editor ? 'ckeditor-field' : '' }}"
         rows="3"
+        data-ck-height="250"
         placeholder="{{ $field->placeholder ?? $field->label }}"
         {{ $required }} {{ $disabled }}
     >{{ $value }}</textarea>
@@ -90,12 +91,16 @@
 @elseif($field->type === 'file')
     @php $hasExisting = is_string($value) && $value !== ''; @endphp
     @if($field->enable_croppie)
-        <input type="file" name="{{ $name }}" class="form-control croppie-upload"
-            data-preview="#{{ $idPrefix }}_preview" data-width="800" data-height="600"
-            accept="image/*" {{ $disabled }}>
-        <img id="{{ $idPrefix }}_preview" src="{{ $hasExisting ? asset('storage/'.$value) : 'https://placehold.co/130x130' }}"
-            class="mt-2 rounded border img-thumbnail {{ $hasExisting ? '' : 'd-none' }}" height="130" width="130">
-        <input type="text" name="{{ $name }}_alt" class="form-control mt-2" placeholder="Alt text">
+        @include('backend.partials.image-upload-box', [
+            'name' => $name,
+            'label' => $field->label,
+            'previewId' => $idPrefix . '_preview',
+            'previewUrl' => $hasExisting ? asset('storage/'.$value) : null,
+            'width' => 800,
+            'height' => 600,
+            'altName' => $name . '_alt',
+            'altValue' => old($name . '_alt'),
+        ])
     @else
         <input type="file" name="{{ $name }}" class="form-control" accept="image/*" {{ $disabled }}>
         @if($hasExisting)
@@ -106,10 +111,14 @@
 @elseif($field->type === 'gallery')
     @php $existingItems = is_array($value) ? $value : []; @endphp
     @if($field->enable_croppie)
-        <input type="file" class="form-control gallery-cropper-upload"
-            data-container="#{{ $idPrefix }}_items" data-field="{{ $name }}" data-start-index="{{ count($existingItems) }}"
-            data-width="800" data-height="600" multiple accept="image/*" {{ $disabled }}>
-        <div id="{{ $idPrefix }}_items" class="gallery-sortable d-flex flex-wrap gap-2 mt-3">
+        @include('backend.partials.gallery-upload-box', [
+            'containerId' => $idPrefix . '_items',
+            'field' => $name,
+            'startIndex' => count($existingItems),
+            'width' => 800,
+            'height' => 600,
+        ])
+        <div id="{{ $idPrefix }}_items" class="gallery-sortable d-flex flex-wrap gap-2 mt-3"
             @foreach($existingItems as $gIndex => $item)
                 <div class="gallery-crop-item position-relative d-inline-block m-1 align-top" style="width:140px;">
                     <span class="gallery-drag-handle" title="Drag to reorder"

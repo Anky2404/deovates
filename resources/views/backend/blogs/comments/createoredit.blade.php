@@ -111,14 +111,7 @@
 
         {{-- WEBSITE --}}
         <div class="col-md-6">
-            <label class="form-label">
-                Website
-            </label>
-
-            <input type="url"
-                   name="website"
-                   class="form-control"
-                   value="{{ old('website', $comment->website ?? '') }}">
+            @include('backend.partials.url-input', ['name' => 'website', 'label' => 'Website', 'value' => $comment->website ?? ''])
         </div>
 
         {{-- COMMENT --}}

@@ -39,34 +39,22 @@
 
             {{-- ICON --}}
             <div class="col-md-6">
-                <label class="form-label">Icon Class</label>
-                <input type="text"
-                       name="icon"
-                       class="form-control"
-                       value="{{ old('icon', $category->icon ?? '') }}"
-                       placeholder="bx bxl-react">
+                @include('backend.partials.icon-picker-field', [
+                    'name' => 'icon',
+                    'label' => 'Icon Class',
+                    'value' => old('icon', $category->icon ?? ''),
+                    'placeholder' => 'bx bxl-react',
+                ])
             </div>
 
 {{-- IMAGE --}}
 <div class="col-md-6">
-
-    <label class="form-label">Image</label>
-
-    <input
-        type="file"
-        name="image"
-        class="form-control image-preview-input"
-        data-preview="#categoryImagePreview"
-    >
-
-    <img
-        id="categoryImagePreview"
-        src="{{ !empty($category->image) ? asset('storage/' . $category->image) : 'https://placehold.co/130x130' }}"
-        class="mt-2 rounded border img-thumbnail"
-        height="130"
-        width="130"
-    >
-
+    @include('backend.partials.simple-image-upload-box', [
+        'name' => 'image',
+        'label' => 'Image',
+        'previewId' => 'categoryImagePreview',
+        'previewUrl' => !empty($category->image) ? asset('storage/' . $category->image) : null,
+    ])
 </div>
 
             {{-- DESCRIPTION --}}

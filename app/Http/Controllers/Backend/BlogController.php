@@ -11,6 +11,7 @@ use App\Models\BlogCategory;
 use App\Models\Media;
 use App\Models\Tag;
 use App\Services\MediaUploader;
+use App\Traits\ParsesMetaKeywords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -20,6 +21,7 @@ use Illuminate\Validation\Rule;
 class BlogController extends Controller
 {
     use HandlesImageUploads;
+    use ParsesMetaKeywords;
 
     private $pagerecords;
 
@@ -84,6 +86,10 @@ class BlogController extends Controller
     public function saveorupdate(Request $request, ?string $uuid = null)
     {
         $blog = $uuid ? Blog::where('uuid', $uuid)->firstOrFail() : null;
+
+        $request->merge([
+            'canonical_url' => \App\Helper::normalizeUrl($request->input('canonical_url')),
+        ]);
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -350,20 +356,6 @@ class BlogController extends Controller
         }
     }
 
-    private function parseMetaKeywords(?string $raw): array
-    {
-        if (empty($raw)) {
-            return [];
-        }
-
-        $decoded = json_decode($raw, true);
-
-        if (is_array($decoded)) {
-            return array_values(array_filter(array_map('trim', $decoded)));
-        }
-
-        return array_values(array_filter(array_map('trim', explode(',', $raw))));
-    }
 
     private function parseTagIds($rawTags): array
     {

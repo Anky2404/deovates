@@ -28,55 +28,44 @@
                         value="{{ old('slug', $blog->slug ?? '') }}" required>
                 </div>
 
-                {{-- EXCERPT --}}
+                {{-- FEATURED IMAGE --}}
                 <div class="col-md-6">
-                    <label class="form-label">Excerpt *</label>
-                    <textarea name="excerpt" id="short_description" class="form-control" rows="3" required>
-{{ old('excerpt', $blog->excerpt ?? '') }}</textarea>
-                </div>
-                {{-- IMAGES (FEATURED + OG in ONE COLUMN) --}}
-                <div class="col-md-6">
-
-                    {{-- FEATURED IMAGE --}}
-                    <label class="form-label">Featured Image</label>
-
-                    <input type="file" name="featured_image" class="form-control croppie-upload"
-                        data-preview="#featuredImagePreview" data-width="800" data-height="600" accept="image/*">
-
-                    <img id="featuredImagePreview"
-                        src="{{ !empty($blog->featured_image) ? asset('storage/' . $blog->featured_image) : 'https://placehold.co/130x130' }}"
-                        class="mt-2 rounded border img-thumbnail" height="130" width="130">
-
-                    <input type="text" name="featured_image_alt" class="form-control mt-2"
-                        placeholder="Alt text (used for the image name too)"
-                        value="{{ old('featured_image_alt', $blog->featured_image_alt ?? '') }}">
-
-                    <hr class="my-3">
-
-                    {{-- OG IMAGE --}}
-                    <label class="form-label">OG Image</label>
-
-                    <input type="file" name="og_image" class="form-control croppie-upload"
-                        data-preview="#ogImagePreview" data-width="1200" data-height="630" accept="image/*">
-
-                    <img id="ogImagePreview"
-                        src="{{ !empty($blog->og_image) ? asset('storage/' . $blog->og_image) : 'https://placehold.co/130x130' }}"
-                        class="mt-2 rounded border img-thumbnail" height="130" width="130">
-
-                    <input type="text" name="og_image_alt" class="form-control mt-2"
-                        placeholder="Alt text (used for the image name too)"
-                        value="{{ old('og_image_alt', $blog->og_image_alt ?? '') }}">
-
+                    @include('backend.partials.image-upload-box', [
+                        'name' => 'featured_image',
+                        'label' => 'Featured Image',
+                        'previewId' => 'featuredImagePreview',
+                        'previewUrl' => !empty($blog->featured_image) ? asset('storage/' . $blog->featured_image) : null,
+                        'width' => 800,
+                        'height' => 600,
+                        'altName' => 'featured_image_alt',
+                        'altValue' => old('featured_image_alt', $blog->featured_image_alt ?? ''),
+                    ])
                 </div>
 
-                {{-- GALLERY (multiple images, each cropped + alt/title-texted individually) --}}
+                {{-- OG IMAGE --}}
                 <div class="col-md-6">
-                    <label class="form-label">Gallery Images</label>
+                    @include('backend.partials.image-upload-box', [
+                        'name' => 'og_image',
+                        'label' => 'OG Image',
+                        'previewId' => 'ogImagePreview',
+                        'previewUrl' => !empty($blog->og_image) ? asset('storage/' . $blog->og_image) : null,
+                        'width' => 1200,
+                        'height' => 630,
+                        'altName' => 'og_image_alt',
+                        'altValue' => old('og_image_alt', $blog->og_image_alt ?? ''),
+                    ])
+                </div>
 
-                    <input type="file" class="form-control gallery-cropper-upload"
-                        data-container="#galleryItems" data-field="gallery_items"
-                        data-start-index="{{ isset($blog) ? $blog->galleryMedia->count() : 0 }}"
-                        data-width="800" data-height="600" multiple accept="image/*">
+                {{-- GALLERY (multiple images, each cropped + alt/title-texted individually) — full width below --}}
+                <div class="col-md-12">
+
+                    @include('backend.partials.gallery-upload-box', [
+                        'containerId' => 'galleryItems',
+                        'field' => 'gallery_items',
+                        'startIndex' => isset($blog) ? $blog->galleryMedia->count() : 0,
+                        'width' => 800,
+                        'height' => 600,
+                    ])
 
                     <div id="galleryItems" class="gallery-sortable d-flex flex-wrap gap-2 mt-3"
                         data-reorder-url="{{ isset($blog) ? route('admin.blogs.galleryreorder', $blog->uuid) : '' }}"
@@ -153,10 +142,19 @@
 
 
 
-                {{-- CONTENT --}}
-                <div class="col-md-12">
-                    <label class="form-label">Content *</label>
-                    <textarea name="content" id="description" class="form-control" rows="6" required>{{ old('content', $blog->content ?? '') }}</textarea>
+                {{-- CONTENT + EXCERPT (side-by-side, both CKEditor) --}}
+                <div class="row g-3 mx-0 w-100">
+                    <div class="col-md-6">
+                        <label class="form-label">Content *</label>
+                        <textarea name="content" id="content_input" class="form-control ckeditor-field"
+                            data-ck-height="400" rows="6" required>{{ old('content', $blog->content ?? '') }}</textarea>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Excerpt *</label>
+                        <textarea name="excerpt" id="excerpt_input" class="form-control ckeditor-field"
+                            data-ck-height="200" rows="3" required>{{ old('excerpt', $blog->excerpt ?? '') }}</textarea>
+                    </div>
                 </div>
 
 
@@ -164,9 +162,7 @@
 
                 {{-- CANONICAL URL --}}
                 <div class="col-md-4">
-                    <label class="form-label">Canonical URL</label>
-                    <input type="url" name="canonical_url" class="form-control"
-                        value="{{ old('canonical_url', $blog->canonical_url ?? '') }}">
+                    @include('backend.partials.url-input', ['name' => 'canonical_url', 'label' => 'Canonical URL', 'value' => $blog->canonical_url ?? ''])
                 </div>
 
 

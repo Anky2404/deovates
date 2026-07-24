@@ -161,6 +161,9 @@
         var hidden = tempFieldFor(state.input);
         hidden.value = response.temp_path;
 
+        var box = state.input.closest('.image-upload-box');
+        if (box) box.classList.add('has-image');
+
         // The original raw selection has already been promoted to a temp
         // upload — clear it so it isn't also submitted as a plain file.
         state.input.value = '';
@@ -311,8 +314,66 @@
         state.queue = [];
     }
 
+    // Wires true HTML5 drag-and-drop on top of every croppie-upload /
+    // gallery-cropper-upload input. Dropped files are copied into the
+    // input's FileList (via DataTransfer) and a native 'change' event is
+    // dispatched, so all existing click-to-browse logic above fires
+    // completely unchanged — drag/drop is purely an alternate entry point.
+    function nearestDropZone(input) {
+        return input.closest('.upload-dropzone') || input.parentElement;
+    }
+
+    function initDropZones() {
+        document.querySelectorAll('.croppie-upload, .gallery-cropper-upload').forEach(function (input) {
+            var zone = nearestDropZone(input);
+            if (!zone || zone.dataset.dropzoneBound) return;
+            zone.dataset.dropzoneBound = '1';
+            zone.classList.add('upload-dropzone');
+
+            ['dragenter', 'dragover'].forEach(function (evt) {
+                zone.addEventListener(evt, function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    zone.classList.add('upload-dropzone-active');
+                });
+            });
+
+            ['dragleave', 'dragend'].forEach(function (evt) {
+                zone.addEventListener(evt, function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    zone.classList.remove('upload-dropzone-active');
+                });
+            });
+
+            zone.addEventListener('drop', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                zone.classList.remove('upload-dropzone-active');
+
+                var files = e.dataTransfer && e.dataTransfer.files;
+                if (!files || !files.length) return;
+
+                if (typeof DataTransfer !== 'undefined') {
+                    var dt = new DataTransfer();
+                    Array.prototype.forEach.call(files, function (file) {
+                        if (file.type && file.type.indexOf('image/') === 0) {
+                            dt.items.add(file);
+                        }
+                    });
+                    input.files = dt.files;
+                } else {
+                    input.files = files; // older browsers: best effort
+                }
+
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         initGallerySortable();
+        initDropZones();
 
         var modalEl = document.getElementById('globalCroppieModal');
         if (!modalEl) return;
@@ -456,6 +517,26 @@
         // 5) REMOVE a gallery item (existing or newly-added — both use the
         //    same markup/class, see the blade views that render this widget).
         document.addEventListener('click', function (e) {
+            // 0) REMOVE a single boxed image — clears the preview and any
+            // pending temp upload so the box goes back to its empty state.
+            // Only affects a NEW selection that hasn't been saved yet; if no
+            // replacement is chosen afterwards, the previously saved image on
+            // the record is left untouched on submit.
+            var removeBtn = e.target.closest && e.target.closest('.image-upload-remove');
+            if (removeBtn) {
+                var box = removeBtn.closest('.image-upload-box');
+                if (box) {
+                    box.classList.remove('has-image');
+                    var input = box.querySelector('.image-upload-input');
+                    var img = box.querySelector('.image-upload-thumb');
+                    var temp = box.querySelector('.croppie-temp-field');
+                    if (input) input.value = '';
+                    if (img) img.src = box.dataset.placeholder || '';
+                    if (temp) temp.value = '';
+                }
+                return;
+            }
+
             if (e.target.closest && e.target.closest('.remove-gallery-crop-item')) {
                 var item = e.target.closest('.gallery-crop-item');
                 var container = item ? item.closest('.gallery-sortable') : null;

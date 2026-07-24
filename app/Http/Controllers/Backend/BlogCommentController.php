@@ -56,6 +56,10 @@ class BlogCommentController extends Controller
     {
         $comment = $uuid ? Comment::where('uuid', $uuid)->firstOrFail() : null;
 
+        $request->merge([
+            'website' => \App\Helper::normalizeUrl($request->input('website')),
+        ]);
+
         $validated = $request->validate([
             'blog_id' => ['required', 'exists:blogs,id'],
             'parent_id' => [

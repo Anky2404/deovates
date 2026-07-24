@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="{{ asset('assets/backend/vendor/libs/apex-charts/apex-charts.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/croppie.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}" />
 
     <!-- Auth Pages Only -->
     @if (request()->routeIs('admin.login.index','admin.forgot.index'))

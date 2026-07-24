@@ -49,9 +49,7 @@
 
                 {{-- CANONICAL URL --}}
                 <div class="col-md-6">
-                    <label class="form-label">Canonical URL</label>
-                    <input type="url" name="canonical_url" class="form-control"
-                        value="{{ old('canonical_url', $page->canonical_url ?? '') }}">
+                    @include('backend.partials.url-input', ['name' => 'canonical_url', 'label' => 'Canonical URL', 'value' => $page->canonical_url ?? ''])
                 </div>
 
                 {{-- META DESCRIPTION --}}
@@ -62,10 +60,9 @@
 
                 {{-- META KEYWORDS --}}
                 <div class="col-md-12">
-                    <label class="form-label">Meta Keywords</label>
-                    <input type="text" name="meta_keywords" class="form-control"
-                        placeholder="comma, separated, keywords"
-                        value="{{ old('meta_keywords', is_array($page->meta_keywords ?? null) ? implode(', ', $page->meta_keywords) : '') }}">
+                    <label class="form-label">Meta Keywords (JSON Array)</label>
+                    <textarea name="meta_keywords" class="form-control json-auto" rows="3"
+                        placeholder="local seo, google business profile">{{ old('meta_keywords', !empty($page->meta_keywords ?? null) ? json_encode($page->meta_keywords, JSON_UNESCAPED_UNICODE) : '') }}</textarea>
                 </div>
 
                 {{-- ACTIVE --}}

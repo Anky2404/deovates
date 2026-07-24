@@ -87,6 +87,10 @@ class MarketingPartnerController extends Controller
     {
         $partner = $uuid ? Partner::where('uuid', $uuid)->firstOrFail() : null;
 
+        $request->merge([
+            'website_url' => \App\Helper::normalizeUrl($request->input('website_url')),
+        ]);
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => ['required', 'string', 'max:255', Rule::unique('partners', 'slug')->ignore($partner?->id)],

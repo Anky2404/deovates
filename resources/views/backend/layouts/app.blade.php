@@ -7,7 +7,6 @@
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- include head --}}
     @include('backend.partials.head')
 </head>
 
@@ -70,11 +69,11 @@
     <!-- Dynamic page scripts -->
     @stack('scripts')
 
-    {{-- Shared crop-and-upload modal (see public/assets/js/image-cropper.js) —
-         included once here so every admin page that adds the "croppie-upload"
-         or "gallery-cropper-upload" class to a file input just works, without
-         each form needing to remember to include it itself. --}}
+    {{-- Shared crop-and-upload modal, see public/assets/js/image-cropper.js --}}
     @include('backend.partials.modal')
+
+    {{-- Shared Boxicons picker modal, see public/assets/js/icon-picker.js --}}
+    @include('backend.partials.icon-picker-modal')
 
     <!-- Footer JS -->
     @include('backend.partials.foot')
