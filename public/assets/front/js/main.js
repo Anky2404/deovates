@@ -378,9 +378,16 @@ $('.tablets-carousel').owlCarousel({
     });
 
 
-/* 9. data-background */
+/* 9. data-background — uses a smaller data-background-mobile image (if the
+   element has one) on narrow viewports, since these are full-bleed hero
+   backgrounds that would otherwise force mobile visitors to download the
+   same large desktop-resolution image, hurting LCP. */
+    var useMobileBg = window.innerWidth <= 768;
     $("[data-background]").each(function () {
-      $(this).css("background-image", "url(" + $(this).attr("data-background") + ")")
+      var $el = $(this);
+      var mobileBg = $el.attr("data-background-mobile");
+      var bg = (useMobileBg && mobileBg) ? mobileBg : $el.attr("data-background");
+      $el.css("background-image", "url(" + bg + ")")
       });
 
 

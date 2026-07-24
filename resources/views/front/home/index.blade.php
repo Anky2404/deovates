@@ -5,7 +5,8 @@
 @section('meta_keywords', config('constants.PAGE_SEO.home.meta_keywords'))
 
 @push('preload')
-    <link rel="preload" as="image" href="{{ asset('assets/front/img/hero/h1_hero.avif') }}" fetchpriority="high">
+    <link rel="preload" as="image" href="{{ asset('assets/front/img/hero/h1_hero-mobile.avif') }}" fetchpriority="high" media="(max-width: 768px)">
+    <link rel="preload" as="image" href="{{ asset('assets/front/img/hero/h1_hero.avif') }}" fetchpriority="high" media="(min-width: 769px)">
 @endpush
 
 @section('content')
@@ -16,7 +17,8 @@
 
                 <!-- Slider 1 -->
                 <div class="single-slider hero-overly slider-height d-flex align-items-center"
-                    data-background="{{ asset('assets/front/img/hero/h1_hero.avif') }}">
+                    data-background="{{ asset('assets/front/img/hero/h1_hero.avif') }}"
+                    data-background-mobile="{{ asset('assets/front/img/hero/h1_hero-mobile.avif') }}">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-11">
@@ -60,7 +62,8 @@
 
                 <!-- Slider 2 -->
                 <div class="single-slider hero-overly slider-height d-flex align-items-center"
-                    data-background="{{ asset('assets/front/img/hero/h2_hero.avif') }}">
+                    data-background="{{ asset('assets/front/img/hero/h2_hero.avif') }}"
+                    data-background-mobile="{{ asset('assets/front/img/hero/h2_hero-mobile.avif') }}">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-11">
@@ -102,7 +105,8 @@
                 </div>
                 <!-- Slider 2 -->
                 <div class="single-slider hero-overly slider-height d-flex align-items-center"
-                    data-background="{{ asset('assets/front/img/hero/h3_hero.avif') }}">
+                    data-background="{{ asset('assets/front/img/hero/h3_hero.avif') }}"
+                    data-background-mobile="{{ asset('assets/front/img/hero/h3_hero-mobile.avif') }}">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-11">
